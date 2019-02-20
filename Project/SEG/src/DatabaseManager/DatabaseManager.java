@@ -8,6 +8,8 @@ import java.util.logging.Logger;
  * Created by Marco-Edoardo Palma.
  */
 
+import Commons.*;
+
 public class DatabaseManager
 {
     private static Connection dbCon;

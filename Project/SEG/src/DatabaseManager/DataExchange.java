@@ -1,15 +1,17 @@
 package DatabaseManager;
-/*
- * Created by Marco-Edoardo Palma.
- */
 
-//import Commons;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+/*
+ * Created by Marco-Edoardo Palma.
+ */
+
+import Commons.*;
 
 /*
  * This class will process queries from QueryComposer.java into DatabaseManager.

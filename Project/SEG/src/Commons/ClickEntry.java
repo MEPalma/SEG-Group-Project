@@ -4,7 +4,10 @@ package Commons;
 import DatabaseManager.Stringifiable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -50,7 +53,7 @@ public class ClickEntry implements Stringifiable
                 ClickEntry tmp = new ClickEntry(
                     resultSet.getInt("id"),
                     resultSet.getInt("userId"),
-                    resultSet.getDate("date"),//TODO check this is in the right format!!!!!!
+                    simpleDateFormat.parse(Stringifiable.parseDateBack(resultSet.getString("date"))),//TODO check this is in the right format!!!!!!
                     resultSet.getDouble("clickCost")
                 );
                 resultSet.close();
@@ -59,6 +62,9 @@ public class ClickEntry implements Stringifiable
         } catch (SQLException e)
         {
             e.printStackTrace();
+        } catch (ParseException ex)
+        {
+            Logger.getLogger(ClickEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

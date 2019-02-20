@@ -3,7 +3,10 @@ package Commons;
 import DatabaseManager.Stringifiable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -54,7 +57,7 @@ public class ImpressionEntry implements Stringifiable
                 ImpressionEntry tmp = new ImpressionEntry(
                     resultSet.getInt("id"),
                     resultSet.getInt("userId"),
-                    resultSet.getDate("date"), //TODO check me!!!!!!!
+                    simpleDateFormat.parse(Stringifiable.parseDateBack(resultSet.getString("date"))), //TODO check me!!!!!!!
                     Context.valueOf(resultSet.getString("context")),
                     resultSet.getDouble("impressionCost")
                 );
@@ -64,6 +67,9 @@ public class ImpressionEntry implements Stringifiable
         } catch (SQLException e)
         {
             e.printStackTrace();
+        } catch (ParseException ex)
+        {
+            Logger.getLogger(ImpressionEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

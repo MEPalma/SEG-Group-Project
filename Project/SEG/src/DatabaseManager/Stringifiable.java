@@ -11,9 +11,13 @@ public interface Stringifiable
 {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         
-    static String parse(String string)
+    static String parseDate(String string)
     {
-        return string.replace("'", "''").replace("\n", "").replace("-", "").trim();
+        return string.trim().replace("-", "@").trim();
+    }
+    static String parseDateBack(String string)
+    {
+        return string.replace("''", "'").replace("@", "-");
     }
 
     public String getDBContent();

@@ -4,7 +4,10 @@ package Commons;
 import DatabaseManager.Stringifiable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -40,8 +43,8 @@ public class ServerEntry implements Stringifiable
         String is = "', '";
         return ("'" + this.id + is + 
                 this.userId + is + 
-                simpleDateFormat.format(this.entryDate) + is + 
-                simpleDateFormat.format(this.exitDate) + is +
+                Stringifiable.parseDate(simpleDateFormat.format(this.entryDate)) + is + 
+                Stringifiable.parseDate(simpleDateFormat.format(this.exitDate)) + is +
                 this.pagesViewed.intValue() + is +
                 this.conversion +
                 "'");
@@ -57,8 +60,8 @@ public class ServerEntry implements Stringifiable
                 ServerEntry tmp = new ServerEntry(
                     resultSet.getInt("id"),
                     resultSet.getInt("userId"),
-                    resultSet.getDate("entryDate"),//TODO check this is in the right format!!!!!!
-                    resultSet.getDate("exitDate"),//TODO check this is in the right format!!!!!!
+                    simpleDateFormat.parse(Stringifiable.parseDateBack(resultSet.getString("entryDate"))),//TODO check this is in the right format!!!!!!
+                    simpleDateFormat.parse(Stringifiable.parseDateBack(resultSet.getString("exitDate"))),//TODO check this is in the right format!!!!!!
                     resultSet.getInt("pagesViewed"),
                     Conversion.valueOf(resultSet.getString("conversion"))
                 );
@@ -68,6 +71,9 @@ public class ServerEntry implements Stringifiable
         } catch (SQLException e)
         {
             e.printStackTrace();
+        } catch (ParseException ex)
+        {
+            Logger.getLogger(ServerEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

@@ -12,6 +12,7 @@ import java.util.*;
  */
 
 import Commons.*;
+import java.time.chrono.ThaiBuddhistEra;
 
 /*
  * This class will process queries from QueryComposer.java into DatabaseManager.
@@ -43,6 +44,35 @@ public class DataExchange
     public void close()
     {
         this.dbM.close();
+    }
+    
+    /*
+        INSERT STATEMENTS
+    */
+    
+    public void insertUserStmt(UserEntry user)
+    {
+        this.dbM.writeQuery(QueryComposer.insertUserStmt(user));
+    }
+    
+    public void insertImpressionStmt(ImpressionEntry ie)
+    {
+        this.dbM.writeQuery(QueryComposer.insertImpressionStmt(ie));
+    }
+    
+    public void insertClickStmt(ClickEntry ce)
+    {
+        this.dbM.writeQuery(QueryComposer.insertClickStmt(ce));
+    }
+    
+    public void insertServerStmt(ServerEntry se)
+    {
+        this.dbM.writeQuery(QueryComposer.insertServerStmt(se));
+    }
+    
+    public void insertSettingStmt(String name, String value)
+    {
+        this.dbM.writeQuery(QueryComposer.insertSettingStmt(name, value));
     }
     
 }

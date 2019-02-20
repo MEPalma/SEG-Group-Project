@@ -1,6 +1,8 @@
 package DatabaseManager;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * Created by Marco-Edoardo Palma.
@@ -28,6 +30,8 @@ public class DatabaseManager
         } catch (ClassNotFoundException e)
         {
             System.err.println("[ FAIL ] --> [DB NOT CONNECTED]:: " + e.getStackTrace());
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

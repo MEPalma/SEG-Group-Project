@@ -3,6 +3,7 @@ package Commons;
 
 import DatabaseManager.Stringifiable;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -31,13 +32,35 @@ public class ClickEntry implements Stringifiable
     @Override
     public String getDBContent()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String is = "', '";
+        return ("'" + this.id + is + 
+                this.userId + is +
+                simpleDateFormat.format(this.date) + is +
+                this.clickCost.doubleValue() +
+                "'");
     }
-
+    
     @Override
     public Object parseDBContent(ResultSet resultSet)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            if (!resultSet.isClosed())
+            {
+                ClickEntry tmp = new ClickEntry(
+                    resultSet.getInt("id"),
+                    resultSet.getInt("userId"),
+                    resultSet.getDate("date"),//TODO check this is in the right format!!!!!!
+                    resultSet.getDouble("clickCost")
+                );
+                resultSet.close();
+                return tmp;
+            }
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
     
     public Date getDate()

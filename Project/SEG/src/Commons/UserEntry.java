@@ -2,6 +2,7 @@ package Commons;
 
 import DatabaseManager.Stringifiable;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -33,13 +34,31 @@ public class UserEntry implements Stringifiable
     @Override
     public String getDBContent()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String is = "', '";
+        return ("'" + this.id + is + this.gender + is + this.age + is + this.income + "'");
     }
 
     @Override
     public Object parseDBContent(ResultSet resultSet)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            if (!resultSet.isClosed())
+            {
+                UserEntry tmp = new UserEntry(
+                    resultSet.getInt("id"),
+                    Gender.valueOf(resultSet.getString("gender")),
+                    Age.valueOf(resultSet.getString("age")),
+                    Income.valueOf(resultSet.getString("income"))
+                );
+                resultSet.close();
+                return tmp;
+            }
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public int getId()

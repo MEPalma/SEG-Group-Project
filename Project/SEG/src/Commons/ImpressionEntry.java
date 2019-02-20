@@ -2,6 +2,7 @@ package Commons;
 
 import DatabaseManager.Stringifiable;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -28,20 +29,43 @@ public class ImpressionEntry implements Stringifiable
         this.context = context;
         this.impressionCost = impressionCost;
     }
-    
+
     /*
         implementation of Stringifiable.java
     */
     @Override
     public String getDBContent()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String is = "', '";
+        return ("'" + this.id + is + 
+                simpleDateFormat.format(this.date) + is +
+                this.context + is +
+                this.impressionCost.doubleValue() +
+                "'");
     }
 
     @Override
     public Object parseDBContent(ResultSet resultSet)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            if (!resultSet.isClosed())
+            {
+                ImpressionEntry tmp = new ImpressionEntry(
+                    resultSet.getInt("id"),
+                    resultSet.getInt("userId"),
+                    resultSet.getDate("date"), //TODO check me!!!!!!!
+                    Context.valueOf(resultSet.getString("context")),
+                    resultSet.getDouble("impressionCost")
+                );
+                resultSet.close();
+                return tmp;
+            }
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
     
     public Date getDate()

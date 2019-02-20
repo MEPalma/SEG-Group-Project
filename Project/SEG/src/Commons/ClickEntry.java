@@ -11,14 +11,17 @@ import java.util.Date;
  */
 public class ClickEntry implements Stringifiable
 {
-    private Date date;
+    //IN THE SAME ORDER AS DECLARATION IN DB TABLE
     private final int id;
+    private final int userId;
+    private Date date;
     private Number clickCost;
 
-    public ClickEntry(Date date, int id, Number clickCost)
+    public ClickEntry(int id, int userId, Date date, Number clickCost)
     {
-        this.date = date;
         this.id = id;
+        this.userId = userId;
+        this.date = date;
         this.clickCost = clickCost;
     }
 
@@ -42,9 +45,9 @@ public class ClickEntry implements Stringifiable
         return date;
     }
 
-    public int getId()
+    public int getUserId()
     {
-        return id;
+        return userId;
     }
 
     public Number getClickCost()

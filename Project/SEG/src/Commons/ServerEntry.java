@@ -15,7 +15,7 @@ public class ServerEntry implements Stringifiable
     
     private Date entryDate;
     private Date exitDate;
-    private final int id;
+    private final int userId;
     private Number pagesViewed;
     private Conversion conversion;
 
@@ -23,7 +23,7 @@ public class ServerEntry implements Stringifiable
     {
         this.entryDate = entryDate;
         this.exitDate = exitDate;
-        this.id = id;
+        this.userId = id;
         this.pagesViewed = pagesViewed;
         this.conversion = conversion;
     }
@@ -53,9 +53,9 @@ public class ServerEntry implements Stringifiable
         return exitDate;
     }
 
-    public int getId()
+    public int getUserId()
     {
-        return id;
+        return userId;
     }
 
     public Number getPagesViewed()

@@ -19,7 +19,8 @@ public class DatabaseManager
         initDbCon();
 
         //init tables
-//        writeQuery(QueryComposer.CREATE_TABLES);
+        writeQuery(QueryComposer.CREATE_TABLES);
+        writeQuery(QueryComposer.CREATE_INDEXES);
     }
 
     private synchronized void initDbCon()

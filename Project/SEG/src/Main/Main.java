@@ -1,5 +1,7 @@
 package Main;
 
+import DatabaseManager.DataExchange;
+import DatabaseManager.DatabaseManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,6 +20,8 @@ public class Main
         Date d = simpleDateFormat.parse("2015-01-20 16:12:47");
         System.out.println(d.toString());
         System.out.println(simpleDateFormat.format(new Date()));
+        
+        DataExchange dataExchange = new DataExchange(new DatabaseManager());
     }
 
 }

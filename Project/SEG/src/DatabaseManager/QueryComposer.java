@@ -25,7 +25,7 @@ public class QueryComposer
                                                                 "userId INTEGER,\n" + 
                                                                 "date DATE,\n" +
                                                                 "context VARCHAR(255),\n" + 
-                                                                "impressionCost NUMERIC\n" +
+                                                                "impressionCost NUMERIC,\n" +
                                                                 "FOREIGN KEY (userId) REFERENCES USERS(userId)\n" +
                                                             ");";
     
@@ -37,7 +37,7 @@ public class QueryComposer
                                                         "FOREIGN KEY (userId) REFERENCES USERS(userId)\n" +
                                                      ");";
     
-    private static String CRATE_TABLE_SERVER_LOGS = "CREATE TABLE IF NOT EXISTS SERVER_LOGS(\n" +
+    private static String CREATE_TABLE_SERVER_LOGS = "CREATE TABLE IF NOT EXISTS SERVER_LOGS(\n" +
                                                         "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                                                         "userId INTEGER,\n" +
                                                         "entryDate DATE,\n" +
@@ -45,18 +45,28 @@ public class QueryComposer
                                                         "pagesViewed INTEGER,\n" +
                                                         "conversion VARCHAR(55),\n" +
                                                         "FOREIGN KEY (userId) REFERENCES USERS(userId)\n" +
-                                                     ");";
+                                                      ");";
     
-    private static String CREATE_SETTINGS = "CREATE TABLE IF NOT EXISTS Settings (\n" +
-                                               "name VARCHAR(255) PRIMARY KEY,\n" +
-                                               "value TEXT\n" +
-                                             ");";
+    private static String CREATE_TABLE_SETTINGS = "CREATE TABLE IF NOT EXISTS SETTINGS (\n" +
+                                                    "name VARCHAR(255) PRIMARY KEY,\n" +
+                                                    "value TEXT\n" +
+                                                  ");";
     
-    private static String[] INDEX_IMPRESSIONS = { "CREATE INDEX IMPRESSION_LOGS_DATE_INDEX ON IMPRESSION_LOGS (date);" };
-    private static String[] INDEX_CLICK_LOGS = { "CREATE INDEX CLICK_LOGS_DATE_INDEX ON CLICK_LOGS (date);" };
-    private static String[] INDEX_SERVER_LOGS = { "CREATE INDEX SERVER_LOGS_ENTRY_DATE_INDEX ON SERVER_LOGS (entryDate);",
-                                                  "CREATE INDEX SERVER_LOGS_EXIT_DATE_INDEX ON SERVER_LOGS (exitDate);"
-                                                };
+    public static String[] CREATE_TABLES = {
+                                            CREATE_TABLE_USERS,
+                                            CREATE_TABLE_IMPRESSION_LOGS,
+                                            CREATE_TABLE_CLICK_LOGS,
+                                            CREATE_TABLE_SERVER_LOGS,
+                                            CREATE_TABLE_SETTINGS,
+                                            "PRAGMA foreign_keys = ON"
+                                           };
+    
+    public static String[] CREATE_INDEXES= { "CREATE INDEX IF NOT EXISTS IMPRESSION_LOGS_DATE_INDEX ON IMPRESSION_LOGS (date);",
+                                             "CREATE INDEX IF NOT EXISTS CLICK_LOGS_DATE_INDEX ON CLICK_LOGS (date);",
+                                             "CREATE INDEX IF NOT EXISTS SERVER_LOGS_ENTRY_DATE_INDEX ON SERVER_LOGS (entryDate);",
+                                             "CREATE INDEX IF NOT EXISTS SERVER_LOGS_EXIT_DATE_INDEX ON SERVER_LOGS (exitDate);"
+                                           };
+    
     
     
 }

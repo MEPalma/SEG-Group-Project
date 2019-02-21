@@ -1,5 +1,7 @@
 package DatabaseManager;
 
+import java.io.File;
+
 /**
  *
  * @author Marco-Edoardo Palma
@@ -12,5 +14,10 @@ package DatabaseManager;
 public class CSVParser
 {
     private DataExchange dataExchange;
-    //files
+    private File impressionLogFile;
+    private File clickLogFile;
+    private File serverLogfile;
+    
+    
+    
 }

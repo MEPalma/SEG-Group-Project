@@ -70,6 +70,7 @@ public class QueryComposer
     
     public static String GETLASTID = "SELECT last_insert_rowid() as id";
     
+    
     /*
         INSERT STATEMENTS
     */
@@ -98,6 +99,31 @@ public class QueryComposer
         return "INSERT INTO SETTINGS VALUES ('" + name + "', '" + value + "');";
     }
     
+    
+    /*
+        UPDATE STATEMENTS
+    */
+    // if you need them call me up (Marco)
+    
+    
+    /*
+        DELETE STATEMENTS
+    */
+    // if you need them call me up (Marco)
+    
+    
+    /*
+        DROP ALL STATEMENTS
+    */
+    public static String dropAllFrom_USERS = "DELETE FROM USERS;";
+    public static String dropAllFrom_IMPRESSION_LOGS = "DELETE FROM IMPRESSION_LOGS;";
+    public static String dropAllFrom_CLICK_LOGS = "DELETE FROM CLICK_LOGS;";
+    public static String dropAllFrom_SERVER_LOGS = "DELETE FROM SERVER_LOGS;";
+    public static String dropAllFrom_SETTINGS = "DELETE FROM SETTINGS;";
+    public static String[] dropAll_noSettings = {dropAllFrom_USERS, 
+                                                 dropAllFrom_IMPRESSION_LOGS, 
+                                                 dropAllFrom_CLICK_LOGS,
+                                                 dropAllFrom_SERVER_LOGS};
     
     /*
         SELECT ALL STATEMENTS
@@ -157,4 +183,5 @@ public class QueryComposer
     {
         return "SELECT * FROM SETTINGS WHERE SETTINGS.name='" + name + "' LIMIT 1;";
     }
+
 }

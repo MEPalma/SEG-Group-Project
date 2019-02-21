@@ -200,6 +200,51 @@ public class DataExchange
         this.dbM.writeQuery(QueryComposer.insertSettingStmt(name, value));
     }
 
+    /*
+        UPDATE STATEMENTS
+    */
+    // if you need them call me up (Marco)
+    
+    
+    /*
+        DELETE STATEMENTS
+    */
+    // if you need them call me up (Marco)
+    
+    
+    /*
+        DROP ALL STATEMENTS
+    */
+    public void dropAllFrom_USERS()
+    {
+        this.dbM.writeQuery(QueryComposer.dropAllFrom_USERS);
+    }
+    
+    public void dropAllFrom_IMPRESSION_LOGS()
+    {
+        this.dbM.writeQuery(QueryComposer.dropAllFrom_IMPRESSION_LOGS);
+    }
+    
+    public void dropAllFrom_CLICK_LOGS()
+    {
+        this.dbM.writeQuery(QueryComposer.dropAllFrom_CLICK_LOGS);
+    }
+    
+    public void dropAllFrom_SERVER_LOGS()
+    {
+        this.dbM.writeQuery(QueryComposer.dropAllFrom_SERVER_LOGS);
+    }
+    
+    public void dropAllFrom_SETTINGS()
+    {
+        this.dbM.writeQuery(QueryComposer.dropAllFrom_SETTINGS);
+    }
+    
+    public void dropAll_noSettings()
+    {
+        this.dbM.writeQuery(QueryComposer.dropAll_noSettings);
+    }
+    
     
     /*
         SELECT ALL STATEMENTS

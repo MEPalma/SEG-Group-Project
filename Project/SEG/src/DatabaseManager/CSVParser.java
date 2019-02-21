@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -36,6 +38,7 @@ public class CSVParser
     
     public synchronized void parseAll() throws Exception
     {
+        this.dataExchange.dropAll_noSettings();
         parseImpressionLogFile();
         parseClickLogFile();
         parseServerLogFile();
@@ -49,18 +52,24 @@ public class CSVParser
         
         try (BufferedReader br = new BufferedReader(new FileReader(this.impressionLogFile))) 
         {
-            String line;
+            Set<String> addedUserIds = new HashSet<String>();//no duplicates!
+            
+            String line = br.readLine(); //skip first line
             while ((line = br.readLine()) != null) 
             {
-               String[] tk = line.split(",");//trim too?
-               this.dataExchange.insertUserStmt(new UserEntry(tk[1], 
-                                                              UserEntry.Gender.valueOf(tk[2]), 
-                                                              UserEntry.Age.valueOf(tk[3]), 
-                                                              UserEntry.Income.valueOf(tk[4])));
-               this.dataExchange.insertImpressionStmt(new ImpressionEntry(ImpressionEntry.AUTO_INDEX, 
+                String[] tk = line.split(",");//trim too?
+                if (!addedUserIds.contains(tk[1]))
+                {
+                    this.dataExchange.insertUserStmt(new UserEntry(tk[1], 
+                                                                  UserEntry.Gender.valueOf(tk[2]), 
+                                                                  parseAge(tk[3]), 
+                                                                  UserEntry.Income.valueOf(tk[4])));
+                     addedUserIds.add(tk[1]);
+                }
+                this.dataExchange.insertImpressionStmt(new ImpressionEntry(ImpressionEntry.AUTO_INDEX, 
                                                                           tk[1], 
                                                                           Stringifiable.simpleDateFormat.parse(tk[0]), 
-                                                                          ImpressionEntry.Context.valueOf(tk[5]), 
+                                                                          parseContext(tk[5]), 
                                                                           Double.parseDouble(tk[6])));
             }
         }
@@ -73,7 +82,7 @@ public class CSVParser
         
         try (BufferedReader br = new BufferedReader(new FileReader(this.clickLogFile))) 
         {
-            String line;
+            String line = br.readLine(); //skip first line
             while ((line = br.readLine()) != null) 
             {
                String[] tk = line.split(",");//trim too?
@@ -92,7 +101,7 @@ public class CSVParser
         
         try (BufferedReader br = new BufferedReader(new FileReader(this.serverLogfile))) 
         {
-            String line;
+            String line = br.readLine(); //skip first line
             while ((line = br.readLine()) != null) 
             {
                String[] tk = line.split(",");//trim too?
@@ -106,4 +115,18 @@ public class CSVParser
         }
     }
     
+    private static UserEntry.Age parseAge(String string)
+    {
+        if (string.equals("<25")) return UserEntry.Age.Age_less_than_25;
+        else if (string.equals("25-34")) return UserEntry.Age.Age_25_34;
+        else if (string.equals("35-44")) return UserEntry.Age.Age_35_44;
+        else if (string.equals("45-54")) return UserEntry.Age.Age_45_54;
+        else return UserEntry.Age.Age_more_than_54;
+    }
+    
+    private static ImpressionEntry.Context parseContext(String string)
+    {
+        if (string.equals("Social Media")) return ImpressionEntry.Context.SocialMedia;
+        return ImpressionEntry.Context.valueOf(string);
+    }
 }

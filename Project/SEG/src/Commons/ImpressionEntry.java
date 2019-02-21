@@ -16,7 +16,7 @@ public class ImpressionEntry implements Stringifiable
 {
     public static int AUTO_INDEX = -1;
      
-    public static enum Context {News, Shopping, Social, Media, BlockTagTree, Travel, Unknown};
+    public static enum Context {News, Shopping, SocialMedia, BlockTagTree, Travel, Hobbies, Blog, Unknown};
     
   
     //IN SAME ORDER AS IN DB TABLE
@@ -50,7 +50,7 @@ public class ImpressionEntry implements Stringifiable
         String tmp;
         if (this.id == AUTO_INDEX) tmp = "NULL, '";
         else tmp = "'" + this.id + is;
-        return (tmp + ", '" +
+        return (tmp +
                 this.userId + is +
                 simpleDateFormat.format(this.date) + is +
                 this.context + is +

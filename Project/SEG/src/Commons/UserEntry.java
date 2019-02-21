@@ -10,9 +10,9 @@ import java.sql.SQLException;
  */
 public class UserEntry implements Stringifiable
 {
-    public static enum Gender {Male, Famale, Unknown};
+    public static enum Gender {Male, Female, Unknown};
     public static enum Age {Age_less_than_25, Age_25_34, Age_35_44, Age_45_54, Age_more_than_54, Unknown};
-    public static enum Income {Low, Medium, Hight, Unknown};
+    public static enum Income {Low, Medium, High, Unknown};
     
     //IN SAME ORDER AS IN DB TABLE
     private String id;
@@ -124,5 +124,4 @@ public class UserEntry implements Stringifiable
     {
         this.income = income;
     }
-    
 }

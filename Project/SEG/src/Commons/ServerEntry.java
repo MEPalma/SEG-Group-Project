@@ -50,8 +50,8 @@ public class ServerEntry implements Stringifiable
         String is = "', '";
         String tmp;
         if (this.id == AUTO_INDEX) tmp = "NULL, '";
-        else tmp = "'" + this.id + is;
-        return (tmp + ", '" +
+        else tmp = this.id + is;
+        return (tmp +
                 this.userId + is + 
                 simpleDateFormat.format(this.entryDate) + is + 
                 simpleDateFormat.format(this.exitDate) + is +

@@ -5,8 +5,10 @@ import Commons.ImpressionEntry;
 import Commons.ServerEntry;
 import Commons.ServerEntry.Conversion;
 import Commons.UserEntry;
+import DatabaseManager.CSVParser;
 import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,21 +31,20 @@ public class Main
 //        System.out.println(simpleDateFormat.format(new Date()));
 //        
         DataExchange dataExchange = new DataExchange(new DatabaseManager());
-       
-//        UserEntry u = new UserEntry();
-//        dataExchange.insertUserStmt(u);
-//        
-//        ServerEntry s = new  ServerEntry();
-//        s.setUserId(u.getId());
-//        dataExchange.insertServerStmt(s);
-//        
-//        ImpressionEntry i = new ImpressionEntry();
-//        i.setUserId(u.getId());
-//        dataExchange.insertImpressionStmt(i);
-//        
-//        ClickEntry c = new ClickEntry();
-//        c.setUserId(u.getId());
-//        dataExchange.insertClickStmt(c);
+        
+        File im = new File("/Users/mep/MEP2G17/Modules/COMP2211/Coursework/DataExample/2_week_campaign_2/impression_log.csv");
+        File cl = new File("/Users/mep/MEP2G17/Modules/COMP2211/Coursework/DataExample/2_week_campaign_2/click_log.csv");
+        File sr = new File("/Users/mep/MEP2G17/Modules/COMP2211/Coursework/DataExample/2_week_campaign_2/server_log.csv");
+
+        CSVParser parser = new CSVParser(dataExchange, im, cl, sr);
+        try
+        {
+            parser.parseAll();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+            
         
 //        List<UserEntry> users = dataExchange.selectAllFrom_USERS();
 //        for (UserEntry x : users)

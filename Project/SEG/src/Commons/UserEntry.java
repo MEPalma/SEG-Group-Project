@@ -10,12 +10,12 @@ import java.sql.SQLException;
  */
 public class UserEntry implements Stringifiable
 {
-    public static enum Gender {Male, Famale};
-    public static enum Age {Age_less_than_25, Age_25_34, Age_35_44, Age_45_54, Age_more_than_54};
-    public static enum Income {Low, Medium, Hight};
+    public static enum Gender {Male, Famale, Unknown};
+    public static enum Age {Age_less_than_25, Age_25_34, Age_35_44, Age_45_54, Age_more_than_54, Unknown};
+    public static enum Income {Low, Medium, Hight, Unknown};
     
     //IN SAME ORDER AS IN DB TABLE
-    private final int id;
+    private int id;
     private Gender gender;
     private Age age;
     private Income income;
@@ -28,6 +28,11 @@ public class UserEntry implements Stringifiable
         this.income = income;
     }
     
+    public UserEntry()
+    {
+        this(-1, Gender.Unknown, Age.Unknown, Income.Unknown);
+    }
+    
     /*
         implementation of Stringifiable.java
     */
@@ -35,7 +40,10 @@ public class UserEntry implements Stringifiable
     public String getDBContent()
     {
         String is = "', '";
-        return ("'" + this.id + is + this.gender + is + this.age + is + this.income + "'");
+        String tmp;
+        if (this.id < 0) tmp = "NULL, '";
+        else tmp = "'" + this.id + is;
+        return (tmp + this.gender + is + this.age + is + this.income + "'");
     }
 
     @Override
@@ -59,6 +67,26 @@ public class UserEntry implements Stringifiable
             e.printStackTrace();
         }
         return null;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.getDBContent();
+    }
+    
+     @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof UserEntry)
+            if (this.id == ((UserEntry) obj).id) return true;
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.id;
     }
 
     public int getId()
@@ -86,6 +114,11 @@ public class UserEntry implements Stringifiable
         this.gender = gender;
     }
 
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+    
     public void setAge(Age age)
     {
         this.age = age;

@@ -14,12 +14,12 @@ import java.util.logging.Logger;
  */
 public class ImpressionEntry implements Stringifiable
 {
-    public static enum Context {News, Shopping, Social, Media, BlockTagTree, Travel};
+    public static enum Context {News, Shopping, Social, Media, BlockTagTree, Travel, Unknown};
     
   
     //IN SAME ORDER AS IN DB TABLE
-    private final int id;
-    private final int userId;
+    private int id;
+    private int userId;
     private Date date;
     private Context context;
     private Number impressionCost;
@@ -32,6 +32,11 @@ public class ImpressionEntry implements Stringifiable
         this.context = context;
         this.impressionCost = impressionCost;
     }
+    
+    public ImpressionEntry()
+    {
+        this(-1, -1, new Date(), Context.Unknown, 0);
+    }
 
     /*
         implementation of Stringifiable.java
@@ -40,7 +45,11 @@ public class ImpressionEntry implements Stringifiable
     public String getDBContent()
     {
         String is = "', '";
-        return ("'" + this.id + is + 
+        String tmp;
+        if (this.id < 0) tmp = "NULL, '";
+        else tmp = "'" + this.id + is;
+        return (tmp + 
+                this.userId + is +
                 simpleDateFormat.format(this.date) + is +
                 this.context + is +
                 this.impressionCost.doubleValue() +
@@ -57,7 +66,7 @@ public class ImpressionEntry implements Stringifiable
                 ImpressionEntry tmp = new ImpressionEntry(
                     resultSet.getInt("id"),
                     resultSet.getInt("userId"),
-                    simpleDateFormat.parse(Stringifiable.parseDateBack(resultSet.getString("date"))), //TODO check me!!!!!!!
+                    resultSet.getDate("date"), //TODO check me!!!!!!!
                     Context.valueOf(resultSet.getString("context")),
                     resultSet.getDouble("impressionCost")
                 );
@@ -67,11 +76,28 @@ public class ImpressionEntry implements Stringifiable
         } catch (SQLException e)
         {
             e.printStackTrace();
-        } catch (ParseException ex)
-        {
-            Logger.getLogger(ImpressionEntry.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
         return null;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.getDBContent();
+    }
+    
+     @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof ImpressionEntry)
+            if (this.id == ((ImpressionEntry) obj).id) return true;
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.id;
     }
     
     public Date getDate()
@@ -97,6 +123,16 @@ public class ImpressionEntry implements Stringifiable
     public Number getImpressionCost()
     {
         return impressionCost;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public void setUserId(int userId)
+    {
+        this.userId = userId;
     }
 
     public void setDate(Date date)

@@ -16,8 +16,8 @@ import java.util.logging.Logger;
 public class ClickEntry implements Stringifiable
 {
     //IN THE SAME ORDER AS DECLARATION IN DB TABLE
-    private final int id;
-    private final int userId;
+    private int id;
+    private int userId;
     private Date date;
     private Number clickCost;
 
@@ -28,6 +28,11 @@ public class ClickEntry implements Stringifiable
         this.date = date;
         this.clickCost = clickCost;
     }
+    
+    public ClickEntry()
+    {
+        this(-1, -1, new Date(), 0);
+    }
 
     /*
         implementation of Stringifiable.java
@@ -36,7 +41,10 @@ public class ClickEntry implements Stringifiable
     public String getDBContent()
     {
         String is = "', '";
-        return ("'" + this.id + is + 
+        String tmp;
+        if (this.id < 0) tmp = "NULL, '";
+        else tmp = this.id + ", '";
+        return (tmp + 
                 this.userId + is +
                 simpleDateFormat.format(this.date) + is +
                 this.clickCost.doubleValue() +
@@ -53,7 +61,7 @@ public class ClickEntry implements Stringifiable
                 ClickEntry tmp = new ClickEntry(
                     resultSet.getInt("id"),
                     resultSet.getInt("userId"),
-                    simpleDateFormat.parse(Stringifiable.parseDateBack(resultSet.getString("date"))),//TODO check this is in the right format!!!!!!
+                    resultSet.getDate("date"),//TODO check this is in the right format!!!!!!
                     resultSet.getDouble("clickCost")
                 );
                 resultSet.close();
@@ -62,11 +70,28 @@ public class ClickEntry implements Stringifiable
         } catch (SQLException e)
         {
             e.printStackTrace();
-        } catch (ParseException ex)
-        {
-            Logger.getLogger(ClickEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.getDBContent();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof ClickEntry)
+            if (this.id == ((ClickEntry) obj).id) return true;
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.id;
     }
     
     public Date getDate()
@@ -84,6 +109,16 @@ public class ClickEntry implements Stringifiable
         return clickCost;
     }
 
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public void setUserId(int userId)
+    {
+        this.userId = userId;
+    }
+    
     public void setDate(Date date)
     {
         this.date = date;

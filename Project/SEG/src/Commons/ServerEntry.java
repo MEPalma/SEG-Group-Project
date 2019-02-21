@@ -15,10 +15,10 @@ import java.util.logging.Logger;
  */
 public class ServerEntry implements Stringifiable
 {
-    public static enum Conversion {Yes, No}
+    public static enum Conversion {Yes, No, Unknown}
   
-    private final int id;
-    private final int userId;
+    private int id;
+    private int userId;
     private Date entryDate;
     private Date exitDate;
     private Number pagesViewed;
@@ -34,6 +34,11 @@ public class ServerEntry implements Stringifiable
         this.conversion = conversion;
     }
 
+    public ServerEntry()
+    {
+        this(-1, -1, new Date(), new Date(), 0, Conversion.Unknown);
+    }
+    
     /*
         implementation of Stringifiable.java
     */
@@ -41,10 +46,13 @@ public class ServerEntry implements Stringifiable
     public String getDBContent()
     {
         String is = "', '";
-        return ("'" + this.id + is + 
+        String tmp;
+        if (this.id < 0) tmp = "NULL, '";
+        else tmp = "'" + this.id + is;
+        return (tmp +
                 this.userId + is + 
-                Stringifiable.parseDate(simpleDateFormat.format(this.entryDate)) + is + 
-                Stringifiable.parseDate(simpleDateFormat.format(this.exitDate)) + is +
+                simpleDateFormat.format(this.entryDate) + is + 
+                simpleDateFormat.format(this.exitDate) + is +
                 this.pagesViewed.intValue() + is +
                 this.conversion +
                 "'");
@@ -60,8 +68,8 @@ public class ServerEntry implements Stringifiable
                 ServerEntry tmp = new ServerEntry(
                     resultSet.getInt("id"),
                     resultSet.getInt("userId"),
-                    simpleDateFormat.parse(Stringifiable.parseDateBack(resultSet.getString("entryDate"))),//TODO check this is in the right format!!!!!!
-                    simpleDateFormat.parse(Stringifiable.parseDateBack(resultSet.getString("exitDate"))),//TODO check this is in the right format!!!!!!
+                    resultSet.getDate("entryDate"),//TODO check this is in the right format!!!!!!
+                    resultSet.getDate("exitDate"),//TODO check this is in the right format!!!!!!
                     resultSet.getInt("pagesViewed"),
                     Conversion.valueOf(resultSet.getString("conversion"))
                 );
@@ -71,11 +79,28 @@ public class ServerEntry implements Stringifiable
         } catch (SQLException e)
         {
             e.printStackTrace();
-        } catch (ParseException ex)
-        {
-            Logger.getLogger(ServerEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.getDBContent();
+    }
+    
+     @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof ServerEntry)
+            if (this.id == ((ServerEntry) obj).id) return true;
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.id;
     }
 
     public Date getEntryDate()
@@ -101,6 +126,16 @@ public class ServerEntry implements Stringifiable
     public Conversion getConversion()
     {
         return conversion;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public void setUserId(int userId)
+    {
+        this.userId = userId;
     }
 
     public void setEntryDate(Date entryDate)

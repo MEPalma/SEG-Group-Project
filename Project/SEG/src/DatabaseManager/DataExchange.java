@@ -63,6 +63,16 @@ public class DataExchange
         this.dbM.writeQuery(q);
     }
     
+    public void writeQuery(List<String> list)
+    {
+        this.dbM.writeQuery(list);
+    }
+
+    public DatabaseManager getDbM()
+    {
+        return dbM;
+    }
+    
     private int getLastID()
     {
         try

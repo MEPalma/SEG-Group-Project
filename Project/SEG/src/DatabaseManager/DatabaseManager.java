@@ -9,10 +9,11 @@ import java.util.logging.Logger;
  */
 
 import Commons.*;
+import java.util.List;
 
 public class DatabaseManager
 {
-    private static Connection dbCon;
+    private Connection dbCon;
 
     public DatabaseManager()
     {
@@ -28,9 +29,13 @@ public class DatabaseManager
         try
         {
             Class.forName("org.sqlite.JDBC");
+            
             // create a connection to the database
 //            this.dbCon = DriverManager.getConnection("jdbc:sqlite:" + new PathsManager().getDB());
+
             this.dbCon = DriverManager.getConnection("jdbc:sqlite::memory:");
+            
+            this.dbCon.setAutoCommit(true);
         } catch (ClassNotFoundException e)
         {
             System.err.println("[ FAIL ] --> [DB NOT CONNECTED]:: " + e.getStackTrace());
@@ -46,7 +51,7 @@ public class DatabaseManager
             this.dbCon.close();
         } catch (SQLException e)
         {
-
+            e.printStackTrace();
         }
     }
 
@@ -70,6 +75,7 @@ public class DatabaseManager
         {
             Statement stmt = this.dbCon.createStatement();
             stmt.execute(query);
+            stmt.close();
         } catch (SQLException e)
         {
             System.out.println(query);
@@ -82,4 +88,26 @@ public class DatabaseManager
         for (String query : queries)
             writeQuery(query);
     }
+    
+    public void writeQuery(List<String> list)
+    {
+        try
+        {
+            Statement statement = this.dbCon.createStatement();
+
+            for (String q : list) 
+                    statement.addBatch(q);
+        
+            statement.executeBatch();
+            statement.close();
+        } catch (Exception e)
+        {
+        }
+    }
+
+    public Connection getDbCon()
+    {
+        return dbCon;
+    }
+    
 }

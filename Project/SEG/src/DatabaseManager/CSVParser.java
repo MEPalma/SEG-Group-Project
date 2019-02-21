@@ -6,10 +6,13 @@ import Commons.ServerEntry;
 import Commons.UserEntry;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,42 +43,50 @@ public class CSVParser
     public synchronized void parseAll() throws Exception
     {
         this.dataExchange.dropAll_noSettings();
-        parseImpressionLogFile();
+        
+        this.dataExchange.writeQuery("PRAGMA foreign_keys = OFF;");
+        
+        this.dataExchange.getDbM().getDbCon().setAutoCommit(false);
+        
+        parseImpressionLogFile();     
         parseClickLogFile();
         parseServerLogFile();
+        
+        this.dataExchange.getDbM().getDbCon().commit();
+        this.dataExchange.getDbM().getDbCon().setAutoCommit(true);
+        
+        this.dataExchange.writeQuery("PRAGMA foreign_keys = ON;");
     }
 
     private void parseImpressionLogFile() throws FileNotFoundException, IOException, Exception
     {
-        // 0     1      2      3       4         5             6
+        // 0     1      2       3       4         5            6
         //DATE | ID | Gender | Age | Income | Context | impressionCost
         // im    us     us      us     us        im           im
 
-        try (BufferedReader br = new BufferedReader(new FileReader(this.impressionLogFile)))
+       try (BufferedReader br = new BufferedReader(new FileReader(this.impressionLogFile), 40000))
         {
-            Set<String> addedUserIds = new HashSet<String>();//no duplicates!
-
-            String line = br.readLine(); //skip first line
+            List<String> insertStatements = new LinkedList<String>();
+            
+            Set<Integer> addedUserIds = new HashSet<Integer>();//no duplicates!
+            
+            br.readLine();//skip first line
+           
+            String line = "";
             while ((line = br.readLine()) != null)
             {
                 String[] tk = line.split(",");
-                if (!addedUserIds.contains(tk[1]))
+                int userIdhash = tk[1].hashCode();
+                if (!addedUserIds.contains(userIdhash))
                 {
-                    this.dataExchange.insertUserStmt(new UserEntry(tk[1],
-                            UserEntry.Gender.valueOf(tk[2]),
-                            parseAge(tk[3]),
-                            UserEntry.Income.valueOf(tk[4])));
-                    addedUserIds.add(tk[1]);
+                    insertStatements.add("INSERT INTO USERS VALUES ('" + tk[1] + "', '" + tk[2] + "', '" + parseAge(tk[3]) + "', '" + tk[4] + "');");
+                    addedUserIds.add(userIdhash);
                 }
                 if (!tk[0].equals("n/a"))
-                {
-                    this.dataExchange.insertImpressionStmt(new ImpressionEntry(ImpressionEntry.AUTO_INDEX,
-                            tk[1],
-                            Stringifiable.simpleDateFormat.parse(tk[0]),
-                            parseContext(tk[5]),
-                            Double.parseDouble(tk[6])));
-                }
+                    insertStatements.add("INSERT INTO IMPRESSION_LOGS VALUES (NULL, '" + tk[1] + "', '" + tk[0] + "', '" + parseContext(tk[5]) + "', '" +  Double.parseDouble(tk[6]) + "');");
+                
             }
+            this.dataExchange.writeQuery(insertStatements);
         }
     }
 
@@ -84,20 +95,19 @@ public class CSVParser
         // 0     1      2     
         //DATE | ID | clickcost
 
-        try (BufferedReader br = new BufferedReader(new FileReader(this.clickLogFile)))
+        try (BufferedReader br = new BufferedReader(new FileReader(this.clickLogFile), 40000))
         {
-            String line = br.readLine(); //skip first line
+            List<String> insertStatements = new LinkedList<String>();
+            
+            br.readLine();//skip first line
+            String line = br.readLine();
             while ((line = br.readLine()) != null)
             {
                 String[] tk = line.split(",");
                 if (!tk[0].equals("n/a"))
-                {
-                    this.dataExchange.insertClickStmt(new ClickEntry(ClickEntry.AUTO_INDEX,
-                            tk[1],
-                            Stringifiable.simpleDateFormat.parse(tk[0]),
-                            Double.parseDouble(tk[2])));
-                }
+                    insertStatements.add("INSERT INTO CLICK_LOGS VALUES (NULL, '" + tk[1] + "','" + tk[0] + "','" + Double.parseDouble(tk[2]) + "');");
             }
+            this.dataExchange.writeQuery(insertStatements);
         }
     }
 
@@ -106,22 +116,19 @@ public class CSVParser
         //     0       1      2           3            4
         //entryDATE | ID | exitDate | pagesViewed | conversions
 
-        try (BufferedReader br = new BufferedReader(new FileReader(this.serverLogfile)))
+        try (BufferedReader br = new BufferedReader(new FileReader(this.serverLogfile), 40000))
         {
-            String line = br.readLine(); //skip first line
+            List<String> insertStatements = new LinkedList<String>();
+            
+            br.readLine(); //skip first line
+            String line = "";
             while ((line = br.readLine()) != null)
             {
                 String[] tk = line.split(",");
                 if (!tk[0].equals("n/a") && !tk[2].equals("n/a"))
-                {
-                    this.dataExchange.insertServerStmt(new ServerEntry(ServerEntry.AUTO_INDEX,
-                            tk[1],
-                            Stringifiable.simpleDateFormat.parse(tk[0]),
-                            Stringifiable.simpleDateFormat.parse(tk[2]),
-                            Integer.parseInt(tk[3]),
-                            ServerEntry.Conversion.valueOf(tk[4])));
-                }
+                    insertStatements.add("INSERT INTO SERVER_LOGS VALUES (NULL,'" + tk[1] + "','" + tk[0] + "','" + tk[2] + "','" + Integer.parseInt(tk[3]) + "','" + tk[4] + "');");
             }
+            this.dataExchange.writeQuery(insertStatements);
         }
     }
 

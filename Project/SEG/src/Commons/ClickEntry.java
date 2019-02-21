@@ -61,15 +61,17 @@ public class ClickEntry implements Stringifiable
                 ClickEntry tmp = new ClickEntry(
                     resultSet.getInt("id"),
                     resultSet.getInt("userId"),
-                    resultSet.getDate("date"),//TODO check this is in the right format!!!!!!
+                    simpleDateFormat.parse(resultSet.getString("date")),
                     resultSet.getDouble("clickCost")
                 );
-                resultSet.close();
                 return tmp;
             }
         } catch (SQLException e)
         {
             e.printStackTrace();
+        } catch (Exception ex)
+        {
+            System.out.println("fuuuuuuck");
         }
         return null;
     }

@@ -97,4 +97,14 @@ public class QueryComposer
     {
         return "INSERT INTO SETTINGS VALUES ('" + name + "', '" + value + "');";
     }
+    
+    /*
+        SELECT ALL STATEMENTS
+    */
+    
+    public static String selectAllFrom_USERS = "SELECT * FROM USERS;";
+    public static String selectAllFrom_IMPRESSION_LOGS = "SELECT * FROM IMPRESSION_LOGS;";
+    public static String selectAllFrom_CLICK_LOGS = "SELECT * FROM CLICK_LOGS;";
+    public static String selectAllFrom_SERVER_LOGS = "SELECT * FROM SERVER_LOGS;";
+    public static String selectAllFrom_SETTINGS = "SELECT * FROM SETTINGS;";
 }

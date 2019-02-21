@@ -66,17 +66,19 @@ public class ImpressionEntry implements Stringifiable
                 ImpressionEntry tmp = new ImpressionEntry(
                     resultSet.getInt("id"),
                     resultSet.getInt("userId"),
-                    resultSet.getDate("date"), //TODO check me!!!!!!!
+                    simpleDateFormat.parse(resultSet.getString("date")),
                     Context.valueOf(resultSet.getString("context")),
                     resultSet.getDouble("impressionCost")
                 );
-                resultSet.close();
                 return tmp;
             }
         } catch (SQLException e)
         {
             e.printStackTrace();
-        } 
+        } catch (ParseException ex) 
+        {
+            Logger.getLogger(ImpressionEntry.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
     

@@ -68,17 +68,19 @@ public class ServerEntry implements Stringifiable
                 ServerEntry tmp = new ServerEntry(
                     resultSet.getInt("id"),
                     resultSet.getInt("userId"),
-                    resultSet.getDate("entryDate"),//TODO check this is in the right format!!!!!!
-                    resultSet.getDate("exitDate"),//TODO check this is in the right format!!!!!!
+                    simpleDateFormat.parse(resultSet.getString("entryDate")),
+                    simpleDateFormat.parse(resultSet.getString("exitDate")),
                     resultSet.getInt("pagesViewed"),
                     Conversion.valueOf(resultSet.getString("conversion"))
                 );
-                resultSet.close();
                 return tmp;
             }
         } catch (SQLException e)
         {
             e.printStackTrace();
+        } catch (ParseException ex)
+        {
+            Logger.getLogger(ServerEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

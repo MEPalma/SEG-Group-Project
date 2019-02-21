@@ -59,7 +59,6 @@ public class UserEntry implements Stringifiable
                     Age.valueOf(resultSet.getString("age")),
                     Income.valueOf(resultSet.getString("income"))
                 );
-                resultSet.close();
                 return tmp;
             }
         } catch (SQLException e)

@@ -73,6 +73,99 @@ public class DataExchange
     }
     
     /*
+        PARSERS
+    */
+    
+    private List<UserEntry> parseUserEntrys(ResultSet rset)
+    {
+        try
+        {
+            UserEntry maker = new UserEntry();
+            
+            List<UserEntry> users = new LinkedList<UserEntry>();
+            while (rset.next())
+                users.add((UserEntry) maker.parseDBContent(rset));
+
+            return users;
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return new LinkedList<UserEntry>();
+        }
+    }
+    
+    private List<ImpressionEntry> parseImpressionEntrys(ResultSet rset)
+    {
+        try
+        {
+            ImpressionEntry maker = new ImpressionEntry();
+            
+            List<ImpressionEntry> impressions = new LinkedList<ImpressionEntry>();
+            while (rset.next())
+                impressions.add((ImpressionEntry) maker.parseDBContent(rset));
+
+            return impressions;
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return new LinkedList<ImpressionEntry>();
+        }
+    }
+    
+    private List<ClickEntry> parseClickEntrys(ResultSet rset)
+    {
+        try
+        {
+            ClickEntry maker = new ClickEntry();
+            
+            List<ClickEntry> clicks = new LinkedList<ClickEntry>();
+            while (rset.next())
+                clicks.add((ClickEntry) maker.parseDBContent(rset));
+
+            return clicks;
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return new LinkedList<ClickEntry>();
+        }
+    }
+    
+    private List<ServerEntry> parseServerEntrys(ResultSet rset)
+    {
+        try
+        {
+            ServerEntry maker = new ServerEntry();
+            
+            List<ServerEntry> servers = new LinkedList<ServerEntry>();
+            while (rset.next())
+                servers.add((ServerEntry) maker.parseDBContent(rset));
+
+            return servers;
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return new LinkedList<ServerEntry>();
+        }
+    }
+    
+    private Map<String, String> parseSettings(ResultSet rset)
+    {
+        try
+        {
+            Map<String, String> settings = new HashMap<String, String>();
+            while (rset.next())
+                settings.put(rset.getString("name"), rset.getString("value"));
+
+            return settings;
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return new HashMap<String, String>();
+        }
+    }
+    
+    
+    /*
         INSERT STATEMENTS
     */
     
@@ -103,6 +196,51 @@ public class DataExchange
     public void insertSettingStmt(String name, String value)
     {
         this.dbM.writeQuery(QueryComposer.insertSettingStmt(name, value));
+    }
+
+    
+    /*
+        SELECT ALL STATEMENTS
+    */
+    
+    public List<UserEntry> selectAllFrom_USERS()
+    {
+        ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_USERS);
+        List tmp = parseUserEntrys(rset);
+        close(rset);
+        return tmp;
+    }
+    
+    public List<ImpressionEntry> selectAllFrom_IMPRESSION_LOGS()
+    {
+        ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_IMPRESSION_LOGS);
+        List tmp = parseImpressionEntrys(rset);
+        close(rset);
+        return tmp;
+    }
+    
+    public List<ClickEntry> selectAllFrom_CLICK_LOGS()
+    {
+        ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_CLICK_LOGS);
+        List tmp = parseClickEntrys(rset);
+        close(rset);
+        return tmp;
+    }
+    
+    public List<ServerEntry> selectAllFrom_SERVER_LOGS()
+    {
+        ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_SERVER_LOGS);
+        List tmp = parseServerEntrys(rset);
+        close(rset);
+        return tmp;
+    }
+    
+    public Map<String, String> selectAllFrom_SETTINGS()
+    {
+        ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_SETTINGS);
+        Map tmp = parseSettings(rset);
+        close(rset);
+        return tmp;
     }
     
 }

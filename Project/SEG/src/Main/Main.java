@@ -10,6 +10,7 @@ import DatabaseManager.DatabaseManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -27,21 +28,39 @@ public class Main
 //        System.out.println(simpleDateFormat.format(new Date()));
 //        
         DataExchange dataExchange = new DataExchange(new DatabaseManager());
+       
+//        UserEntry u = new UserEntry();
+//        dataExchange.insertUserStmt(u);
+//        
+//        ServerEntry s = new  ServerEntry();
+//        s.setUserId(u.getId());
+//        dataExchange.insertServerStmt(s);
+//        
+//        ImpressionEntry i = new ImpressionEntry();
+//        i.setUserId(u.getId());
+//        dataExchange.insertImpressionStmt(i);
+//        
+//        ClickEntry c = new ClickEntry();
+//        c.setUserId(u.getId());
+//        dataExchange.insertClickStmt(c);
         
-        UserEntry u = new UserEntry();
-        dataExchange.insertUserStmt(u);
+        List<UserEntry> users = dataExchange.selectAllFrom_USERS();
+        for (UserEntry x : users)
+            System.out.println(x.toString());
         
-        ServerEntry s = new  ServerEntry();
-        s.setUserId(u.getId());
-        dataExchange.insertServerStmt(s);
+        List<ClickEntry> clicks = dataExchange.selectAllFrom_CLICK_LOGS();
+        for (ClickEntry c : clicks)
+            System.out.println(c.toString());
         
-        ImpressionEntry i = new ImpressionEntry();
-        i.setUserId(u.getId());
-        dataExchange.insertImpressionStmt(i);
+        List<ImpressionEntry> impressions = dataExchange.selectAllFrom_IMPRESSION_LOGS();
+        for (ImpressionEntry c : impressions)
+            System.out.println(c.toString());
         
-        ClickEntry c = new ClickEntry();
-        c.setUserId(u.getId());
-        dataExchange.insertClickStmt(c);
+        List<ServerEntry> server = dataExchange.selectAllFrom_SERVER_LOGS();
+        for (ServerEntry x : server)
+            System.out.println(x.toString());
+        
+        dataExchange.close();
     }
 
 }

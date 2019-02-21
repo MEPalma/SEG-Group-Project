@@ -3,7 +3,11 @@ package Commons;
 
 import DatabaseManager.Stringifiable;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -11,21 +15,30 @@ import java.util.Date;
  */
 public class ServerEntry implements Stringifiable
 {
-    public static enum Conversion {Yes, No}
-    
+    public static int AUTO_INDEX = -1;
+     
+    public static enum Conversion {Yes, No, Unknown}
+  
+    private int id;
+    private String userId;
     private Date entryDate;
     private Date exitDate;
-    private final int id;
     private Number pagesViewed;
     private Conversion conversion;
 
-    public ServerEntry(Date entryDate, Date exitDate, int id, Number pagesViewed, Conversion conversion)
+    public ServerEntry(int id, String userId, Date entryDate, Date exitDate, Number pagesViewed, Conversion conversion)
     {
+        this.id = id;
+        this.userId = userId;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
-        this.id = id;
         this.pagesViewed = pagesViewed;
         this.conversion = conversion;
+    }
+
+    public ServerEntry()
+    {
+        this(AUTO_INDEX, "", new Date(), new Date(), 0, Conversion.Unknown);
     }
     
     /*
@@ -34,13 +47,64 @@ public class ServerEntry implements Stringifiable
     @Override
     public String getDBContent()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String is = "', '";
+        String tmp;
+        if (this.id == AUTO_INDEX) tmp = "NULL, '";
+        else tmp = this.id + is;
+        return (tmp +
+                this.userId + is + 
+                simpleDateFormat.format(this.entryDate) + is + 
+                simpleDateFormat.format(this.exitDate) + is +
+                this.pagesViewed.intValue() + is +
+                this.conversion +
+                "'");
     }
 
     @Override
     public Object parseDBContent(ResultSet resultSet)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            if (!resultSet.isClosed())
+            {
+                ServerEntry tmp = new ServerEntry(
+                    resultSet.getInt("id"),
+                    resultSet.getString("userId"),
+                    simpleDateFormat.parse(resultSet.getString("entryDate")),
+                    simpleDateFormat.parse(resultSet.getString("exitDate")),
+                    resultSet.getInt("pagesViewed"),
+                    Conversion.valueOf(resultSet.getString("conversion"))
+                );
+                return tmp;
+            }
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        } catch (ParseException ex)
+        {
+            Logger.getLogger(ServerEntry.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.getDBContent();
+    }
+    
+     @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof ServerEntry)
+            if (this.id == ((ServerEntry) obj).id) return true;
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.id;
     }
 
     public Date getEntryDate()
@@ -53,9 +117,9 @@ public class ServerEntry implements Stringifiable
         return exitDate;
     }
 
-    public int getId()
+    public String getUserId()
     {
-        return id;
+        return userId;
     }
 
     public Number getPagesViewed()
@@ -66,6 +130,16 @@ public class ServerEntry implements Stringifiable
     public Conversion getConversion()
     {
         return conversion;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public void setUserId(String userId)
+    {
+        this.userId = userId;
     }
 
     public void setEntryDate(Date entryDate)

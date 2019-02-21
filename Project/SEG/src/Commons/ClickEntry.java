@@ -3,7 +3,11 @@ package Commons;
 
 import DatabaseManager.Stringifiable;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -11,15 +15,25 @@ import java.util.Date;
  */
 public class ClickEntry implements Stringifiable
 {
+    public static int AUTO_INDEX = -1;
+     
+    //IN THE SAME ORDER AS DECLARATION IN DB TABLE
+    private int id;
+    private String userId;
     private Date date;
-    private final int id;
     private Number clickCost;
 
-    public ClickEntry(Date date, int id, Number clickCost)
+    public ClickEntry(int id, String userId, Date date, Number clickCost)
     {
-        this.date = date;
         this.id = id;
+        this.userId = userId;
+        this.date = date;
         this.clickCost = clickCost;
+    }
+    
+    public ClickEntry()
+    {
+        this(AUTO_INDEX, "", new Date(), 0);
     }
 
     /*
@@ -28,13 +42,60 @@ public class ClickEntry implements Stringifiable
     @Override
     public String getDBContent()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String is = "', '";
+        String tmp;
+        if (this.id == AUTO_INDEX) tmp = "NULL, '";
+        else tmp = this.id + ", '";
+        return (tmp +
+                this.userId + is +
+                simpleDateFormat.format(this.date) + is +
+                this.clickCost.doubleValue() +
+                "'");
     }
-
+    
     @Override
     public Object parseDBContent(ResultSet resultSet)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            if (!resultSet.isClosed())
+            {
+                ClickEntry tmp = new ClickEntry(
+                    resultSet.getInt("id"),
+                    resultSet.getString("userId"),
+                    simpleDateFormat.parse(resultSet.getString("date")),
+                    resultSet.getDouble("clickCost")
+                );
+                return tmp;
+            }
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        } catch (Exception ex)
+        {
+            System.out.println("fuuuuuuck");
+        }
+        return null;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.getDBContent();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof ClickEntry)
+            if (this.id == ((ClickEntry) obj).id) return true;
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.id;
     }
     
     public Date getDate()
@@ -42,9 +103,9 @@ public class ClickEntry implements Stringifiable
         return date;
     }
 
-    public int getId()
+    public String getUserId()
     {
-        return id;
+        return userId;
     }
 
     public Number getClickCost()
@@ -52,6 +113,16 @@ public class ClickEntry implements Stringifiable
         return clickCost;
     }
 
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public void setUserId(String userId)
+    {
+        this.userId = userId;
+    }
+    
     public void setDate(Date date)
     {
         this.date = date;

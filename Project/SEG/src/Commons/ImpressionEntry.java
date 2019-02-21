@@ -2,7 +2,11 @@ package Commons;
 
 import DatabaseManager.Stringifiable;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -10,43 +14,94 @@ import java.util.Date;
  */
 public class ImpressionEntry implements Stringifiable
 {
-    public static enum Gender {Male, Famale};
-    public static enum Age {Age_less_than_25, Age_25_34, Age_35_44, Age_45_54, Age_more_than_54};
-    public static enum Income {Low, Medium, Hight};
-    public static enum Context {News, Shopping, Social, Media, BlockTagTree, Travel};
+    public static int AUTO_INDEX = -1;
+     
+    public static enum Context {News, Shopping, SocialMedia, BlockTagTree, Travel, Hobbies, Blog, Unknown};
     
+  
+    //IN SAME ORDER AS IN DB TABLE
+    private int id;
+    private String userId;
     private Date date;
-    private final int id;
-    private Gender gender;
-    private Age age;
-    private Income income;
     private Context context;
-    private Number impressionCose;
+    private Number impressionCost;
 
-    public ImpressionEntry(Date date, int id, Gender gender, Age age, Income income, Context context, Number impressionCose)
+    public ImpressionEntry(int id, String userId, Date date, Context context, Number impressionCost)
     {
-        this.date = date;
         this.id = id;
-        this.gender = gender;
-        this.age = age;
-        this.income = income;
+        this.userId = userId;
+        this.date = date;
         this.context = context;
-        this.impressionCose = impressionCose;
+        this.impressionCost = impressionCost;
     }
     
+    public ImpressionEntry()
+    {
+        this(AUTO_INDEX, "", new Date(), Context.Unknown, 0);
+    }
+
     /*
         implementation of Stringifiable.java
     */
     @Override
     public String getDBContent()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String is = "', '";
+        String tmp;
+        if (this.id == AUTO_INDEX) tmp = "NULL, '";
+        else tmp = "'" + this.id + is;
+        return (tmp +
+                this.userId + is +
+                simpleDateFormat.format(this.date) + is +
+                this.context + is +
+                this.impressionCost.doubleValue() +
+                "'");
     }
 
     @Override
     public Object parseDBContent(ResultSet resultSet)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            if (!resultSet.isClosed())
+            {
+                ImpressionEntry tmp = new ImpressionEntry(
+                    resultSet.getInt("id"),
+                    resultSet.getString("userId"),
+                    simpleDateFormat.parse(resultSet.getString("date")),
+                    Context.valueOf(resultSet.getString("context")),
+                    resultSet.getDouble("impressionCost")
+                );
+                return tmp;
+            }
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        } catch (ParseException ex) 
+        {
+            Logger.getLogger(ImpressionEntry.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.getDBContent();
+    }
+    
+     @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof ImpressionEntry)
+            if (this.id == ((ImpressionEntry) obj).id) return true;
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.id;
     }
     
     public Date getDate()
@@ -54,24 +109,14 @@ public class ImpressionEntry implements Stringifiable
         return date;
     }
 
+    public String getUserId()
+    {
+        return userId;
+    }
+    
     public int getId()
     {
         return id;
-    }
-
-    public Gender getGender()
-    {
-        return gender;
-    }
-
-    public Age getAge()
-    {
-        return age;
-    }
-
-    public Income getIncome()
-    {
-        return income;
     }
 
     public Context getContext()
@@ -79,9 +124,19 @@ public class ImpressionEntry implements Stringifiable
         return context;
     }
 
-    public Number getImpressionCose()
+    public Number getImpressionCost()
     {
-        return impressionCose;
+        return impressionCost;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public void setUserId(String userId)
+    {
+        this.userId = userId;
     }
 
     public void setDate(Date date)
@@ -89,30 +144,14 @@ public class ImpressionEntry implements Stringifiable
         this.date = date;
     }
 
-    public void setGender(Gender gender)
-    {
-        this.gender = gender;
-    }
-
-    public void setAge(Age age)
-    {
-        this.age = age;
-    }
-
-    public void setIncome(Income income)
-    {
-        this.income = income;
-    }
-
     public void setContext(Context context)
     {
         this.context = context;
     }
 
-    public void setImpressionCose(Number impressionCose)
+    public void setImpressionCost(Number impressionCost)
     {
-        this.impressionCose = impressionCose;
+        this.impressionCost = impressionCost;
     }
-    
     
 }

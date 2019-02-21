@@ -15,13 +15,15 @@ import java.util.logging.Logger;
  */
 public class ClickEntry implements Stringifiable
 {
+    public static int AUTO_INDEX = -1;
+     
     //IN THE SAME ORDER AS DECLARATION IN DB TABLE
     private int id;
-    private int userId;
+    private String userId;
     private Date date;
     private Number clickCost;
 
-    public ClickEntry(int id, int userId, Date date, Number clickCost)
+    public ClickEntry(int id, String userId, Date date, Number clickCost)
     {
         this.id = id;
         this.userId = userId;
@@ -31,7 +33,7 @@ public class ClickEntry implements Stringifiable
     
     public ClickEntry()
     {
-        this(-1, -1, new Date(), 0);
+        this(AUTO_INDEX, "", new Date(), 0);
     }
 
     /*
@@ -42,9 +44,9 @@ public class ClickEntry implements Stringifiable
     {
         String is = "', '";
         String tmp;
-        if (this.id < 0) tmp = "NULL, '";
+        if (this.id == AUTO_INDEX) tmp = "NULL, '";
         else tmp = this.id + ", '";
-        return (tmp + 
+        return (tmp + ", '" +
                 this.userId + is +
                 simpleDateFormat.format(this.date) + is +
                 this.clickCost.doubleValue() +
@@ -60,7 +62,7 @@ public class ClickEntry implements Stringifiable
             {
                 ClickEntry tmp = new ClickEntry(
                     resultSet.getInt("id"),
-                    resultSet.getInt("userId"),
+                    resultSet.getString("userId"),
                     simpleDateFormat.parse(resultSet.getString("date")),
                     resultSet.getDouble("clickCost")
                 );
@@ -101,7 +103,7 @@ public class ClickEntry implements Stringifiable
         return date;
     }
 
-    public int getUserId()
+    public String getUserId()
     {
         return userId;
     }
@@ -116,7 +118,7 @@ public class ClickEntry implements Stringifiable
         this.id = id;
     }
 
-    public void setUserId(int userId)
+    public void setUserId(String userId)
     {
         this.userId = userId;
     }

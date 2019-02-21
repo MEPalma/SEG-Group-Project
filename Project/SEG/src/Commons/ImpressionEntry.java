@@ -14,17 +14,19 @@ import java.util.logging.Logger;
  */
 public class ImpressionEntry implements Stringifiable
 {
+    public static int AUTO_INDEX = -1;
+     
     public static enum Context {News, Shopping, Social, Media, BlockTagTree, Travel, Unknown};
     
   
     //IN SAME ORDER AS IN DB TABLE
     private int id;
-    private int userId;
+    private String userId;
     private Date date;
     private Context context;
     private Number impressionCost;
 
-    public ImpressionEntry(int id, int userId, Date date, Context context, Number impressionCost)
+    public ImpressionEntry(int id, String userId, Date date, Context context, Number impressionCost)
     {
         this.id = id;
         this.userId = userId;
@@ -35,7 +37,7 @@ public class ImpressionEntry implements Stringifiable
     
     public ImpressionEntry()
     {
-        this(-1, -1, new Date(), Context.Unknown, 0);
+        this(AUTO_INDEX, "", new Date(), Context.Unknown, 0);
     }
 
     /*
@@ -46,9 +48,9 @@ public class ImpressionEntry implements Stringifiable
     {
         String is = "', '";
         String tmp;
-        if (this.id < 0) tmp = "NULL, '";
+        if (this.id == AUTO_INDEX) tmp = "NULL, '";
         else tmp = "'" + this.id + is;
-        return (tmp + 
+        return (tmp + ", '" +
                 this.userId + is +
                 simpleDateFormat.format(this.date) + is +
                 this.context + is +
@@ -65,7 +67,7 @@ public class ImpressionEntry implements Stringifiable
             {
                 ImpressionEntry tmp = new ImpressionEntry(
                     resultSet.getInt("id"),
-                    resultSet.getInt("userId"),
+                    resultSet.getString("userId"),
                     simpleDateFormat.parse(resultSet.getString("date")),
                     Context.valueOf(resultSet.getString("context")),
                     resultSet.getDouble("impressionCost")
@@ -107,7 +109,7 @@ public class ImpressionEntry implements Stringifiable
         return date;
     }
 
-    public int getUserId()
+    public String getUserId()
     {
         return userId;
     }
@@ -132,7 +134,7 @@ public class ImpressionEntry implements Stringifiable
         this.id = id;
     }
 
-    public void setUserId(int userId)
+    public void setUserId(String userId)
     {
         this.userId = userId;
     }

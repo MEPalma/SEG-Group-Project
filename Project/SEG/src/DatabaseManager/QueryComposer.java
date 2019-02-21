@@ -14,7 +14,7 @@ import java.util.Locale;
 public class QueryComposer
 {
     private static String CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS USERS(\n" +
-                                                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                                                "id VARCHAR(255) PRIMARY KEY NOT NULL,\n" +
                                                 "gender VARCHAR(55),\n" +
                                                 "age VARCHAR(55),\n" +
                                                 "income VARCHAR(55)\n" +
@@ -22,7 +22,7 @@ public class QueryComposer
     
     private static String CREATE_TABLE_IMPRESSION_LOGS = "CREATE TABLE IF NOT EXISTS IMPRESSION_LOGS(\n" +
                                                                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" + 
-                                                                "userId INTEGER,\n" + 
+                                                                "userId VARCHAR(255),\n" + 
                                                                 "date DATE,\n" +
                                                                 "context VARCHAR(255),\n" + 
                                                                 "impressionCost NUMERIC,\n" +
@@ -31,7 +31,7 @@ public class QueryComposer
     
     private static String CREATE_TABLE_CLICK_LOGS = "CREATE TABLE IF NOT EXISTS CLICK_LOGS(\n" +
                                                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                                                        "userId INTEGER,\n" +
+                                                        "userId VARCHAR(255),\n" +
                                                         "date DATE,\n" +
                                                         "clickCost NUMERIC,\n" +
                                                         "FOREIGN KEY (userId) REFERENCES USERS(id)\n" +
@@ -39,7 +39,7 @@ public class QueryComposer
     
     private static String CREATE_TABLE_SERVER_LOGS = "CREATE TABLE IF NOT EXISTS SERVER_LOGS(\n" +
                                                         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                                                        "userId INTEGER,\n" +
+                                                        "userId VARCHAR(255),\n" +
                                                         "entryDate DATE,\n" +
                                                         "exitDate DATE,\n" +
                                                         "pagesViewed INTEGER,\n" +
@@ -140,9 +140,9 @@ public class QueryComposer
         SELECT BY ID
     */
     
-    public static String selectByIdFrom_USERS(int id) 
+    public static String selectByIdFrom_USERS(String id) 
     { 
-        return "SELECT * FROM USERS WHERE USERS.id=" + id + " LIMIT 1;";
+        return "SELECT * FROM USERS WHERE USERS.id='" + id + "' LIMIT 1;";
     }
 
     public static String selectByIdFrom_IMPRESSION_LOGS(int id)
@@ -164,19 +164,19 @@ public class QueryComposer
     /*
         SELECT BY userId
     */
-    public static String selectByUserIdFrom_IMPRESSION_LOGS(int userId)
+    public static String selectByUserIdFrom_IMPRESSION_LOGS(String userId)
     { 
-        return "SELECT * FROM IMPRESSION_LOGS WHERE IMPRESSION_LOGS.userId=" + userId + "";
+        return "SELECT * FROM IMPRESSION_LOGS WHERE IMPRESSION_LOGS.userId='" + userId + "';";
     }
     
-    public static String selectByUserIdFrom_CLICK_LOGS(int userId)
+    public static String selectByUserIdFrom_CLICK_LOGS(String userId)
     { 
-        return "SELECT * FROM CLICK_LOGS WHERE CLICK_LOGS.userId=" + userId + ";";
+        return "SELECT * FROM CLICK_LOGS WHERE CLICK_LOGS.userId='" + userId + "';";
     }
     
-    public static String selectByUserIdFrom_SERVER_LOGS(int userId)
+    public static String selectByUserIdFrom_SERVER_LOGS(String userId)
     { 
-        return "SELECT * FROM SERVER_LOGS WHERE SERVER_LOGS.userId=" + userId + ";";
+        return "SELECT * FROM SERVER_LOGS WHERE SERVER_LOGS.userId='" + userId + "';";
     }
     
     public static String selectByNameFrom_SETTINGS(String name)

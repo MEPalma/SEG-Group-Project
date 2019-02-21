@@ -7,6 +7,7 @@ import Commons.ServerEntry.Conversion;
 import Commons.UserEntry;
 import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -68,7 +69,7 @@ public class Main
 //        System.out.println(dataExchange.selectByUserIdFrom_CLICK_LOGS(1).toString());
 //        System.out.println(dataExchange.selectByUserIdFrom_IMPRESSION_LOGS(1).toString());
 //        System.out.println(dataExchange.selectByUserIdFrom_SERVER_LOGS(1).toString());
-        
+
         dataExchange.close();
     }
 

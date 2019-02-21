@@ -174,7 +174,6 @@ public class DataExchange
     public void insertUserStmt(UserEntry user)
     {
         this.dbM.writeQuery(QueryComposer.insertUserStmt(user));
-        user.setId(this.getLastID());
     }
     
     public void insertImpressionStmt(ImpressionEntry ie)
@@ -294,7 +293,7 @@ public class DataExchange
         SELECT BY ID
     */
     
-    public UserEntry selectByIdFrom_USERS(int id) 
+    public UserEntry selectByIdFrom_USERS(String id) 
     { 
         ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_USERS(id));
         
@@ -342,7 +341,7 @@ public class DataExchange
     /*
         SELECT BY userId
     */
-    public List<ImpressionEntry> selectByUserIdFrom_IMPRESSION_LOGS(int userId)
+    public List<ImpressionEntry> selectByUserIdFrom_IMPRESSION_LOGS(String userId)
     { 
         ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_IMPRESSION_LOGS(userId));
         List tmp = parseImpressionEntrys(rset);
@@ -350,7 +349,7 @@ public class DataExchange
         return tmp;
     }
     
-    public List<ClickEntry> selectByUserIdFrom_CLICK_LOGS(int userId)
+    public List<ClickEntry> selectByUserIdFrom_CLICK_LOGS(String userId)
     { 
         ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_CLICK_LOGS(userId));
         List tmp = parseClickEntrys(rset);
@@ -358,7 +357,7 @@ public class DataExchange
         return tmp;
     }
     
-    public List<ServerEntry> selectByUserIdFrom_SERVER_LOGS(int userId)
+    public List<ServerEntry> selectByUserIdFrom_SERVER_LOGS(String userId)
     { 
         ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_SERVER_LOGS(userId));
         List tmp = parseServerEntrys(rset);

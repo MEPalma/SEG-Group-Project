@@ -15,16 +15,18 @@ import java.util.logging.Logger;
  */
 public class ServerEntry implements Stringifiable
 {
+    public static int AUTO_INDEX = -1;
+     
     public static enum Conversion {Yes, No, Unknown}
   
     private int id;
-    private int userId;
+    private String userId;
     private Date entryDate;
     private Date exitDate;
     private Number pagesViewed;
     private Conversion conversion;
 
-    public ServerEntry(int id, int userId, Date entryDate, Date exitDate, Number pagesViewed, Conversion conversion)
+    public ServerEntry(int id, String userId, Date entryDate, Date exitDate, Number pagesViewed, Conversion conversion)
     {
         this.id = id;
         this.userId = userId;
@@ -36,7 +38,7 @@ public class ServerEntry implements Stringifiable
 
     public ServerEntry()
     {
-        this(-1, -1, new Date(), new Date(), 0, Conversion.Unknown);
+        this(AUTO_INDEX, "", new Date(), new Date(), 0, Conversion.Unknown);
     }
     
     /*
@@ -47,9 +49,9 @@ public class ServerEntry implements Stringifiable
     {
         String is = "', '";
         String tmp;
-        if (this.id < 0) tmp = "NULL, '";
+        if (this.id == AUTO_INDEX) tmp = "NULL, '";
         else tmp = "'" + this.id + is;
-        return (tmp +
+        return (tmp + ", '" +
                 this.userId + is + 
                 simpleDateFormat.format(this.entryDate) + is + 
                 simpleDateFormat.format(this.exitDate) + is +
@@ -67,7 +69,7 @@ public class ServerEntry implements Stringifiable
             {
                 ServerEntry tmp = new ServerEntry(
                     resultSet.getInt("id"),
-                    resultSet.getInt("userId"),
+                    resultSet.getString("userId"),
                     simpleDateFormat.parse(resultSet.getString("entryDate")),
                     simpleDateFormat.parse(resultSet.getString("exitDate")),
                     resultSet.getInt("pagesViewed"),
@@ -115,7 +117,7 @@ public class ServerEntry implements Stringifiable
         return exitDate;
     }
 
-    public int getUserId()
+    public String getUserId()
     {
         return userId;
     }
@@ -135,7 +137,7 @@ public class ServerEntry implements Stringifiable
         this.id = id;
     }
 
-    public void setUserId(int userId)
+    public void setUserId(String userId)
     {
         this.userId = userId;
     }

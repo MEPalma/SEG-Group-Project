@@ -15,12 +15,12 @@ public class UserEntry implements Stringifiable
     public static enum Income {Low, Medium, Hight, Unknown};
     
     //IN SAME ORDER AS IN DB TABLE
-    private int id;
+    private String id;
     private Gender gender;
     private Age age;
     private Income income;
 
-    public UserEntry(int id, Gender gender, Age age, Income income)
+    public UserEntry(String id, Gender gender, Age age, Income income)
     {
         this.id = id;
         this.gender = gender;
@@ -30,7 +30,7 @@ public class UserEntry implements Stringifiable
     
     public UserEntry()
     {
-        this(-1, Gender.Unknown, Age.Unknown, Income.Unknown);
+        this("", Gender.Unknown, Age.Unknown, Income.Unknown);
     }
     
     /*
@@ -40,10 +40,7 @@ public class UserEntry implements Stringifiable
     public String getDBContent()
     {
         String is = "', '";
-        String tmp;
-        if (this.id < 0) tmp = "NULL, '";
-        else tmp = "'" + this.id + is;
-        return (tmp + this.gender + is + this.age + is + this.income + "'");
+        return ("'" + this.id + is + this.gender + is + this.age + is + this.income + "'");
     }
 
     @Override
@@ -54,7 +51,7 @@ public class UserEntry implements Stringifiable
             if (!resultSet.isClosed())
             {
                 UserEntry tmp = new UserEntry(
-                    resultSet.getInt("id"),
+                    resultSet.getString("id"),
                     Gender.valueOf(resultSet.getString("gender")),
                     Age.valueOf(resultSet.getString("age")),
                     Income.valueOf(resultSet.getString("income"))
@@ -85,10 +82,10 @@ public class UserEntry implements Stringifiable
     @Override
     public int hashCode()
     {
-        return this.id;
+        return this.id.hashCode();
     }
 
-    public int getId()
+    public String getId()
     {
         return id;
     }
@@ -113,7 +110,7 @@ public class UserEntry implements Stringifiable
         this.gender = gender;
     }
 
-    public void setId(int id)
+    public void setId(String id)
     {
         this.id = id;
     }

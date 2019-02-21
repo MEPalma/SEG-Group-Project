@@ -58,6 +58,11 @@ public class DataExchange
         }
     }
     
+    public void writeQuery(String q)
+    {
+        this.dbM.writeQuery(q);
+    }
+    
     private int getLastID()
     {
         try

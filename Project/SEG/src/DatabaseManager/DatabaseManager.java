@@ -29,7 +29,8 @@ public class DatabaseManager
         {
             Class.forName("org.sqlite.JDBC");
             // create a connection to the database
-            this.dbCon = DriverManager.getConnection("jdbc:sqlite:" + new PathsManager().getDB());
+//            this.dbCon = DriverManager.getConnection("jdbc:sqlite:" + new PathsManager().getDB());
+            this.dbCon = DriverManager.getConnection("jdbc:sqlite::memory:");
         } catch (ClassNotFoundException e)
         {
             System.err.println("[ FAIL ] --> [DB NOT CONNECTED]:: " + e.getStackTrace());

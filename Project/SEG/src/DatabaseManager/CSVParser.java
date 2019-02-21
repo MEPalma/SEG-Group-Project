@@ -57,7 +57,7 @@ public class CSVParser
             String line = br.readLine(); //skip first line
             while ((line = br.readLine()) != null) 
             {
-                String[] tk = line.split(",");//trim too?
+                String[] tk = line.split(",");
                 if (!addedUserIds.contains(tk[1]))
                 {
                     this.dataExchange.insertUserStmt(new UserEntry(tk[1], 
@@ -85,7 +85,7 @@ public class CSVParser
             String line = br.readLine(); //skip first line
             while ((line = br.readLine()) != null) 
             {
-               String[] tk = line.split(",");//trim too?
+               String[] tk = line.split(",");
                this.dataExchange.insertClickStmt(new ClickEntry(ClickEntry.AUTO_INDEX, 
                                                                 tk[1], 
                                                                 Stringifiable.simpleDateFormat.parse(tk[0]),
@@ -104,9 +104,9 @@ public class CSVParser
             String line = br.readLine(); //skip first line
             while ((line = br.readLine()) != null) 
             {
-               String[] tk = line.split(",");//trim too?
+               String[] tk = line.split(",");
                this.dataExchange.insertServerStmt(new ServerEntry(ServerEntry.AUTO_INDEX, 
-                                                                  tk[1], 
+                                                                  tk[1],
                                                                   Stringifiable.simpleDateFormat.parse(tk[0]),
                                                                   Stringifiable.simpleDateFormat.parse(tk[2]),
                                                                   Integer.parseInt(tk[3]), 

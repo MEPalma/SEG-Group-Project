@@ -23,6 +23,7 @@ import java.util.Set;
  */
 public class CSVParser
 {
+
     private DataExchange dataExchange;
     private File impressionLogFile;
     private File clickLogFile;
@@ -35,7 +36,7 @@ public class CSVParser
         this.clickLogFile = clickLogFile;
         this.serverLogfile = serverLogfile;
     }
-    
+
     public synchronized void parseAll() throws Exception
     {
         this.dataExchange.dropAll_noSettings();
@@ -43,90 +44,113 @@ public class CSVParser
         parseClickLogFile();
         parseServerLogFile();
     }
-    
+
     private void parseImpressionLogFile() throws FileNotFoundException, IOException, Exception
     {
         // 0     1      2      3       4         5             6
         //DATE | ID | Gender | Age | Income | Context | impressionCost
         // im    us     us      us     us        im           im
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(this.impressionLogFile))) 
+
+        try (BufferedReader br = new BufferedReader(new FileReader(this.impressionLogFile)))
         {
             Set<String> addedUserIds = new HashSet<String>();//no duplicates!
-            
+
             String line = br.readLine(); //skip first line
-            while ((line = br.readLine()) != null) 
+            while ((line = br.readLine()) != null)
             {
                 String[] tk = line.split(",");
                 if (!addedUserIds.contains(tk[1]))
                 {
-                    this.dataExchange.insertUserStmt(new UserEntry(tk[1], 
-                                                                  UserEntry.Gender.valueOf(tk[2]), 
-                                                                  parseAge(tk[3]), 
-                                                                  UserEntry.Income.valueOf(tk[4])));
-                     addedUserIds.add(tk[1]);
+                    this.dataExchange.insertUserStmt(new UserEntry(tk[1],
+                            UserEntry.Gender.valueOf(tk[2]),
+                            parseAge(tk[3]),
+                            UserEntry.Income.valueOf(tk[4])));
+                    addedUserIds.add(tk[1]);
                 }
-                this.dataExchange.insertImpressionStmt(new ImpressionEntry(ImpressionEntry.AUTO_INDEX, 
-                                                                          tk[1], 
-                                                                          Stringifiable.simpleDateFormat.parse(tk[0]), 
-                                                                          parseContext(tk[5]), 
-                                                                          Double.parseDouble(tk[6])));
+                if (!tk[0].equals("n/a"))
+                {
+                    this.dataExchange.insertImpressionStmt(new ImpressionEntry(ImpressionEntry.AUTO_INDEX,
+                            tk[1],
+                            Stringifiable.simpleDateFormat.parse(tk[0]),
+                            parseContext(tk[5]),
+                            Double.parseDouble(tk[6])));
+                }
             }
         }
     }
-    
-    private void parseClickLogFile()throws FileNotFoundException, IOException, Exception
+
+    private void parseClickLogFile() throws FileNotFoundException, IOException, Exception
     {
         // 0     1      2     
         //DATE | ID | clickcost
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(this.clickLogFile))) 
+
+        try (BufferedReader br = new BufferedReader(new FileReader(this.clickLogFile)))
         {
             String line = br.readLine(); //skip first line
-            while ((line = br.readLine()) != null) 
+            while ((line = br.readLine()) != null)
             {
-               String[] tk = line.split(",");
-               this.dataExchange.insertClickStmt(new ClickEntry(ClickEntry.AUTO_INDEX, 
-                                                                tk[1], 
-                                                                Stringifiable.simpleDateFormat.parse(tk[0]),
-                                                                Double.parseDouble(tk[2])));
+                String[] tk = line.split(",");
+                if (!tk[0].equals("n/a"))
+                {
+                    this.dataExchange.insertClickStmt(new ClickEntry(ClickEntry.AUTO_INDEX,
+                            tk[1],
+                            Stringifiable.simpleDateFormat.parse(tk[0]),
+                            Double.parseDouble(tk[2])));
+                }
             }
         }
     }
-    
-    private void parseServerLogFile()throws FileNotFoundException, IOException, Exception
+
+    private void parseServerLogFile() throws FileNotFoundException, IOException, Exception
     {
         //     0       1      2           3            4
         //entryDATE | ID | exitDate | pagesViewed | conversions
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(this.serverLogfile))) 
+
+        try (BufferedReader br = new BufferedReader(new FileReader(this.serverLogfile)))
         {
             String line = br.readLine(); //skip first line
-            while ((line = br.readLine()) != null) 
+            while ((line = br.readLine()) != null)
             {
-               String[] tk = line.split(",");
-               this.dataExchange.insertServerStmt(new ServerEntry(ServerEntry.AUTO_INDEX, 
-                                                                  tk[1],
-                                                                  Stringifiable.simpleDateFormat.parse(tk[0]),
-                                                                  Stringifiable.simpleDateFormat.parse(tk[2]),
-                                                                  Integer.parseInt(tk[3]), 
-                                                                  ServerEntry.Conversion.valueOf(tk[4])));
+                String[] tk = line.split(",");
+                if (!tk[0].equals("n/a") && !tk[2].equals("n/a"))
+                {
+                    this.dataExchange.insertServerStmt(new ServerEntry(ServerEntry.AUTO_INDEX,
+                            tk[1],
+                            Stringifiable.simpleDateFormat.parse(tk[0]),
+                            Stringifiable.simpleDateFormat.parse(tk[2]),
+                            Integer.parseInt(tk[3]),
+                            ServerEntry.Conversion.valueOf(tk[4])));
+                }
             }
         }
     }
-    
+
     private static UserEntry.Age parseAge(String string)
     {
-        if (string.equals("<25")) return UserEntry.Age.Age_less_than_25;
-        else if (string.equals("25-34")) return UserEntry.Age.Age_25_34;
-        else if (string.equals("35-44")) return UserEntry.Age.Age_35_44;
-        else if (string.equals("45-54")) return UserEntry.Age.Age_45_54;
-        else return UserEntry.Age.Age_more_than_54;
+        if (string.equals("<25"))
+        {
+            return UserEntry.Age.Age_less_than_25;
+        } else if (string.equals("25-34"))
+        {
+            return UserEntry.Age.Age_25_34;
+        } else if (string.equals("35-44"))
+        {
+            return UserEntry.Age.Age_35_44;
+        } else if (string.equals("45-54"))
+        {
+            return UserEntry.Age.Age_45_54;
+        } else
+        {
+            return UserEntry.Age.Age_more_than_54;
+        }
     }
-    
+
     private static ImpressionEntry.Context parseContext(String string)
     {
-        if (string.equals("Social Media")) return ImpressionEntry.Context.SocialMedia;
+        if (string.equals("Social Media"))
+        {
+            return ImpressionEntry.Context.SocialMedia;
+        }
         return ImpressionEntry.Context.valueOf(string);
     }
 }

@@ -14,41 +14,37 @@ import java.util.Locale;
 public class QueryComposer
 {
     private static String CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS USERS(\n" +
-                                                "id INTEGER NOT NULL,\n" +
+                                                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
                                                 "gender VARCHAR(55),\n" +
                                                 "age VARCHAR(55),\n" +
-                                                "income VARCHAR(55),\n" +
-                                                "PRIMARY KEY (id)\n"+
+                                                "income VARCHAR(55)\n" +
                                                ");";
     
     private static String CREATE_TABLE_IMPRESSION_LOGS = "CREATE TABLE IF NOT EXISTS IMPRESSION_LOGS(\n" +
-                                                                "id INTEGER NOT NULL,\n" + 
+                                                                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" + 
                                                                 "userId INTEGER,\n" + 
                                                                 "date DATE,\n" +
                                                                 "context VARCHAR(255),\n" + 
                                                                 "impressionCost NUMERIC,\n" +
-                                                                "PRIMARY KEY (id)\n"+
-                                                                "FOREIGN KEY (userId) REFERENCES USERS(userId)\n" +
+                                                                "FOREIGN KEY (userId) REFERENCES USERS(id)\n" +
                                                             ");";
     
     private static String CREATE_TABLE_CLICK_LOGS = "CREATE TABLE IF NOT EXISTS CLICK_LOGS(\n" +
-                                                        "id INTEGER NOT NULL," +
+                                                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                                                         "userId INTEGER,\n" +
                                                         "date DATE,\n" +
                                                         "clickCost NUMERIC,\n" +
-                                                        "PRIMARY KEY (id)\n"+
-                                                        "FOREIGN KEY (userId) REFERENCES USERS(userId)\n" +
+                                                        "FOREIGN KEY (userId) REFERENCES USERS(id)\n" +
                                                      ");";
     
     private static String CREATE_TABLE_SERVER_LOGS = "CREATE TABLE IF NOT EXISTS SERVER_LOGS(\n" +
-                                                        "id INTEGER NOT NULL,\n" +
+                                                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
                                                         "userId INTEGER,\n" +
                                                         "entryDate DATE,\n" +
                                                         "exitDate DATE,\n" +
                                                         "pagesViewed INTEGER,\n" +
                                                         "conversion VARCHAR(55),\n" +
-                                                        "PRIMARY KEY (id)\n"+
-                                                        "FOREIGN KEY (userId) REFERENCES USERS(userId)\n" +
+                                                        "FOREIGN KEY (userId) REFERENCES USERS(id)\n" +
                                                       ");";
     
     private static String CREATE_TABLE_SETTINGS = "CREATE TABLE IF NOT EXISTS SETTINGS (\n" +

@@ -44,21 +44,30 @@ public class Main
 //        c.setUserId(u.getId());
 //        dataExchange.insertClickStmt(c);
         
-        List<UserEntry> users = dataExchange.selectAllFrom_USERS();
-        for (UserEntry x : users)
-            System.out.println(x.toString());
-        
-        List<ClickEntry> clicks = dataExchange.selectAllFrom_CLICK_LOGS();
-        for (ClickEntry c : clicks)
-            System.out.println(c.toString());
-        
-        List<ImpressionEntry> impressions = dataExchange.selectAllFrom_IMPRESSION_LOGS();
-        for (ImpressionEntry c : impressions)
-            System.out.println(c.toString());
-        
-        List<ServerEntry> server = dataExchange.selectAllFrom_SERVER_LOGS();
-        for (ServerEntry x : server)
-            System.out.println(x.toString());
+//        List<UserEntry> users = dataExchange.selectAllFrom_USERS();
+//        for (UserEntry x : users)
+//            System.out.println(x.toString());
+//        
+//        List<ClickEntry> clicks = dataExchange.selectAllFrom_CLICK_LOGS();
+//        for (ClickEntry cl : clicks)
+//            System.out.println(cl.toString());
+//        
+//        List<ImpressionEntry> impressions = dataExchange.selectAllFrom_IMPRESSION_LOGS();
+//        for (ImpressionEntry im : impressions)
+//            System.out.println(im.toString());
+//        
+//        List<ServerEntry> server = dataExchange.selectAllFrom_SERVER_LOGS();
+//        for (ServerEntry x : server)
+//            System.out.println(x.toString());
+//        
+//        System.out.println(dataExchange.selectByIdFrom_USERS(1).toString());
+//        System.out.println(dataExchange.selectByIdFrom_CLICK_LOGS(1).toString());
+//        System.out.println(dataExchange.selectByIdFrom_IMPRESSION_LOGS(1).toString());
+//        System.out.println(dataExchange.selectByIdFrom_SERVER_LOGS(1).toString());
+//        
+//        System.out.println(dataExchange.selectByUserIdFrom_CLICK_LOGS(1).toString());
+//        System.out.println(dataExchange.selectByUserIdFrom_IMPRESSION_LOGS(1).toString());
+//        System.out.println(dataExchange.selectByUserIdFrom_SERVER_LOGS(1).toString());
         
         dataExchange.close();
     }

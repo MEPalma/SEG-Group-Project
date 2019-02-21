@@ -98,6 +98,7 @@ public class QueryComposer
         return "INSERT INTO SETTINGS VALUES ('" + name + "', '" + value + "');";
     }
     
+    
     /*
         SELECT ALL STATEMENTS
     */
@@ -107,4 +108,53 @@ public class QueryComposer
     public static String selectAllFrom_CLICK_LOGS = "SELECT * FROM CLICK_LOGS;";
     public static String selectAllFrom_SERVER_LOGS = "SELECT * FROM SERVER_LOGS;";
     public static String selectAllFrom_SETTINGS = "SELECT * FROM SETTINGS;";
+    
+    
+    /*
+        SELECT BY ID
+    */
+    
+    public static String selectByIdFrom_USERS(int id) 
+    { 
+        return "SELECT * FROM USERS WHERE USERS.id=" + id + " LIMIT 1;";
+    }
+
+    public static String selectByIdFrom_IMPRESSION_LOGS(int id)
+    { 
+        return "SELECT * FROM IMPRESSION_LOGS WHERE IMPRESSION_LOGS.id=" + id + " LIMIT 1;";
+    }
+    
+    public static String selectByIdFrom_CLICK_LOGS(int id)
+    { 
+        return "SELECT * FROM CLICK_LOGS WHERE CLICK_LOGS.id=" + id + " LIMIT 1;";
+    }
+    
+    public static String selectByIdFrom_SERVER_LOGS(int id)
+    { 
+        return "SELECT * FROM SERVER_LOGS WHERE SERVER_LOGS.id=" + id + " LIMIT 1;";
+    }
+    
+    
+    /*
+        SELECT BY userId
+    */
+    public static String selectByUserIdFrom_IMPRESSION_LOGS(int userId)
+    { 
+        return "SELECT * FROM IMPRESSION_LOGS WHERE IMPRESSION_LOGS.userId=" + userId + "";
+    }
+    
+    public static String selectByUserIdFrom_CLICK_LOGS(int userId)
+    { 
+        return "SELECT * FROM CLICK_LOGS WHERE CLICK_LOGS.userId=" + userId + ";";
+    }
+    
+    public static String selectByUserIdFrom_SERVER_LOGS(int userId)
+    { 
+        return "SELECT * FROM SERVER_LOGS WHERE SERVER_LOGS.userId=" + userId + ";";
+    }
+    
+    public static String selectByNameFrom_SETTINGS(String name)
+    {
+        return "SELECT * FROM SETTINGS WHERE SETTINGS.name='" + name + "' LIMIT 1;";
+    }
 }

@@ -12,6 +12,8 @@ import java.util.*;
 
 import Commons.*;
 import java.time.chrono.ThaiBuddhistEra;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * This class will process queries from QueryComposer.java into DatabaseManager.
@@ -243,4 +245,91 @@ public class DataExchange
         return tmp;
     }
     
+    /*
+        SELECT BY ID
+    */
+    
+    public UserEntry selectByIdFrom_USERS(int id) 
+    { 
+        ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_USERS(id));
+        
+        UserEntry maker = new UserEntry();
+        maker = (UserEntry) maker.parseDBContent(rset);
+        
+        close(rset);
+        return maker;
+    }
+
+    public ImpressionEntry selectByIdFrom_IMPRESSION_LOGS(int id)
+    { 
+        ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_IMPRESSION_LOGS(id));
+        
+        ImpressionEntry maker = new ImpressionEntry();
+        maker = (ImpressionEntry) maker.parseDBContent(rset);
+        
+        close(rset);
+        return maker;
+    }
+    
+    public ClickEntry selectByIdFrom_CLICK_LOGS(int id)
+    { 
+        ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_CLICK_LOGS(id));
+        
+        ClickEntry maker = new ClickEntry();
+        maker = (ClickEntry) maker.parseDBContent(rset);
+        
+        close(rset);
+        return maker;
+    }
+    
+    public ServerEntry selectByIdFrom_SERVER_LOGS(int id)
+    {
+        ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_SERVER_LOGS(id));
+        
+        ServerEntry maker = new ServerEntry();
+        maker = (ServerEntry) maker.parseDBContent(rset);
+        
+        close(rset);
+        return maker;
+    }
+    
+    
+    /*
+        SELECT BY userId
+    */
+    public List<ImpressionEntry> selectByUserIdFrom_IMPRESSION_LOGS(int userId)
+    { 
+        ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_IMPRESSION_LOGS(userId));
+        List tmp = parseImpressionEntrys(rset);
+        close(rset);
+        return tmp;
+    }
+    
+    public List<ClickEntry> selectByUserIdFrom_CLICK_LOGS(int userId)
+    { 
+        ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_CLICK_LOGS(userId));
+        List tmp = parseClickEntrys(rset);
+        close(rset);
+        return tmp;
+    }
+    
+    public List<ServerEntry> selectByUserIdFrom_SERVER_LOGS(int userId)
+    { 
+        ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_SERVER_LOGS(userId));
+        List tmp = parseServerEntrys(rset);
+        close(rset);
+        return tmp;
+    }
+    
+    public String selectByNameFrom_SETTINGS(String name)
+    {
+        ResultSet resultSet = this.dbM.query(QueryComposer.selectByNameFrom_SETTINGS(name));
+        try
+        {
+            return resultSet.getString("value");
+        } catch (SQLException ex)
+        {
+            return null;
+        }
+    }
 }

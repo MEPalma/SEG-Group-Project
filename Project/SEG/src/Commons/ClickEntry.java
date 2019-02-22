@@ -34,14 +34,11 @@ public class ClickEntry implements Stringifiable
     {
         this(AUTO_INDEX, "", new Date(), 0);
     }
-
-    /*
-        implementation of Stringifiable.java
-     */
+    
     @Override
-    public String getDBContent()
+    public String stringify()
     {
-        String is = "', '";
+       String is = "', '";
         String tmp;
         if (this.id == AUTO_INDEX)
         {
@@ -58,33 +55,9 @@ public class ClickEntry implements Stringifiable
     }
 
     @Override
-    public Object parseDBContent(ResultSet resultSet)
-    {
-        try
-        {
-            if (!resultSet.isClosed())
-            {
-                return new ClickEntry(
-                        resultSet.getInt("id"),
-                        resultSet.getString("userId"),
-                        globalDateFormat.parse(resultSet.getString("date")),
-                        resultSet.getDouble("clickCost")
-                );
-            }
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        } catch (ParseException ex)
-        {
-            Logger.getLogger(ClickEntry.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    @Override
     public String toString()
     {
-        return this.getDBContent();
+        return stringify();
     }
 
     @Override

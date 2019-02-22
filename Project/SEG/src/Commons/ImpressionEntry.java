@@ -14,9 +14,13 @@ import java.util.logging.Logger;
  */
 public class ImpressionEntry implements Stringifiable
 {
+
     public static int AUTO_INDEX = -1;
 
-    public static enum Context {News, Shopping, SocialMedia, BlockTagTree, Travel, Hobbies, Blog, Unknown};
+    public static enum Context
+    {
+        News, Shopping, SocialMedia, BlockTagTree, Travel, Hobbies, Blog, Unknown
+    };
 
     //IN SAME ORDER AS IN DB TABLE
     private int id;
@@ -39,11 +43,8 @@ public class ImpressionEntry implements Stringifiable
         this(AUTO_INDEX, "", new Date(), Context.Unknown, 0);
     }
 
-    /*
-        implementation of Stringifiable.java
-     */
     @Override
-    public String getDBContent()
+    public String stringify()
     {
         String is = "', '";
         String tmp;
@@ -63,34 +64,9 @@ public class ImpressionEntry implements Stringifiable
     }
 
     @Override
-    public Object parseDBContent(ResultSet resultSet)
-    {
-        try
-        {
-            if (!resultSet.isClosed())
-            {
-                return new ImpressionEntry(
-                        resultSet.getInt("id"),
-                        resultSet.getString("userId"),
-                        globalDateFormat.parse(resultSet.getString("date")),
-                        Context.valueOf(resultSet.getString("context")),
-                        resultSet.getDouble("impressionCost")
-                );
-            }
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        } catch (ParseException ex)
-        {
-            Logger.getLogger(ImpressionEntry.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    @Override
     public String toString()
     {
-        return this.getDBContent();
+        return stringify();
     }
 
     @Override

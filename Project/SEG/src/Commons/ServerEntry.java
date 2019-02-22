@@ -41,11 +41,8 @@ public class ServerEntry implements Stringifiable
         this(AUTO_INDEX, "", new Date(), new Date(), 0, Conversion.Unknown);
     }
     
-    /*
-        implementation of Stringifiable.java
-    */
-    @Override
-    public String getDBContent()
+     @Override
+    public String stringify()
     {
         String is = "', '";
         String tmp;
@@ -59,37 +56,11 @@ public class ServerEntry implements Stringifiable
                 this.conversion +
                 "'");
     }
-
-    @Override
-    public Object parseDBContent(ResultSet resultSet)
-    {
-        try
-        {
-            if (!resultSet.isClosed())
-            {
-                return new ServerEntry(
-                    resultSet.getInt("id"),
-                    resultSet.getString("userId"),
-                    globalDateFormat.parse(resultSet.getString("entryDate")),
-                    globalDateFormat.parse(resultSet.getString("exitDate")),
-                    resultSet.getInt("pagesViewed"),
-                    Conversion.valueOf(resultSet.getString("conversion"))
-                );
-            }
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        } catch (ParseException ex)
-        {
-            Logger.getLogger(ServerEntry.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
     
     @Override
     public String toString()
     {
-        return this.getDBContent();
+        return stringify();
     }
     
      @Override

@@ -45,23 +45,30 @@ public class Main
             e.printStackTrace();
         }
             
-        
-//        List<UserEntry> users = dataExchange.selectAllFrom_USERS();
+        List<UserEntry> users = dataExchange.selectAllFrom_USERS();
+        System.out.println(users.size());
+        System.out.println(dataExchange.countAllFrom_USERS());
 //        for (UserEntry x : users)
 //            System.out.println(x.toString());
-//        
-//        List<ClickEntry> clicks = dataExchange.selectAllFrom_CLICK_LOGS();
+        
+        List<ClickEntry> clicks = dataExchange.selectAllFrom_CLICK_LOGS();
+        System.out.println(clicks.size());
+        System.out.println(dataExchange.countAllFrom_CLICK_LOGS());
 //        for (ClickEntry cl : clicks)
 //            System.out.println(cl.toString());
-//        
-//        List<ImpressionEntry> impressions = dataExchange.selectAllFrom_IMPRESSION_LOGS();
+        
+        List<ImpressionEntry> impressions = dataExchange.selectAllFrom_IMPRESSION_LOGS();
+        System.out.println(impressions.size());
+        System.out.println(dataExchange.countAllFrom_IMPRESSION_LOGS());
 //        for (ImpressionEntry im : impressions)
 //            System.out.println(im.toString());
-//        
-//        List<ServerEntry> server = dataExchange.selectAllFrom_SERVER_LOGS();
+        
+        List<ServerEntry> server = dataExchange.selectAllFrom_SERVER_LOGS();
+        System.out.println(server.size());
+        System.out.println(dataExchange.countAllFrom_SERVER_LOGS());
 //        for (ServerEntry x : server)
 //            System.out.println(x.toString());
-//        
+        
 //        System.out.println(dataExchange.selectByIdFrom_USERS(1).toString());
 //        System.out.println(dataExchange.selectByIdFrom_CLICK_LOGS(1).toString());
 //        System.out.println(dataExchange.selectByIdFrom_IMPRESSION_LOGS(1).toString());

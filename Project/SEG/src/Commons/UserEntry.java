@@ -10,10 +10,22 @@ import java.sql.SQLException;
  */
 public class UserEntry implements Stringifiable
 {
-    public static enum Gender {Male, Female, Unknown};
-    public static enum Age {Age_less_than_25, Age_25_34, Age_35_44, Age_45_54, Age_more_than_54, Unknown};
-    public static enum Income {Low, Medium, High, Unknown};
-    
+
+    public static enum Gender
+    {
+        Male, Female, Unknown
+    };
+
+    public static enum Age
+    {
+        Age_less_than_25, Age_25_34, Age_35_44, Age_45_54, Age_more_than_54, Unknown
+    };
+
+    public static enum Income
+    {
+        Low, Medium, High, Unknown
+    };
+
     //IN SAME ORDER AS IN DB TABLE
     private String id;
     private Gender gender;
@@ -27,55 +39,39 @@ public class UserEntry implements Stringifiable
         this.age = age;
         this.income = income;
     }
-    
+
     public UserEntry()
     {
         this("", Gender.Unknown, Age.Unknown, Income.Unknown);
     }
-    
-    /*
-        implementation of Stringifiable.java
-    */
+
     @Override
-    public String getDBContent()
+    public String stringify()
     {
-        if (this.id.equals("")) return null;//id needs to be specified!
+        if (this.id.equals(""))
+        {
+            return null;//id needs to be specified!
+        }
         String is = "', '";
         return ("'" + this.id + is + this.gender + is + this.age + is + this.income + "'");
     }
 
     @Override
-    public Object parseDBContent(ResultSet resultSet)
-    {
-        try
-        {
-            if (!resultSet.isClosed())
-            {
-                return new UserEntry(
-                    resultSet.getString("id"),
-                    Gender.valueOf(resultSet.getString("gender")),
-                    Age.valueOf(resultSet.getString("age")),
-                    Income.valueOf(resultSet.getString("income"))
-                );
-            }
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
-    @Override
     public String toString()
     {
-        return this.getDBContent();
+        return stringify();
     }
-    
-     @Override
+
+    @Override
     public boolean equals(Object obj)
     {
         if (obj instanceof UserEntry)
-            if (this.id == ((UserEntry) obj).id) return true;
+        {
+            if (this.id == ((UserEntry) obj).id)
+            {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -114,7 +110,7 @@ public class UserEntry implements Stringifiable
     {
         this.id = id;
     }
-    
+
     public void setAge(Age age)
     {
         this.age = age;

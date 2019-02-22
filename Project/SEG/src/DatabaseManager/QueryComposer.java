@@ -84,22 +84,22 @@ public class QueryComposer
      */
     public static String insertUserStmt(UserEntry user)
     {
-        return "INSERT INTO USERS VALUES (" + user.getDBContent() + ");";
+        return "INSERT INTO USERS VALUES (" + user.stringify()+ ");";
     }
 
     public static String insertImpressionStmt(ImpressionEntry ie)
     {
-        return "INSERT INTO IMPRESSION_LOGS VALUES (" + ie.getDBContent() + ");";
+        return "INSERT INTO IMPRESSION_LOGS VALUES (" + ie.stringify() + ");";
     }
 
     public static String insertClickStmt(ClickEntry ce)
     {
-        return "INSERT INTO CLICK_LOGS VALUES (" + ce.getDBContent() + ");";
+        return "INSERT INTO CLICK_LOGS VALUES (" + ce.stringify() + ");";
     }
 
     public static String insertServerStmt(ServerEntry se)
     {
-        return "INSERT INTO SERVER_LOGS VALUES (" + se.getDBContent() + ");";
+        return "INSERT INTO SERVER_LOGS VALUES (" + se.stringify() + ");";
     }
 
     public static String insertSettingStmt(String name, String value)//TODO check... looks shitty!
@@ -131,6 +131,15 @@ public class QueryComposer
         dropAllFrom_SERVER_LOGS
     };
 
+    /*
+        COUNT STATEMENTS
+    */
+    public static String countAllFrom_USERS = "SELECT COUNT(*) as c FROM USERS;";
+    public static String countAllFrom_IMPRESSION_LOGS = "SELECT COUNT(*) as c FROM IMPRESSION_LOGS;";
+    public static String countAllFrom_CLICK_LOGS = "SELECT COUNT(*) as c FROM CLICK_LOGS;";
+    public static String countAllFrom_SERVER_LOGS = "SELECT COUNT(*) as c FROM SERVER_LOGS;";
+    public static String countAllFrom_SETTINGS = "SELECT COUNT(*) as c FROM SETTINGS;";
+    
     /*
         SELECT ALL STATEMENTS
      */

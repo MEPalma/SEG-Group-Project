@@ -1,4 +1,5 @@
 package DatabaseManager;
+
 /*
  * @author Marco-Edoardo Palma
  */
@@ -10,9 +11,9 @@ import java.io.IOException;
  * This class is in charge of returning a always valid path to the database file, 
  * independently from the os the app is running on.
  */
-
 public class PathsManager
 {
+
     private String db;
 
     public PathsManager()
@@ -23,8 +24,7 @@ public class PathsManager
         if (OS.contains("WIN"))
         {
             workingDirectory = System.getenv("AppData");
-        }
-        else
+        } else
         {
             workingDirectory = System.getProperty("user.home");
             workingDirectory += "/Library";
@@ -33,7 +33,10 @@ public class PathsManager
         this.db = workingDirectory + "/com.seggroup31.Dashboard/";
 
         File check = new File(db);
-        if (!check.isDirectory()) check.mkdirs();
+        if (!check.isDirectory())
+        {
+            check.mkdirs();
+        }
 
         this.db += "DashboardProject.database";
 
@@ -54,5 +57,5 @@ public class PathsManager
     {
         return db;
     }
-    
+
 }

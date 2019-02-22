@@ -14,10 +14,9 @@ import java.sql.Statement;
  *
  * @author Marco-Edoardo Palma
  */
-
-/*
- * This class will take 3 file representing the 3 csv files, and will parse them into
- * the database (mapped by the DataExchange)
+/**
+ * This class will take 3 file representing the 3 csv files, and will parse them
+ * into the database (mapped by the DataExchange)
  */
 public class CSVParser
 {
@@ -35,22 +34,33 @@ public class CSVParser
         this.serverLogfile = serverLogfile;
     }
 
+    /**
+     * This method clears the database, then parses all the csv files into
+     * memory, then flushes the result into the database. During the process
+     * pragma on foreign keys is disabled and commitments are set manually
+     * temporarily.
+     *
+     * csv is parsed to allow entries to be compiled into instances of the
+     * objects in the Commons package.
+     *
+     * @throws Exception
+     */
     public synchronized void parseAll() throws Exception
     {
         this.dataExchange.dropAll_noSettings();
-        
+
         this.dataExchange.setForiegnKeyPragma(false);
         this.dataExchange.setAutoCommit(false);
-        
+
         Statement insertionStatement = this.dataExchange.getSqlStatement();
-        
-        parseImpressionLogFile(insertionStatement);     
+
+        parseImpressionLogFile(insertionStatement);
         parseClickLogFile(insertionStatement);
         parseServerLogFile(insertionStatement);
-        
+
         this.dataExchange.writeSqlStatement(insertionStatement);
         this.dataExchange.commitNow();
-        
+
         this.dataExchange.setAutoCommit(true);
         this.dataExchange.setForiegnKeyPragma(true);
     }
@@ -61,12 +71,12 @@ public class CSVParser
         //DATE | ID | Gender | Age | Income | Context | impressionCost
         // im    us     us      us     us        im           im
 
-       try (BufferedReader br = new BufferedReader(new FileReader(this.impressionLogFile), 40000))
+        try (BufferedReader br = new BufferedReader(new FileReader(this.impressionLogFile), 40000))
         {
             Set<Integer> addedUserIds = new HashSet<Integer>();//no duplicates!
-            
+
             br.readLine();//skip first line
-           
+
             String line = "";
             while ((line = br.readLine()) != null)
             {
@@ -78,10 +88,12 @@ public class CSVParser
                     addedUserIds.add(userIdhash);
                 }
                 if (!tk[0].equals("n/a"))
-                    sqlStmt.addBatch("INSERT INTO IMPRESSION_LOGS VALUES (NULL, '" + tk[1] + "', '" + tk[0] + "', '" + tk[5].replace(" ", "") + "', '" +  Double.parseDouble(tk[6]) + "');");
-                
+                {
+                    sqlStmt.addBatch("INSERT INTO IMPRESSION_LOGS VALUES (NULL, '" + tk[1] + "', '" + tk[0] + "', '" + tk[5].replace(" ", "") + "', '" + Double.parseDouble(tk[6]) + "');");
+                }
+
             }
-            
+
             br.close();
         }
     }
@@ -92,14 +104,16 @@ public class CSVParser
         //DATE | ID | clickcost
 
         try (BufferedReader br = new BufferedReader(new FileReader(this.clickLogFile), 40000))
-        {   
+        {
             br.readLine();//skip first line
             String line = br.readLine();
             while ((line = br.readLine()) != null)
             {
                 String[] tk = line.split(",");
                 if (!tk[0].equals("n/a"))
+                {
                     sqlStmt.addBatch("INSERT INTO CLICK_LOGS VALUES (NULL, '" + tk[1] + "','" + tk[0] + "','" + Double.parseDouble(tk[2]) + "');");
+                }
             }
             br.close();
         }
@@ -118,12 +132,21 @@ public class CSVParser
             {
                 String[] tk = line.split(",");
                 if (!tk[0].equals("n/a") && !tk[2].equals("n/a"))
+                {
                     sqlStmt.addBatch("INSERT INTO SERVER_LOGS VALUES (NULL,'" + tk[1] + "','" + tk[0] + "','" + tk[2] + "','" + Integer.parseInt(tk[3]) + "','" + tk[4] + "');");
+                }
             }
             br.close();
         }
     }
 
+    /**
+     * This method is needed as the format of the csv cannot comply with the
+     * enumeration rules in java.
+     *
+     * @param string
+     * @return
+     */
     private static UserEntry.Age parseAge(String string)
     {
         if (string.equals("<25"))

@@ -43,6 +43,10 @@ public class DatabaseManager
         }
     }
 
+    /**
+     * Closes the connection with the database. 
+     * Perform only before quitting the program.
+     */
     public synchronized void close()
     {
         try
@@ -54,6 +58,12 @@ public class DatabaseManager
         }
     }
 
+    /**
+     * Returns the ResultSet given by the query.
+     * Queries submitted in this method are expected to return a ResultSet.
+     * @param query
+     * @return 
+     */
     public synchronized ResultSet query(String query)
     {
         try
@@ -68,6 +78,10 @@ public class DatabaseManager
         return null;
     }
 
+    /**
+     * Executes a query which does not return a ResultSet.
+     * @param query 
+     */
     public synchronized void writeQuery(String query)
     {
         try
@@ -81,7 +95,11 @@ public class DatabaseManager
             e.printStackTrace();
         }
     }
-
+    
+    /**
+     * Executes an array of queries which do not return a ResultSet
+     * @param query 
+     */
     public synchronized void writeQuery(String[] queries)
     {
         for (String query : queries)
@@ -90,6 +108,10 @@ public class DatabaseManager
         }
     }
 
+    /**
+     * Executes a list of queries which do not return a ResultSet
+     * @param query 
+     */
     public void writeQuery(List<String> list)
     {
         try
@@ -108,6 +130,10 @@ public class DatabaseManager
         }
     }
 
+    /**
+     * Returns the connection instance with the database
+     * @return 
+     */
     public Connection getDbCon()
     {
         return dbCon;

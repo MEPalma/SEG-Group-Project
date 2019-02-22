@@ -39,6 +39,7 @@ public class UserEntry implements Stringifiable
     @Override
     public String getDBContent()
     {
+        if (this.id.equals("")) return null;//id needs to be specified!
         String is = "', '";
         return ("'" + this.id + is + this.gender + is + this.age + is + this.income + "'");
     }
@@ -50,13 +51,12 @@ public class UserEntry implements Stringifiable
         {
             if (!resultSet.isClosed())
             {
-                UserEntry tmp = new UserEntry(
+                return new UserEntry(
                     resultSet.getString("id"),
                     Gender.valueOf(resultSet.getString("gender")),
                     Age.valueOf(resultSet.getString("age")),
                     Income.valueOf(resultSet.getString("income"))
                 );
-                return tmp;
             }
         } catch (SQLException e)
         {

@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 /*
  * Created by Marco-Edoardo Palma.
  */
-
 import Commons.*;
 import java.util.List;
 
@@ -29,17 +28,17 @@ public class DatabaseManager
         try
         {
             Class.forName("org.sqlite.JDBC");
-            
+
             // create a connection to the database
 //            this.dbCon = DriverManager.getConnection("jdbc:sqlite:" + new PathsManager().getDB());
-
             this.dbCon = DriverManager.getConnection("jdbc:sqlite::memory:");
-            
+
             this.dbCon.setAutoCommit(true);
         } catch (ClassNotFoundException e)
         {
             System.err.println("[ FAIL ] --> [DB NOT CONNECTED]:: " + e.getStackTrace());
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(DatabaseManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -86,18 +85,22 @@ public class DatabaseManager
     public synchronized void writeQuery(String[] queries)
     {
         for (String query : queries)
+        {
             writeQuery(query);
+        }
     }
-    
+
     public void writeQuery(List<String> list)
     {
         try
         {
             Statement statement = this.dbCon.createStatement();
 
-            for (String q : list) 
-                    statement.addBatch(q);
-        
+            for (String q : list)
+            {
+                statement.addBatch(q);
+            }
+
             statement.executeBatch();
             statement.close();
         } catch (Exception e)
@@ -109,5 +112,5 @@ public class DatabaseManager
     {
         return dbCon;
     }
-    
+
 }

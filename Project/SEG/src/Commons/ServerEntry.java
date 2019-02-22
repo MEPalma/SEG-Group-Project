@@ -53,8 +53,8 @@ public class ServerEntry implements Stringifiable
         else tmp = this.id + is;
         return (tmp +
                 this.userId + is + 
-                simpleDateFormat.format(this.entryDate) + is + 
-                simpleDateFormat.format(this.exitDate) + is +
+                globalDateFormat.format(this.entryDate) + is + 
+                globalDateFormat.format(this.exitDate) + is +
                 this.pagesViewed.intValue() + is +
                 this.conversion +
                 "'");
@@ -67,15 +67,14 @@ public class ServerEntry implements Stringifiable
         {
             if (!resultSet.isClosed())
             {
-                ServerEntry tmp = new ServerEntry(
+                return new ServerEntry(
                     resultSet.getInt("id"),
                     resultSet.getString("userId"),
-                    simpleDateFormat.parse(resultSet.getString("entryDate")),
-                    simpleDateFormat.parse(resultSet.getString("exitDate")),
+                    globalDateFormat.parse(resultSet.getString("entryDate")),
+                    globalDateFormat.parse(resultSet.getString("exitDate")),
                     resultSet.getInt("pagesViewed"),
                     Conversion.valueOf(resultSet.getString("conversion"))
                 );
-                return tmp;
             }
         } catch (SQLException e)
         {

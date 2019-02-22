@@ -1,4 +1,3 @@
-
 package Commons;
 
 import DatabaseManager.Stringifiable;
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
 public class ClickEntry implements Stringifiable
 {
     public static int AUTO_INDEX = -1;
-     
+
     //IN THE SAME ORDER AS DECLARATION IN DB TABLE
     private int id;
     private String userId;
@@ -30,7 +29,7 @@ public class ClickEntry implements Stringifiable
         this.date = date;
         this.clickCost = clickCost;
     }
-    
+
     public ClickEntry()
     {
         this(AUTO_INDEX, "", new Date(), 0);
@@ -38,21 +37,26 @@ public class ClickEntry implements Stringifiable
 
     /*
         implementation of Stringifiable.java
-    */
+     */
     @Override
     public String getDBContent()
     {
         String is = "', '";
         String tmp;
-        if (this.id == AUTO_INDEX) tmp = "NULL, '";
-        else tmp = this.id + ", '";
-        return (tmp +
-                this.userId + is +
-                simpleDateFormat.format(this.date) + is +
-                this.clickCost.doubleValue() +
-                "'");
+        if (this.id == AUTO_INDEX)
+        {
+            tmp = "NULL, '";
+        } else
+        {
+            tmp = this.id + ", '";
+        }
+        return (tmp
+                + this.userId + is
+                + globalDateFormat.format(this.date) + is
+                + this.clickCost.doubleValue()
+                + "'");
     }
-    
+
     @Override
     public Object parseDBContent(ResultSet resultSet)
     {
@@ -60,20 +64,19 @@ public class ClickEntry implements Stringifiable
         {
             if (!resultSet.isClosed())
             {
-                ClickEntry tmp = new ClickEntry(
-                    resultSet.getInt("id"),
-                    resultSet.getString("userId"),
-                    simpleDateFormat.parse(resultSet.getString("date")),
-                    resultSet.getDouble("clickCost")
+                return new ClickEntry(
+                        resultSet.getInt("id"),
+                        resultSet.getString("userId"),
+                        globalDateFormat.parse(resultSet.getString("date")),
+                        resultSet.getDouble("clickCost")
                 );
-                return tmp;
             }
         } catch (SQLException e)
         {
             e.printStackTrace();
-        } catch (Exception ex)
+        } catch (ParseException ex)
         {
-            System.out.println("fuuuuuuck");
+            Logger.getLogger(ClickEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -88,7 +91,12 @@ public class ClickEntry implements Stringifiable
     public boolean equals(Object obj)
     {
         if (obj instanceof ClickEntry)
-            if (this.id == ((ClickEntry) obj).id) return true;
+        {
+            if (this.id == ((ClickEntry) obj).id)
+            {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -97,7 +105,7 @@ public class ClickEntry implements Stringifiable
     {
         return this.id;
     }
-    
+
     public Date getDate()
     {
         return date;
@@ -122,7 +130,7 @@ public class ClickEntry implements Stringifiable
     {
         this.userId = userId;
     }
-    
+
     public void setDate(Date date)
     {
         this.date = date;
@@ -132,5 +140,5 @@ public class ClickEntry implements Stringifiable
     {
         this.clickCost = clickCost;
     }
-    
+
 }

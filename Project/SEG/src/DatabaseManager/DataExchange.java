@@ -65,7 +65,6 @@ public class DataExchange
 //    {
 //        this.dbM.writeQuery(list);
 //    }
-
     public void writeSqlStatement(Statement s) throws SQLException
     {
         s.executeBatch();

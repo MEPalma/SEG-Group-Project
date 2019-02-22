@@ -15,10 +15,9 @@ import java.util.logging.Logger;
 public class ImpressionEntry implements Stringifiable
 {
     public static int AUTO_INDEX = -1;
-     
+
     public static enum Context {News, Shopping, SocialMedia, BlockTagTree, Travel, Hobbies, Blog, Unknown};
-    
-  
+
     //IN SAME ORDER AS IN DB TABLE
     private int id;
     private String userId;
@@ -34,7 +33,7 @@ public class ImpressionEntry implements Stringifiable
         this.context = context;
         this.impressionCost = impressionCost;
     }
-    
+
     public ImpressionEntry()
     {
         this(AUTO_INDEX, "", new Date(), Context.Unknown, 0);
@@ -42,20 +41,25 @@ public class ImpressionEntry implements Stringifiable
 
     /*
         implementation of Stringifiable.java
-    */
+     */
     @Override
     public String getDBContent()
     {
         String is = "', '";
         String tmp;
-        if (this.id == AUTO_INDEX) tmp = "NULL, '";
-        else tmp = "'" + this.id + is;
-        return (tmp +
-                this.userId + is +
-                simpleDateFormat.format(this.date) + is +
-                this.context + is +
-                this.impressionCost.doubleValue() +
-                "'");
+        if (this.id == AUTO_INDEX)
+        {
+            tmp = "NULL, '";
+        } else
+        {
+            tmp = "'" + this.id + is;
+        }
+        return (tmp
+                + this.userId + is
+                + globalDateFormat.format(this.date) + is
+                + this.context + is
+                + this.impressionCost.doubleValue()
+                + "'");
     }
 
     @Override
@@ -65,36 +69,40 @@ public class ImpressionEntry implements Stringifiable
         {
             if (!resultSet.isClosed())
             {
-                ImpressionEntry tmp = new ImpressionEntry(
-                    resultSet.getInt("id"),
-                    resultSet.getString("userId"),
-                    simpleDateFormat.parse(resultSet.getString("date")),
-                    Context.valueOf(resultSet.getString("context")),
-                    resultSet.getDouble("impressionCost")
+                return new ImpressionEntry(
+                        resultSet.getInt("id"),
+                        resultSet.getString("userId"),
+                        globalDateFormat.parse(resultSet.getString("date")),
+                        Context.valueOf(resultSet.getString("context")),
+                        resultSet.getDouble("impressionCost")
                 );
-                return tmp;
             }
         } catch (SQLException e)
         {
             e.printStackTrace();
-        } catch (ParseException ex) 
+        } catch (ParseException ex)
         {
             Logger.getLogger(ImpressionEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
+
     @Override
     public String toString()
     {
         return this.getDBContent();
     }
-    
-     @Override
+
+    @Override
     public boolean equals(Object obj)
     {
         if (obj instanceof ImpressionEntry)
-            if (this.id == ((ImpressionEntry) obj).id) return true;
+        {
+            if (this.id == ((ImpressionEntry) obj).id)
+            {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -103,7 +111,7 @@ public class ImpressionEntry implements Stringifiable
     {
         return this.id;
     }
-    
+
     public Date getDate()
     {
         return date;
@@ -113,7 +121,7 @@ public class ImpressionEntry implements Stringifiable
     {
         return userId;
     }
-    
+
     public int getId()
     {
         return id;
@@ -153,5 +161,5 @@ public class ImpressionEntry implements Stringifiable
     {
         this.impressionCost = impressionCost;
     }
-    
+
 }

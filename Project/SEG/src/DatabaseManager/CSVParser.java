@@ -1,6 +1,5 @@
 package DatabaseManager;
 
-import Commons.ImpressionEntry;
 import Commons.UserEntry;
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,8 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.sql.Statement;
 
@@ -84,6 +81,8 @@ public class CSVParser
                     sqlStmt.addBatch("INSERT INTO IMPRESSION_LOGS VALUES (NULL, '" + tk[1] + "', '" + tk[0] + "', '" + tk[5].replace(" ", "") + "', '" +  Double.parseDouble(tk[6]) + "');");
                 
             }
+            
+            br.close();
         }
     }
 
@@ -102,6 +101,7 @@ public class CSVParser
                 if (!tk[0].equals("n/a"))
                     sqlStmt.addBatch("INSERT INTO CLICK_LOGS VALUES (NULL, '" + tk[1] + "','" + tk[0] + "','" + Double.parseDouble(tk[2]) + "');");
             }
+            br.close();
         }
     }
 
@@ -120,6 +120,7 @@ public class CSVParser
                 if (!tk[0].equals("n/a") && !tk[2].equals("n/a"))
                     sqlStmt.addBatch("INSERT INTO SERVER_LOGS VALUES (NULL,'" + tk[1] + "','" + tk[0] + "','" + tk[2] + "','" + Integer.parseInt(tk[3]) + "','" + tk[4] + "');");
             }
+            br.close();
         }
     }
 

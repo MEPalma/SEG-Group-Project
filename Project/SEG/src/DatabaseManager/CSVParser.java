@@ -1,12 +1,9 @@
 package DatabaseManager;
 
-import Commons.ClickEntry;
 import Commons.ImpressionEntry;
-import Commons.ServerEntry;
 import Commons.UserEntry;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,6 +11,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.sql.Statement;
 
 /**
  *
@@ -44,21 +42,23 @@ public class CSVParser
     {
         this.dataExchange.dropAll_noSettings();
         
-        this.dataExchange.writeQuery("PRAGMA foreign_keys = OFF;");
+        this.dataExchange.setForiegnKeyPragma(false);
+        this.dataExchange.setAutoCommit(false);
         
-        this.dataExchange.getDbM().getDbCon().setAutoCommit(false);
+        Statement insertionStatement = this.dataExchange.getSqlStatement();
         
-        parseImpressionLogFile();     
-        parseClickLogFile();
-        parseServerLogFile();
+        parseImpressionLogFile(insertionStatement);     
+        parseClickLogFile(insertionStatement);
+        parseServerLogFile(insertionStatement);
         
-        this.dataExchange.getDbM().getDbCon().commit();
-        this.dataExchange.getDbM().getDbCon().setAutoCommit(true);
+        this.dataExchange.writeSqlStatement(insertionStatement);
+        this.dataExchange.commitNow();
         
-        this.dataExchange.writeQuery("PRAGMA foreign_keys = ON;");
+        this.dataExchange.setAutoCommit(true);
+        this.dataExchange.setForiegnKeyPragma(true);
     }
 
-    private void parseImpressionLogFile() throws FileNotFoundException, IOException, Exception
+    private void parseImpressionLogFile(Statement sqlStmt) throws FileNotFoundException, IOException, Exception
     {
         // 0     1      2       3       4         5            6
         //DATE | ID | Gender | Age | Income | Context | impressionCost
@@ -66,8 +66,6 @@ public class CSVParser
 
        try (BufferedReader br = new BufferedReader(new FileReader(this.impressionLogFile), 40000))
         {
-            List<String> insertStatements = new LinkedList<String>();
-            
             Set<Integer> addedUserIds = new HashSet<Integer>();//no duplicates!
             
             br.readLine();//skip first line
@@ -79,56 +77,49 @@ public class CSVParser
                 int userIdhash = tk[1].hashCode();
                 if (!addedUserIds.contains(userIdhash))
                 {
-                    insertStatements.add("INSERT INTO USERS VALUES ('" + tk[1] + "', '" + tk[2] + "', '" + parseAge(tk[3]) + "', '" + tk[4] + "');");
+                    sqlStmt.addBatch("INSERT INTO USERS VALUES ('" + tk[1] + "', '" + tk[2] + "', '" + parseAge(tk[3]) + "', '" + tk[4] + "');");
                     addedUserIds.add(userIdhash);
                 }
                 if (!tk[0].equals("n/a"))
-                    insertStatements.add("INSERT INTO IMPRESSION_LOGS VALUES (NULL, '" + tk[1] + "', '" + tk[0] + "', '" + parseContext(tk[5]) + "', '" +  Double.parseDouble(tk[6]) + "');");
+                    sqlStmt.addBatch("INSERT INTO IMPRESSION_LOGS VALUES (NULL, '" + tk[1] + "', '" + tk[0] + "', '" + tk[5].replace(" ", "") + "', '" +  Double.parseDouble(tk[6]) + "');");
                 
             }
-            this.dataExchange.writeQuery(insertStatements);
         }
     }
 
-    private void parseClickLogFile() throws FileNotFoundException, IOException, Exception
+    private void parseClickLogFile(Statement sqlStmt) throws FileNotFoundException, IOException, Exception
     {
         // 0     1      2     
         //DATE | ID | clickcost
 
         try (BufferedReader br = new BufferedReader(new FileReader(this.clickLogFile), 40000))
-        {
-            List<String> insertStatements = new LinkedList<String>();
-            
+        {   
             br.readLine();//skip first line
             String line = br.readLine();
             while ((line = br.readLine()) != null)
             {
                 String[] tk = line.split(",");
                 if (!tk[0].equals("n/a"))
-                    insertStatements.add("INSERT INTO CLICK_LOGS VALUES (NULL, '" + tk[1] + "','" + tk[0] + "','" + Double.parseDouble(tk[2]) + "');");
+                    sqlStmt.addBatch("INSERT INTO CLICK_LOGS VALUES (NULL, '" + tk[1] + "','" + tk[0] + "','" + Double.parseDouble(tk[2]) + "');");
             }
-            this.dataExchange.writeQuery(insertStatements);
         }
     }
 
-    private void parseServerLogFile() throws FileNotFoundException, IOException, Exception
+    private void parseServerLogFile(Statement sqlStmt) throws FileNotFoundException, IOException, Exception
     {
         //     0       1      2           3            4
         //entryDATE | ID | exitDate | pagesViewed | conversions
 
         try (BufferedReader br = new BufferedReader(new FileReader(this.serverLogfile), 40000))
         {
-            List<String> insertStatements = new LinkedList<String>();
-            
             br.readLine(); //skip first line
             String line = "";
             while ((line = br.readLine()) != null)
             {
                 String[] tk = line.split(",");
                 if (!tk[0].equals("n/a") && !tk[2].equals("n/a"))
-                    insertStatements.add("INSERT INTO SERVER_LOGS VALUES (NULL,'" + tk[1] + "','" + tk[0] + "','" + tk[2] + "','" + Integer.parseInt(tk[3]) + "','" + tk[4] + "');");
+                    sqlStmt.addBatch("INSERT INTO SERVER_LOGS VALUES (NULL,'" + tk[1] + "','" + tk[0] + "','" + tk[2] + "','" + Integer.parseInt(tk[3]) + "','" + tk[4] + "');");
             }
-            this.dataExchange.writeQuery(insertStatements);
         }
     }
 
@@ -152,12 +143,12 @@ public class CSVParser
         }
     }
 
-    private static ImpressionEntry.Context parseContext(String string)
-    {
-        if (string.equals("Social Media"))
-        {
-            return ImpressionEntry.Context.SocialMedia;
-        }
-        return ImpressionEntry.Context.valueOf(string);
-    }
+//    private static ImpressionEntry.Context parseContext(String string)
+//    {
+//        if (string.equals("Social Media"))
+//        {
+//            return ImpressionEntry.Context.SocialMedia;
+//        }
+//        return ImpressionEntry.Context.valueOf(string);
+//    }
 }

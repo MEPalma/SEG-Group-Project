@@ -1,4 +1,6 @@
-package GUI;
+/*
+ * Created by Marco-Edoardo Palma.
+ */
 /*
  * Created by Marco-Edoardo Palma.
  */

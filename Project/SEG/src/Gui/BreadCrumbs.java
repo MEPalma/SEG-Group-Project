@@ -90,6 +90,7 @@ public class BreadCrumbs extends JPanel
     private void navigateTo(int index)
     {
         cancelBackgroundTask();
+        stopProgressBar();
 
         if (index < 0)
         {

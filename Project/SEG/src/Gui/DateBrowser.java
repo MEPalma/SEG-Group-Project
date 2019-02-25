@@ -6,21 +6,22 @@ import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import DatabaseManager.Stringifiable;
 
 /**
  *
  * @author MNarco-Edoardo Palma
  */
-
 public class DateBrowser extends JPanel
 {
+
     private SimpleDateFormat dateFormat;
     private Date date;
     private DateChangedListener listener;
 
-    public DateBrowser(Color background)
+    public DateBrowser()
     {
-        this(background, new SimpleDateFormat("yyyy/MM/dd"), new Date());//TODO change to simple data format
+        this(GuiColors.RED, Stringifiable.globalDateFormat, new Date());//TODO change to simple data format
     }
 
     public DateBrowser(Color background, SimpleDateFormat dateFormat, Date date)
@@ -57,12 +58,16 @@ public class DateBrowser extends JPanel
                 Insets scnMax = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
                 int taskBarSize = scnMax.bottom;
 
-
                 int x = dateBox.getLocationOnScreen().x;
-                if (x + DateBrowserFrame.WIDTH > screenSize.width) x = screenSize.width - DateBrowserFrame.WIDTH;
+                if (x + DateBrowserFrame.WIDTH > screenSize.width)
+                {
+                    x = screenSize.width - DateBrowserFrame.WIDTH;
+                }
                 int y = dateBox.getLocationOnScreen().y + dateBox.getHeight();
                 if (y + DateBrowserFrame.HEIGHT > (screenSize.height - taskBarSize))
+                {
                     y = screenSize.height - taskBarSize - DateBrowserFrame.HEIGHT;
+                }
 
                 new DateBrowserFrame(thisBrowser, x, y).setVisible(true);
             }
@@ -77,7 +82,9 @@ public class DateBrowser extends JPanel
     private void notifyListener()
     {
         if (this.listener != null)
+        {
             this.listener.takeAction();
+        }
     }
 
     public Date getDate()
@@ -120,20 +127,21 @@ public class DateBrowser extends JPanel
 
 class DateBrowserFrame extends JFrame
 {
+
     public static int HEIGHT = 230;
     public static int WIDTH = 250;
     private DateBrowser dateBrowser;
 
     public DateBrowserFrame(DateBrowser dateBrowser, int x, int y) throws HeadlessException
     {
-        super("Jackie");
+        super("Dashboard App");
         this.dateBrowser = dateBrowser;
 
         setLocation(x, y);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setUndecorated(true);
         setSize(WIDTH, HEIGHT);
-        setBackground(new Color(43, 46, 52));
+        setBackground(GuiColors.RED);
         getContentPane().setBackground(getBackground());
 
         addFocusListener(new FocusAdapter()
@@ -250,7 +258,9 @@ class DateBrowserFrame extends JFrame
             if (ctmp.getTime().equals(dateBrowser.getDate()))
             {
                 for (MouseListener ml : dayChooser.getMouseListeners())
+                {
                     dayChooser.removeMouseListener(ml);
+                }
 
                 dayChooser.setForeground(new Color(105, 175, 205));
             }
@@ -268,7 +278,9 @@ class DateBrowserFrame extends JFrame
         }
 
         for (int i = added; i < 42; i++)
+        {
             cvpDaysViewPanel.add(new TitleLabel("", TitleLabel.CENTER, 8));
+        }
 
         centerViewPanel.add(cvpDaysViewPanel, BorderLayout.CENTER);
 

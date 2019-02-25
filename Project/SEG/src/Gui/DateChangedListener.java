@@ -1,7 +1,7 @@
 package Gui;
 /**
  *
- * @author MNarco-Edoardo Palma
+ * @author Marco-Edoardo Palma
  */
 public interface DateChangedListener
 {

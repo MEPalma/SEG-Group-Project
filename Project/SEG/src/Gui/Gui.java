@@ -24,6 +24,7 @@ import javax.swing.WindowConstants;
  */
 public class Gui extends JFrame
 {
+
     private DataExchange dataExchange;
 
     private JPanel mainView;
@@ -88,7 +89,10 @@ public class Gui extends JFrame
             {
                 if (!titleLabel.getName().equals("SELECTED"))
                 {
-                    for (JLabel l : menuLabels) l.setName("");
+                    for (JLabel l : menuLabels)
+                    {
+                        l.setName("");
+                    }
                     titleLabel.setName("SELECTED");
                     openHomeView();
                 }
@@ -122,7 +126,10 @@ public class Gui extends JFrame
             {
                 if (!homeButton.getName().equals("S"))
                 {
-                    for (JLabel l : menuLabels) l.setName("");
+                    for (JLabel l : menuLabels)
+                    {
+                        l.setName("");
+                    }
                     homeButton.setName("S");
                     openHomeView();
                 }
@@ -138,14 +145,17 @@ public class Gui extends JFrame
             {
                 if (!compareButton.getName().equals("S"))
                 {
-                    for (JLabel l : menuLabels) l.setName("");
+                    for (JLabel l : menuLabels)
+                    {
+                        l.setName("");
+                    }
                     compareButton.setName("S");
 //                    openCompareView();TODO
                 }
             }
         });
         menuLabels.add(compareButton);
-        
+
         MenuLabel loadButton = new MenuLabel("Load CSVs", MenuLabel.CENTER);
         loadButton.addMouseListener(new MouseAdapter()
         {
@@ -154,14 +164,17 @@ public class Gui extends JFrame
             {
                 if (!compareButton.getName().equals("S"))
                 {
-                    for (JLabel l : menuLabels) l.setName("");
+                    for (JLabel l : menuLabels)
+                    {
+                        l.setName("");
+                    }
                     compareButton.setName("S");
                     openLoadCSVsView();
                 }
             }
         });
         menuLabels.add(loadButton);
-        
+
         MenuLabel settingsButton = new MenuLabel("Settings", MenuLabel.CENTER);
         settingsButton.addMouseListener(new MouseAdapter()
         {
@@ -170,7 +183,10 @@ public class Gui extends JFrame
             {
                 if (!compareButton.getName().equals("S"))
                 {
-                    for (JLabel l : menuLabels) l.setName("");
+                    for (JLabel l : menuLabels)
+                    {
+                        l.setName("");
+                    }
                     settingsButton.setName("S");
                     openLoadCSVsView();
                 }
@@ -182,7 +198,6 @@ public class Gui extends JFrame
         this.menuButtonsPane.add(compareButton);
         this.menuButtonsPane.add(loadButton);
         this.menuButtonsPane.add(settingsButton);
-        
 
         openHomeView();
     }
@@ -192,7 +207,7 @@ public class Gui extends JFrame
     {
         if (visible)
         {
-            setSize(new Dimension(1100, 750));
+            setSize(new Dimension(1200, 850));
 
             Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
             int x = (screen.width / 2) - (super.getSize().width / 2);
@@ -207,7 +222,7 @@ public class Gui extends JFrame
         breadCrumbs.clear();
         breadCrumbs.push("Home", new HomeView(dataExchange, breadCrumbs));
     }
-    
+
     public synchronized void openLoadCSVsView()
     {
         breadCrumbs.clear();

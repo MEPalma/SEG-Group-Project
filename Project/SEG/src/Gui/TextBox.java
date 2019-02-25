@@ -1,6 +1,7 @@
-package GUI;
-/*
- * Created by Marco-Edoardo Palma.
+package Gui;
+/**
+ *
+ * @author Marco-Edoardo Palma
  */
 
 import javax.swing.*;

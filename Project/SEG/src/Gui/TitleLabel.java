@@ -1,5 +1,10 @@
 package Gui;
 
+/**
+ *
+ * @author Marco-Edoardo Palma
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
@@ -14,7 +19,7 @@ public class TitleLabel extends JLabel
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
-        super.setForeground(Color.WHITE);
+        super.setForeground(new Color(32, 32, 32));
         super.setFont(new Font("Verdana", Font.PLAIN, 22));
         super.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setBackground(new Color(0, 0, 0, 0));
@@ -25,7 +30,7 @@ public class TitleLabel extends JLabel
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
-        super.setForeground(Color.WHITE);
+        super.setForeground(new Color(32, 32, 32));
         super.setFont(new Font("Verdana", Font.PLAIN, size));
         super.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setBackground(new Color(0, 0, 0, 0));
@@ -36,7 +41,7 @@ public class TitleLabel extends JLabel
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
-        super.setForeground(Color.WHITE);
+        super.setForeground(new Color(32, 32, 32));
         super.setFont(new Font("Verdana", Font.PLAIN, size));
         super.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setBackground(new Color(0, 0, 0, 0));

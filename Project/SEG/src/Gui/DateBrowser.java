@@ -1,4 +1,4 @@
-package GUI;
+package Gui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,6 +6,11 @@ import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+/**
+ *
+ * @author MNarco-Edoardo Palma
+ */
 
 public class DateBrowser extends JPanel
 {

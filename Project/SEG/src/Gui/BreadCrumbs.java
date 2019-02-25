@@ -1,8 +1,9 @@
 
 package Gui;
 
-/*
- * Created by Marco-Edoardo Palma.
+/**
+ *
+ * @author Marco-Edoardo Palma
  */
 
 import javax.swing.*;
@@ -13,8 +14,8 @@ import java.util.Stack;
 
 public class BreadCrumbs extends JPanel
 {
-    private Color BACKGROUND = new Color(60, 69, 79);
-    private Color SELECTED = new Color(43, 46, 52);
+    private Color BACKGROUND = GuiColors.DARK_LIGHT;
+    private Color SELECTED = GuiColors.LIGHT;
 
     private JPanel viewPanel;
 
@@ -42,7 +43,7 @@ public class BreadCrumbs extends JPanel
         this.progressBar.setBorderPainted(false);
 
         setBackground(BACKGROUND);
-        setBorder(BorderFactory.createEmptyBorder());
+        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         setPreferredSize(new Dimension(300, 52));
 
         this.panesStacks = new Stack<RPanel>();

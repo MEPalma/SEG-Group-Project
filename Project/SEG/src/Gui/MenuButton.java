@@ -1,5 +1,10 @@
 package Gui;
 
+/**
+ *
+ * @author MNarco-Edoardo Palma
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;

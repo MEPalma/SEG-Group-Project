@@ -18,10 +18,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
-/**
- *
- * @author MNarco-Edoardo Palma
- */
 public class Gui extends JFrame
 {
 

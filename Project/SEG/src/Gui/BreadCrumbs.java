@@ -1,11 +1,6 @@
 
 package Gui;
 
-/**
- *
- * @author Marco-Edoardo Palma
- */
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -31,7 +26,7 @@ public class BreadCrumbs extends JPanel
     {
         super();
         setBackground(SELECTED);
-        setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        setBorder(BorderFactory.createEmptyBorder());
 
         this.viewPanel = viewPanel;
 
@@ -39,11 +34,11 @@ public class BreadCrumbs extends JPanel
         this.progressBar = new JProgressBar();
         this.progressBar.setIndeterminate(true);
         this.progressBar.setBorderPainted(false);
-        this.progressBar.setPreferredSize(new Dimension(30, 24));
+        this.progressBar.setPreferredSize(new Dimension(30, 30));
         this.progressBar.setBorderPainted(false);
 
         setBackground(BACKGROUND);
-        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.LIGHT_GRAY));
         setPreferredSize(new Dimension(300, 52));
 
         this.panesStacks = new Stack<RPanel>();

@@ -42,7 +42,7 @@ public class HomeView extends RPanel
         this.breadCrumbs = breadCrumbs;
 
         this.chartData = new LinkedList<>();
-        this.chartType = ChartType.LINECHART;
+        this.chartType = ChartType.LINE_CHART;
         this.xAxisLabel = "xAxisLabel";
         this.yAxisLabel = "yAxisLabel";
         this.chartTitle = "chartTitle";
@@ -167,7 +167,11 @@ public class HomeView extends RPanel
 
                         System.out.println(chartData.size());
                         add(new TitleLabel(chartTitle, TitleLabel.CENTER), BorderLayout.NORTH);
-                        add(GraphManager.createChart(chartType, chartData, xAxisLabel, yAxisLabel), BorderLayout.CENTER);
+                        
+                        JPanel chart = GraphManager.createChart(chartType, chartData, xAxisLabel, yAxisLabel);
+                        chart.setBackground(GuiColors.LIGHT);
+                        chart.setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, chart.getBackground()));
+                        add(chart, BorderLayout.CENTER);
                         add(bottomFunctionsPanel, BorderLayout.SOUTH);
 
                         breadCrumbs.stopProgressBar();

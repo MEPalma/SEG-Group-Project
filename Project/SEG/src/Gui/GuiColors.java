@@ -16,4 +16,5 @@ public class GuiColors
     
     public static Color WHITE = Color.WHITE;
     public static Color LIGHT_GRAY = Color.LIGHT_GRAY;
+    public static Color DARK_GRAY = new Color(75, 75, 75);
 }

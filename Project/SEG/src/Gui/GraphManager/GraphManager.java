@@ -19,28 +19,12 @@ public class GraphManager
 
     public static enum ChartType
     {
-        LINECHART, HISTOGRAM
-    }
-
-    public GraphManager()
-    {
-
+        LINE_CHART
     }
 
     public static JPanel createChart(ChartType type, Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel)
     {
-        if (type == ChartType.HISTOGRAM)
-        {
-            return createHistogram(data, xAxisLabel, yAxisLabel);
-        } else
-        {
-            return createLineChart(data, xAxisLabel, yAxisLabel);
-        }
-    }
-
-    private static JPanel createHistogram(Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel)
-    {
-        return null;
+        return createLineChart(data, xAxisLabel, yAxisLabel);
     }
 
     private static JPanel createLineChart(Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel)
@@ -61,7 +45,7 @@ public class GraphManager
         );
         chart.setBorderVisible(false);
         chart.setAntiAlias(true);
-        chart.setBackgroundPaint(GuiColors.LIGHT_GRAY);
+        chart.setBackgroundPaint(GuiColors.LIGHT);
 
         //plot init
         XYPlot plot = chart.getXYPlot();
@@ -71,13 +55,13 @@ public class GraphManager
         renderer.setSeriesStroke(0, new BasicStroke(2.0f));
 
         plot.setRenderer(renderer);
-        plot.setBackgroundPaint(GuiColors.LIGHT);
+        plot.setBackgroundPaint(GuiColors.DARK_GRAY);
 
         plot.setRangeGridlinesVisible(true);
         plot.setRangeGridlinePaint(GuiColors.LIGHT_GRAY);
 
         plot.setDomainGridlinesVisible(true);
-        plot.setDomainGridlinePaint(GuiColors.DARK_LIGHT);
+        plot.setDomainGridlinePaint(GuiColors.LIGHT_GRAY);
 
         return new ChartPanel(chart);
     }

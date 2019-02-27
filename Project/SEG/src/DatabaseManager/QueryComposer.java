@@ -194,5 +194,12 @@ public class QueryComposer
     {
         return "SELECT * FROM SETTINGS WHERE SETTINGS.name='" + name + "' LIMIT 1;";
     }
+    /*
+    Numer of impressions by week query.
+     */
 
+    public static String getNumberOfImpressionsPerWeek = "select count(impressionCost) as GroupedValues from impression_logs group by strftime('%W', Date);";
+    /*
+    Number of clicks
+     */
 }

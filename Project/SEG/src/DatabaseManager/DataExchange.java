@@ -647,24 +647,4 @@ public class DataExchange
             return null;
         }
     }
-    public List<Number> getNumberOfImpressionsPerWeek()
-    {
-        ResultSet resultSet = this.dbM.query(QueryComposer.getNumberOfImpressionsPerWeek);
-        try {
-            List<Number> number=new LinkedList<>();
-            while(resultSet.next())
-            {
-                number.add(resultSet.getDouble("GroupedValues"));
-            }
-
-            for(Number nmbr :number)
-            {
-                System.out.println(nmbr+"\n");
-            }
-        }catch (SQLException ex)
-        {
-
-        }
-        return new LinkedList<>();
-    }
 }

@@ -195,11 +195,57 @@ public class QueryComposer
         return "SELECT * FROM SETTINGS WHERE SETTINGS.name='" + name + "' LIMIT 1;";
     }
     /*
-    Numer of impressions by week query.
+    Nubmer of impressions by week query.
      */
 
-    public static String getNumberOfImpressionsPerWeek = "select count(impressionCost) as GroupedValues from impression_logs group by strftime('%W', Date);";
+    public static String getNumberOfImpressionsPerWeek = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%W', Date) order by Date;";
+    public static String getNumberOfImpressionsPerHour="select Date as d,count(impressionCost) as c from impression_logs group by strftime('%H:%d', Date) order by Date;";
+    public static String getNumberOfImpressionsPerDay="select Date as d,count(impressionCost) as c from impression_logs group by strftime('%d', Date) order by Date;";
+
     /*
     Number of clicks
      */
+    public static String getNumberOfClicksPerWeek="select Date as d,count(ClickCost) as c from click_logs group by strftime('%W', Date) order by Date;";
+    public static String getNumberOfClicksPerHour="select Date as d,count(ClickCost) as c from click_logs group by strftime('%H:%d', Date) order by Date;";
+    public static String getNumberOfClicksPerDay="select Date as d,count(ClickCost) as c from click_logs group by strftime('%d', Date) order by Date;";
+
+    /*
+     *Number of uniques
+     */
+    public static String getNumberOfUniques="select count (distinct ID) as GroupedValues from click_logs;";
+    public static String getGetNumberOfUniquesPerDay="";
+    public static String getGetNumberOfUniquesPerWeek="";
+    public static String getGetNumberOfUniquesPerHours="";
+
+
+    /*
+    Number of Bounces
+     */
+    public static String getNumberOfBounces="select count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as GroupedValues from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1;";
+    public static String getGetNumberOfBouncesPerDay="";
+    public static String getGetNumberOfBouncesPerHour="";
+    public static String getNumberofBouncesPeWeek="";
+
+
+    /*
+    Number of Conversions
+     */
+    public static String getNumberOfConversions="select count(Conversion) as GroupedValues from server_logs where Conversion='No';";
+    public static String getNumberOfConversionsPerHour="";
+    public static String getNumberOfConversionsPerDay="";
+    public static String getNumberOfConversionsPerWeek="";
+
+    /*
+    Total Cost
+     */
+    public static String getTotalCost="select (select sum(impressionCost) from impression_logs) +(select sum(ClickCost) from click_logs) as GroupedValues;";
+    public static String getTotalCostPerHour="";
+    public static String getTotalCostPerWeek="";
+    public static String getTotalCostPerDay="";
+    /*
+   Gets per hour--24 hours
+   For time granularity!!!
+    */
+    public static String getTotalNumberOfImpressionsPerHour="select count(impressionCost) as GroupedValues from impression_logs group by strftime('%H',Date);";
+
 }

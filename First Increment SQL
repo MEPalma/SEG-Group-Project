@@ -1,18 +1,110 @@
 
-// Number of impressions
+// Number of impressions per week/////////////////////////////////////////////////////////////////////////
 select 
     count(impressionCost) as GroupedValues
 from impression_logs
 group by strftime('%W', Date);
 
-//Number of Clicks
+
+//Number of impressions per day//////////////////////////////
+select Date,count(impressionCost) as GroupedValues from impression_logs group by strftime('%d', Date);
+
+//time gran hours impressions
+select Date,count(impressionCost) as GroupedValues from impression_logs group by strftime('%H', Date);
+
+//Number of impressions per hour
+select Date,count(impressionCost) as GroupedValues from impression_logs group by strftime('%H:%d', Date) order by Date;
+//Number of impressions per week
+select Date,count(impressionCost) as GroupedValues from impression_logs group by strftime('%W', Date) order by Date;
+
+
+//Number of impressions per day
+select Date,count(impressionCost) as GroupedValues from impression_logs group by strftime('%d', Date) order by Date;
+
+
+//Number of Clicks/////////////////////////////////////////////////////////////////////////////////
 
 select 
     count(ClickCost) as GroupedValues
 from click_logs
-group by strftime('%W', Date);
-// Number of Uniques 
-//Unique number of users tha click on an add on the course of the campaign
+group by strftime('%W', Date) order by Date;
+
+
+//NUMBER OF CLICKS PER HOUR
+select Date as d,count(ClickCost) as c from click_logs group by strftime('%H:%d', Date) order by Date;
+
+//NUMBER O CLICKS PER DAY
+
+select Date as d,count(ClickCost) as c from click_logs group by strftime('%d', Date) order by Date;
+
+//NUMBER OF CLICKS PER WEEK
+
+select Date as d,count(ClickCost) as c from click_logs group by strftime('%W', Date) order by Date;
+
+
+
+// Number of Uniques ////////////////////////////////////////////////////////////////////////////
+//Unique number of users tha click on an add on the course of the campaign///////////////////////////
 
 SELECT COUNT (DISTINCT ID)
   FROM click_logs;
+//NUMBER OF UNIQEUS PER WEEK
+
+select Date as d,count(distinct id) as c from click_logs group by strftime('%W', Date) order by Date;
+
+select distinct count(id) as c, date as d  from impression_logs by strftime('%W', Date) order by Date;
+
+select Date as d,count(distinct id) as c from impression_logs group by strftime('%W', Date) order by Date;
+
+select Date as d,count(distinct id) as c from click_logs group by strftime('%W', Date) order by Date;
+select EntryDate as d,count(distinct id) as c from server_logs group by strftime('%W', EntryDate) order by EntryDate;
+
+
+//Unique by day
+
+select Date as d,count( id) as c from click_logs group by strftime('%d', Date) order by Date;
+
+
+
+// Number of Bounces defined within 1 min general////////////////////////////////////////////////////////
+
+* a single page has been visited
+* navigates away after a short time
+
+// count  those with only one page visited
+select count(PagesViewed) from server_logs where PagesViewed=1;
+
+//select short time visited
+select count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as GroupedValues
+from server_logs
+where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1;
+
+//try '%s'
+
+select count(PagesViewed) as GroupedValues
+from server_logs
+group by strftime('s', EntryDate);
+
+//////////////////////////////////////////////////////////////////
+
+//Number of Conversions/////////////////////////////////////////// IN GENERAL
+
+select count(Conversion) as GroupedValues from server_logs where Conversion='No';
+
+//Total Cost///////////////////////////////////////////////////////////
+
+---- sum from impressions
+
+select sum(impressionCost)
+from impression_logs;
+--sum from clicks
+
+select sum(ClickCost) from click_logs;
+
+
+sum in general----
+
+select (select sum(impressionCost) from impression_logs) +(select sum(ClickCost) from click_logs) as GroupedValues;
+
+
+-----

@@ -1,8 +1,6 @@
 package DatabaseManager;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -12,6 +10,7 @@ import java.util.*;
 import Commons.*;
 import static DatabaseManager.Stringifiable.globalDateFormat;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -647,24 +646,156 @@ public class DataExchange
             return null;
         }
     }
-    public List<Number> getNumberOfImpressionsPerWeek()
-    {
-        ResultSet resultSet = this.dbM.query(QueryComposer.getNumberOfImpressionsPerWeek);
+
+
+
+    /*
+    Method that avoids duplicates for lists;
+     */
+    private List<Number> getNumbersInfo(ResultSet resultSetC) {
         try {
-            List<Number> number=new LinkedList<>();
-            while(resultSet.next())
+            List<Number> numberC=new LinkedList<>();
+            while(resultSetC.next())
             {
-                number.add(resultSet.getDouble("GroupedValues"));
+                numberC.add(resultSetC.getDouble("GroupedValues"));
             }
 
-            for(Number nmbr :number)
-            {
-                System.out.println(nmbr+"\n");
-            }
+            return numberC;
+        }
+        catch (SQLException ex)
+        {
+            return null;
+        }
+    }
+
+    /*
+    Method that avoids duplicates for ints
+     */
+    private Integer getIntegerInfo(ResultSet resultInts) {
+        int unique=0;
+        try {
+            unique=resultInts.getInt("GroupedValues");
+            return unique;
         }catch (SQLException ex)
         {
+            return null;
+        }
+    }
 
+    private Double getDoubleInfo(ResultSet resultInts) {
+        double unique=0;
+        try {
+            unique=resultInts.getInt("GroupedValues");
+            System.out.println(unique);
+            return unique;
+        }catch (SQLException ex)
+        {
+            return null;
+        }
+    }
+
+    private List<Tuple<String,Number>> getInfoTuple(ResultSet resultTuple)
+    {
+        List<Tuple<String,Number>> root=new LinkedList<>();
+        List<Date> hour=new LinkedList<>();
+        //Time hr;
+        List<Number> number=new LinkedList<>();
+        try{
+            //hr=resultPerHour.getTime("GroupedValues");
+            while(resultTuple.next())
+            {
+                root.add(new Tuple<String,Number>(resultTuple.getString("d") ,(resultTuple.getLong("c"))));
+            }
+            for (Tuple<String, Number> stringNumberTuple : root) {
+                System.out.println(stringNumberTuple.getX()+"    "+stringNumberTuple.getY());
+            }
+
+            //return <>
+        }catch (SQLException ex)
+        {
+            return null;
         }
         return new LinkedList<>();
     }
+
+
+    /*
+    Data call for number of impressions per week.
+    Maybe return the actual list?--> number
+     */
+    public List<Tuple<String ,Number > >getNumberOfImpressionsPerWeek()
+    {
+        ResultSet resultPerWeek=this.dbM.query(QueryComposer.getNumberOfImpressionsPerWeek);
+       return getInfoTuple(resultPerWeek);
+    }
+
+    /*
+    Number of Clicks per week
+    CHANGE TO BE PER WEEK====ATM IS OVER ALL PERIOD.
+     */
+
+    public List<Tuple<String ,Number > >getNumberOfClicksPerWeek()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
+        return getInfoTuple(resultPerHour);
+    }
+
+
+
+    public Integer getNumberOfUniques()
+    {
+        ResultSet resultSetUniques=this.dbM.query(QueryComposer.getNumberOfUniques);
+        return getIntegerInfo(resultSetUniques);
+
+    }
+
+
+
+    public Integer getNumberOfBounces()
+    {
+        ResultSet resultSetBounce=this.dbM.query(QueryComposer.getNumberOfBounces);
+        return getIntegerInfo(resultSetBounce);
+    }
+
+    public Integer getNumberOfConversions()
+    {
+        ResultSet resultSetConversions=this.dbM.query(QueryComposer.getNumberOfConversions);
+        return getIntegerInfo(resultSetConversions);
+    }
+
+    public Double getTotalCost()
+    {
+        ResultSet resultTotalCost=this.dbM.query(QueryComposer.getTotalCost);
+        return getDoubleInfo(resultTotalCost);
+    }
+
+
+    public List<Tuple<String ,Number > >getNumberOfImpressionsPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
+       return getInfoTuple(resultPerHour);
+    }
+
+    public List<Tuple<String ,Number > >getNumberOfImpressionsPerDay()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfImpressionsPerDay);
+        return getInfoTuple(resultPerHour);
+    }
+
+    public List<Tuple<String ,Number > >getNumberOfClicksPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
+        return getInfoTuple(resultPerHour);
+    }
+
+    public List<Tuple<String ,Number > >getNumberOfClicksPerDay()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
+        return getInfoTuple(resultPerHour);
+    }
+
+
+
+
+
 }

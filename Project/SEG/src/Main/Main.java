@@ -24,7 +24,24 @@ public class Main
         new Gui(dataExchange).setVisible(true);
         System.out.println(new PathsManager().getDB());
 
-        dataExchange.getNumberOfImpressionsPerWeek();
+//        dataExchange.getNumberOfImpressionsPerWeek();
+        dataExchange.getNumberOfClicksPerWeek();
+//          dataExchange.getNumberOfUniques();
+//        dataExchange.getNumberOfBounces();
+//        dataExchange.getTotalCost();
+//        dataExchange.getNumberOfImpressionsPerHour();
+//          dataExchange.getNumberOfImpressionsPerWeek();
+//        dataExchange.getNumberOfImpressionsPerDay();
+//         dataExchange.getNumberOfClicksPerHour();
+//        dataExchange.getNumberOfClicksPerDay();
+
+
+
+
+
+
+
+//////////END OF PART 1///////////////////
 //        String pattern = "yyyy-MM-dd hh:mm:ss";
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 //        Date d = simpleDateFormat.parse("2015-01-20 16:12:47");

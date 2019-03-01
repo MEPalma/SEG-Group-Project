@@ -248,4 +248,9 @@ public class QueryComposer
     */
     public static String getTotalNumberOfImpressionsPerHour="select count(impressionCost) as GroupedValues from impression_logs group by strftime('%H',Date);";
 
+    /*
+    CTR per week the closest i've got ok=>>>>wrong result tho
+     */
+    public static String getCTRPerWeek="SELECT date ,cast(count(click_logs.date) AS FLOAT)/cast((SELECT count(impression_logs.date) FROM impression_logs) AS FLOAT) FROM click_logs group by  strftime('%W',date) order by date;";
+
 }

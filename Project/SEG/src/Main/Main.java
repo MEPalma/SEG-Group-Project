@@ -42,7 +42,7 @@ public class Main
 //        dataExchange.getNumberOfConversionsPerWeek();
 //        dataExchange.getTotalCostPerDay();
 //        dataExchange.getTotalCostPerHour();
-//        dataExchange.getTotalCostPerWeek();
+        dataExchange.getTotalCostPerWeek();
 
 
 

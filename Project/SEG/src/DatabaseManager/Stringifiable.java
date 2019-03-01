@@ -3,11 +3,9 @@ package DatabaseManager;
 import java.text.SimpleDateFormat;
 
 /**
- * 
  * @author Marco Edoardo Palma
  */
-public interface Stringifiable
-{
+public interface Stringifiable {
     /**
      * This is a SimpleDateFormat able to parse and format dates based on the requirements
      * of the csv files supplied to the program.
@@ -17,7 +15,8 @@ public interface Stringifiable
     /**
      * This function should return the content of an object's insertion instance for a db.
      * For example: INSERT IN TABLE X VALUES (stringify());
-     * @return 
+     *
+     * @return
      */
     public String stringify();
 }

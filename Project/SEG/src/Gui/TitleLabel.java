@@ -1,7 +1,6 @@
 package Gui;
 
 /**
- *
  * @author Marco-Edoardo Palma
  */
 
@@ -12,10 +11,8 @@ import java.awt.event.MouseListener;
 /**
  * Represents a standardized TitleLabel in order to maintain the style though out the application constant
  */
-public class TitleLabel extends JLabel
-{
-    public TitleLabel(String title, int horizontalAlignment)
-    {
+public class TitleLabel extends JLabel {
+    public TitleLabel(String title, int horizontalAlignment) {
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
@@ -25,8 +22,7 @@ public class TitleLabel extends JLabel
         setBackground(new Color(0, 0, 0, 0));
     }
 
-    public TitleLabel(String title, int horizontalAlignment, int size)
-    {
+    public TitleLabel(String title, int horizontalAlignment, int size) {
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
@@ -36,8 +32,7 @@ public class TitleLabel extends JLabel
         setBackground(new Color(0, 0, 0, 0));
     }
 
-    public TitleLabel(String title, int horizontalAlignment, int size, MouseListener listener)
-    {
+    public TitleLabel(String title, int horizontalAlignment, int size, MouseListener listener) {
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);

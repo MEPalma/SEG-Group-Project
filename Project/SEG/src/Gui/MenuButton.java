@@ -1,7 +1,6 @@
 package Gui;
 
 /**
- *
  * @author MNarco-Edoardo Palma
  */
 
@@ -13,16 +12,14 @@ import java.awt.event.MouseEvent;
 /**
  * Represents a standardized MenuButton in order to maintain the style though out the application constant
  */
-public class MenuButton extends JButton
-{
+public class MenuButton extends JButton {
     public final static int STANDARD = 0;
     public final static int OPEN = 1;
     public final static int DELETE = 2;
 
     private Color mouseEnteredColor;
 
-    public MenuButton(String text, int textSize)
-    {
+    public MenuButton(String text, int textSize) {
         super(text.toUpperCase());
 
         setFont(new Font("Verdana", Font.PLAIN, textSize));
@@ -34,8 +31,7 @@ public class MenuButton extends JButton
         setBorder(BorderFactory.createEmptyBorder());
     }
 
-    public MenuButton(String text, int textSize, int mode)
-    {
+    public MenuButton(String text, int textSize, int mode) {
         //init
         super(text.toUpperCase());
 
@@ -46,28 +42,23 @@ public class MenuButton extends JButton
         setOpaque(true);
 
         //set colo scheme based on button mode: STANDARD, OPEN-SAVE, DELETE
-        switch (mode)
-        {
-            case MenuButton.STANDARD:
-            {
+        switch (mode) {
+            case MenuButton.STANDARD: {
                 mouseEnteredColor = new Color(245, 245, 245);
                 break;
             }
 
-            case MenuButton.OPEN:
-            {
+            case MenuButton.OPEN: {
                 mouseEnteredColor = new Color(178, 223, 219);
                 break;
             }
 
-            case MenuButton.DELETE:
-            {
+            case MenuButton.DELETE: {
                 mouseEnteredColor = new Color(255, 138, 128);
                 break;
             }
 
-            default:
-            {
+            default: {
                 mouseEnteredColor = Color.WHITE;
                 break;
             }
@@ -77,39 +68,32 @@ public class MenuButton extends JButton
         setBorder(BorderFactory.createLineBorder(Color.WHITE, 3, true));
 
         //ad style listener form mouse entered and exited --> the color of the button will change
-        addMouseListener(new MouseAdapter()
-        {
+        addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e)
-            {
+            public void mouseEntered(MouseEvent e) {
                 setBackground(mouseEnteredColor);
                 setBorder(BorderFactory.createLineBorder(mouseEnteredColor, 3, true));
             }
         });
 
-        addMouseListener(new MouseAdapter()
-        {
+        addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseExited(MouseEvent e)
-            {
+            public void mouseExited(MouseEvent e) {
                 setBackground(Color.WHITE);
                 setBorder(BorderFactory.createLineBorder(Color.WHITE, 3, true));
             }
         });
 
-        addMouseListener(new MouseAdapter()
-        {
+        addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e)
-            {
+            public void mousePressed(MouseEvent e) {
                 super.mouseClicked(e);
             }
         });
     }
 
     @Override
-    public void setText(String text)
-    {
+    public void setText(String text) {
         super.setText(text.toUpperCase());
     }
 }

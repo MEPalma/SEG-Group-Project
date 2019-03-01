@@ -1,4 +1,3 @@
-
 package Gui;
 
 import javax.swing.*;
@@ -7,12 +6,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Stack;
 
-public class BreadCrumbs extends JPanel
-{
+public class BreadCrumbs extends JPanel {
     private Color BACKGROUND = GuiColors.DARK_LIGHT;
     private Color SELECTED = GuiColors.LIGHT;
 
     private JPanel viewPanel;
+    private GraphView graphView;
+    private BreadCrumbsHoster breadCrumbsHoster;
 
     private JProgressBar progressBar;
     private boolean visibleProgressBar;
@@ -22,13 +22,14 @@ public class BreadCrumbs extends JPanel
 
     private SwingWorker backgroundTask;
 
-    public BreadCrumbs(JPanel viewPanel)
-    {
+    public BreadCrumbs(BreadCrumbsHoster breadCrumbsHoster, JPanel viewPanel, GraphView graphView) {
         super();
         setBackground(SELECTED);
         setBorder(BorderFactory.createEmptyBorder());
 
         this.viewPanel = viewPanel;
+        this.graphView = graphView;
+        this.breadCrumbsHoster = breadCrumbsHoster;
 
         this.visibleProgressBar = false;
         this.progressBar = new JProgressBar();
@@ -45,36 +46,31 @@ public class BreadCrumbs extends JPanel
         this.crumbsStack = new Stack<JPanel>();
     }
 
-    private JPanel getNewCrumb(String text)
-    {
+    private JPanel getNewCrumb(String text) {
         JPanel crumb = new JPanel(new BorderLayout());
         crumb.setBackground(SELECTED);
         crumb.setBorder(BorderFactory.createEmptyBorder());
         crumb.add(new TitleLabel(text, JLabel.CENTER, 16), BorderLayout.CENTER);
 
         final int myIndex = crumbsStack.size();
-        crumb.addMouseListener(new MouseAdapter()
-        {
+        crumb.addMouseListener(new MouseAdapter() {
             Color previousColor;
 
             @Override
-            public void mouseClicked(MouseEvent e)
-            {
+            public void mouseClicked(MouseEvent e) {
                 navigateTo(myIndex);
                 previousColor = SELECTED;
                 setBackground(SELECTED);
             }
 
             @Override
-            public void mouseEntered(MouseEvent e)
-            {
+            public void mouseEntered(MouseEvent e) {
                 previousColor = crumb.getBackground();
                 crumb.setBackground(SELECTED);
             }
 
             @Override
-            public void mouseExited(MouseEvent e)
-            {
+            public void mouseExited(MouseEvent e) {
                 crumb.setBackground(previousColor);
             }
         });
@@ -82,25 +78,21 @@ public class BreadCrumbs extends JPanel
         return crumb;
     }
 
-    private void navigateTo(int index)
-    {
+    private void navigateTo(int index) {
         cancelBackgroundTask();
         stopProgressBar();
 
-        if (index < 0)
-        {
+        if (index < 0) {
             viewPanel.removeAll();
             crumbsStack.clear();
             panesStacks.clear();
-        } else if (index >= 0 && index < this.crumbsStack.size())
-        {
+        } else if (index >= 0 && index < this.crumbsStack.size()) {
             //unselect all
             for (JPanel c : crumbsStack)
                 c.setBackground(BACKGROUND);
 
             //delete the followings
-            while (crumbsStack.size() - 1 > index)
-            {
+            while (crumbsStack.size() - 1 > index) {
                 crumbsStack.pop();
                 panesStacks.pop();
             }
@@ -118,20 +110,22 @@ public class BreadCrumbs extends JPanel
             panesStacks.get(index).revalidate();
         }
         refresh();
+        this.breadCrumbsHoster.refresh();
     }
 
-    public synchronized void push(String name, RPanel view)
-    {
+    public synchronized void push(String name, RPanel view) {
         cancelBackgroundTask();
 
         this.panesStacks.push(view);
         this.crumbsStack.push(getNewCrumb(name));
 
         navigateTo(panesStacks.size() - 1);
+
+        //TODO check
+        setPreferredSize(new Dimension(getWidth() + 300, 10));
     }
 
-    public synchronized void pop()
-    {
+    public synchronized void pop() {
         this.crumbsStack.pop();
         this.panesStacks.pop();
 
@@ -140,8 +134,7 @@ public class BreadCrumbs extends JPanel
         navigateTo(panesStacks.size() - 1);
     }
 
-    private void refresh()
-    {
+    private void refresh() {
         removeAll();
 
         setLayout(new GridLayout(1, this.crumbsStack.size()));
@@ -154,15 +147,12 @@ public class BreadCrumbs extends JPanel
         revalidate();
     }
 
-    public synchronized void clear()
-    {
+    public synchronized void clear() {
         navigateTo(-1);
     }
 
-    public synchronized void startProgressBar()
-    {
-        if (!this.visibleProgressBar)
-        {
+    public synchronized void startProgressBar() {
+        if (!this.visibleProgressBar) {
             this.visibleProgressBar = true;
 
             viewPanel.add(this.progressBar, BorderLayout.SOUTH);
@@ -176,10 +166,8 @@ public class BreadCrumbs extends JPanel
         }
     }
 
-    public synchronized void stopProgressBar()
-    {
-        if (this.visibleProgressBar)
-        {
+    public synchronized void stopProgressBar() {
+        if (this.visibleProgressBar) {
             this.visibleProgressBar = false;
 
             viewPanel.remove(this.progressBar);
@@ -193,14 +181,12 @@ public class BreadCrumbs extends JPanel
         }
     }
 
-    public synchronized void updateBackgroundTask(SwingWorker backgroundTask)
-    {
+    public synchronized void updateBackgroundTask(SwingWorker backgroundTask) {
         cancelBackgroundTask();
         this.backgroundTask = backgroundTask;
     }
 
-    public synchronized void cancelBackgroundTask()
-    {
+    public synchronized void cancelBackgroundTask() {
         if (this.backgroundTask != null) this.backgroundTask.cancel(true);
     }
 }

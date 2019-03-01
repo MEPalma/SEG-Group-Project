@@ -3,16 +3,16 @@ package DatabaseManager;
 /*
  * Created by Marco-Edoardo Palma.
  */
-import Commons.*;
 
-import java.text.NumberFormat;
-import java.util.Locale;
+import Commons.ClickEntry;
+import Commons.ImpressionEntry;
+import Commons.ServerEntry;
+import Commons.UserEntry;
 
 /*
  * This class is a container for all of the queries that can be made to the database.
  */
-public class QueryComposer
-{
+public class QueryComposer {
 
     private static String CREATE_TABLE_USERS
             = "CREATE TABLE IF NOT EXISTS USERS(\n"
@@ -60,45 +60,41 @@ public class QueryComposer
             + ");";
 
     public static String[] CREATE_TABLES =
-    {
-        "PRAGMA foreign_keys = ON;",
-        CREATE_TABLE_USERS,
-        CREATE_TABLE_IMPRESSION_LOGS,
-        CREATE_TABLE_CLICK_LOGS,
-        CREATE_TABLE_SERVER_LOGS,
-        CREATE_TABLE_SETTINGS
-    };
+            {
+                    "PRAGMA foreign_keys = ON;",
+                    CREATE_TABLE_USERS,
+                    CREATE_TABLE_IMPRESSION_LOGS,
+                    CREATE_TABLE_CLICK_LOGS,
+                    CREATE_TABLE_SERVER_LOGS,
+                    CREATE_TABLE_SETTINGS
+            };
 
     public static String[] CREATE_INDEXES =
-    {
-        "CREATE INDEX IF NOT EXISTS IMPRESSION_LOGS_DATE_INDEX ON IMPRESSION_LOGS (date);",
-        "CREATE INDEX IF NOT EXISTS CLICK_LOGS_DATE_INDEX ON CLICK_LOGS (date);",
-        "CREATE INDEX IF NOT EXISTS SERVER_LOGS_ENTRY_DATE_INDEX ON SERVER_LOGS (entryDate);",
-        "CREATE INDEX IF NOT EXISTS SERVER_LOGS_EXIT_DATE_INDEX ON SERVER_LOGS (exitDate);"
-    };
+            {
+                    "CREATE INDEX IF NOT EXISTS IMPRESSION_LOGS_DATE_INDEX ON IMPRESSION_LOGS (date);",
+                    "CREATE INDEX IF NOT EXISTS CLICK_LOGS_DATE_INDEX ON CLICK_LOGS (date);",
+                    "CREATE INDEX IF NOT EXISTS SERVER_LOGS_ENTRY_DATE_INDEX ON SERVER_LOGS (entryDate);",
+                    "CREATE INDEX IF NOT EXISTS SERVER_LOGS_EXIT_DATE_INDEX ON SERVER_LOGS (exitDate);"
+            };
 
     public static String GETLASTID = "SELECT last_insert_rowid() as id";
 
     /*
         INSERT STATEMENTS
      */
-    public static String insertUserStmt(UserEntry user)
-    {
-        return "INSERT INTO USERS VALUES (" + user.stringify()+ ");";
+    public static String insertUserStmt(UserEntry user) {
+        return "INSERT INTO USERS VALUES (" + user.stringify() + ");";
     }
 
-    public static String insertImpressionStmt(ImpressionEntry ie)
-    {
+    public static String insertImpressionStmt(ImpressionEntry ie) {
         return "INSERT INTO IMPRESSION_LOGS VALUES (" + ie.stringify() + ");";
     }
 
-    public static String insertClickStmt(ClickEntry ce)
-    {
+    public static String insertClickStmt(ClickEntry ce) {
         return "INSERT INTO CLICK_LOGS VALUES (" + ce.stringify() + ");";
     }
 
-    public static String insertServerStmt(ServerEntry se)
-    {
+    public static String insertServerStmt(ServerEntry se) {
         return "INSERT INTO SERVER_LOGS VALUES (" + se.stringify() + ");";
     }
 
@@ -124,12 +120,12 @@ public class QueryComposer
     public static String dropAllFrom_SERVER_LOGS = "DELETE FROM SERVER_LOGS;";
     public static String dropAllFrom_SETTINGS = "DELETE FROM SETTINGS;";
     public static String[] dropAll_noSettings =
-    {
-        dropAllFrom_USERS,
-        dropAllFrom_IMPRESSION_LOGS,
-        dropAllFrom_CLICK_LOGS,
-        dropAllFrom_SERVER_LOGS
-    };
+            {
+                    dropAllFrom_USERS,
+                    dropAllFrom_IMPRESSION_LOGS,
+                    dropAllFrom_CLICK_LOGS,
+                    dropAllFrom_SERVER_LOGS
+            };
 
     /*
         COUNT STATEMENTS
@@ -139,7 +135,7 @@ public class QueryComposer
     public static String countAllFrom_CLICK_LOGS = "SELECT COUNT(*) as c FROM CLICK_LOGS;";
     public static String countAllFrom_SERVER_LOGS = "SELECT COUNT(*) as c FROM SERVER_LOGS;";
     public static String countAllFrom_SETTINGS = "SELECT COUNT(*) as c FROM SETTINGS;";
-    
+
     /*
         SELECT ALL STATEMENTS
      */
@@ -152,46 +148,38 @@ public class QueryComposer
     /*
         SELECT BY ID
      */
-    public static String selectByIdFrom_USERS(String id)
-    {
+    public static String selectByIdFrom_USERS(String id) {
         return "SELECT * FROM USERS WHERE USERS.id='" + id + "' LIMIT 1;";
     }
 
-    public static String selectByIdFrom_IMPRESSION_LOGS(int id)
-    {
+    public static String selectByIdFrom_IMPRESSION_LOGS(int id) {
         return "SELECT * FROM IMPRESSION_LOGS WHERE IMPRESSION_LOGS.id=" + id + " LIMIT 1;";
     }
 
-    public static String selectByIdFrom_CLICK_LOGS(int id)
-    {
+    public static String selectByIdFrom_CLICK_LOGS(int id) {
         return "SELECT * FROM CLICK_LOGS WHERE CLICK_LOGS.id=" + id + " LIMIT 1;";
     }
 
-    public static String selectByIdFrom_SERVER_LOGS(int id)
-    {
+    public static String selectByIdFrom_SERVER_LOGS(int id) {
         return "SELECT * FROM SERVER_LOGS WHERE SERVER_LOGS.id=" + id + " LIMIT 1;";
     }
 
     /*
         SELECT BY userId
      */
-    public static String selectByUserIdFrom_IMPRESSION_LOGS(String userId)
-    {
+    public static String selectByUserIdFrom_IMPRESSION_LOGS(String userId) {
         return "SELECT * FROM IMPRESSION_LOGS WHERE IMPRESSION_LOGS.userId='" + userId + "';";
     }
 
-    public static String selectByUserIdFrom_CLICK_LOGS(String userId)
-    {
+    public static String selectByUserIdFrom_CLICK_LOGS(String userId) {
         return "SELECT * FROM CLICK_LOGS WHERE CLICK_LOGS.userId='" + userId + "';";
     }
 
-    public static String selectByUserIdFrom_SERVER_LOGS(String userId)
-    {
+    public static String selectByUserIdFrom_SERVER_LOGS(String userId) {
         return "SELECT * FROM SERVER_LOGS WHERE SERVER_LOGS.userId='" + userId + "';";
     }
 
-    public static String selectByNameFrom_SETTINGS(String name)
-    {
+    public static String selectByNameFrom_SETTINGS(String name) {
         return "SELECT * FROM SETTINGS WHERE SETTINGS.name='" + name + "' LIMIT 1;";
     }
 

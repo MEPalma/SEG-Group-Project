@@ -2,23 +2,20 @@ package Main;
 
 import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
-import java.text.ParseException;
-
 import Gui.Gui;
+
+import java.text.ParseException;
 import java.util.Locale;
 
 /**
- *
  * @author Group 31
  */
-public class Main 
-{
+public class Main {
 
-    public static void main(String[] args) throws ParseException 
-    {
+    public static void main(String[] args) throws ParseException {
         Locale.setDefault(Locale.ENGLISH);
         new Gui(new DataExchange(new DatabaseManager())).setVisible(true);
-        
+
 //        String pattern = "yyyy-MM-dd hh:mm:ss";
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 //        Date d = simpleDateFormat.parse("2015-01-20 16:12:47");
@@ -26,7 +23,7 @@ public class Main
 //        System.out.println(simpleDateFormat.format(new Date()));
 //        
 //        DataExchange dataExchange = new DataExchange(new DatabaseManager());
-        
+
 //        File im = new File("/Users/mep/MEP2G17/Modules/COMP2211/Coursework/DataExample/2_week_campaign_2/impression_log.csv");
 //        File cl = new File("/Users/mep/MEP2G17/Modules/COMP2211/Coursework/DataExample/2_week_campaign_2/click_log.csv");
 //        File sr = new File("/Users/mep/MEP2G17/Modules/COMP2211/Coursework/DataExample/2_week_campaign_2/server_log.csv");
@@ -63,7 +60,7 @@ public class Main
 //        System.out.println(dataExchange.countAllFrom_SERVER_LOGS());
 //        for (ServerEntry x : server)
 //            System.out.println(x.toString());
-        
+
 //        System.out.println(dataExchange.selectByIdFrom_USERS(1).toString());
 //        System.out.println(dataExchange.selectByIdFrom_CLICK_LOGS(1).toString());
 //        System.out.println(dataExchange.selectByIdFrom_IMPRESSION_LOGS(1).toString());

@@ -1,16 +1,13 @@
 package Gui;
 /**
- *
  * @author Marco-Edoardo Palma
  */
 
 import javax.swing.*;
 import java.awt.*;
 
-public class TextBox extends JTextField
-{
-    public TextBox(Color background)
-    {
+public class TextBox extends JTextField {
+    public TextBox(Color background) {
         super();
         setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.WHITE));
         setFont(new Font("Verdana", Font.PLAIN, 14));

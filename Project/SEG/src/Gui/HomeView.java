@@ -4,28 +4,20 @@ import Commons.Tuple;
 import DatabaseManager.DataExchange;
 import Gui.GraphManager.GraphManager;
 import Gui.GraphManager.GraphManager.ChartType;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.SwingWorker;
 
 /**
- *
  * @author Marco-Edoardo Palma
  */
-public class HomeView extends RPanel
-{
+public class HomeView extends RPanel {
 
     public static Color BACKGROUND = GuiColors.LIGHT;
     private final DataExchange dataExchange;
@@ -35,8 +27,7 @@ public class HomeView extends RPanel
     private final ChartType chartType;
     private final String chartTitle, xAxisLabel, yAxisLabel;
 
-    public HomeView(DataExchange dataExchange, BreadCrumbs breadCrumbs)
-    {
+    public HomeView(DataExchange dataExchange, BreadCrumbs breadCrumbs) {
         super(BACKGROUND, new BorderLayout());
         this.dataExchange = dataExchange;
         this.breadCrumbs = breadCrumbs;
@@ -51,34 +42,26 @@ public class HomeView extends RPanel
     }
 
     @Override
-    public void refresh()
-    {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>()
-        {
+    public void refresh() {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             //Ref data for graph
 
             @Override
-            protected Void doInBackground() throws Exception
-            {
+            protected Void doInBackground() throws Exception {
                 breadCrumbs.startProgressBar();
 
-                try
-                {
+                try {
                     Thread.sleep(1000);//simulate loading
 
-                } catch (Exception e)
-                {
+                } catch (Exception e) {
                 }
                 return null;
             }
 
             @Override
-            protected void done()
-            {
-                if (!isCancelled())
-                {
-                    try
-                    {
+            protected void done() {
+                if (!isCancelled()) {
+                    try {
                         removeAll();
 
                         JPanel bottomFunctionsPanel = new JPanel(new BorderLayout());
@@ -87,21 +70,17 @@ public class HomeView extends RPanel
 
                         TitleLabel showFieldsButton = new TitleLabel("<icon>", TitleLabel.CENTER, 20);
                         showFieldsButton.setForeground(Color.DARK_GRAY);
-                        showFieldsButton.addMouseListener(new MouseAdapter()
-                        {
+                        showFieldsButton.addMouseListener(new MouseAdapter() {
                             @Override
-                            public void mousePressed(MouseEvent e)
-                            {
+                            public void mousePressed(MouseEvent e) {
                                 JDialog dialogFrame = new JDialog();
                                 dialogFrame.setUndecorated(true);
                                 dialogFrame.getContentPane().setLayout(new BorderLayout());
 
-                                dialogFrame.getContentPane().add(new FieldChooser(dialogFrame, new JPanel()), BorderLayout.CENTER);
-                                dialogFrame.addFocusListener(new FocusAdapter()
-                                {
+                                dialogFrame.getContentPane().add(new FieldChooser(dialogFrame, chartData), BorderLayout.CENTER);
+                                dialogFrame.addFocusListener(new FocusAdapter() {
                                     @Override
-                                    public void focusLost(FocusEvent e)
-                                    {
+                                    public void focusLost(FocusEvent e) {
                                         dialogFrame.setVisible(false);
                                     }
                                 });
@@ -117,14 +96,12 @@ public class HomeView extends RPanel
                             }
 
                             @Override
-                            public void mouseEntered(MouseEvent e)
-                            {
+                            public void mouseEntered(MouseEvent e) {
                                 setForeground(Color.DARK_GRAY);
                             }
 
                             @Override
-                            public void mouseExited(MouseEvent e)
-                            {
+                            public void mouseExited(MouseEvent e) {
                                 setForeground(Color.BLACK);
                             }
                         });
@@ -132,21 +109,17 @@ public class HomeView extends RPanel
 
                         TitleLabel changeChartType = new TitleLabel("<icon>", TitleLabel.CENTER, 20);
                         changeChartType.setForeground(Color.DARK_GRAY);
-                        changeChartType.addMouseListener(new MouseAdapter()
-                        {
+                        changeChartType.addMouseListener(new MouseAdapter() {
                             @Override
-                            public void mouseClicked(MouseEvent e)
-                            {
+                            public void mouseClicked(MouseEvent e) {
                                 JDialog dialogFrame = new JDialog();
                                 dialogFrame.setUndecorated(true);
                                 dialogFrame.getContentPane().setLayout(new BorderLayout());
 
                                 dialogFrame.getContentPane().add(new ChartTypeChooser(dialogFrame, chartData), BorderLayout.CENTER);
-                                dialogFrame.addFocusListener(new FocusAdapter()
-                                {
+                                dialogFrame.addFocusListener(new FocusAdapter() {
                                     @Override
-                                    public void focusLost(FocusEvent e)
-                                    {
+                                    public void focusLost(FocusEvent e) {
                                         dialogFrame.setVisible(false);
                                         refresh();
                                     }
@@ -167,7 +140,7 @@ public class HomeView extends RPanel
 
                         System.out.println(chartData.size());
                         add(new TitleLabel(chartTitle, TitleLabel.CENTER), BorderLayout.NORTH);
-                        
+
                         JPanel chart = GraphManager.createChart(chartType, chartData, xAxisLabel, yAxisLabel);
                         chart.setBackground(GuiColors.LIGHT);
                         chart.setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, chart.getBackground()));
@@ -178,8 +151,7 @@ public class HomeView extends RPanel
 
                         revalidate();
                         repaint();
-                    } catch (Exception e)
-                    {
+                    } catch (Exception e) {
                     }
                 }
             }
@@ -188,21 +160,16 @@ public class HomeView extends RPanel
         backgroundTask.execute();
     }
 
-    class FieldChooser extends JPanel
-    {
-
-        public FieldChooser(JDialog dialogFrame, JPanel dummyChart)
-        {
+    class FieldChooser extends JPanel {
+        public FieldChooser(JDialog dialogFrame, Collection<Tuple<Number, Number>> chartData) {
             super(new GridLayout(11, 1, 4, 4));
             setBackground(GuiColors.RED);
             setBorder(BorderFactory.createLineBorder(GuiColors.RED, 10, true));
 
             MenuLabel nImpressionsButton = new MenuLabel("N. Impressions", MenuLabel.LEFT, 16);
-            nImpressionsButton.addMouseListener(new MouseAdapter()
-            {
+            nImpressionsButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -210,11 +177,9 @@ public class HomeView extends RPanel
             add(nImpressionsButton);
 
             MenuLabel nClicksButton = new MenuLabel("N. Clicks", MenuLabel.LEFT, 16);
-            nClicksButton.addMouseListener(new MouseAdapter()
-            {
+            nClicksButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -222,11 +187,9 @@ public class HomeView extends RPanel
             add(nClicksButton);
 
             MenuLabel nUniquesButton = new MenuLabel("N. Uniques", MenuLabel.LEFT, 16);
-            nUniquesButton.addMouseListener(new MouseAdapter()
-            {
+            nUniquesButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -234,11 +197,9 @@ public class HomeView extends RPanel
             add(nUniquesButton);
 
             MenuLabel nBouncesButton = new MenuLabel("N. Bounces", MenuLabel.LEFT, 16);
-            nBouncesButton.addMouseListener(new MouseAdapter()
-            {
+            nBouncesButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -246,11 +207,9 @@ public class HomeView extends RPanel
             add(nBouncesButton);
 
             MenuLabel nConversionssButton = new MenuLabel("N. Conversions", MenuLabel.LEFT, 16);
-            nConversionssButton.addMouseListener(new MouseAdapter()
-            {
+            nConversionssButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -258,11 +217,9 @@ public class HomeView extends RPanel
             add(nConversionssButton);
 
             MenuLabel totalCostButton = new MenuLabel("Total Cost", MenuLabel.LEFT, 16);
-            totalCostButton.addMouseListener(new MouseAdapter()
-            {
+            totalCostButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -270,11 +227,9 @@ public class HomeView extends RPanel
             add(totalCostButton);
 
             MenuLabel CTRButton = new MenuLabel("CTR", MenuLabel.LEFT, 16);
-            CTRButton.addMouseListener(new MouseAdapter()
-            {
+            CTRButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -282,11 +237,9 @@ public class HomeView extends RPanel
             add(CTRButton);
 
             MenuLabel CPAButton = new MenuLabel("CPA", MenuLabel.LEFT, 16);
-            CPAButton.addMouseListener(new MouseAdapter()
-            {
+            CPAButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -294,11 +247,9 @@ public class HomeView extends RPanel
             add(CPAButton);
 
             MenuLabel CPCButton = new MenuLabel("CPC", MenuLabel.LEFT, 16);
-            CPCButton.addMouseListener(new MouseAdapter()
-            {
+            CPCButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -306,11 +257,9 @@ public class HomeView extends RPanel
             add(CPCButton);
 
             MenuLabel CPMButton = new MenuLabel("CPM", MenuLabel.LEFT, 16);
-            CPMButton.addMouseListener(new MouseAdapter()
-            {
+            CPMButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -318,11 +267,9 @@ public class HomeView extends RPanel
             add(CPMButton);
 
             MenuLabel bounceRateButton = new MenuLabel("Bounce Rate", MenuLabel.LEFT, 16);
-            bounceRateButton.addMouseListener(new MouseAdapter()
-            {
+            bounceRateButton.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                     dummyForChart();
                 }
@@ -330,38 +277,31 @@ public class HomeView extends RPanel
             add(bounceRateButton);
         }
 
-        private void dummyForChart()
-        {
+        private void dummyForChart() {
 
         }
     }
 
-    class ChartTypeChooser extends JPanel
-    {
+    class ChartTypeChooser extends JPanel {
 
-        public ChartTypeChooser(JDialog dialogFrame, Collection<Tuple<Number, Number>> chartData)
-        {
+        public ChartTypeChooser(JDialog dialogFrame, Collection<Tuple<Number, Number>> chartData) {
             super(new GridLayout(2, 1, 4, 4));
             setBackground(GuiColors.RED);
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
             MenuLabel histoLabel = new MenuLabel("Histogram", MenuLabel.LEFT, 16);
-            histoLabel.addMouseListener(new MouseAdapter()
-            {
+            histoLabel.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dialogFrame.setVisible(false);
                 }
             });
             add(histoLabel);
 
             MenuLabel lineLabel = new MenuLabel("LineChart", MenuLabel.LEFT, 16);
-            lineLabel.addMouseListener(new MouseAdapter()
-            {
+            lineLabel.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     //load from db here
                     //TODO this is sample data -> change with query to database
                     chartData.clear();

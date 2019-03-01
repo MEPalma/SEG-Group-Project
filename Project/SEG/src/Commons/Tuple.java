@@ -1,41 +1,33 @@
-
 package Commons;
 
-public class Tuple<L, R>
-{
+public class Tuple<L, R> {
     private final L x;
     private final R y;
 
-    public Tuple(L x, R y)
-    {
+    public Tuple(L x, R y) {
         this.x = x;
         this.y = y;
     }
-    
+
     @Override
-    public boolean equals(Object obj)
-    {
-        if (obj instanceof Tuple)
-        {
+    public boolean equals(Object obj) {
+        if (obj instanceof Tuple) {
             return (((Tuple) obj).y.equals(this.y) && ((Tuple) obj).x.equals(this.x));
         }
         return false;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return this.x.hashCode() + this.y.hashCode();
     }
 
-    public L getX()
-    {
+    public L getX() {
         return x;
     }
 
-    public R getY()
-    {
+    public R getY() {
         return y;
     }
-    
+
 }

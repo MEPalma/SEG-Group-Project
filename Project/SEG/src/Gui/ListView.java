@@ -7,12 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
 
-public class ListView extends JPanel implements Scrollable
-{
+public class ListView extends JPanel implements Scrollable {
     public static String SKIPSPACER = "ss";
 
-    public ListView(Color color, Collection<Component> cells)
-    {
+    public ListView(Color color, Collection<Component> cells) {
         super(new GridBagLayout());
         setBackground(color);
         setBorder(BorderFactory.createEmptyBorder());
@@ -23,12 +21,10 @@ public class ListView extends JPanel implements Scrollable
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
 
-        for (Component cell : cells)
-        {
+        for (Component cell : cells) {
             add(cell, gbc);
 
-            if (cell.getName() == null || !cell.getName().equals(SKIPSPACER))
-            {
+            if (cell.getName() == null || !cell.getName().equals(SKIPSPACER)) {
                 JSeparator separator2 = new JSeparator(JToolBar.Separator.HORIZONTAL);
                 separator2.setPreferredSize(new Dimension(80, 10));
                 add(separator2, gbc);
@@ -36,8 +32,7 @@ public class ListView extends JPanel implements Scrollable
         }
     }
 
-    public JScrollPane getWrappedInScroll(boolean visibleScrollbar)
-    {
+    public JScrollPane getWrappedInScroll(boolean visibleScrollbar) {
         JScrollPane listScroller;
         if (visibleScrollbar)
             listScroller = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -57,32 +52,27 @@ public class ListView extends JPanel implements Scrollable
     }
 
     @Override
-    public Dimension getPreferredScrollableViewportSize()
-    {
+    public Dimension getPreferredScrollableViewportSize() {
         return null;
     }
 
     @Override
-    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
-    {
+    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
         return 16;
     }
 
     @Override
-    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
-    {
+    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
         return 16;
     }
 
     @Override
-    public boolean getScrollableTracksViewportWidth()
-    {
+    public boolean getScrollableTracksViewportWidth() {
         return true;
     }
 
     @Override
-    public boolean getScrollableTracksViewportHeight()
-    {
+    public boolean getScrollableTracksViewportHeight() {
         return false;
     }
 }

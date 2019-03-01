@@ -2,9 +2,6 @@ package Gui.GraphManager;
 
 import Commons.Tuple;
 import Gui.GuiColors;
-import java.awt.BasicStroke;
-import java.util.Collection;
-import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -14,21 +11,21 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-public class GraphManager
-{
+import javax.swing.*;
+import java.awt.*;
+import java.util.Collection;
 
-    public static enum ChartType
-    {
+public class GraphManager {
+
+    public static enum ChartType {
         LINE_CHART
     }
 
-    public static JPanel createChart(ChartType type, Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel)
-    {
+    public static JPanel createChart(ChartType type, Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel) {
         return createLineChart(data, xAxisLabel, yAxisLabel);
     }
 
-    private static JPanel createLineChart(Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel)
-    {
+    private static JPanel createLineChart(Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel) {
         //copy data
         XYSeriesCollection dataset = getLineChartDataset(data);
 
@@ -51,7 +48,7 @@ public class GraphManager
         XYPlot plot = chart.getXYPlot();
 
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesPaint(0, GuiColors.RED);
+        renderer.setSeriesPaint(0, GuiColors.BASE_LIGHT);
         renderer.setSeriesStroke(0, new BasicStroke(2.0f));
 
         plot.setRenderer(renderer);
@@ -66,11 +63,9 @@ public class GraphManager
         return new ChartPanel(chart);
     }
 
-    private static XYSeriesCollection getLineChartDataset(Collection<Tuple<Number, Number>> data)
-    {
+    private static XYSeriesCollection getLineChartDataset(Collection<Tuple<Number, Number>> data) {
         XYSeries series = new XYSeries(""); //TODO accept multiple series (next increments)
-        for (Tuple<Number, Number> i : data)
-        {
+        for (Tuple<Number, Number> i : data) {
             series.add(i.getX(), i.getY());
         }
 

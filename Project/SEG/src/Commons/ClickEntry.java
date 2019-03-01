@@ -1,19 +1,13 @@
 package Commons;
 
 import DatabaseManager.Stringifiable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
+
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
  * @author Marco-Edoardo Palma
  */
-public class ClickEntry implements Stringifiable
-{
+public class ClickEntry implements Stringifiable {
     public static int AUTO_INDEX = -1;
 
     //IN THE SAME ORDER AS DECLARATION IN DB TABLE
@@ -22,29 +16,24 @@ public class ClickEntry implements Stringifiable
     private Date date;
     private Number clickCost;
 
-    public ClickEntry(int id, String userId, Date date, Number clickCost)
-    {
+    public ClickEntry(int id, String userId, Date date, Number clickCost) {
         this.id = id;
         this.userId = userId;
         this.date = date;
         this.clickCost = clickCost;
     }
 
-    public ClickEntry()
-    {
+    public ClickEntry() {
         this(AUTO_INDEX, "", new Date(), 0);
     }
-    
+
     @Override
-    public String stringify()
-    {
-       String is = "', '";
+    public String stringify() {
+        String is = "', '";
         String tmp;
-        if (this.id == AUTO_INDEX)
-        {
+        if (this.id == AUTO_INDEX) {
             tmp = "NULL, '";
-        } else
-        {
+        } else {
             tmp = this.id + ", '";
         }
         return (tmp
@@ -55,18 +44,14 @@ public class ClickEntry implements Stringifiable
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return stringify();
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (obj instanceof ClickEntry)
-        {
-            if (this.id == ((ClickEntry) obj).id)
-            {
+    public boolean equals(Object obj) {
+        if (obj instanceof ClickEntry) {
+            if (this.id == ((ClickEntry) obj).id) {
                 return true;
             }
         }
@@ -74,43 +59,35 @@ public class ClickEntry implements Stringifiable
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return this.id;
     }
 
-    public Date getDate()
-    {
+    public Date getDate() {
         return date;
     }
 
-    public String getUserId()
-    {
+    public String getUserId() {
         return userId;
     }
 
-    public Number getClickCost()
-    {
+    public Number getClickCost() {
         return clickCost;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public void setUserId(String userId)
-    {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public void setDate(Date date)
-    {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public void setClickCost(Number clickCost)
-    {
+    public void setClickCost(Number clickCost) {
         this.clickCost = clickCost;
     }
 

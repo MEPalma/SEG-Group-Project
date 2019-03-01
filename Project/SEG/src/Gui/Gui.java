@@ -1,25 +1,13 @@
 package Gui;
 
 import DatabaseManager.DataExchange;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.WindowConstants;
 
-public class Gui extends JFrame
-{
+public class Gui extends JFrame {
 
     private DataExchange dataExchange;
 
@@ -27,42 +15,33 @@ public class Gui extends JFrame
     private JPanel northView;
     private JPanel menuButtonsPane;
 
-    private JPanel crumbsView;
+    private BreadCrumbsHoster breadCrumbsHoster;
 
-    private BreadCrumbs breadCrumbs;
-
-    public Gui(DataExchange dataExchange)
-    {
+    public Gui(DataExchange dataExchange) {
         super("Dashboard App");
 //        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("")));
 
-        try
-        {
+        try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e)
-        {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (InstantiationException e)
-        {
+        } catch (InstantiationException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e)
-        {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e)
-        {
+        } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
 
         this.dataExchange = dataExchange;
+        this.breadCrumbsHoster = new BreadCrumbsHoster();
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter()
-        {
+        addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent)
-            {
-                breadCrumbs.cancelBackgroundTask();
-                breadCrumbs.stopProgressBar();
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+//                breadCrumbs.cancelBackgroundTask();
+//                breadCrumbs.stopProgressBar();
                 dataExchange.close();
                 System.exit(0);
             }
@@ -71,139 +50,91 @@ public class Gui extends JFrame
 
         this.northView = new JPanel(new BorderLayout());
         getContentPane().add(this.northView, BorderLayout.NORTH);
-        this.northView.setBackground(GuiColors.LIGHT);
+        this.northView.setBackground(GuiColors.BASE_LIGHT);
         this.northView.setLayout(new BorderLayout());
         this.northView.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.LIGHT_GRAY));
 
         List<JLabel> menuLabels = new ArrayList<JLabel>(5);
 
         TitleLabel titleLabel = new TitleLabel("Dashboard App", JLabel.LEFT);
-        titleLabel.addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mousePressed(MouseEvent e)
-            {
-                if (!titleLabel.getName().equals("SELECTED"))
-                {
-                    for (JLabel l : menuLabels)
-                    {
-                        l.setName("");
-                    }
-                    titleLabel.setName("SELECTED");
-                    openHomeView();
-                }
-            }
-        });
-        menuLabels.add(titleLabel);
+
         this.northView.add(titleLabel, BorderLayout.NORTH);
 
         this.mainView = new JPanel(new BorderLayout());
-        this.mainView.setBackground(GuiColors.RED);
+        this.mainView.setBackground(GuiColors.LIGHT);
+        this.mainView.add(this.breadCrumbsHoster, BorderLayout.CENTER);
         getContentPane().add(this.mainView, BorderLayout.CENTER);
 
-        this.crumbsView = new JPanel(new BorderLayout());
-        this.crumbsView.setBackground(GuiColors.LIGHT);
-        this.crumbsView.setBorder(BorderFactory.createEmptyBorder());
-
-        this.breadCrumbs = new BreadCrumbs(this.mainView);
-        this.mainView.add(this.crumbsView, BorderLayout.NORTH);
-        this.mainView.add(this.crumbsView, BorderLayout.CENTER);
 
         this.menuButtonsPane = new JPanel(new GridLayout(10, 1, 4, 4));
-        this.menuButtonsPane.setBackground(GuiColors.RED);
-        this.menuButtonsPane.setPreferredSize(new Dimension(120, 60));
-        add(this.menuButtonsPane, BorderLayout.WEST);
+        this.menuButtonsPane.setBackground(GuiColors.DARK_GRAY);
+        this.menuButtonsPane.setPreferredSize(new Dimension(60, 60));
+//        add(this.menuButtonsPane, BorderLayout.WEST);
 
-        MenuLabel homeButton = new MenuLabel("Home", MenuLabel.CENTER);
-        homeButton.addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                if (!homeButton.getName().equals("S"))
-                {
-                    for (JLabel l : menuLabels)
-                    {
-                        l.setName("");
-                    }
-                    homeButton.setName("S");
-                    openHomeView();
-                }
-            }
-        });
-        menuLabels.add(homeButton);
+//        MenuLabel homeButton = new MenuLabel("Home", MenuLabel.CENTER, 8);
+//        homeButton.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                if (!homeButton.getName().equals("S")) {
+//                    for (JLabel l : menuLabels) {
+//                        l.setName("");
+//                    }
+//                    homeButton.setName("S");
+////                    openHomeView();
+//                    breadCrumbsHoster.getBreadCrumbs().push("AFSKNVA", new LoadCSVsView(dataExchange, breadCrumbsHoster.getBreadCrumbs()));
+//                }
+//            }
+//        });
+//        menuLabels.add(homeButton);
+//
+//        MenuLabel loadButton = new MenuLabel("Load CSVs", MenuLabel.CENTER, 8);
+//        loadButton.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                if (!loadButton.getName().equals("S")) {
+//                    for (JLabel l : menuLabels) {
+//                        l.setName("");
+//                    }
+//                    loadButton.setName("S");
+//                }
+//            }
+//        });
+//        menuLabels.add(loadButton);
+//
+//        MenuLabel settingsButton = new MenuLabel("Settings", MenuLabel.CENTER, 8);
+//        settingsButton.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                if (!settingsButton.getName().equals("S")) {
+//                    for (JLabel l : menuLabels) {
+//                        l.setName("");
+//                    }
+//                    settingsButton.setName("S");
+////                    openLoadCSVsView();
+//                }
+//            }
+//        });
+//        menuLabels.add(settingsButton);
+//
+//        this.menuButtonsPane.add(homeButton);
+//        this.menuButtonsPane.add(loadButton);
+//        this.menuButtonsPane.add(settingsButton);
 
-        MenuLabel compareButton = new MenuLabel("Compare", MenuLabel.CENTER);
-        compareButton.addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                if (!compareButton.getName().equals("S"))
-                {
-                    for (JLabel l : menuLabels)
-                    {
-                        l.setName("");
-                    }
-                    compareButton.setName("S");
-//                    openCompareView();TODO
-                }
-            }
-        });
-        menuLabels.add(compareButton);
 
-        MenuLabel loadButton = new MenuLabel("Load CSVs", MenuLabel.CENTER);
-        loadButton.addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                if (!compareButton.getName().equals("S"))
-                {
-                    for (JLabel l : menuLabels)
-                    {
-                        l.setName("");
-                    }
-                    compareButton.setName("S");
-                    openLoadCSVsView();
-                }
-            }
-        });
-        menuLabels.add(loadButton);
+        //BreadCrumbs
+        JPanel crumbsView = new JPanel(new BorderLayout());
+        crumbsView.setBackground(GuiColors.LIGHT);
+        crumbsView.setBorder(BorderFactory.createEmptyBorder());
 
-        MenuLabel settingsButton = new MenuLabel("Settings", MenuLabel.CENTER);
-        settingsButton.addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                if (!compareButton.getName().equals("S"))
-                {
-                    for (JLabel l : menuLabels)
-                    {
-                        l.setName("");
-                    }
-                    settingsButton.setName("S");
-                    openLoadCSVsView();
-                }
-            }
-        });
-        menuLabels.add(settingsButton);
+        this.breadCrumbsHoster.getBreadCrumbs().push("Campaign Name", new MainMenu(this.dataExchange, this.breadCrumbsHoster.getBreadCrumbs()));
 
-        this.menuButtonsPane.add(homeButton);
-        this.menuButtonsPane.add(compareButton);
-        this.menuButtonsPane.add(loadButton);
-        this.menuButtonsPane.add(settingsButton);
-
-        openHomeView();
+//        openHomeView();
     }
 
     @Override
-    public void setVisible(boolean visible)
-    {
-        if (visible)
-        {
-            setSize(new Dimension(1200, 850));
+    public void setVisible(boolean visible) {
+        if (visible) {
+            setSize(new Dimension(1200, 800));
 
             Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
             int x = (screen.width / 2) - (super.getSize().width / 2);
@@ -213,16 +144,16 @@ public class Gui extends JFrame
         super.setVisible(visible);
     }
 
-    private synchronized void openHomeView()
-    {
-        breadCrumbs.clear();
-        breadCrumbs.push("Home", new HomeView(dataExchange, breadCrumbs));
-    }
-
-    public synchronized void openLoadCSVsView()
-    {
-        breadCrumbs.clear();
-        breadCrumbs.push("Load CSVs", new LoadCSVsView(dataExchange, breadCrumbs));
-    }
+//    private synchronized void openHomeView() {
+//
+//        this.breadCrumbs = new BreadCrumbs(this.mainView);
+//        breadCrumbs.clear();
+//        breadCrumbs.push("Home", new Deprecated_HomeView(dataExchange, breadCrumbs));
+//    }
+//
+//    public synchronized void openLoadCSVsView() {
+//        breadCrumbs.clear();
+//        breadCrumbs.push("Load CSVs", new LoadCSVsView(dataExchange, breadCrumbs));
+//    }
 
 }

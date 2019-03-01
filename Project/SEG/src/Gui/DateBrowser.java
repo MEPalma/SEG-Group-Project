@@ -1,31 +1,28 @@
 package Gui;
 
+import DatabaseManager.Stringifiable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import DatabaseManager.Stringifiable;
 
 /**
- *
  * @author MNarco-Edoardo Palma
  */
-public class DateBrowser extends JPanel
-{
+public class DateBrowser extends JPanel {
 
     private SimpleDateFormat dateFormat;
     private Date date;
     private DateChangedListener listener;
 
-    public DateBrowser()
-    {
-        this(GuiColors.RED, Stringifiable.globalDateFormat, new Date());//TODO change to simple data format
+    public DateBrowser() {
+        this(GuiColors.BASE_LIGHT, Stringifiable.globalDateFormat, new Date());//TODO change to simple data format
     }
 
-    public DateBrowser(Color background, SimpleDateFormat dateFormat, Date date)
-    {
+    public DateBrowser(Color background, SimpleDateFormat dateFormat, Date date) {
         super(new BorderLayout(4, 4));
         setBackground(background);
 
@@ -35,8 +32,7 @@ public class DateBrowser extends JPanel
         refresh();
     }
 
-    private void refresh()
-    {
+    private void refresh() {
         removeAll();
 
         DateBrowser thisBrowser = this;
@@ -46,11 +42,9 @@ public class DateBrowser extends JPanel
         dateBox.setPreferredSize(new Dimension(150, 26));
         dateBox.setHorizontalAlignment(TextBox.CENTER);
         dateBox.setText(dateFormat.format(date));
-        dateBox.addMouseListener(new MouseAdapter()
-        {
+        dateBox.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e)
-            {
+            public void mouseClicked(MouseEvent e) {
                 //size of the screen
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -59,13 +53,11 @@ public class DateBrowser extends JPanel
                 int taskBarSize = scnMax.bottom;
 
                 int x = dateBox.getLocationOnScreen().x;
-                if (x + DateBrowserFrame.WIDTH > screenSize.width)
-                {
+                if (x + DateBrowserFrame.WIDTH > screenSize.width) {
                     x = screenSize.width - DateBrowserFrame.WIDTH;
                 }
                 int y = dateBox.getLocationOnScreen().y + dateBox.getHeight();
-                if (y + DateBrowserFrame.HEIGHT > (screenSize.height - taskBarSize))
-                {
+                if (y + DateBrowserFrame.HEIGHT > (screenSize.height - taskBarSize)) {
                     y = screenSize.height - taskBarSize - DateBrowserFrame.HEIGHT;
                 }
 
@@ -79,61 +71,50 @@ public class DateBrowser extends JPanel
         revalidate();
     }
 
-    private void notifyListener()
-    {
-        if (this.listener != null)
-        {
+    private void notifyListener() {
+        if (this.listener != null) {
             this.listener.takeAction();
         }
     }
 
-    public Date getDate()
-    {
+    public Date getDate() {
         return this.date;
     }
 
-    public SimpleDateFormat getDateFormat()
-    {
+    public SimpleDateFormat getDateFormat() {
         return dateFormat;
     }
 
-    public String getText()
-    {
+    public String getText() {
         return this.dateFormat.format(this.date);
     }
 
-    public DateChangedListener getDateChangedListener()
-    {
+    public DateChangedListener getDateChangedListener() {
         return listener;
     }
 
-    public void setDateFormat(SimpleDateFormat dateFormat)
-    {
+    public void setDateFormat(SimpleDateFormat dateFormat) {
         this.dateFormat = dateFormat;
     }
 
-    public void setDate(Date date)
-    {
+    public void setDate(Date date) {
         this.date = date;
         refresh();
         notifyListener();
     }
 
-    public void setDateChangedListener(DateChangedListener listener)
-    {
+    public void setDateChangedListener(DateChangedListener listener) {
         this.listener = listener;
     }
 }
 
-class DateBrowserFrame extends JFrame
-{
+class DateBrowserFrame extends JFrame {
 
     public static int HEIGHT = 230;
     public static int WIDTH = 250;
     private DateBrowser dateBrowser;
 
-    public DateBrowserFrame(DateBrowser dateBrowser, int x, int y) throws HeadlessException
-    {
+    public DateBrowserFrame(DateBrowser dateBrowser, int x, int y) throws HeadlessException {
         super("Dashboard App");
         this.dateBrowser = dateBrowser;
 
@@ -141,14 +122,12 @@ class DateBrowserFrame extends JFrame
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setUndecorated(true);
         setSize(WIDTH, HEIGHT);
-        setBackground(GuiColors.RED);
+        setBackground(GuiColors.BASE_LIGHT);
         getContentPane().setBackground(getBackground());
 
-        addFocusListener(new FocusAdapter()
-        {
+        addFocusListener(new FocusAdapter() {
             @Override
-            public void focusLost(FocusEvent e)
-            {
+            public void focusLost(FocusEvent e) {
                 setVisible(false);
             }
         });
@@ -156,8 +135,7 @@ class DateBrowserFrame extends JFrame
         refresh();
     }
 
-    private void refresh()
-    {
+    private void refresh() {
         getContentPane().removeAll();
         getContentPane().setLayout(new BorderLayout());
 
@@ -179,11 +157,9 @@ class DateBrowserFrame extends JFrame
         cvpNorthPanel.setBackground(getBackground());
 
         MenuLabel goBackOneMonthLabel = new MenuLabel("<", MenuLabel.CENTER, 14);
-        goBackOneMonthLabel.addMouseListener(new MouseAdapter()
-        {
+        goBackOneMonthLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e)
-            {
+            public void mouseClicked(MouseEvent e) {
                 Calendar cTMP = Calendar.getInstance();
                 cTMP.setTime(dateBrowser.getDate());
                 cTMP.add(Calendar.MONTH, -1);
@@ -194,11 +170,9 @@ class DateBrowserFrame extends JFrame
             }
         });
         MenuLabel goForewordOneMonthLabel = new MenuLabel(">", MenuLabel.CENTER, 14);
-        goForewordOneMonthLabel.addMouseListener(new MouseAdapter()
-        {
+        goForewordOneMonthLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e)
-            {
+            public void mouseClicked(MouseEvent e) {
                 Calendar cTMP = Calendar.getInstance();
                 cTMP.setTime(dateBrowser.getDate());
                 cTMP.add(Calendar.MONTH, +1);
@@ -240,35 +214,29 @@ class DateBrowserFrame extends JFrame
 
         int added = 0;
         int lastDayNumber = 1;
-        for (Date d = startDate; d.before(endDate); d.setTime(d.getTime() + 86400000))
-        {
+        for (Date d = startDate; d.before(endDate); d.setTime(d.getTime() + 86400000)) {
             final Calendar ctmp = Calendar.getInstance();
             ctmp.setTime(d);
 
             int dayNumTMP = ctmp.get(Calendar.DAY_OF_WEEK);
 
-            for (int i = lastDayNumber; i < dayNumTMP - 1; i++)
-            {
+            for (int i = lastDayNumber; i < dayNumTMP - 1; i++) {
                 cvpDaysViewPanel.add(new TitleLabel("", TitleLabel.CENTER, 12));
                 added++;
             }
             lastDayNumber = dayNumTMP;
 
             MenuLabel dayChooser = new MenuLabel(Integer.toString(ctmp.get(Calendar.DAY_OF_MONTH)), TitleLabel.CENTER, 12);
-            if (ctmp.getTime().equals(dateBrowser.getDate()))
-            {
-                for (MouseListener ml : dayChooser.getMouseListeners())
-                {
+            if (ctmp.getTime().equals(dateBrowser.getDate())) {
+                for (MouseListener ml : dayChooser.getMouseListeners()) {
                     dayChooser.removeMouseListener(ml);
                 }
 
                 dayChooser.setForeground(new Color(105, 175, 205));
             }
-            dayChooser.addMouseListener(new MouseAdapter()
-            {
+            dayChooser.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e)
-                {
+                public void mouseClicked(MouseEvent e) {
                     dateBrowser.setDate(ctmp.getTime());
                     setVisible(false);
                 }
@@ -277,8 +245,7 @@ class DateBrowserFrame extends JFrame
             added++;
         }
 
-        for (int i = added; i < 42; i++)
-        {
+        for (int i = added; i < 42; i++) {
             cvpDaysViewPanel.add(new TitleLabel("", TitleLabel.CENTER, 8));
         }
 

@@ -1,31 +1,34 @@
 package DatabaseManager;
 
+import Commons.ClickEntry;
+import Commons.ImpressionEntry;
+import Commons.ServerEntry;
+import Commons.UserEntry;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static DatabaseManager.Stringifiable.globalDateFormat;
 
 /*
  * Created by Marco-Edoardo Palma.
  */
-import Commons.*;
-import static DatabaseManager.Stringifiable.globalDateFormat;
-import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * This class will process queries from QueryComposer.java into DatabaseManager.
  * The 'interface' between frontend and backend
  */
-public class DataExchange
-{
+public class DataExchange {
 
     private DatabaseManager dbM;
 
-    public DataExchange(DatabaseManager databaseManager)
-    {
+    public DataExchange(DatabaseManager databaseManager) {
         this.dbM = databaseManager;
     }
 
@@ -35,8 +38,7 @@ public class DataExchange
      * @param price
      * @return
      */
-    public static String formatPrice(double price)
-    {
+    public static String formatPrice(double price) {
         NumberFormat priceNumberFormat = NumberFormat.getCurrencyInstance(Locale.UK);
         return priceNumberFormat.format(price);
     }
@@ -47,8 +49,7 @@ public class DataExchange
      * @param percentage
      * @return
      */
-    public static String formatPercentage(double percentage)
-    {
+    public static String formatPercentage(double percentage) {
         NumberFormat numberFormat = NumberFormat.getPercentInstance();
         numberFormat.setMaximumFractionDigits(2);
         numberFormat.setMinimumFractionDigits(2);
@@ -59,8 +60,7 @@ public class DataExchange
      * closes the connection of the database. Do this only before exiting the
      * application!
      */
-    public void close()
-    {
+    public void close() {
         this.dbM.close();
     }
 
@@ -70,13 +70,10 @@ public class DataExchange
      *
      * @param resultSet
      */
-    public static void close(ResultSet resultSet)
-    {
-        try
-        {
+    public static void close(ResultSet resultSet) {
+        try {
             resultSet.close();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -89,14 +86,14 @@ public class DataExchange
 //    {
 //        this.dbM.writeQuery(list);
 //    }
+
     /**
      * Executes the batch of a Statement, then closes the Statement.
      *
      * @param s
      * @throws SQLException
      */
-    public void writeSqlStatement(Statement s) throws SQLException
-    {
+    public void writeSqlStatement(Statement s) throws SQLException {
         s.executeBatch();
         s.close();
     }
@@ -107,8 +104,7 @@ public class DataExchange
      * @return
      * @throws SQLException
      */
-    public Statement getSqlStatement() throws SQLException
-    {
+    public Statement getSqlStatement() throws SQLException {
         return this.dbM.getDbCon().createStatement();
     }
 
@@ -120,13 +116,10 @@ public class DataExchange
      *
      * @param b
      */
-    public void setForiegnKeyPragma(boolean b)
-    {
-        if (b)
-        {
+    public void setForiegnKeyPragma(boolean b) {
+        if (b) {
             this.dbM.writeQuery("PRAGMA foreign_keys = ON;");
-        } else
-        {
+        } else {
             this.dbM.writeQuery("PRAGMA foreign_keys = OFF;");
         }
     }
@@ -140,8 +133,7 @@ public class DataExchange
      * @param b
      * @throws SQLException
      */
-    public void setAutoCommit(boolean b) throws SQLException
-    {
+    public void setAutoCommit(boolean b) throws SQLException {
         this.dbM.getDbCon().setAutoCommit(b);
     }
 
@@ -150,8 +142,7 @@ public class DataExchange
      *
      * @throws SQLException
      */
-    public void commitNow() throws SQLException
-    {
+    public void commitNow() throws SQLException {
         this.dbM.getDbCon().commit();
     }
 
@@ -161,16 +152,13 @@ public class DataExchange
      *
      * @return
      */
-    private int getLastID()
-    {
-        try
-        {
+    private int getLastID() {
+        try {
             ResultSet resultSet = this.dbM.query(QueryComposer.GETLASTID);
             int c = resultSet.getInt("id");
             close(resultSet);
             return c;
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         System.exit(8);
@@ -182,6 +170,7 @@ public class DataExchange
     
             SINGLE RETURNS (parse only one object from a ResultSet)
      */
+
     /**
      * Parses a ResultSet into a UserEntry and does not close the ResultSet.
      * returns null if a parsing error occurred.
@@ -189,17 +178,14 @@ public class DataExchange
      * @param rset
      * @return
      */
-    private UserEntry parseUserEntry(ResultSet rset)
-    {
-        try
-        {
+    private UserEntry parseUserEntry(ResultSet rset) {
+        try {
             return new UserEntry(
                     rset.getString("id"),
                     UserEntry.Gender.valueOf(rset.getString("gender")),
                     UserEntry.Age.valueOf(rset.getString("age")),
                     UserEntry.Income.valueOf(rset.getString("income")));
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             Logger.getLogger(DataExchange.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -212,21 +198,17 @@ public class DataExchange
      * @param rset
      * @return
      */
-    private ImpressionEntry parseImpressionEntry(ResultSet rset)
-    {
-        try
-        {
+    private ImpressionEntry parseImpressionEntry(ResultSet rset) {
+        try {
             return new ImpressionEntry(
                     rset.getInt("id"),
                     rset.getString("userId"),
                     globalDateFormat.parse(rset.getString("date")),
                     ImpressionEntry.Context.valueOf(rset.getString("context")),
                     rset.getDouble("impressionCost"));
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             Logger.getLogger(DataExchange.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex)
-        {
+        } catch (ParseException ex) {
             Logger.getLogger(DataExchange.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -239,17 +221,14 @@ public class DataExchange
      * @param rset
      * @return
      */
-    private ClickEntry parseClickEntry(ResultSet rset)
-    {
-        try
-        {
+    private ClickEntry parseClickEntry(ResultSet rset) {
+        try {
             return new ClickEntry(
                     rset.getInt("id"),
                     rset.getString("userId"),
                     globalDateFormat.parse(rset.getString("date")),
                     rset.getDouble("clickCost"));
-        } catch (SQLException | ParseException ex)
-        {
+        } catch (SQLException | ParseException ex) {
             Logger.getLogger(DataExchange.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -262,10 +241,8 @@ public class DataExchange
      * @param rset
      * @return
      */
-    private ServerEntry parseServerEntry(ResultSet rset)
-    {
-        try
-        {
+    private ServerEntry parseServerEntry(ResultSet rset) {
+        try {
             return new ServerEntry(
                     rset.getInt("id"),
                     rset.getString("userId"),
@@ -273,8 +250,7 @@ public class DataExchange
                     globalDateFormat.parse(rset.getString("exitDate")),
                     rset.getInt("pagesViewed"),
                     ServerEntry.Conversion.valueOf(rset.getString("conversion")));
-        } catch (SQLException | ParseException ex)
-        {
+        } catch (SQLException | ParseException ex) {
             Logger.getLogger(DataExchange.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -283,6 +259,7 @@ public class DataExchange
     /*
             MULTIPLE RETURNS (parse a list of objects from a ResultSet)
      */
+
     /**
      * Parses a result set into a list of UserEntrys, returns an empty list if a
      * parsing error occurred. It does not close the ResultSet.
@@ -290,19 +267,15 @@ public class DataExchange
      * @param rset
      * @return
      */
-    private List<UserEntry> parseUserEntrys(ResultSet rset)
-    {
-        try
-        {
+    private List<UserEntry> parseUserEntrys(ResultSet rset) {
+        try {
             List<UserEntry> users = new LinkedList<UserEntry>();
-            while (rset.next())
-            {
+            while (rset.next()) {
                 users.add(parseUserEntry(rset));
             }
 
             return users;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return new LinkedList<UserEntry>();
         }
@@ -315,19 +288,15 @@ public class DataExchange
      * @param rset
      * @return
      */
-    private List<ImpressionEntry> parseImpressionEntrys(ResultSet rset)
-    {
-        try
-        {
+    private List<ImpressionEntry> parseImpressionEntrys(ResultSet rset) {
+        try {
             List<ImpressionEntry> impressions = new LinkedList<ImpressionEntry>();
-            while (rset.next())
-            {
+            while (rset.next()) {
                 impressions.add(parseImpressionEntry(rset));
             }
 
             return impressions;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return new LinkedList<ImpressionEntry>();
         }
@@ -340,19 +309,15 @@ public class DataExchange
      * @param rset
      * @return
      */
-    private List<ClickEntry> parseClickEntrys(ResultSet rset)
-    {
-        try
-        {
+    private List<ClickEntry> parseClickEntrys(ResultSet rset) {
+        try {
             List<ClickEntry> clicks = new LinkedList<ClickEntry>();
-            while (rset.next())
-            {
+            while (rset.next()) {
                 clicks.add(parseClickEntry(rset));
             }
 
             return clicks;
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             return new LinkedList<ClickEntry>();
         }
     }
@@ -364,19 +329,15 @@ public class DataExchange
      * @param rset
      * @return
      */
-    private List<ServerEntry> parseServerEntrys(ResultSet rset)
-    {
-        try
-        {
+    private List<ServerEntry> parseServerEntrys(ResultSet rset) {
+        try {
             List<ServerEntry> servers = new LinkedList<ServerEntry>();
-            while (rset.next())
-            {
+            while (rset.next()) {
                 servers.add(parseServerEntry(rset));
             }
 
             return servers;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return new LinkedList<ServerEntry>();
         }
@@ -390,19 +351,15 @@ public class DataExchange
      * @param rset
      * @return
      */
-    private Map<String, String> parseSettings(ResultSet rset)
-    {
-        try
-        {
+    private Map<String, String> parseSettings(ResultSet rset) {
+        try {
             Map<String, String> settings = new HashMap<String, String>();
-            while (rset.next())
-            {
+            while (rset.next()) {
                 settings.put(rset.getString("name"), rset.getString("value"));
             }
 
             return settings;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return new HashMap<String, String>();
         }
@@ -411,31 +368,26 @@ public class DataExchange
     /*
         INSERT STATEMENTS
      */
-    public void insertUserStmt(UserEntry user)
-    {
+    public void insertUserStmt(UserEntry user) {
         this.dbM.writeQuery(QueryComposer.insertUserStmt(user));
     }
 
-    public void insertImpressionStmt(ImpressionEntry ie)
-    {
+    public void insertImpressionStmt(ImpressionEntry ie) {
         this.dbM.writeQuery(QueryComposer.insertImpressionStmt(ie));
         ie.setId(this.getLastID());
     }
 
-    public void insertClickStmt(ClickEntry ce)
-    {
+    public void insertClickStmt(ClickEntry ce) {
         this.dbM.writeQuery(QueryComposer.insertClickStmt(ce));
         ce.setId(this.getLastID());
     }
 
-    public void insertServerStmt(ServerEntry se)
-    {
+    public void insertServerStmt(ServerEntry se) {
         this.dbM.writeQuery(QueryComposer.insertServerStmt(se));
         se.setId(this.getLastID());
     }
 
-    public void insertSettingStmt(String name, String value)
-    {
+    public void insertSettingStmt(String name, String value) {
         this.dbM.writeQuery(QueryComposer.insertSettingStmt(name, value));
     }
 
@@ -450,116 +402,97 @@ public class DataExchange
     /*
         DROP ALL STATEMENTS
      */
-    public void dropAllFrom_USERS()
-    {
+    public void dropAllFrom_USERS() {
         this.dbM.writeQuery(QueryComposer.dropAllFrom_USERS);
     }
 
-    public void dropAllFrom_IMPRESSION_LOGS()
-    {
+    public void dropAllFrom_IMPRESSION_LOGS() {
         this.dbM.writeQuery(QueryComposer.dropAllFrom_IMPRESSION_LOGS);
     }
 
-    public void dropAllFrom_CLICK_LOGS()
-    {
+    public void dropAllFrom_CLICK_LOGS() {
         this.dbM.writeQuery(QueryComposer.dropAllFrom_CLICK_LOGS);
     }
 
-    public void dropAllFrom_SERVER_LOGS()
-    {
+    public void dropAllFrom_SERVER_LOGS() {
         this.dbM.writeQuery(QueryComposer.dropAllFrom_SERVER_LOGS);
     }
 
-    public void dropAllFrom_SETTINGS()
-    {
+    public void dropAllFrom_SETTINGS() {
         this.dbM.writeQuery(QueryComposer.dropAllFrom_SETTINGS);
     }
 
-    public void dropAll_noSettings()
-    {
+    public void dropAll_noSettings() {
         this.dbM.writeQuery(QueryComposer.dropAll_noSettings);
     }
 
     /*
         COUNT STATEMENTS
      */
-    
-    private int parseCountQuery(ResultSet resultSet)
-    {
-        try
-        {
+
+    private int parseCountQuery(ResultSet resultSet) {
+        try {
             int tmp = resultSet.getInt("c");
             close(resultSet);
             return tmp;
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
             return 0;
         }
     }
-    
-    public int countAllFrom_USERS()
-    {
+
+    public int countAllFrom_USERS() {
         return this.parseCountQuery(this.dbM.query(QueryComposer.countAllFrom_USERS));
     }
-    
-    public int countAllFrom_IMPRESSION_LOGS()
-    {
+
+    public int countAllFrom_IMPRESSION_LOGS() {
         return this.parseCountQuery(this.dbM.query(QueryComposer.countAllFrom_IMPRESSION_LOGS));
     }
-    
-    public int countAllFrom_CLICK_LOGS()
-    {
+
+    public int countAllFrom_CLICK_LOGS() {
         return this.parseCountQuery(this.dbM.query(QueryComposer.countAllFrom_CLICK_LOGS));
     }
-    
-    public int countAllFrom_SERVER_LOGS()
-    {
+
+    public int countAllFrom_SERVER_LOGS() {
         return this.parseCountQuery(this.dbM.query(QueryComposer.countAllFrom_SERVER_LOGS));
     }
-    
-    public int countAllFrom_SETTINGS()
-    {
+
+    public int countAllFrom_SETTINGS() {
         return this.parseCountQuery(this.dbM.query(QueryComposer.countAllFrom_SETTINGS));
     }
 
     /*
         SELECT ALL STATEMENTS
      */
-    public List<UserEntry> selectAllFrom_USERS()
-    {
+    public List<UserEntry> selectAllFrom_USERS() {
         ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_USERS);
         List tmp = parseUserEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public List<ImpressionEntry> selectAllFrom_IMPRESSION_LOGS()
-    {
+    public List<ImpressionEntry> selectAllFrom_IMPRESSION_LOGS() {
         ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_IMPRESSION_LOGS);
         List tmp = parseImpressionEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public List<ClickEntry> selectAllFrom_CLICK_LOGS()
-    {
+    public List<ClickEntry> selectAllFrom_CLICK_LOGS() {
         ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_CLICK_LOGS);
         List tmp = parseClickEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public List<ServerEntry> selectAllFrom_SERVER_LOGS()
-    {
+    public List<ServerEntry> selectAllFrom_SERVER_LOGS() {
         ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_SERVER_LOGS);
         List tmp = parseServerEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public Map<String, String> selectAllFrom_SETTINGS()
-    {
+    public Map<String, String> selectAllFrom_SETTINGS() {
         ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_SETTINGS);
         Map tmp = parseSettings(rset);
         close(rset);
@@ -569,8 +502,7 @@ public class DataExchange
     /*
         SELECT BY ID
      */
-    public UserEntry selectByIdFrom_USERS(String id)
-    {
+    public UserEntry selectByIdFrom_USERS(String id) {
         ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_USERS(id));
 
         UserEntry tmp = (UserEntry) this.parseUserEntry(rset);
@@ -579,8 +511,7 @@ public class DataExchange
         return tmp;
     }
 
-    public ImpressionEntry selectByIdFrom_IMPRESSION_LOGS(int id)
-    {
+    public ImpressionEntry selectByIdFrom_IMPRESSION_LOGS(int id) {
         ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_IMPRESSION_LOGS(id));
 
         ImpressionEntry tmp = (ImpressionEntry) this.parseImpressionEntry(rset);
@@ -589,8 +520,7 @@ public class DataExchange
         return tmp;
     }
 
-    public ClickEntry selectByIdFrom_CLICK_LOGS(int id)
-    {
+    public ClickEntry selectByIdFrom_CLICK_LOGS(int id) {
         ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_CLICK_LOGS(id));
 
         ClickEntry tmp = (ClickEntry) this.parseClickEntry(rset);
@@ -599,8 +529,7 @@ public class DataExchange
         return tmp;
     }
 
-    public ServerEntry selectByIdFrom_SERVER_LOGS(int id)
-    {
+    public ServerEntry selectByIdFrom_SERVER_LOGS(int id) {
         ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_SERVER_LOGS(id));
 
         ServerEntry tmp = (ServerEntry) this.parseServerEntry(rset);
@@ -612,38 +541,32 @@ public class DataExchange
     /*
         SELECT BY userId
      */
-    public List<ImpressionEntry> selectByUserIdFrom_IMPRESSION_LOGS(String userId)
-    {
+    public List<ImpressionEntry> selectByUserIdFrom_IMPRESSION_LOGS(String userId) {
         ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_IMPRESSION_LOGS(userId));
         List tmp = parseImpressionEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public List<ClickEntry> selectByUserIdFrom_CLICK_LOGS(String userId)
-    {
+    public List<ClickEntry> selectByUserIdFrom_CLICK_LOGS(String userId) {
         ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_CLICK_LOGS(userId));
         List tmp = parseClickEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public List<ServerEntry> selectByUserIdFrom_SERVER_LOGS(String userId)
-    {
+    public List<ServerEntry> selectByUserIdFrom_SERVER_LOGS(String userId) {
         ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_SERVER_LOGS(userId));
         List tmp = parseServerEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public String selectByNameFrom_SETTINGS(String name)
-    {
+    public String selectByNameFrom_SETTINGS(String name) {
         ResultSet resultSet = this.dbM.query(QueryComposer.selectByNameFrom_SETTINGS(name));
-        try
-        {
+        try {
             return resultSet.getString("value");
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             return null;
         }
     }

@@ -30,7 +30,6 @@ public class BreadCrumbsHoster extends RPanel
         this.rightPanel.add(graphView, BorderLayout.CENTER);
         add(this.rightPanel, BorderLayout.CENTER);
 
-
     }
 
     @Override

@@ -63,64 +63,65 @@ public class Gui extends JFrame {
         this.northView.add(titleLabel, BorderLayout.NORTH);
 
         this.mainView = new JPanel(new BorderLayout());
-        this.mainView.setBackground(GuiColors.RED);
+        this.mainView.setBackground(GuiColors.LIGHT);
         this.mainView.add(this.breadCrumbsHoster, BorderLayout.CENTER);
         getContentPane().add(this.mainView, BorderLayout.CENTER);
 
 
 
         this.menuButtonsPane = new JPanel(new GridLayout(10, 1, 4, 4));
-        this.menuButtonsPane.setBackground(GuiColors.RED);
+        this.menuButtonsPane.setBackground(GuiColors.DARK_GRAY);
         this.menuButtonsPane.setPreferredSize(new Dimension(60, 60));
-        add(this.menuButtonsPane, BorderLayout.WEST);
+//        add(this.menuButtonsPane, BorderLayout.WEST);
 
-        MenuLabel homeButton = new MenuLabel("Home", MenuLabel.CENTER, 8);
-        homeButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!homeButton.getName().equals("S")) {
-                    for (JLabel l : menuLabels) {
-                        l.setName("");
-                    }
-                    homeButton.setName("S");
-//                    openHomeView();
-                }
-            }
-        });
-        menuLabels.add(homeButton);
-
-        MenuLabel loadButton = new MenuLabel("Load CSVs", MenuLabel.CENTER, 8);
-        loadButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!loadButton.getName().equals("S")) {
-                    for (JLabel l : menuLabels) {
-                        l.setName("");
-                    }
-                    loadButton.setName("S");
-                }
-            }
-        });
-        menuLabels.add(loadButton);
-
-        MenuLabel settingsButton = new MenuLabel("Settings", MenuLabel.CENTER, 8);
-        settingsButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!settingsButton.getName().equals("S")) {
-                    for (JLabel l : menuLabels) {
-                        l.setName("");
-                    }
-                    settingsButton.setName("S");
-//                    openLoadCSVsView();
-                }
-            }
-        });
-        menuLabels.add(settingsButton);
-
-        this.menuButtonsPane.add(homeButton);
-        this.menuButtonsPane.add(loadButton);
-        this.menuButtonsPane.add(settingsButton);
+//        MenuLabel homeButton = new MenuLabel("Home", MenuLabel.CENTER, 8);
+//        homeButton.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                if (!homeButton.getName().equals("S")) {
+//                    for (JLabel l : menuLabels) {
+//                        l.setName("");
+//                    }
+//                    homeButton.setName("S");
+////                    openHomeView();
+//                    breadCrumbsHoster.getBreadCrumbs().push("AFSKNVA", new LoadCSVsView(dataExchange, breadCrumbsHoster.getBreadCrumbs()));
+//                }
+//            }
+//        });
+//        menuLabels.add(homeButton);
+//
+//        MenuLabel loadButton = new MenuLabel("Load CSVs", MenuLabel.CENTER, 8);
+//        loadButton.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                if (!loadButton.getName().equals("S")) {
+//                    for (JLabel l : menuLabels) {
+//                        l.setName("");
+//                    }
+//                    loadButton.setName("S");
+//                }
+//            }
+//        });
+//        menuLabels.add(loadButton);
+//
+//        MenuLabel settingsButton = new MenuLabel("Settings", MenuLabel.CENTER, 8);
+//        settingsButton.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                if (!settingsButton.getName().equals("S")) {
+//                    for (JLabel l : menuLabels) {
+//                        l.setName("");
+//                    }
+//                    settingsButton.setName("S");
+////                    openLoadCSVsView();
+//                }
+//            }
+//        });
+//        menuLabels.add(settingsButton);
+//
+//        this.menuButtonsPane.add(homeButton);
+//        this.menuButtonsPane.add(loadButton);
+//        this.menuButtonsPane.add(settingsButton);
 
 
         //BreadCrumbs
@@ -128,7 +129,7 @@ public class Gui extends JFrame {
         crumbsView.setBackground(GuiColors.LIGHT);
         crumbsView.setBorder(BorderFactory.createEmptyBorder());
 
-        this.breadCrumbsHoster.getBreadCrumbs().push("AFSKNVA", new LoadCSVsView(this.dataExchange, this.breadCrumbsHoster.getBreadCrumbs()));
+        this.breadCrumbsHoster.getBreadCrumbs().push("Campaign Name", new MainMenu(this.dataExchange, this.breadCrumbsHoster.getBreadCrumbs()));
 
 //        openHomeView();
     }

@@ -21,6 +21,7 @@ public class GraphView extends RPanel {
     public GraphView() {
         super(Color.YELLOW, new BorderLayout());
         this.graphsOnScreen = new LinkedList<GraphSpecs>();
+        this.mode = Mode.SINGLE_MODE;
     }
 
     @Override
@@ -37,6 +38,7 @@ public class GraphView extends RPanel {
             }
             else
             {
+                add(new TitleLabel("NO GRAPH SELECTED", TitleLabel.CENTER, 30), BorderLayout.CENTER);
                 //TODO NO GRAPH MESSAGE TEXT IN THE MIDDLE
             }
         }
@@ -53,6 +55,7 @@ public class GraphView extends RPanel {
             }
             else
             {
+                add(new TitleLabel("NO GRAPH SELECTED", TitleLabel.CENTER, 30), BorderLayout.CENTER);
                 //TODO NO GRAPH MESSAGE TEXT IN THE MIDDLE
             }
         }

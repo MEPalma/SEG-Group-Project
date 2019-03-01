@@ -40,7 +40,7 @@ public class BreadCrumbs extends JPanel {
 
         setBackground(BACKGROUND);
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.LIGHT_GRAY));
-        setPreferredSize(new Dimension(300, 52));
+        setPreferredSize(new Dimension(250, 52));
 
         this.panesStacks = new Stack<RPanel>();
         this.crumbsStack = new Stack<JPanel>();
@@ -110,6 +110,7 @@ public class BreadCrumbs extends JPanel {
             panesStacks.get(index).revalidate();
         }
         refresh();
+        this.breadCrumbsHoster.getBreadCrumbs().refresh();//TODO remove
         this.breadCrumbsHoster.refresh();
     }
 
@@ -120,9 +121,6 @@ public class BreadCrumbs extends JPanel {
         this.crumbsStack.push(getNewCrumb(name));
 
         navigateTo(panesStacks.size() - 1);
-
-        //TODO check
-        setPreferredSize(new Dimension(getWidth() + 300, 10));
     }
 
     public synchronized void pop() {
@@ -135,7 +133,10 @@ public class BreadCrumbs extends JPanel {
     }
 
     private void refresh() {
+        setPreferredSize(new Dimension((this.crumbsStack.size()*200), 52));
+
         removeAll();
+        this.graphView.refresh();//todo check needed?
 
         setLayout(new GridLayout(1, this.crumbsStack.size()));
 

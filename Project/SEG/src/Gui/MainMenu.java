@@ -3,8 +3,6 @@ package Gui;
 import DatabaseManager.DataExchange;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,8 +11,8 @@ import java.util.List;
 
 public class MainMenu extends RPanel
 {
-    private DataExchange dataExchange;//todo change with controller
-    private BreadCrumbs breadCrumbs;
+    private final DataExchange dataExchange;//todo change with controller
+    private final BreadCrumbs breadCrumbs;
 
     public MainMenu(DataExchange dataExchange, BreadCrumbs breadCrumbs) {
         super(GuiColors.RED, new BorderLayout());
@@ -33,7 +31,7 @@ public class MainMenu extends RPanel
         chooseMetricsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO
+                breadCrumbs.push("Choose metrics", new MetricsMenu(dataExchange, breadCrumbs));
             }
         });
         menus.add(getMenuCard(chooseMetricsLabel));
@@ -43,7 +41,7 @@ public class MainMenu extends RPanel
         filtersLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO
+                breadCrumbs.push("Filters", new FiltersMenu(dataExchange, breadCrumbs));
             }
         });
         menus.add(getMenuCard(filtersLabel));

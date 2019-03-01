@@ -48,7 +48,7 @@ public class GraphManager {
         XYPlot plot = chart.getXYPlot();
 
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesPaint(0, GuiColors.RED);
+        renderer.setSeriesPaint(0, GuiColors.BASE_LIGHT);
         renderer.setSeriesStroke(0, new BasicStroke(2.0f));
 
         plot.setRenderer(renderer);

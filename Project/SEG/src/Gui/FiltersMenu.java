@@ -7,30 +7,29 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
-public class FiltersMenu extends RPanel
-{
+public class FiltersMenu extends RPanel {
     private final DataExchange dataExchange;//todo change with controller
     private final BreadCrumbs breadCrumbs;
 
     public FiltersMenu(DataExchange dataExchange, BreadCrumbs breadCrumbs) {
-        super(GuiColors.RED, new BorderLayout());
+        super(GuiColors.BASE_LIGHT, new BorderLayout());
         this.dataExchange = dataExchange;
         this.breadCrumbs = breadCrumbs;
         refresh();
     }
 
     @Override
-    public void refresh()
-    {
+    public void refresh() {
         List<Component> menus = new LinkedList<>();
 
-        //DATE
-        menus.add(getTimeSpanSelection());
+        menus.add(getDateRange());
+        menus.add(getAudianceSegments());
+        menus.add(getContext());
 
         add(new ListView(getBackground(), menus).getWrappedInScroll(true), BorderLayout.CENTER);
 
@@ -38,21 +37,17 @@ public class FiltersMenu extends RPanel
         revalidate();
     }
 
-    private JPanel getTimeSpanSelection()
-    {
+    private JPanel getDateRange() {
         TitleLabel titleLabel = new TitleLabel("Date range", TitleLabel.LEFT, 20);
         titleLabel.setForeground(GuiColors.LIGHT);
 
         DateBrowser startDate = new DateBrowser(getBackground(), Stringifiable.globalDateFormat, new Date());
-        startDate.setDateChangedListener(new DateChangedListener()
-        {
+        startDate.setDateChangedListener(new DateChangedListener() {
             @Override
-            public void takeAction()
-            {
+            public void takeAction() {
                 Calendar tmpC = Calendar.getInstance();
                 tmpC.setTime(startDate.getDate());
-                if (tmpC.get(Calendar.DAY_OF_MONTH) > 15)
-                {
+                if (tmpC.get(Calendar.DAY_OF_MONTH) > 15) {
                     tmpC.add(Calendar.MONTH, 1);
                     tmpC.set(Calendar.DAY_OF_MONTH, tmpC.getActualMaximum(Calendar.DAY_OF_MONTH));
                 } else tmpC.set(Calendar.DAY_OF_MONTH, tmpC.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -60,15 +55,12 @@ public class FiltersMenu extends RPanel
         });
 
         DateBrowser endDate = new DateBrowser(getBackground(), Stringifiable.globalDateFormat, new Date());
-        endDate.setDateChangedListener(new DateChangedListener()
-        {
+        endDate.setDateChangedListener(new DateChangedListener() {
             @Override
-            public void takeAction()
-            {
+            public void takeAction() {
                 Calendar tmpC = Calendar.getInstance();
                 tmpC.setTime(endDate.getDate());
-                if (tmpC.get(Calendar.DAY_OF_MONTH) > 15)
-                {
+                if (tmpC.get(Calendar.DAY_OF_MONTH) > 15) {
                     tmpC.add(Calendar.MONTH, 1);
                     tmpC.set(Calendar.DAY_OF_MONTH, tmpC.getActualMaximum(Calendar.DAY_OF_MONTH));
                 } else tmpC.set(Calendar.DAY_OF_MONTH, tmpC.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -95,8 +87,7 @@ public class FiltersMenu extends RPanel
         return wrapper;
     }
 
-    private JPanel getAudianceSegments()
-    {
+    private JPanel getAudianceSegments() {
         TitleLabel titleLabel = new TitleLabel("Audience segments", TitleLabel.LEFT, 20);
         titleLabel.setForeground(GuiColors.LIGHT);
 
@@ -111,12 +102,9 @@ public class FiltersMenu extends RPanel
         maleOption.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (maleOption.isSelected())
-                {
+                if (maleOption.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -126,12 +114,9 @@ public class FiltersMenu extends RPanel
         femaleOption.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (femaleOption.isSelected())
-                {
+                if (femaleOption.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -144,12 +129,9 @@ public class FiltersMenu extends RPanel
         opAge_less_than_25.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opAge_less_than_25.isSelected())
-                {
+                if (opAge_less_than_25.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -159,12 +141,9 @@ public class FiltersMenu extends RPanel
         opAge_25_34.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opAge_25_34.isSelected())
-                {
+                if (opAge_25_34.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -174,12 +153,9 @@ public class FiltersMenu extends RPanel
         opAge_35_44.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opAge_35_44.isSelected())
-                {
+                if (opAge_35_44.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -189,12 +165,9 @@ public class FiltersMenu extends RPanel
         opAge_45_54.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opAge_45_54.isSelected())
-                {
+                if (opAge_45_54.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -204,77 +177,24 @@ public class FiltersMenu extends RPanel
         opAge_more_than_54.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opAge_more_than_54.isSelected())
-                {
+                if (opAge_more_than_54.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
         });
-        JPanel ages = wrapInRow(new Component[] {opAge_less_than_25, opAge_25_34, opAge_35_44, opAge_45_54, opAge_more_than_54});
+        JPanel ages = wrapInRow(new Component[]{opAge_less_than_25, opAge_25_34, opAge_35_44, opAge_45_54, opAge_more_than_54});
 
-
-        // Low, Medium, High,
-        RadioButton opLowIncome = new RadioButton("Low");
-        opLowIncome.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (opLowIncome.isSelected())
-                {
-                    //todo remove from pool
-                }
-                else
-                {
-                    //todo
-                }
-            }
-        });
-
-        RadioButton opMediumIncome = new RadioButton("Medium");
-        opMediumIncome.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (opMediumIncome.isSelected())
-                {
-                    //todo remove from pool
-                }
-                else
-                {
-                    //todo
-                }
-            }
-        });
-
-        RadioButton highIncome = new RadioButton("High");
-        highIncome.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (highIncome.isSelected())
-                {
-                    //todo remove from pool
-                }
-                else
-                {
-                    //todo
-                }
-            }
-        });
-        JPanel incomes = wrapInRow(new Component[]{opLowIncome, opMediumIncome, highIncome});
 
         //INCOME
         RadioButton opNews = new RadioButton("News");
         opNews.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opNews.isSelected())
-                {
+                if (opNews.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -284,12 +204,9 @@ public class FiltersMenu extends RPanel
         opShopping.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opShopping.isSelected())
-                {
+                if (opShopping.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -299,12 +216,9 @@ public class FiltersMenu extends RPanel
         opSocialMedia.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opSocialMedia.isSelected())
-                {
+                if (opSocialMedia.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -314,12 +228,9 @@ public class FiltersMenu extends RPanel
         opTravels.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opTravels.isSelected())
-                {
+                if (opTravels.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -329,12 +240,9 @@ public class FiltersMenu extends RPanel
         opHobbies.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opHobbies.isSelected())
-                {
+                if (opHobbies.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -344,12 +252,9 @@ public class FiltersMenu extends RPanel
         opBlog.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (opBlog.isSelected())
-                {
+                if (opBlog.isSelected()) {
                     //todo remove from pool
-                }
-                else
-                {
+                } else {
                     //todo
                 }
             }
@@ -357,27 +262,99 @@ public class FiltersMenu extends RPanel
 
         JPanel contexts = wrapInRow(new Component[]{opNews, opShopping, opSocialMedia, opTravels, opHobbies, opBlog});
 
-        TitleLabel ageTitle = new TitleLabel("Age", TitleLabel.LEFT, 18);
+        TitleLabel genderTitle = new TitleLabel("Gender", TitleLabel.LEFT, 16);
+        genderTitle.setForeground(GuiColors.LIGHT);
+
+        TitleLabel ageTitle = new TitleLabel("Age", TitleLabel.LEFT, 16);
         ageTitle.setForeground(GuiColors.LIGHT);
 
-        TitleLabel audienceSegmentsTitle = new TitleLabel("Audience segments", TitleLabel.LEFT, 18);
-        audienceSegmentsTitle.setForeground(GuiColors.LIGHT);
-
-        TitleLabel contextTitle = new TitleLabel("Context", TitleLabel.LEFT, 18);
+        TitleLabel contextTitle = new TitleLabel("Context", TitleLabel.LEFT, 16);
         contextTitle.setForeground(GuiColors.LIGHT);
 
-        JPanel subWrapper = new JPanel(new GridLayout(8, 1, 4, 4));
-        subWrapper.add(audienceSegmentsTitle);
-        subWrapper.add(ageTitle);
-        subWrapper.add(ages);
+        JPanel subWrapperGender = new JPanel(new GridLayout(2, 1, 4, 4));
+        subWrapperGender.setBorder(BorderFactory.createEmptyBorder());
+        subWrapperGender.setBackground(wrapper.getBackground());
+        subWrapperGender.add(genderTitle);
+        subWrapperGender.add(genders);
 
+        JPanel subWrapperAge = new JPanel(new GridLayout(2, 1, 4, 4));
+        subWrapperAge.setBorder(BorderFactory.createEmptyBorder());
+        subWrapperAge.setBackground(wrapper.getBackground());
+        subWrapperAge.add(ageTitle);
+        subWrapperAge.add(ages);
+
+        JPanel subWrapperContext = new JPanel(new GridLayout(2, 1, 4, 4));
+        subWrapperContext.setBorder(BorderFactory.createEmptyBorder());
+        subWrapperContext.setBackground(wrapper.getBackground());
+        subWrapperContext.add(contextTitle);
+        subWrapperContext.add(contexts);
+
+        List<Component> sections = new LinkedList<>();
+        sections.add(subWrapperGender);
+        sections.add(subWrapperAge);
+        sections.add(subWrapperContext);
+
+        wrapper.add(new ListView(wrapper.getBackground(), sections), BorderLayout.CENTER);
 
         return wrapper;
     }
 
-    private JPanel wrapInRow(Component[] components)
-    {
-        JPanel optionsPanel = new JPanel(new GridLayout(1, components.length, 4, 4));
+    private JPanel getContext() {
+        TitleLabel contextTitle = new TitleLabel("Context", TitleLabel.LEFT, 20);
+        contextTitle.setForeground(GuiColors.LIGHT);
+
+        // Low, Medium, High,
+        RadioButton opLowIncome = new RadioButton("Low");
+        opLowIncome.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (opLowIncome.isSelected()) {
+                    //todo remove from pool
+                } else {
+                    //todo
+                }
+            }
+        });
+
+        RadioButton opMediumIncome = new RadioButton("Medium");
+        opMediumIncome.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (opMediumIncome.isSelected()) {
+                    //todo remove from pool
+                } else {
+                    //todo
+                }
+            }
+        });
+
+        RadioButton highIncome = new RadioButton("High");
+        highIncome.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (highIncome.isSelected()) {
+                    //todo remove from pool
+                } else {
+                    //todo
+                }
+            }
+        });
+        JPanel contexts = wrapInRow(new Component[]{opLowIncome, opMediumIncome, highIncome});
+
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
+        wrapper.setBackground(GuiColors.BASE_LIGHT);
+        wrapper.add(contextTitle, BorderLayout.NORTH);
+        wrapper.add(contexts, BorderLayout.CENTER);
+
+        return wrapper;
+    }
+
+    private JPanel wrapInRow(Component[] components) {
+        int columns = (components.length > 4) ? (components.length / 2) : components.length;
+        int rows = components.length / columns;
+
+        JPanel optionsPanel = new JPanel(new GridLayout(rows, columns, 0, 2));
         optionsPanel.setBackground(getBackground());
         optionsPanel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, getBackground()));
         for (int i = 0; i < components.length; i++)

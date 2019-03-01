@@ -18,15 +18,14 @@ public class MenuLabel extends JLabel {
         setName("");
         super.setBackground(new Color(0, 0, 0, 0));
         super.setFont(new Font("Verdana", Font.PLAIN, 16));
-        super.setForeground(Color.WHITE);
-        super.setBackground(new Color(0, 0, 0, 0));
+        super.setForeground(GuiColors.TEXT_UNSELECTED);
         super.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         addListeners();
     }
 
     public MenuLabel(String title, int horizontalAlignment, int size) {
         this(title, horizontalAlignment);
-        super.setBackground(new Color(0, 0, 0, 0));
+        super.setBackground(GuiColors.TEXT_UNSELECTED);
         super.setFont(new Font("Verdana", Font.PLAIN, size));
         setName("");
         addListeners();
@@ -37,7 +36,7 @@ public class MenuLabel extends JLabel {
         super.setHorizontalAlignment(horizontalAlignment);
         super.setFont(new Font("Verdana", Font.PLAIN, 16));
         super.setForeground(Color.WHITE);
-        super.setBackground(new Color(0, 0, 0, 0));
+        super.setBackground(GuiColors.TEXT_UNSELECTED);
         super.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         setName("");
         addListeners();
@@ -47,12 +46,12 @@ public class MenuLabel extends JLabel {
         super.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                setForeground(Color.DARK_GRAY);
+                setForeground(GuiColors.TEXT_SELECTED);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                setForeground(Color.WHITE);
+                setForeground(GuiColors.TEXT_UNSELECTED);
             }
 
             @Override

@@ -9,13 +9,12 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainMenu extends RPanel
-{
+public class MainMenu extends RPanel {
     private final DataExchange dataExchange;//todo change with controller
     private final BreadCrumbs breadCrumbs;
 
     public MainMenu(DataExchange dataExchange, BreadCrumbs breadCrumbs) {
-        super(GuiColors.RED, new BorderLayout());
+        super(GuiColors.BASE_LIGHT, new BorderLayout());
         this.dataExchange = dataExchange;
         this.breadCrumbs = breadCrumbs;
         refresh();
@@ -32,6 +31,7 @@ public class MainMenu extends RPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 breadCrumbs.push("Choose metrics", new MetricsMenu(dataExchange, breadCrumbs));
+                this.mouseExited(e);
             }
         });
         menus.add(getMenuCard(chooseMetricsLabel));
@@ -42,6 +42,7 @@ public class MainMenu extends RPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 breadCrumbs.push("Filters", new FiltersMenu(dataExchange, breadCrumbs));
+                this.mouseExited(e);
             }
         });
         menus.add(getMenuCard(filtersLabel));
@@ -52,6 +53,7 @@ public class MainMenu extends RPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 //TODO
+                this.mouseExited(e);
             }
         });
         menus.add(getMenuCard(graphTypeLabel));
@@ -62,6 +64,7 @@ public class MainMenu extends RPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 breadCrumbs.push("Load CSVs", new LoadCSVsView(dataExchange, breadCrumbs));
+                this.mouseExited(e);
             }
         });
         menus.add(getMenuCard(loadCSVsLabel));
@@ -72,6 +75,7 @@ public class MainMenu extends RPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 //TODO
+                this.mouseExited(e);
             }
         });
         menus.add(getMenuCard(settingsLabel));
@@ -82,8 +86,7 @@ public class MainMenu extends RPanel
         revalidate();
     }
 
-    private JPanel getMenuCard(Component leftComponent)
-    {
+    private JPanel getMenuCard(Component leftComponent) {
         JPanel tmp = new JPanel(new BorderLayout());
         tmp.setPreferredSize(new Dimension(100, 50));
         tmp.add(leftComponent, BorderLayout.WEST);

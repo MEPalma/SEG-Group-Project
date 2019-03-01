@@ -16,7 +16,7 @@ public class TitleLabel extends JLabel {
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
-        super.setForeground(new Color(32, 32, 32));
+        super.setForeground(GuiColors.TEXT_UNSELECTED);
         super.setFont(new Font("Verdana", Font.PLAIN, 22));
         super.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setBackground(new Color(0, 0, 0, 0));
@@ -26,7 +26,7 @@ public class TitleLabel extends JLabel {
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
-        super.setForeground(new Color(32, 32, 32));
+        super.setForeground(GuiColors.TEXT_UNSELECTED);
         super.setFont(new Font("Verdana", Font.PLAIN, size));
         super.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setBackground(new Color(0, 0, 0, 0));
@@ -36,7 +36,7 @@ public class TitleLabel extends JLabel {
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
-        super.setForeground(new Color(32, 32, 32));
+        super.setForeground(GuiColors.TEXT_UNSELECTED);
         super.setFont(new Font("Verdana", Font.PLAIN, size));
         super.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setBackground(new Color(0, 0, 0, 0));

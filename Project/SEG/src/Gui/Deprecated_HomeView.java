@@ -17,7 +17,7 @@ import java.util.LinkedList;
 /**
  * @author Marco-Edoardo Palma
  */
-public class HomeView extends RPanel {
+public class Deprecated_HomeView extends RPanel {
 
     public static Color BACKGROUND = GuiColors.LIGHT;
     private final DataExchange dataExchange;
@@ -27,7 +27,7 @@ public class HomeView extends RPanel {
     private final ChartType chartType;
     private final String chartTitle, xAxisLabel, yAxisLabel;
 
-    public HomeView(DataExchange dataExchange, BreadCrumbs breadCrumbs) {
+    public Deprecated_HomeView(DataExchange dataExchange, BreadCrumbs breadCrumbs) {
         super(BACKGROUND, new BorderLayout());
         this.dataExchange = dataExchange;
         this.breadCrumbs = breadCrumbs;
@@ -163,8 +163,8 @@ public class HomeView extends RPanel {
     class FieldChooser extends JPanel {
         public FieldChooser(JDialog dialogFrame, Collection<Tuple<Number, Number>> chartData) {
             super(new GridLayout(11, 1, 4, 4));
-            setBackground(GuiColors.RED);
-            setBorder(BorderFactory.createLineBorder(GuiColors.RED, 10, true));
+            setBackground(GuiColors.BASE_LIGHT);
+            setBorder(BorderFactory.createLineBorder(GuiColors.BASE_LIGHT, 10, true));
 
             MenuLabel nImpressionsButton = new MenuLabel("N. Impressions", MenuLabel.LEFT, 16);
             nImpressionsButton.addMouseListener(new MouseAdapter() {
@@ -286,7 +286,7 @@ public class HomeView extends RPanel {
 
         public ChartTypeChooser(JDialog dialogFrame, Collection<Tuple<Number, Number>> chartData) {
             super(new GridLayout(2, 1, 4, 4));
-            setBackground(GuiColors.RED);
+            setBackground(GuiColors.BASE_LIGHT);
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
             MenuLabel histoLabel = new MenuLabel("Histogram", MenuLabel.LEFT, 16);

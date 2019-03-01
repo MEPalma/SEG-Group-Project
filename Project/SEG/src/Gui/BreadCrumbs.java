@@ -7,8 +7,8 @@ import java.awt.event.MouseEvent;
 import java.util.Stack;
 
 public class BreadCrumbs extends JPanel {
-    private Color BACKGROUND = GuiColors.DARK_LIGHT;
-    private Color SELECTED = GuiColors.LIGHT;
+    private Color BACKGROUND = GuiColors.BASE_DARK;
+    private Color SELECTED = GuiColors.BASE_LIGHT;
 
     private JPanel viewPanel;
     private GraphView graphView;
@@ -133,7 +133,7 @@ public class BreadCrumbs extends JPanel {
     }
 
     private void refresh() {
-        setPreferredSize(new Dimension((this.crumbsStack.size()*200), 52));
+        setPreferredSize(new Dimension((this.crumbsStack.size() * 200), 52));
 
         removeAll();
         this.graphView.refresh();//todo check needed?
@@ -189,6 +189,10 @@ public class BreadCrumbs extends JPanel {
 
     public synchronized void cancelBackgroundTask() {
         if (this.backgroundTask != null) this.backgroundTask.cancel(true);
+    }
+
+    public GraphView getGraphView() {
+        return graphView;
     }
 }
 

@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  */
 public class LoadCSVsView extends RPanel {
 
-    public static Color BACKGROUND = GuiColors.LIGHT;
+    public static Color BACKGROUND = GuiColors.BASE_LIGHT;
     private final DataExchange dataExchange;
     private final BreadCrumbs breadCrumbs;
 
@@ -56,7 +56,7 @@ public class LoadCSVsView extends RPanel {
                 components.add(getClickLogFileFinderPanel());
                 components.add(getServerLogFileFinderPanel());
 
-                ListView listView = new ListView(GuiColors.LIGHT, components);
+                ListView listView = new ListView(BACKGROUND, components);
 
                 add(new TitleLabel(" Import data from CSV files", TitleLabel.LEFT), BorderLayout.NORTH);
                 add(listView.getWrappedInScroll(true), BorderLayout.CENTER);
@@ -96,21 +96,21 @@ public class LoadCSVsView extends RPanel {
             private JPanel getImpressionLogFileFinderPanel() {
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-                panel.setBackground(GuiColors.LIGHT);
+                panel.setBackground(BACKGROUND);
 
                 TitleLabel titleLabel = new TitleLabel("Impression Log", TitleLabel.LEFT, 14);
-                titleLabel.setPreferredSize(new Dimension(200, 20));
+                titleLabel.setPreferredSize(new Dimension(160, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
                 JPanel pathFinderPanel = new JPanel(new BorderLayout());
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
-                TextBox pathTextBox = new TextBox(GuiColors.DARK_LIGHT);
+                TextBox pathTextBox = new TextBox(Color.WHITE);
                 pathTextBox.setEditable(false);
                 pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
 
-                MenuButton findFileButton = new MenuButton("...", 14, MenuButton.STANDARD);
+                MenuButton findFileButton = new MenuButton("...", 14);
                 findFileButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -153,21 +153,21 @@ public class LoadCSVsView extends RPanel {
             private JPanel getClickLogFileFinderPanel() {
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-                panel.setBackground(GuiColors.LIGHT);
+                panel.setBackground(BACKGROUND);
 
                 TitleLabel titleLabel = new TitleLabel("Click Log", TitleLabel.LEFT, 14);
-                titleLabel.setPreferredSize(new Dimension(200, 20));
+                titleLabel.setPreferredSize(new Dimension(160, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
                 JPanel pathFinderPanel = new JPanel(new BorderLayout());
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
-                TextBox pathTextBox = new TextBox(GuiColors.DARK_LIGHT);
+                TextBox pathTextBox = new TextBox(Color.WHITE);
                 pathTextBox.setEditable(false);
                 pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
 
-                MenuButton findFileButton = new MenuButton("...", 14, MenuButton.STANDARD);
+                MenuButton findFileButton = new MenuButton("...", 14);
                 findFileButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -210,21 +210,21 @@ public class LoadCSVsView extends RPanel {
             private JPanel getServerLogFileFinderPanel() {
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-                panel.setBackground(GuiColors.LIGHT);
+                panel.setBackground(BACKGROUND);
 
                 TitleLabel titleLabel = new TitleLabel("Server Log", TitleLabel.LEFT, 14);
-                titleLabel.setPreferredSize(new Dimension(200, 20));
+                titleLabel.setPreferredSize(new Dimension(160, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
                 JPanel pathFinderPanel = new JPanel(new BorderLayout());
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
-                TextBox pathTextBox = new TextBox(GuiColors.DARK_LIGHT);
+                TextBox pathTextBox = new TextBox(Color.WHITE);
                 pathTextBox.setEditable(false);
                 pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
 
-                MenuButton findFileButton = new MenuButton("...", 14, MenuButton.STANDARD);
+                MenuButton findFileButton = new MenuButton("...", 14);
                 findFileButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {

@@ -34,7 +34,7 @@ public class CSVParser {
      * memory, then flushes the result into the database. During the process
      * pragma on foreign keys is disabled and commitments are set manually
      * temporarily.
-     *
+     * <p>
      * csv is parsed to allow entries to be compiled into instances of the
      * objects in the Commons package.
      *

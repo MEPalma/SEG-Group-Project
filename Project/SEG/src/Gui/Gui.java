@@ -4,8 +4,6 @@ import DatabaseManager.DataExchange;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +50,7 @@ public class Gui extends JFrame {
 
         this.northView = new JPanel(new BorderLayout());
         getContentPane().add(this.northView, BorderLayout.NORTH);
-        this.northView.setBackground(GuiColors.LIGHT);
+        this.northView.setBackground(GuiColors.BASE_LIGHT);
         this.northView.setLayout(new BorderLayout());
         this.northView.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.LIGHT_GRAY));
 
@@ -66,7 +64,6 @@ public class Gui extends JFrame {
         this.mainView.setBackground(GuiColors.LIGHT);
         this.mainView.add(this.breadCrumbsHoster, BorderLayout.CENTER);
         getContentPane().add(this.mainView, BorderLayout.CENTER);
-
 
 
         this.menuButtonsPane = new JPanel(new GridLayout(10, 1, 4, 4));
@@ -137,7 +134,7 @@ public class Gui extends JFrame {
     @Override
     public void setVisible(boolean visible) {
         if (visible) {
-            setSize(new Dimension(1200, 850));
+            setSize(new Dimension(1200, 800));
 
             Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
             int x = (screen.width / 2) - (super.getSize().width / 2);
@@ -151,7 +148,7 @@ public class Gui extends JFrame {
 //
 //        this.breadCrumbs = new BreadCrumbs(this.mainView);
 //        breadCrumbs.clear();
-//        breadCrumbs.push("Home", new HomeView(dataExchange, breadCrumbs));
+//        breadCrumbs.push("Home", new Deprecated_HomeView(dataExchange, breadCrumbs));
 //    }
 //
 //    public synchronized void openLoadCSVsView() {

@@ -12,7 +12,7 @@ public class ImpressionEntry implements Stringifiable {
     public static int AUTO_INDEX = -1;
 
     public static enum Context {
-        News, Shopping, SocialMedia, BlockTagTree, Travel, Hobbies, Blog, Unknown
+        News, Shopping, SocialMedia, Travel, Hobbies, Blog, Unknown
     }
 
     ;

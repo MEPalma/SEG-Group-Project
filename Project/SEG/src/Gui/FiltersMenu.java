@@ -137,6 +137,8 @@ public class FiltersMenu extends RPanel
             }
         });
 
+        JPanel genders = wrapInRow(new Component[]{maleOption, femaleOption});
+
         //AGE
         RadioButton opAge_less_than_25 = new RadioButton("<25");
         opAge_less_than_25.addMouseListener(new MouseAdapter() {
@@ -212,9 +214,163 @@ public class FiltersMenu extends RPanel
                 }
             }
         });
-        wrapper.add(wrapInRow(new Component[] {opAge_less_than_25, }), BorderLayout.CENTER);
+        JPanel ages = wrapInRow(new Component[] {opAge_less_than_25, opAge_25_34, opAge_35_44, opAge_45_54, opAge_more_than_54});
+
+
+        // Low, Medium, High,
+        RadioButton opLowIncome = new RadioButton("Low");
+        opLowIncome.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (opLowIncome.isSelected())
+                {
+                    //todo remove from pool
+                }
+                else
+                {
+                    //todo
+                }
+            }
+        });
+
+        RadioButton opMediumIncome = new RadioButton("Medium");
+        opMediumIncome.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (opMediumIncome.isSelected())
+                {
+                    //todo remove from pool
+                }
+                else
+                {
+                    //todo
+                }
+            }
+        });
+
+        RadioButton highIncome = new RadioButton("High");
+        highIncome.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (highIncome.isSelected())
+                {
+                    //todo remove from pool
+                }
+                else
+                {
+                    //todo
+                }
+            }
+        });
+        JPanel incomes = wrapInRow(new Component[]{opLowIncome, opMediumIncome, highIncome});
 
         //INCOME
+        RadioButton opNews = new RadioButton("News");
+        opNews.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (opNews.isSelected())
+                {
+                    //todo remove from pool
+                }
+                else
+                {
+                    //todo
+                }
+            }
+        });
+
+        RadioButton opShopping = new RadioButton("Shopping");
+        opShopping.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (opShopping.isSelected())
+                {
+                    //todo remove from pool
+                }
+                else
+                {
+                    //todo
+                }
+            }
+        });
+
+        RadioButton opSocialMedia = new RadioButton("Social Media");
+        opSocialMedia.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (opSocialMedia.isSelected())
+                {
+                    //todo remove from pool
+                }
+                else
+                {
+                    //todo
+                }
+            }
+        });
+
+        RadioButton opTravels = new RadioButton("Travels");
+        opTravels.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (opTravels.isSelected())
+                {
+                    //todo remove from pool
+                }
+                else
+                {
+                    //todo
+                }
+            }
+        });
+
+        RadioButton opHobbies = new RadioButton("Hobbies");
+        opHobbies.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (opHobbies.isSelected())
+                {
+                    //todo remove from pool
+                }
+                else
+                {
+                    //todo
+                }
+            }
+        });
+
+        RadioButton opBlog = new RadioButton("Blog");
+        opBlog.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (opBlog.isSelected())
+                {
+                    //todo remove from pool
+                }
+                else
+                {
+                    //todo
+                }
+            }
+        });
+
+        JPanel contexts = wrapInRow(new Component[]{opNews, opShopping, opSocialMedia, opTravels, opHobbies, opBlog});
+
+        TitleLabel ageTitle = new TitleLabel("Age", TitleLabel.LEFT, 18);
+        ageTitle.setForeground(GuiColors.LIGHT);
+
+        TitleLabel audienceSegmentsTitle = new TitleLabel("Audience segments", TitleLabel.LEFT, 18);
+        audienceSegmentsTitle.setForeground(GuiColors.LIGHT);
+
+        TitleLabel contextTitle = new TitleLabel("Context", TitleLabel.LEFT, 18);
+        contextTitle.setForeground(GuiColors.LIGHT);
+
+        JPanel subWrapper = new JPanel(new GridLayout(8, 1, 4, 4));
+        subWrapper.add(audienceSegmentsTitle);
+        subWrapper.add(ageTitle);
+        subWrapper.add(ages);
+
 
         return wrapper;
     }

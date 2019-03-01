@@ -770,6 +770,9 @@ public class DataExchange
     }
 
 
+    /*
+    NUMBER OF IMPRESSIONS
+     */
     public List<Tuple<String ,Number > >getNumberOfImpressionsPerHour()
     {
         ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
@@ -782,6 +785,9 @@ public class DataExchange
         return getInfoTuple(resultPerHour);
     }
 
+    /*
+    NUMBER OF CLICKS
+     */
     public List<Tuple<String ,Number > >getNumberOfClicksPerHour()
     {
         ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
@@ -794,6 +800,85 @@ public class DataExchange
         return getInfoTuple(resultPerHour);
     }
 
+    /*
+    NUMBER OF UNIQUES
+     */
+    public List<Tuple<String ,Number > >getNumberOfUniquesPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getGetNumberOfUniquesPerHours);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getNumberOfUniquesPerDay()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getGetNumberOfUniquesPerDay);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getNumberOfUniquesPerWeek()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getGetNumberOfUniquesPerWeek);
+        return getInfoTuple(resultPerHour);
+    }
+
+
+    /*
+    NUMBER OF BOUNCES
+     */
+
+
+    public List<Tuple<String ,Number > >getNumberOfBouncesPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getGetNumberOfBouncesPerHour);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getNumberOfBouncesPerDay()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getGetNumberOfBouncesPerDay);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getNumberOfBouncesPerWeek()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfBouncesPerWeek);
+        return getInfoTuple(resultPerHour);
+    }
+
+    /*
+    NUMBER OF CONVERSIONS
+     */
+
+    public List<Tuple<String ,Number > >getNumberOfConversionsPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfConversionsPerHour);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getNumberOfConversionsPerDay()
+    {
+        ResultSet resultPerDay=this.dbM.query(QueryComposer.getNumberOfConversionsPerDay);
+        return getInfoTuple(resultPerDay);
+    }
+    public List<Tuple<String ,Number > >getNumberOfConversionsPerWeek()
+    {
+        ResultSet resultPerWeek=this.dbM.query(QueryComposer.getNumberOfConversionsPerWeek);
+        return getInfoTuple(resultPerWeek);
+    }
+
+    /*
+    TOTAL COST NUMBER
+     */
+    public List<Tuple<String ,Number > >getTotalCostPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getTotalCostPerHour);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getTotalCostPerDay()
+    {
+        ResultSet resultPerDay=this.dbM.query(QueryComposer.getTotalCostPerDay);
+        return getInfoTuple(resultPerDay);
+    }
+    public List<Tuple<String ,Number > >getTotalCostPerWeek()
+    {
+        ResultSet resultPerWeek=this.dbM.query(QueryComposer.getTotalCostPerWeek);
+        return getInfoTuple(resultPerWeek);
+    }
 
 
 

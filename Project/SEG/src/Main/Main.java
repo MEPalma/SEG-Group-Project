@@ -25,7 +25,7 @@ public class Main
         System.out.println(new PathsManager().getDB());
 
 //        dataExchange.getNumberOfImpressionsPerWeek();
-        dataExchange.getNumberOfClicksPerWeek();
+//        dataExchange.getNumberOfClicksPerWeek();
 //          dataExchange.getNumberOfUniques();
 //        dataExchange.getNumberOfBounces();
 //        dataExchange.getTotalCost();
@@ -34,8 +34,15 @@ public class Main
 //        dataExchange.getNumberOfImpressionsPerDay();
 //         dataExchange.getNumberOfClicksPerHour();
 //        dataExchange.getNumberOfClicksPerDay();
-
-
+//          dataExchange.getNumberOfUniquesPerDay();
+//         dataExchange.getNumberOfUniquesPerWeek();
+//         dataExchange.getNumberOfUniquesPerHour();
+//            dataExchange.getNumberOfConversionsPerDay();
+//        dataExchange.getNumberOfConversionsPerHour();
+//        dataExchange.getNumberOfConversionsPerWeek();
+//        dataExchange.getTotalCostPerDay();
+//        dataExchange.getTotalCostPerHour();
+//        dataExchange.getTotalCostPerWeek();
 
 
 

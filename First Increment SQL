@@ -48,6 +48,7 @@ select Date as d,count(ClickCost) as c from click_logs group by strftime('%W', D
 
 SELECT COUNT (DISTINCT ID)
   FROM click_logs;
+
 //NUMBER OF UNIQEUS PER WEEK
 
 select Date as d,count(distinct id) as c from click_logs group by strftime('%W', Date) order by Date;
@@ -57,13 +58,16 @@ select distinct count(id) as c, date as d  from impression_logs by strftime('%W'
 select Date as d,count(distinct id) as c from impression_logs group by strftime('%W', Date) order by Date;
 
 select Date as d,count(distinct id) as c from click_logs group by strftime('%W', Date) order by Date;
-select EntryDate as d,count(distinct id) as c from server_logs group by strftime('%W', EntryDate) order by EntryDate;
+
 
 
 //Unique by day
 
 select Date as d,count( id) as c from click_logs group by strftime('%d', Date) order by Date;
 
+//Unique by hour
+
+select Date as d,count( id) as c from click_logs group by strftime('%H:%d', Date) order by Date;
 
 
 // Number of Bounces defined within 1 min general////////////////////////////////////////////////////////
@@ -75,21 +79,42 @@ select Date as d,count( id) as c from click_logs group by strftime('%d', Date) o
 select count(PagesViewed) from server_logs where PagesViewed=1;
 
 //select short time visited
-select count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as GroupedValues
-from server_logs
-where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1;
+//BOUNCE BY WEEK
+select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%W',EntryDate);
+
+//BOUNCE BY HOUR
+select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%H:%d',EntryDate) order by EntryDate;
+
+//BOUNCE BY DAY
+
+select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%d',EntryDate) order by EntryDate;
+
+
+
 
 //try '%s'
 
-select count(PagesViewed) as GroupedValues
-from server_logs
-group by strftime('s', EntryDate);
+select count(PagesViewed) as GroupedValues from server_logs group by strftime('s', EntryDate);
 
 //////////////////////////////////////////////////////////////////
 
 //Number of Conversions/////////////////////////////////////////// IN GENERAL
 
 select count(Conversion) as GroupedValues from server_logs where Conversion='No';
+
+//ConversionS PER HOUR
+
+select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%H:%d',EntryDate) order by EntryDate;
+
+//conversions per Day
+
+select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%d',EntryDate) order by EntryDate;
+
+//conversions per Week
+
+ select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%W',EntryDate) order by EntryDate;
+
+
 
 //Total Cost///////////////////////////////////////////////////////////
 
@@ -104,7 +129,54 @@ select sum(ClickCost) from click_logs;
 
 sum in general----
 
-select (select sum(impressionCost) from impression_logs) +(select sum(ClickCost) from click_logs) as GroupedValues;
+select (select Date as d, sum(impressionCost) from impression_logs) +(select Date as d, sum(ClickCost) from click_logs) as sum  group by strftime('%H:%d',Date) order by Date;
+
+//TOTAL COST PER HOURS
+
+select d,sum(total) as total_cost  from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%H:%d',d) order by d;
+
+//TOTAL COST PER DAY
+select d,sum(total)
+          as total_cost
+  from (
+       select date as d,ClickCost as total
+         from click_logs
+       union all
+       select date as d,impressionCost as total
+         from impression_logs
+       ) as u
+       group by  strftime('%d',d) order by d;
+//TOTAL COST PER WEEK
+select d,sum(total)
+          as total_cost
+  from (
+       select date as d,ClickCost as total
+         from click_logs
+       union all
+       select date as d,impressionCost as total
+         from impression_logs
+       ) as u
+       group by  strftime('%W',d) order by d;
 
 
+
+
+SELECT click_logs.ClickCost + impression_logs.impressionCost FROM click_logs LEFT JOIN impression_logs ON click_logs.date = impression_logs.date  group by strftime('%d',date) order by date;
+/////////////////////////////////////////////////////////////////
+
+select Date, sum(ClickCost) as sum from click_logs
+group by strftime('%d',Date) order by Date;
+
+
+
+ 
+
+
+//TOTAL COST PER DAYS
+
+select Date as d, sum(impressionCost) from impression_logs Union select Date as d, sum(ClickCost) from click_logs as sumT group by strftime('%d',Date) order by Date;
+//TOTAL COST PER WEEK
+select Date as d, sum(impressionCost) from impression_logs Union select date as d, sum(ClickCost) from click_logs as sumT group by strftime('%W',Date) order by Date;
+
+--???? Total cost???
 -----

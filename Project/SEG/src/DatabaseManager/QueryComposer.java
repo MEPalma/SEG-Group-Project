@@ -213,35 +213,35 @@ public class QueryComposer
      *Number of uniques
      */
     public static String getNumberOfUniques="select count (distinct ID) as GroupedValues from click_logs;";
-    public static String getGetNumberOfUniquesPerDay="";
-    public static String getGetNumberOfUniquesPerWeek="";
-    public static String getGetNumberOfUniquesPerHours="";
+    public static String getGetNumberOfUniquesPerDay="select Date as d,count( id) as c from click_logs group by strftime('%d', Date) order by Date;";
+    public static String getGetNumberOfUniquesPerWeek="select Date as d,count(distinct id) as c from click_logs group by strftime('%W', Date) order by Date;";
+    public static String getGetNumberOfUniquesPerHours="select Date as d,count( id) as c from click_logs group by strftime('%H:%d', Date) order by Date;";
 
 
     /*
     Number of Bounces
      */
     public static String getNumberOfBounces="select count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as GroupedValues from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1;";
-    public static String getGetNumberOfBouncesPerDay="";
-    public static String getGetNumberOfBouncesPerHour="";
-    public static String getNumberofBouncesPeWeek="";
+    public static String getGetNumberOfBouncesPerDay="select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%d',EntryDate) order by EntryDate;";
+    public static String getGetNumberOfBouncesPerHour="select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%H:%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfBouncesPerWeek="select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%W',EntryDate);";
 
 
     /*
     Number of Conversions
      */
     public static String getNumberOfConversions="select count(Conversion) as GroupedValues from server_logs where Conversion='No';";
-    public static String getNumberOfConversionsPerHour="";
-    public static String getNumberOfConversionsPerDay="";
-    public static String getNumberOfConversionsPerWeek="";
+    public static String getNumberOfConversionsPerHour="select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%H:%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfConversionsPerDay="select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfConversionsPerWeek="select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%W',EntryDate) order by EntryDate;";
 
     /*
     Total Cost
      */
     public static String getTotalCost="select (select sum(impressionCost) from impression_logs) +(select sum(ClickCost) from click_logs) as GroupedValues;";
-    public static String getTotalCostPerHour="";
-    public static String getTotalCostPerWeek="";
-    public static String getTotalCostPerDay="";
+    public static String getTotalCostPerHour="select d,sum(total) as c  from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%H:%d',d) order by d;";
+    public static String getTotalCostPerWeek="select d,sum(total) as c from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%W',d) order by d;";
+    public static String getTotalCostPerDay="select d,sum(total) as c from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%d',d) order by d";
     /*
    Gets per hour--24 hours
    For time granularity!!!

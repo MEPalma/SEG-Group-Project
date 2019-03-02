@@ -87,12 +87,12 @@ public class GraphManager {
         barChart.removeLegend();
         barChart.setBackgroundPaint(Color.WHITE);
 
-        CategoryPlot cplot = (CategoryPlot)barChart.getPlot();
+        CategoryPlot cplot = (CategoryPlot) barChart.getPlot();
         cplot.setBackgroundPaint(SystemColor.inactiveCaption);
 
-        ((BarRenderer)cplot.getRenderer()).setBarPainter(new StandardBarPainter());
+        ((BarRenderer) cplot.getRenderer()).setBarPainter(new StandardBarPainter());
 
-        BarRenderer r = (BarRenderer)barChart.getCategoryPlot().getRenderer();
+        BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
         r.setSeriesPaint(0, GuiColors.BASE_LIGHT);
 
         Plot plot = barChart.getPlot();
@@ -110,7 +110,6 @@ public class GraphManager {
         for (Tuple<String, Number> i : data) {
             dataset.addValue(i.getY(), "", i.getX());
         }
-
 
 
         return dataset;

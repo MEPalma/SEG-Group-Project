@@ -3,7 +3,6 @@ package Main;
 import Gui.Gui;
 import Gui.MainController;
 
-import java.text.ParseException;
 import java.util.Locale;
 
 /**
@@ -11,7 +10,7 @@ import java.util.Locale;
  */
 public class Main {
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) {
         Locale.setDefault(Locale.ENGLISH);
         new Gui(new MainController()).setVisible(true);
     }

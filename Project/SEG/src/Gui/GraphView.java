@@ -2,6 +2,9 @@ package Gui;
 
 import Commons.Tuple;
 import Gui.GraphManager.GraphManager;
+import Gui.GuiComponents.ListView;
+import Gui.GuiComponents.RPanel;
+import Gui.GuiComponents.TitleLabel;
 
 import javax.swing.*;
 import java.awt.*;

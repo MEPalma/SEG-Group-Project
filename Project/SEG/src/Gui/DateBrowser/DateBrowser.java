@@ -1,6 +1,10 @@
-package Gui;
+package Gui.DateBrowser;
 
 import DatabaseManager.Stringifiable;
+import Gui.GuiColors;
+import Gui.GuiComponents.MenuLabel;
+import Gui.GuiComponents.TextBox;
+import Gui.GuiComponents.TitleLabel;
 
 import javax.swing.*;
 import java.awt.*;

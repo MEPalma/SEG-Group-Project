@@ -1,6 +1,8 @@
 package Gui;
 
 import DatabaseManager.DataExchange;
+import Gui.GuiComponents.TitleLabel;
+import Gui.SideMenus.MainMenu;
 
 import javax.swing.*;
 import java.awt.*;

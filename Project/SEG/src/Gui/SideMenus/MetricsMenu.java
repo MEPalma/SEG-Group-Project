@@ -1,4 +1,11 @@
-package Gui;
+package Gui.SideMenus;
+
+import Gui.GuiColors;
+import Gui.GuiComponents.ListView;
+import Gui.GuiComponents.RPanel;
+import Gui.GuiComponents.RadioButton;
+import Gui.GuiComponents.TitleLabel;
+import Gui.MainController;
 
 import javax.swing.*;
 import java.awt.*;

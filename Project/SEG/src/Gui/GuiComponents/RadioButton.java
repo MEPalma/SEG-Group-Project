@@ -1,4 +1,6 @@
-package Gui;
+package Gui.GuiComponents;
+
+import Gui.GuiColors;
 
 import javax.swing.*;
 import java.awt.*;

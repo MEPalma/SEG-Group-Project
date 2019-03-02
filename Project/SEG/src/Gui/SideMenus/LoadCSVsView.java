@@ -1,6 +1,9 @@
-package Gui;
+package Gui.SideMenus;
 
 import DatabaseManager.CSVParser;
+import Gui.GuiColors;
+import Gui.GuiComponents.*;
+import Gui.MainController;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;

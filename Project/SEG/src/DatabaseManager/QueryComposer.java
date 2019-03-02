@@ -15,7 +15,7 @@ public class QueryComposer
             + "age VARCHAR(55),\n"
             + "income VARCHAR(55)\n"
             + ");";
-    
+
 
     private static String CREATE_TABLE_IMPRESSION_LOGS
             = "CREATE TABLE IF NOT EXISTS IMPRESSION_LOGS(\n"

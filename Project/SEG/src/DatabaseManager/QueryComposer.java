@@ -54,22 +54,22 @@ public class QueryComposer
             + ");";
 
     public static String[] CREATE_TABLES =
-            {
-                    "PRAGMA foreign_keys = ON;",
-                    CREATE_TABLE_USERS,
-                    CREATE_TABLE_IMPRESSION_LOGS,
-                    CREATE_TABLE_CLICK_LOGS,
-                    CREATE_TABLE_SERVER_LOGS,
-                    CREATE_TABLE_SETTINGS
-            };
+    {
+        "PRAGMA foreign_keys = ON;",
+        CREATE_TABLE_USERS,
+        CREATE_TABLE_IMPRESSION_LOGS,
+        CREATE_TABLE_CLICK_LOGS,
+        CREATE_TABLE_SERVER_LOGS,
+        CREATE_TABLE_SETTINGS
+    };
 
     public static String[] CREATE_INDEXES =
-            {
-                    "CREATE INDEX IF NOT EXISTS IMPRESSION_LOGS_DATE_INDEX ON IMPRESSION_LOGS (date);",
-                    "CREATE INDEX IF NOT EXISTS CLICK_LOGS_DATE_INDEX ON CLICK_LOGS (date);",
-                    "CREATE INDEX IF NOT EXISTS SERVER_LOGS_ENTRY_DATE_INDEX ON SERVER_LOGS (entryDate);",
-                    "CREATE INDEX IF NOT EXISTS SERVER_LOGS_EXIT_DATE_INDEX ON SERVER_LOGS (exitDate);"
-            };
+    {
+        "CREATE INDEX IF NOT EXISTS IMPRESSION_LOGS_DATE_INDEX ON IMPRESSION_LOGS (date);",
+        "CREATE INDEX IF NOT EXISTS CLICK_LOGS_DATE_INDEX ON CLICK_LOGS (date);",
+        "CREATE INDEX IF NOT EXISTS SERVER_LOGS_ENTRY_DATE_INDEX ON SERVER_LOGS (entryDate);",
+        "CREATE INDEX IF NOT EXISTS SERVER_LOGS_EXIT_DATE_INDEX ON SERVER_LOGS (exitDate);"
+    };
 
     public static String GETLASTID = "SELECT last_insert_rowid() as id";
 
@@ -118,12 +118,12 @@ public class QueryComposer
     public static String dropAllFrom_SERVER_LOGS = "DELETE FROM SERVER_LOGS;";
     public static String dropAllFrom_SETTINGS = "DELETE FROM SETTINGS;";
     public static String[] dropAll_noSettings =
-            {
-                    dropAllFrom_USERS,
-                    dropAllFrom_IMPRESSION_LOGS,
-                    dropAllFrom_CLICK_LOGS,
-                    dropAllFrom_SERVER_LOGS
-            };
+    {
+        dropAllFrom_USERS,
+        dropAllFrom_IMPRESSION_LOGS,
+        dropAllFrom_CLICK_LOGS,
+        dropAllFrom_SERVER_LOGS
+    };
 
     /*
         COUNT STATEMENTS
@@ -133,7 +133,7 @@ public class QueryComposer
     public static String countAllFrom_CLICK_LOGS = "SELECT COUNT(*) as c FROM CLICK_LOGS;";
     public static String countAllFrom_SERVER_LOGS = "SELECT COUNT(*) as c FROM SERVER_LOGS;";
     public static String countAllFrom_SETTINGS = "SELECT COUNT(*) as c FROM SETTINGS;";
-
+    
     /*
         SELECT ALL STATEMENTS
      */
@@ -216,7 +216,7 @@ public class QueryComposer
     Number of Bounces
      */
     public static String getNumberOfBounces="select count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as GroupedValues from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1;";
-    public static String getNumberOfBouncesPerDay="select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfBouncesPerDay="select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%d',EntryDate) order by EntryDate;";
     public static String getNumberOfBouncesPerHour="select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%H:%d',EntryDate) order by EntryDate;";
     public static String getNumberOfBouncesPerWeek="select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%W',EntryDate);";
 

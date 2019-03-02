@@ -195,7 +195,7 @@ public class QueryComposer
         return "SELECT * FROM SETTINGS WHERE SETTINGS.name='" + name + "' LIMIT 1;";
     }
     /*
-    Nubmer of impressions by week query.
+    Number of impressions by week query.
      */
 
     public static String getNumberOfImpressionsPerWeek = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%W', Date) order by Date;";
@@ -222,9 +222,9 @@ public class QueryComposer
     Number of Bounces
      */
     public static String getNumberOfBounces="select count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as GroupedValues from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1;";
-    public static String getGetNumberOfBouncesPerDay="select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%d',EntryDate) order by EntryDate;";
-    public static String getGetNumberOfBouncesPerHour="select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%H:%d',EntryDate) order by EntryDate;";
-    public static String getNumberOfBouncesPerWeek="select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%W',EntryDate);";
+    public static String getNumberOfBouncesPerDay="select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfBouncesPerHour="select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%H:%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfBouncesPerWeek="select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%W',EntryDate);";
 
 
     /*
@@ -251,6 +251,9 @@ public class QueryComposer
     /*
     CTR per week the closest i've got ok=>>>>wrong result tho
      */
-    public static String getCTRPerWeek="SELECT date ,cast(count(click_logs.date) AS FLOAT)/cast((SELECT count(impression_logs.date) FROM impression_logs) AS FLOAT) FROM click_logs group by  strftime('%W',date) order by date;";
+    public static String getCTRPerWeek="SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%W',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%W',date) order by date;";
+    public static String getCTRPerDay="SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%d',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%d',date) order by date;";
+    public static String getCTRPerHour="SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%H:%d',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%H:%d',date) order by date;";
+
 
 }

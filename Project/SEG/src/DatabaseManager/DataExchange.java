@@ -704,7 +704,7 @@ public class DataExchange
             //hr=resultPerHour.getTime("GroupedValues");
             while(resultTuple.next())
             {
-                root.add(new Tuple<String,Number>(resultTuple.getString("d") ,(resultTuple.getLong("c"))));
+                root.add(new Tuple<String,Number>(resultTuple.getString("d") ,(resultTuple.getFloat("c"))));
             }
             for (Tuple<String, Number> stringNumberTuple : root) {
                 System.out.println(stringNumberTuple.getX()+"    "+stringNumberTuple.getY());
@@ -717,6 +717,98 @@ public class DataExchange
         }
         return new LinkedList<>();
     }
+    private List<Tuple<String,Number>> getInfoTupleDivision(ResultSet resultTuple1, ResultSet resultTuple2)
+    {
+        List<Tuple<String,Number>> root1=new LinkedList<>();
+        List<Tuple<String,Number>> root2=new LinkedList<>();
+        List<Date> hour=new LinkedList<>();
+        //Time hr;
+        List<Number> number=new LinkedList<>();
+        try{
+            //hr=resultPerHour.getTime("GroupedValues");
+            while(resultTuple1.next())
+            {
+                root1.add(new Tuple<String,Number>(resultTuple1.getString("d") ,(resultTuple1.getFloat("c"))));
+
+            }
+            while(resultTuple2.next())
+            {
+                root2.add(new Tuple<>(resultTuple2.getString("d"),(resultTuple2.getFloat("c"))));
+            }
+            for(int i=0;i<root1.size();i++)
+            {
+                System.out.println(root1.get(i).getX()+"   "+formatPrice(root1.get(i).getY().floatValue()/root2.get(i).getY().floatValue()));
+            }
+
+            //return <>
+        }catch (SQLException ex)
+        {
+            return null;
+        }
+        return new LinkedList<>();
+    }
+
+    private List<Tuple<String,Number>> getInfoTupleDivisionNoPrice(ResultSet resultTuple1, ResultSet resultTuple2)
+    {
+        List<Tuple<String,Number>> root1=new LinkedList<>();
+        List<Tuple<String,Number>> root2=new LinkedList<>();
+
+        try{
+
+            while(resultTuple1.next())
+            {
+                root1.add(new Tuple<String,Number>(resultTuple1.getString("d") ,(resultTuple1.getFloat("c"))));
+
+            }
+            while(resultTuple2.next())
+            {
+                root2.add(new Tuple<>(resultTuple2.getString("d"),(resultTuple2.getFloat("c"))));
+            }
+            for(int i=0;i<root1.size();i++)
+            {
+                System.out.println(root1.get(i).getX()+"   "+(root1.get(i).getY().floatValue()/root2.get(i).getY().floatValue()));
+            }
+
+            //return <>
+        }catch (SQLException ex)
+        {
+            return null;
+        }
+        return new LinkedList<>();
+    }
+
+    /*
+    FOR TOTAL CPM--DIVIDE BY 1000
+     */
+    private List<Tuple<String,Number>> getInfoTupleDivisionCPM(ResultSet resultTuple1, ResultSet resultTuple2)
+    {
+        List<Tuple<String,Number>> root1=new LinkedList<>();
+        List<Tuple<String,Number>> root2=new LinkedList<>();
+
+        try{
+
+            while(resultTuple1.next())
+            {
+                root1.add(new Tuple<String,Number>(resultTuple1.getString("d") ,(resultTuple1.getFloat("c"))));
+
+            }
+            while(resultTuple2.next())
+            {
+                root2.add(new Tuple<>(resultTuple2.getString("d"),(resultTuple2.getFloat("c")/1000)));
+            }
+            for(int i=0;i<root1.size();i++)
+            {
+                System.out.println(root1.get(i).getX()+"   "+formatPrice(root1.get(i).getY().floatValue()/root2.get(i).getY().floatValue()));
+            }
+
+            //return <>
+        }catch (SQLException ex)
+        {
+            return null;
+        }
+        return new LinkedList<>();
+    }
+
 
 
     /*
@@ -827,12 +919,12 @@ public class DataExchange
 
     public List<Tuple<String ,Number > >getNumberOfBouncesPerHour()
     {
-        ResultSet resultPerHour=this.dbM.query(QueryComposer.getGetNumberOfBouncesPerHour);
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfBouncesPerHour);
         return getInfoTuple(resultPerHour);
     }
     public List<Tuple<String ,Number > >getNumberOfBouncesPerDay()
     {
-        ResultSet resultPerHour=this.dbM.query(QueryComposer.getGetNumberOfBouncesPerDay);
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfBouncesPerDay);
         return getInfoTuple(resultPerHour);
     }
     public List<Tuple<String ,Number > >getNumberOfBouncesPerWeek()
@@ -879,6 +971,201 @@ public class DataExchange
         ResultSet resultPerWeek=this.dbM.query(QueryComposer.getTotalCostPerWeek);
         return getInfoTuple(resultPerWeek);
     }
+
+    /*
+    CTR the average number of clicks per impression
+     */
+    public List<Tuple<String ,Number>> getCTRPerHour()
+    {
+
+        //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
+        //return getInfoTuple(resultPerHour);
+        ResultSet resultTotalImpressionPerHour =this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
+        ResultSet resultTotalClicksPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
+        List<Tuple<String ,Number>> tmp = getInfoTupleDivision(resultTotalClicksPerHour,resultTotalImpressionPerHour);
+        close(resultTotalClicksPerHour);
+        close(resultTotalImpressionPerHour);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCTRPerDay()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalImpressionPerDay =this.dbM.query(QueryComposer.getNumberOfImpressionsPerDay);
+        ResultSet resultTotalClicksPerDay=this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivision(resultTotalClicksPerDay,resultTotalImpressionPerDay);
+        close(resultTotalClicksPerDay);
+        close(resultTotalImpressionPerDay);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCTRPerWeek()
+    {
+//        ResultSet resultPerWeek=this.dbM.query(QueryComposer.getCTRPerWeek);
+//        return getInfoTuple(resultPerWeek);
+        ResultSet resultTotalImpressionPerWeek =this.dbM.query(QueryComposer.getNumberOfImpressionsPerWeek);
+        ResultSet resultTotalClicksPerWeek=this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivision(resultTotalClicksPerWeek,resultTotalImpressionPerWeek);
+        close(resultTotalClicksPerWeek);
+        close(resultTotalImpressionPerWeek);
+        return tmp;
+    }
+
+    /*
+    CPA--COST PER ACQUISITION
+     */
+    public List<Tuple<String ,Number>> getCPAPerHour()
+    {
+
+        //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
+        //return getInfoTuple(resultPerHour);
+        ResultSet resultTotalConversionPerHour =this.dbM.query(QueryComposer.getNumberOfConversionsPerHour);
+        ResultSet restultTotalCost=this.dbM.query(QueryComposer.getTotalCostPerHour);
+        List<Tuple<String ,Number>> tmp = getInfoTupleDivision(restultTotalCost,resultTotalConversionPerHour);
+        close(resultTotalConversionPerHour);
+        close(restultTotalCost);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCPAPerDay()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalConversionPerDay =this.dbM.query(QueryComposer.getNumberOfConversionsPerDay);
+        ResultSet resultTotalCostPerDay=this.dbM.query(QueryComposer.getTotalCostPerDay);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivision(resultTotalCostPerDay,resultTotalConversionPerDay);
+        close(resultTotalConversionPerDay);
+        close(resultTotalCostPerDay);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCPAPerWeek()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalConversionPerWeek =this.dbM.query(QueryComposer.getNumberOfConversionsPerWeek);
+        ResultSet resultTotalCostPerWeek=this.dbM.query(QueryComposer.getTotalCostPerWeek);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivision(resultTotalCostPerWeek,resultTotalConversionPerWeek);
+        close(resultTotalCostPerWeek);
+        close(resultTotalConversionPerWeek);
+        return tmp;
+    }
+
+    /*
+    CPC=the average amount of money spent on an ad for each click
+     */
+
+    public List<Tuple<String ,Number>> getCPCPerHour()
+    {
+
+        //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
+        //return getInfoTuple(resultPerHour);
+        ResultSet resultTotalClicksPerHour =this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
+        ResultSet resultTotalCostPerHour=this.dbM.query(QueryComposer.getTotalCostPerHour);
+        List<Tuple<String ,Number>> tmp = getInfoTupleDivision(resultTotalCostPerHour,resultTotalClicksPerHour);
+        close(resultTotalClicksPerHour);
+        close(resultTotalCostPerHour);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCPCPerDay()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalClickPerDay =this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
+        ResultSet resultTotalCostPerDay=this.dbM.query(QueryComposer.getTotalCostPerDay);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivision(resultTotalCostPerDay,resultTotalClickPerDay);
+        close(resultTotalClickPerDay);
+        close(resultTotalCostPerDay);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCPCPerWeek()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalConversionPerWeek =this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
+        ResultSet resultTotalCostPerWeek=this.dbM.query(QueryComposer.getTotalCostPerWeek);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivision(resultTotalCostPerWeek,resultTotalConversionPerWeek);
+        close(resultTotalCostPerWeek);
+        close(resultTotalConversionPerWeek);
+        return tmp;
+    }
+
+    /*
+    CPM-	THE AVERAGE AMOUNT OF MONEY SPENT ON AN AD FOR EVERY THOUSAND IMPRESSION
+     */
+
+    public List<Tuple<String ,Number>> getCPMPerHour()
+    {
+
+        //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
+        //return getInfoTuple(resultPerHour);
+        ResultSet resultTotalImpressionsPerHour =this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
+        ResultSet resultTotalCostPerHour=this.dbM.query(QueryComposer.getTotalCostPerHour);
+        List<Tuple<String ,Number>> tmp = getInfoTupleDivisionCPM(resultTotalCostPerHour,resultTotalImpressionsPerHour);
+        close(resultTotalCostPerHour);
+        close(resultTotalImpressionsPerHour);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCPMPerDay()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalImpressionsPerDay =this.dbM.query(QueryComposer.getNumberOfImpressionsPerDay);
+        ResultSet resultTotalCostPerDay=this.dbM.query(QueryComposer.getTotalCostPerDay);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivisionCPM(resultTotalCostPerDay,resultTotalImpressionsPerDay);
+        close(resultTotalImpressionsPerDay);
+        close(resultTotalCostPerDay);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCPMPerWeek()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalImpressionPerWeek =this.dbM.query(QueryComposer.getNumberOfImpressionsPerWeek);
+        ResultSet resultTotalCostPerWeek=this.dbM.query(QueryComposer.getTotalCostPerWeek);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivisionCPM(resultTotalCostPerWeek,resultTotalImpressionPerWeek);
+        close(resultTotalCostPerWeek);
+        close(resultTotalImpressionPerWeek);
+        return tmp;
+    }
+
+    /*
+    BOUNCE RATE
+     */
+
+
+    public List<Tuple<String ,Number>> getBounceRatePerHour()
+    {
+
+        //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
+        //return getInfoTuple(resultPerHour);
+        ResultSet resultBounceRatePerHour =this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
+        ResultSet resultClickPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
+        List<Tuple<String ,Number>> tmp = getInfoTupleDivisionNoPrice(resultBounceRatePerHour,resultClickPerHour);
+        close(resultBounceRatePerHour);
+        close(resultClickPerHour);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getBounceRatePerDay()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultBounceRatePerDay =this.dbM.query(QueryComposer.getNumberOfBouncesPerDay);
+        ResultSet resultClickPerDay=this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivisionNoPrice(resultBounceRatePerDay,resultClickPerDay);
+        close(resultBounceRatePerDay);
+        close(resultClickPerDay);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getBounceRatePerWeek()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultBouncePerWeek =this.dbM.query(QueryComposer.getNumberOfBouncesPerWeek);
+        ResultSet resultClickPerWeek=this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivisionNoPrice(resultBouncePerWeek,resultClickPerWeek);
+        close(resultBouncePerWeek);
+        close(resultClickPerWeek);
+        return tmp;
+    }
+
 
 
 

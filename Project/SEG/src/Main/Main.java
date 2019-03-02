@@ -24,6 +24,9 @@ public class Main
         new Gui(dataExchange).setVisible(true);
         System.out.println(new PathsManager().getDB());
 
+        /*
+        SHOULD the first ones return just long?? Or is it fine float as well>
+         */
 //        dataExchange.getNumberOfImpressionsPerWeek();
 //        dataExchange.getNumberOfClicksPerWeek();
 //          dataExchange.getNumberOfUniques();
@@ -40,9 +43,22 @@ public class Main
 //            dataExchange.getNumberOfConversionsPerDay();
 //        dataExchange.getNumberOfConversionsPerHour();
 //        dataExchange.getNumberOfConversionsPerWeek();
-//        dataExchange.getTotalCostPerDay();
+//       dataExchange.getTotalCostPerDay();
 //        dataExchange.getTotalCostPerHour();
-        dataExchange.getTotalCostPerWeek();
+//        dataExchange.getTotalCostPerWeek();
+//        dataExchange.getCTRPerDay();
+//        dataExchange.getCTRPerWeek();
+//       dataExchange.getCTRPerHour();
+//        dataExchange.getCPCPerHour();
+//        dataExchange.getCPCPerDay();
+//        dataExchange.getCPCPerWeek();
+//        dataExchange.getCPMPerDay();
+//        dataExchange.getCPMPerWeek();
+//        dataExchange.getCPMPerHour();
+//        dataExchange.getBounceRatePerDay();
+        dataExchange.getBounceRatePerWeek();
+ //       dataExchange.getBounceRatePerHour();
+
 
 
 

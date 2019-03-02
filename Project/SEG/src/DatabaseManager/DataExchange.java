@@ -1,34 +1,30 @@
 package DatabaseManager;
 
-import Commons.ClickEntry;
-import Commons.ImpressionEntry;
-import Commons.ServerEntry;
-import Commons.UserEntry;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static DatabaseManager.Stringifiable.globalDateFormat;
 
 /*
  * Created by Marco-Edoardo Palma.
  */
+import Commons.*;
+import static DatabaseManager.Stringifiable.globalDateFormat;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * This class will process queries from QueryComposer.java into DatabaseManager.
  * The 'interface' between frontend and backend
  */
-public class DataExchange {
+public class DataExchange
+{
 
     private DatabaseManager dbM;
 
-    public DataExchange(DatabaseManager databaseManager) {
+    public DataExchange(DatabaseManager databaseManager)
+    {
         this.dbM = databaseManager;
     }
 
@@ -38,7 +34,8 @@ public class DataExchange {
      * @param price
      * @return
      */
-    public static String formatPrice(double price) {
+    public static String formatPrice(double price)
+    {
         NumberFormat priceNumberFormat = NumberFormat.getCurrencyInstance(Locale.UK);
         return priceNumberFormat.format(price);
     }
@@ -49,7 +46,8 @@ public class DataExchange {
      * @param percentage
      * @return
      */
-    public static String formatPercentage(double percentage) {
+    public static String formatPercentage(double percentage)
+    {
         NumberFormat numberFormat = NumberFormat.getPercentInstance();
         numberFormat.setMaximumFractionDigits(2);
         numberFormat.setMinimumFractionDigits(2);
@@ -60,7 +58,8 @@ public class DataExchange {
      * closes the connection of the database. Do this only before exiting the
      * application!
      */
-    public void close() {
+    public void close()
+    {
         this.dbM.close();
     }
 
@@ -70,10 +69,13 @@ public class DataExchange {
      *
      * @param resultSet
      */
-    public static void close(ResultSet resultSet) {
-        try {
+    public static void close(ResultSet resultSet)
+    {
+        try
+        {
             resultSet.close();
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             e.printStackTrace();
         }
     }
@@ -86,14 +88,14 @@ public class DataExchange {
 //    {
 //        this.dbM.writeQuery(list);
 //    }
-
     /**
      * Executes the batch of a Statement, then closes the Statement.
      *
      * @param s
      * @throws SQLException
      */
-    public void writeSqlStatement(Statement s) throws SQLException {
+    public void writeSqlStatement(Statement s) throws SQLException
+    {
         s.executeBatch();
         s.close();
     }
@@ -104,7 +106,8 @@ public class DataExchange {
      * @return
      * @throws SQLException
      */
-    public Statement getSqlStatement() throws SQLException {
+    public Statement getSqlStatement() throws SQLException
+    {
         return this.dbM.getDbCon().createStatement();
     }
 
@@ -116,10 +119,13 @@ public class DataExchange {
      *
      * @param b
      */
-    public void setForiegnKeyPragma(boolean b) {
-        if (b) {
+    public void setForiegnKeyPragma(boolean b)
+    {
+        if (b)
+        {
             this.dbM.writeQuery("PRAGMA foreign_keys = ON;");
-        } else {
+        } else
+        {
             this.dbM.writeQuery("PRAGMA foreign_keys = OFF;");
         }
     }
@@ -133,7 +139,8 @@ public class DataExchange {
      * @param b
      * @throws SQLException
      */
-    public void setAutoCommit(boolean b) throws SQLException {
+    public void setAutoCommit(boolean b) throws SQLException
+    {
         this.dbM.getDbCon().setAutoCommit(b);
     }
 
@@ -142,7 +149,8 @@ public class DataExchange {
      *
      * @throws SQLException
      */
-    public void commitNow() throws SQLException {
+    public void commitNow() throws SQLException
+    {
         this.dbM.getDbCon().commit();
     }
 
@@ -152,13 +160,16 @@ public class DataExchange {
      *
      * @return
      */
-    private int getLastID() {
-        try {
+    private int getLastID()
+    {
+        try
+        {
             ResultSet resultSet = this.dbM.query(QueryComposer.GETLASTID);
             int c = resultSet.getInt("id");
             close(resultSet);
             return c;
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             e.printStackTrace();
         }
         System.exit(8);
@@ -167,10 +178,9 @@ public class DataExchange {
 
     /*
         PARSERS:
-    
+
             SINGLE RETURNS (parse only one object from a ResultSet)
      */
-
     /**
      * Parses a ResultSet into a UserEntry and does not close the ResultSet.
      * returns null if a parsing error occurred.
@@ -178,14 +188,17 @@ public class DataExchange {
      * @param rset
      * @return
      */
-    private UserEntry parseUserEntry(ResultSet rset) {
-        try {
+    private UserEntry parseUserEntry(ResultSet rset)
+    {
+        try
+        {
             return new UserEntry(
                     rset.getString("id"),
                     UserEntry.Gender.valueOf(rset.getString("gender")),
                     UserEntry.Age.valueOf(rset.getString("age")),
                     UserEntry.Income.valueOf(rset.getString("income")));
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(DataExchange.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -198,17 +211,21 @@ public class DataExchange {
      * @param rset
      * @return
      */
-    private ImpressionEntry parseImpressionEntry(ResultSet rset) {
-        try {
+    private ImpressionEntry parseImpressionEntry(ResultSet rset)
+    {
+        try
+        {
             return new ImpressionEntry(
                     rset.getInt("id"),
                     rset.getString("userId"),
                     globalDateFormat.parse(rset.getString("date")),
                     ImpressionEntry.Context.valueOf(rset.getString("context")),
                     rset.getDouble("impressionCost"));
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(DataExchange.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
+        } catch (ParseException ex)
+        {
             Logger.getLogger(DataExchange.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -221,14 +238,17 @@ public class DataExchange {
      * @param rset
      * @return
      */
-    private ClickEntry parseClickEntry(ResultSet rset) {
-        try {
+    private ClickEntry parseClickEntry(ResultSet rset)
+    {
+        try
+        {
             return new ClickEntry(
                     rset.getInt("id"),
                     rset.getString("userId"),
                     globalDateFormat.parse(rset.getString("date")),
                     rset.getDouble("clickCost"));
-        } catch (SQLException | ParseException ex) {
+        } catch (SQLException | ParseException ex)
+        {
             Logger.getLogger(DataExchange.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -241,8 +261,10 @@ public class DataExchange {
      * @param rset
      * @return
      */
-    private ServerEntry parseServerEntry(ResultSet rset) {
-        try {
+    private ServerEntry parseServerEntry(ResultSet rset)
+    {
+        try
+        {
             return new ServerEntry(
                     rset.getInt("id"),
                     rset.getString("userId"),
@@ -250,7 +272,8 @@ public class DataExchange {
                     globalDateFormat.parse(rset.getString("exitDate")),
                     rset.getInt("pagesViewed"),
                     ServerEntry.Conversion.valueOf(rset.getString("conversion")));
-        } catch (SQLException | ParseException ex) {
+        } catch (SQLException | ParseException ex)
+        {
             Logger.getLogger(DataExchange.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -259,7 +282,6 @@ public class DataExchange {
     /*
             MULTIPLE RETURNS (parse a list of objects from a ResultSet)
      */
-
     /**
      * Parses a result set into a list of UserEntrys, returns an empty list if a
      * parsing error occurred. It does not close the ResultSet.
@@ -267,15 +289,19 @@ public class DataExchange {
      * @param rset
      * @return
      */
-    private List<UserEntry> parseUserEntrys(ResultSet rset) {
-        try {
+    private List<UserEntry> parseUserEntrys(ResultSet rset)
+    {
+        try
+        {
             List<UserEntry> users = new LinkedList<UserEntry>();
-            while (rset.next()) {
+            while (rset.next())
+            {
                 users.add(parseUserEntry(rset));
             }
 
             return users;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return new LinkedList<UserEntry>();
         }
@@ -288,15 +314,19 @@ public class DataExchange {
      * @param rset
      * @return
      */
-    private List<ImpressionEntry> parseImpressionEntrys(ResultSet rset) {
-        try {
+    private List<ImpressionEntry> parseImpressionEntrys(ResultSet rset)
+    {
+        try
+        {
             List<ImpressionEntry> impressions = new LinkedList<ImpressionEntry>();
-            while (rset.next()) {
+            while (rset.next())
+            {
                 impressions.add(parseImpressionEntry(rset));
             }
 
             return impressions;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return new LinkedList<ImpressionEntry>();
         }
@@ -309,15 +339,19 @@ public class DataExchange {
      * @param rset
      * @return
      */
-    private List<ClickEntry> parseClickEntrys(ResultSet rset) {
-        try {
+    private List<ClickEntry> parseClickEntrys(ResultSet rset)
+    {
+        try
+        {
             List<ClickEntry> clicks = new LinkedList<ClickEntry>();
-            while (rset.next()) {
+            while (rset.next())
+            {
                 clicks.add(parseClickEntry(rset));
             }
 
             return clicks;
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             return new LinkedList<ClickEntry>();
         }
     }
@@ -329,15 +363,19 @@ public class DataExchange {
      * @param rset
      * @return
      */
-    private List<ServerEntry> parseServerEntrys(ResultSet rset) {
-        try {
+    private List<ServerEntry> parseServerEntrys(ResultSet rset)
+    {
+        try
+        {
             List<ServerEntry> servers = new LinkedList<ServerEntry>();
-            while (rset.next()) {
+            while (rset.next())
+            {
                 servers.add(parseServerEntry(rset));
             }
 
             return servers;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return new LinkedList<ServerEntry>();
         }
@@ -351,15 +389,19 @@ public class DataExchange {
      * @param rset
      * @return
      */
-    private Map<String, String> parseSettings(ResultSet rset) {
-        try {
+    private Map<String, String> parseSettings(ResultSet rset)
+    {
+        try
+        {
             Map<String, String> settings = new HashMap<String, String>();
-            while (rset.next()) {
+            while (rset.next())
+            {
                 settings.put(rset.getString("name"), rset.getString("value"));
             }
 
             return settings;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return new HashMap<String, String>();
         }
@@ -368,26 +410,31 @@ public class DataExchange {
     /*
         INSERT STATEMENTS
      */
-    public void insertUserStmt(UserEntry user) {
+    public void insertUserStmt(UserEntry user)
+    {
         this.dbM.writeQuery(QueryComposer.insertUserStmt(user));
     }
 
-    public void insertImpressionStmt(ImpressionEntry ie) {
+    public void insertImpressionStmt(ImpressionEntry ie)
+    {
         this.dbM.writeQuery(QueryComposer.insertImpressionStmt(ie));
         ie.setId(this.getLastID());
     }
 
-    public void insertClickStmt(ClickEntry ce) {
+    public void insertClickStmt(ClickEntry ce)
+    {
         this.dbM.writeQuery(QueryComposer.insertClickStmt(ce));
         ce.setId(this.getLastID());
     }
 
-    public void insertServerStmt(ServerEntry se) {
+    public void insertServerStmt(ServerEntry se)
+    {
         this.dbM.writeQuery(QueryComposer.insertServerStmt(se));
         se.setId(this.getLastID());
     }
 
-    public void insertSettingStmt(String name, String value) {
+    public void insertSettingStmt(String name, String value)
+    {
         this.dbM.writeQuery(QueryComposer.insertSettingStmt(name, value));
     }
 
@@ -402,27 +449,33 @@ public class DataExchange {
     /*
         DROP ALL STATEMENTS
      */
-    public void dropAllFrom_USERS() {
+    public void dropAllFrom_USERS()
+    {
         this.dbM.writeQuery(QueryComposer.dropAllFrom_USERS);
     }
 
-    public void dropAllFrom_IMPRESSION_LOGS() {
+    public void dropAllFrom_IMPRESSION_LOGS()
+    {
         this.dbM.writeQuery(QueryComposer.dropAllFrom_IMPRESSION_LOGS);
     }
 
-    public void dropAllFrom_CLICK_LOGS() {
+    public void dropAllFrom_CLICK_LOGS()
+    {
         this.dbM.writeQuery(QueryComposer.dropAllFrom_CLICK_LOGS);
     }
 
-    public void dropAllFrom_SERVER_LOGS() {
+    public void dropAllFrom_SERVER_LOGS()
+    {
         this.dbM.writeQuery(QueryComposer.dropAllFrom_SERVER_LOGS);
     }
 
-    public void dropAllFrom_SETTINGS() {
+    public void dropAllFrom_SETTINGS()
+    {
         this.dbM.writeQuery(QueryComposer.dropAllFrom_SETTINGS);
     }
 
-    public void dropAll_noSettings() {
+    public void dropAll_noSettings()
+    {
         this.dbM.writeQuery(QueryComposer.dropAll_noSettings);
     }
 
@@ -430,69 +483,82 @@ public class DataExchange {
         COUNT STATEMENTS
      */
 
-    private int parseCountQuery(ResultSet resultSet) {
-        try {
+    private int parseCountQuery(ResultSet resultSet)
+    {
+        try
+        {
             int tmp = resultSet.getInt("c");
             close(resultSet);
             return tmp;
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             e.printStackTrace();
             return 0;
         }
     }
 
-    public int countAllFrom_USERS() {
+    public int countAllFrom_USERS()
+    {
         return this.parseCountQuery(this.dbM.query(QueryComposer.countAllFrom_USERS));
     }
 
-    public int countAllFrom_IMPRESSION_LOGS() {
+    public int countAllFrom_IMPRESSION_LOGS()
+    {
         return this.parseCountQuery(this.dbM.query(QueryComposer.countAllFrom_IMPRESSION_LOGS));
     }
 
-    public int countAllFrom_CLICK_LOGS() {
+    public int countAllFrom_CLICK_LOGS()
+    {
         return this.parseCountQuery(this.dbM.query(QueryComposer.countAllFrom_CLICK_LOGS));
     }
 
-    public int countAllFrom_SERVER_LOGS() {
+    public int countAllFrom_SERVER_LOGS()
+    {
         return this.parseCountQuery(this.dbM.query(QueryComposer.countAllFrom_SERVER_LOGS));
     }
 
-    public int countAllFrom_SETTINGS() {
+    public int countAllFrom_SETTINGS()
+    {
         return this.parseCountQuery(this.dbM.query(QueryComposer.countAllFrom_SETTINGS));
     }
 
     /*
         SELECT ALL STATEMENTS
      */
-    public List<UserEntry> selectAllFrom_USERS() {
+    public List<UserEntry> selectAllFrom_USERS()
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_USERS);
         List tmp = parseUserEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public List<ImpressionEntry> selectAllFrom_IMPRESSION_LOGS() {
+    public List<ImpressionEntry> selectAllFrom_IMPRESSION_LOGS()
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_IMPRESSION_LOGS);
         List tmp = parseImpressionEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public List<ClickEntry> selectAllFrom_CLICK_LOGS() {
+    public List<ClickEntry> selectAllFrom_CLICK_LOGS()
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_CLICK_LOGS);
         List tmp = parseClickEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public List<ServerEntry> selectAllFrom_SERVER_LOGS() {
+    public List<ServerEntry> selectAllFrom_SERVER_LOGS()
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_SERVER_LOGS);
         List tmp = parseServerEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public Map<String, String> selectAllFrom_SETTINGS() {
+    public Map<String, String> selectAllFrom_SETTINGS()
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectAllFrom_SETTINGS);
         Map tmp = parseSettings(rset);
         close(rset);
@@ -502,7 +568,8 @@ public class DataExchange {
     /*
         SELECT BY ID
      */
-    public UserEntry selectByIdFrom_USERS(String id) {
+    public UserEntry selectByIdFrom_USERS(String id)
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_USERS(id));
 
         UserEntry tmp = (UserEntry) this.parseUserEntry(rset);
@@ -511,7 +578,8 @@ public class DataExchange {
         return tmp;
     }
 
-    public ImpressionEntry selectByIdFrom_IMPRESSION_LOGS(int id) {
+    public ImpressionEntry selectByIdFrom_IMPRESSION_LOGS(int id)
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_IMPRESSION_LOGS(id));
 
         ImpressionEntry tmp = (ImpressionEntry) this.parseImpressionEntry(rset);
@@ -520,7 +588,8 @@ public class DataExchange {
         return tmp;
     }
 
-    public ClickEntry selectByIdFrom_CLICK_LOGS(int id) {
+    public ClickEntry selectByIdFrom_CLICK_LOGS(int id)
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_CLICK_LOGS(id));
 
         ClickEntry tmp = (ClickEntry) this.parseClickEntry(rset);
@@ -529,7 +598,8 @@ public class DataExchange {
         return tmp;
     }
 
-    public ServerEntry selectByIdFrom_SERVER_LOGS(int id) {
+    public ServerEntry selectByIdFrom_SERVER_LOGS(int id)
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_SERVER_LOGS(id));
 
         ServerEntry tmp = (ServerEntry) this.parseServerEntry(rset);
@@ -541,33 +611,564 @@ public class DataExchange {
     /*
         SELECT BY userId
      */
-    public List<ImpressionEntry> selectByUserIdFrom_IMPRESSION_LOGS(String userId) {
+    public List<ImpressionEntry> selectByUserIdFrom_IMPRESSION_LOGS(String userId)
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_IMPRESSION_LOGS(userId));
         List tmp = parseImpressionEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public List<ClickEntry> selectByUserIdFrom_CLICK_LOGS(String userId) {
+    public List<ClickEntry> selectByUserIdFrom_CLICK_LOGS(String userId)
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_CLICK_LOGS(userId));
         List tmp = parseClickEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public List<ServerEntry> selectByUserIdFrom_SERVER_LOGS(String userId) {
+    public List<ServerEntry> selectByUserIdFrom_SERVER_LOGS(String userId)
+    {
         ResultSet rset = this.dbM.query(QueryComposer.selectByUserIdFrom_SERVER_LOGS(userId));
         List tmp = parseServerEntrys(rset);
         close(rset);
         return tmp;
     }
 
-    public String selectByNameFrom_SETTINGS(String name) {
+    public String selectByNameFrom_SETTINGS(String name)
+    {
         ResultSet resultSet = this.dbM.query(QueryComposer.selectByNameFrom_SETTINGS(name));
-        try {
+        try
+        {
             return resultSet.getString("value");
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             return null;
         }
     }
+
+
+
+    /*
+    Method that avoids duplicates for lists;
+     */
+    private List<Number> getNumbersInfo(ResultSet resultSetC) {
+        try {
+            List<Number> numberC=new LinkedList<>();
+            while(resultSetC.next())
+            {
+                numberC.add(resultSetC.getDouble("GroupedValues"));
+            }
+
+            return numberC;
+        }
+        catch (SQLException ex)
+        {
+            return null;
+        }
+    }
+
+    /*
+    Method that avoids duplicates for ints
+     */
+    private Integer getIntegerInfo(ResultSet resultInts) {
+        int unique=0;
+        try {
+            unique=resultInts.getInt("GroupedValues");
+            return unique;
+        }catch (SQLException ex)
+        {
+            return null;
+        }
+    }
+
+    private Double getDoubleInfo(ResultSet resultInts) {
+        double unique=0;
+        try {
+            unique=resultInts.getInt("GroupedValues");
+            System.out.println(unique);
+            return unique;
+        }catch (SQLException ex)
+        {
+            return null;
+        }
+    }
+
+    private List<Tuple<String,Number>> getInfoTuple(ResultSet resultTuple)
+    {
+        List<Tuple<String,Number>> root=new LinkedList<>();
+        List<Date> hour=new LinkedList<>();
+        //Time hr;
+        List<Number> number=new LinkedList<>();
+        try{
+            //hr=resultPerHour.getTime("GroupedValues");
+            while(resultTuple.next())
+            {
+                root.add(new Tuple<String,Number>(resultTuple.getString("d") ,(resultTuple.getFloat("c"))));
+            }
+            for (Tuple<String, Number> stringNumberTuple : root) {
+                System.out.println(stringNumberTuple.getX()+"    "+stringNumberTuple.getY());
+            }
+
+            //return <>
+        }catch (SQLException ex)
+        {
+            return null;
+        }
+        return new LinkedList<>();
+    }
+    private List<Tuple<String,Number>> getInfoTupleDivision(ResultSet resultTuple1, ResultSet resultTuple2)
+    {
+        List<Tuple<String,Number>> root1=new LinkedList<>();
+        List<Tuple<String,Number>> root2=new LinkedList<>();
+        List<Date> hour=new LinkedList<>();
+        //Time hr;
+        List<Number> number=new LinkedList<>();
+        try{
+            //hr=resultPerHour.getTime("GroupedValues");
+            while(resultTuple1.next())
+            {
+                root1.add(new Tuple<String,Number>(resultTuple1.getString("d") ,(resultTuple1.getFloat("c"))));
+
+            }
+            while(resultTuple2.next())
+            {
+                root2.add(new Tuple<>(resultTuple2.getString("d"),(resultTuple2.getFloat("c"))));
+            }
+            for(int i=0;i<root1.size();i++)
+            {
+                System.out.println(root1.get(i).getX()+"   "+formatPrice(root1.get(i).getY().floatValue()/root2.get(i).getY().floatValue()));
+            }
+
+            //return <>
+        }catch (SQLException ex)
+        {
+            return null;
+        }
+        return new LinkedList<>();
+    }
+
+    private List<Tuple<String,Number>> getInfoTupleDivisionNoPrice(ResultSet resultTuple1, ResultSet resultTuple2)
+    {
+        List<Tuple<String,Number>> root1=new LinkedList<>();
+        List<Tuple<String,Number>> root2=new LinkedList<>();
+
+        try{
+
+            while(resultTuple1.next())
+            {
+                root1.add(new Tuple<String,Number>(resultTuple1.getString("d") ,(resultTuple1.getFloat("c"))));
+
+            }
+            while(resultTuple2.next())
+            {
+                root2.add(new Tuple<>(resultTuple2.getString("d"),(resultTuple2.getFloat("c"))));
+            }
+            for(int i=0;i<root1.size();i++)
+            {
+                System.out.println(root1.get(i).getX()+"   "+(root1.get(i).getY().floatValue()/root2.get(i).getY().floatValue()));
+            }
+
+            //return <>
+        }catch (SQLException ex)
+        {
+            return null;
+        }
+        return new LinkedList<>();
+    }
+
+    /*
+    FOR TOTAL CPM--DIVIDE BY 1000
+     */
+    private List<Tuple<String,Number>> getInfoTupleDivisionCPM(ResultSet resultTuple1, ResultSet resultTuple2)
+    {
+        List<Tuple<String,Number>> root1=new LinkedList<>();
+        List<Tuple<String,Number>> root2=new LinkedList<>();
+
+        try{
+
+            while(resultTuple1.next())
+            {
+                root1.add(new Tuple<String,Number>(resultTuple1.getString("d") ,(resultTuple1.getFloat("c"))));
+
+            }
+            while(resultTuple2.next())
+            {
+                root2.add(new Tuple<>(resultTuple2.getString("d"),(resultTuple2.getFloat("c")/1000)));
+            }
+            for(int i=0;i<root1.size();i++)
+            {
+                System.out.println(root1.get(i).getX()+"   "+formatPrice(root1.get(i).getY().floatValue()/root2.get(i).getY().floatValue()));
+            }
+
+            //return <>
+        }catch (SQLException ex)
+        {
+            return null;
+        }
+        return new LinkedList<>();
+    }
+
+
+
+    /*
+    Data call for number of impressions per week.
+    Maybe return the actual list?--> number
+     */
+    public List<Tuple<String ,Number > >getNumberOfImpressionsPerWeek()
+    {
+        ResultSet resultPerWeek=this.dbM.query(QueryComposer.getNumberOfImpressionsPerWeek);
+        return getInfoTuple(resultPerWeek);
+    }
+
+    /*
+    Number of Clicks per week
+    CHANGE TO BE PER WEEK====ATM IS OVER ALL PERIOD.
+     */
+
+    public List<Tuple<String ,Number > >getNumberOfClicksPerWeek()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
+        return getInfoTuple(resultPerHour);
+    }
+
+
+
+    public Integer getNumberOfUniques()
+    {
+        ResultSet resultSetUniques=this.dbM.query(QueryComposer.getNumberOfUniques);
+        return getIntegerInfo(resultSetUniques);
+
+    }
+
+
+
+    public Integer getNumberOfBounces()
+    {
+        ResultSet resultSetBounce=this.dbM.query(QueryComposer.getNumberOfBounces);
+        return getIntegerInfo(resultSetBounce);
+    }
+
+    public Integer getNumberOfConversions()
+    {
+        ResultSet resultSetConversions=this.dbM.query(QueryComposer.getNumberOfConversions);
+        return getIntegerInfo(resultSetConversions);
+    }
+
+    public Double getTotalCost()
+    {
+        ResultSet resultTotalCost=this.dbM.query(QueryComposer.getTotalCost);
+        return getDoubleInfo(resultTotalCost);
+    }
+
+
+    /*
+    NUMBER OF IMPRESSIONS
+     */
+    public List<Tuple<String ,Number > >getNumberOfImpressionsPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
+        return getInfoTuple(resultPerHour);
+    }
+
+    public List<Tuple<String ,Number > >getNumberOfImpressionsPerDay()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfImpressionsPerDay);
+        return getInfoTuple(resultPerHour);
+    }
+
+    /*
+    NUMBER OF CLICKS
+     */
+    public List<Tuple<String ,Number > >getNumberOfClicksPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
+        return getInfoTuple(resultPerHour);
+    }
+
+    public List<Tuple<String ,Number > >getNumberOfClicksPerDay()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
+        return getInfoTuple(resultPerHour);
+    }
+
+    /*
+    NUMBER OF UNIQUES
+     */
+    public List<Tuple<String ,Number > >getNumberOfUniquesPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getGetNumberOfUniquesPerHours);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getNumberOfUniquesPerDay()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getGetNumberOfUniquesPerDay);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getNumberOfUniquesPerWeek()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getGetNumberOfUniquesPerWeek);
+        return getInfoTuple(resultPerHour);
+    }
+
+
+    /*
+    NUMBER OF BOUNCES
+     */
+
+
+    public List<Tuple<String ,Number > >getNumberOfBouncesPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfBouncesPerHour);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getNumberOfBouncesPerDay()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfBouncesPerDay);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getNumberOfBouncesPerWeek()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfBouncesPerWeek);
+        return getInfoTuple(resultPerHour);
+    }
+
+    /*
+    NUMBER OF CONVERSIONS
+     */
+
+    public List<Tuple<String ,Number > >getNumberOfConversionsPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getNumberOfConversionsPerHour);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getNumberOfConversionsPerDay()
+    {
+        ResultSet resultPerDay=this.dbM.query(QueryComposer.getNumberOfConversionsPerDay);
+        return getInfoTuple(resultPerDay);
+    }
+    public List<Tuple<String ,Number > >getNumberOfConversionsPerWeek()
+    {
+        ResultSet resultPerWeek=this.dbM.query(QueryComposer.getNumberOfConversionsPerWeek);
+        return getInfoTuple(resultPerWeek);
+    }
+
+    /*
+    TOTAL COST NUMBER
+     */
+    public List<Tuple<String ,Number > >getTotalCostPerHour()
+    {
+        ResultSet resultPerHour=this.dbM.query(QueryComposer.getTotalCostPerHour);
+        return getInfoTuple(resultPerHour);
+    }
+    public List<Tuple<String ,Number > >getTotalCostPerDay()
+    {
+        ResultSet resultPerDay=this.dbM.query(QueryComposer.getTotalCostPerDay);
+        return getInfoTuple(resultPerDay);
+    }
+    public List<Tuple<String ,Number > >getTotalCostPerWeek()
+    {
+        ResultSet resultPerWeek=this.dbM.query(QueryComposer.getTotalCostPerWeek);
+        return getInfoTuple(resultPerWeek);
+    }
+
+    /*
+    CTR the average number of clicks per impression
+     */
+    public List<Tuple<String ,Number>> getCTRPerHour()
+    {
+
+        //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
+        //return getInfoTuple(resultPerHour);
+        ResultSet resultTotalImpressionPerHour =this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
+        ResultSet resultTotalClicksPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
+        List<Tuple<String ,Number>> tmp = getInfoTupleDivisionNoPrice(resultTotalClicksPerHour,resultTotalImpressionPerHour);
+        close(resultTotalClicksPerHour);
+        close(resultTotalImpressionPerHour);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCTRPerDay()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalImpressionPerDay =this.dbM.query(QueryComposer.getNumberOfImpressionsPerDay);
+        ResultSet resultTotalClicksPerDay=this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivisionNoPrice(resultTotalClicksPerDay,resultTotalImpressionPerDay);
+        close(resultTotalClicksPerDay);
+        close(resultTotalImpressionPerDay);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCTRPerWeek()
+    {
+//        ResultSet resultPerWeek=this.dbM.query(QueryComposer.getCTRPerWeek);
+//        return getInfoTuple(resultPerWeek);
+        ResultSet resultTotalImpressionPerWeek =this.dbM.query(QueryComposer.getNumberOfImpressionsPerWeek);
+        ResultSet resultTotalClicksPerWeek=this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivisionNoPrice(resultTotalClicksPerWeek,resultTotalImpressionPerWeek);
+        close(resultTotalClicksPerWeek);
+        close(resultTotalImpressionPerWeek);
+        return tmp;
+    }
+
+    /*
+    CPA--COST PER ACQUISITION
+     */
+    public List<Tuple<String ,Number>> getCPAPerHour()
+    {
+
+        //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
+        //return getInfoTuple(resultPerHour);
+        ResultSet resultTotalConversionPerHour =this.dbM.query(QueryComposer.getNumberOfConversionsPerHour);
+        return getTuples(resultTotalConversionPerHour);
+    }
+
+    private List<Tuple<String, Number>> getTuples(ResultSet resultTotalConversionPerHour) {
+        ResultSet restultTotalCost=this.dbM.query(QueryComposer.getTotalCostPerHour);
+        List<Tuple<String ,Number>> tmp = getInfoTupleDivision(restultTotalCost,resultTotalConversionPerHour);
+        close(resultTotalConversionPerHour);
+        close(restultTotalCost);
+        return tmp;
+    }
+
+    public List<Tuple<String ,Number > >getCPAPerDay()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalConversionPerDay =this.dbM.query(QueryComposer.getNumberOfConversionsPerDay);
+        ResultSet resultTotalCostPerDay=this.dbM.query(QueryComposer.getTotalCostPerDay);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivision(resultTotalCostPerDay,resultTotalConversionPerDay);
+        close(resultTotalConversionPerDay);
+        close(resultTotalCostPerDay);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCPAPerWeek()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalConversionPerWeek =this.dbM.query(QueryComposer.getNumberOfConversionsPerWeek);
+        ResultSet resultTotalCostPerWeek=this.dbM.query(QueryComposer.getTotalCostPerWeek);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivision(resultTotalCostPerWeek,resultTotalConversionPerWeek);
+        close(resultTotalCostPerWeek);
+        close(resultTotalConversionPerWeek);
+        return tmp;
+    }
+
+    /*
+    CPC=the average amount of money spent on an ad for each click
+     */
+
+    public List<Tuple<String ,Number>> getCPCPerHour()
+    {
+
+        //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
+        //return getInfoTuple(resultPerHour);
+        ResultSet resultTotalClicksPerHour =this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
+        return getTuples(resultTotalClicksPerHour);
+    }
+    public List<Tuple<String ,Number > >getCPCPerDay()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalClickPerDay =this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
+        ResultSet resultTotalCostPerDay=this.dbM.query(QueryComposer.getTotalCostPerDay);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivision(resultTotalCostPerDay,resultTotalClickPerDay);
+        close(resultTotalClickPerDay);
+        close(resultTotalCostPerDay);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCPCPerWeek()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalConversionPerWeek =this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
+        ResultSet resultTotalCostPerWeek=this.dbM.query(QueryComposer.getTotalCostPerWeek);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivision(resultTotalCostPerWeek,resultTotalConversionPerWeek);
+        close(resultTotalCostPerWeek);
+        close(resultTotalConversionPerWeek);
+        return tmp;
+    }
+
+    /*
+    CPM-    THE AVERAGE AMOUNT OF MONEY SPENT ON AN AD FOR EVERY THOUSAND IMPRESSION
+     */
+
+    public List<Tuple<String ,Number>> getCPMPerHour()
+    {
+
+        //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
+        //return getInfoTuple(resultPerHour);
+        ResultSet resultTotalImpressionsPerHour =this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
+        ResultSet resultTotalCostPerHour=this.dbM.query(QueryComposer.getTotalCostPerHour);
+        List<Tuple<String ,Number>> tmp = getInfoTupleDivisionCPM(resultTotalCostPerHour,resultTotalImpressionsPerHour);
+        close(resultTotalCostPerHour);
+        close(resultTotalImpressionsPerHour);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCPMPerDay()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalImpressionsPerDay =this.dbM.query(QueryComposer.getNumberOfImpressionsPerDay);
+        ResultSet resultTotalCostPerDay=this.dbM.query(QueryComposer.getTotalCostPerDay);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivisionCPM(resultTotalCostPerDay,resultTotalImpressionsPerDay);
+        close(resultTotalImpressionsPerDay);
+        close(resultTotalCostPerDay);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getCPMPerWeek()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultTotalImpressionPerWeek =this.dbM.query(QueryComposer.getNumberOfImpressionsPerWeek);
+        ResultSet resultTotalCostPerWeek=this.dbM.query(QueryComposer.getTotalCostPerWeek);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivisionCPM(resultTotalCostPerWeek,resultTotalImpressionPerWeek);
+        close(resultTotalCostPerWeek);
+        close(resultTotalImpressionPerWeek);
+        return tmp;
+    }
+
+    /*
+    BOUNCE RATE
+     */
+
+
+    public List<Tuple<String ,Number>> getBounceRatePerHour()
+    {
+
+        //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
+        //return getInfoTuple(resultPerHour);
+        ResultSet resultBounceRatePerHour =this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
+        ResultSet resultClickPerHour=this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
+        List<Tuple<String ,Number>> tmp = getInfoTupleDivisionNoPrice(resultBounceRatePerHour,resultClickPerHour);
+        close(resultBounceRatePerHour);
+        close(resultClickPerHour);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getBounceRatePerDay()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultBounceRatePerDay =this.dbM.query(QueryComposer.getNumberOfBouncesPerDay);
+        ResultSet resultClickPerDay=this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivisionNoPrice(resultBounceRatePerDay,resultClickPerDay);
+        close(resultBounceRatePerDay);
+        close(resultClickPerDay);
+        return tmp;
+    }
+    public List<Tuple<String ,Number > >getBounceRatePerWeek()
+    {
+//        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
+//        return getInfoTuple(resultPerDay);
+        ResultSet resultBouncePerWeek =this.dbM.query(QueryComposer.getNumberOfBouncesPerWeek);
+        ResultSet resultClickPerWeek=this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
+        List<Tuple<String ,Number>> tmp= getInfoTupleDivisionNoPrice(resultBouncePerWeek,resultClickPerWeek);
+        close(resultBouncePerWeek);
+        close(resultClickPerWeek);
+        return tmp;
+    }
+
+
+
+
+
 }

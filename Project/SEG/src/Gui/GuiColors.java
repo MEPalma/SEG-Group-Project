@@ -2,9 +2,6 @@ package Gui;
 
 import java.awt.*;
 
-/**
- * @author Marco-Edoardo Palma
- */
 public class GuiColors {
     public static Color BASE_DARK = new Color(51, 119, 107);
     public static Color BASE_LIGHT = new Color(65, 148, 136);

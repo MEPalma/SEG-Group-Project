@@ -5,10 +5,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * Created by Marco-Edoardo Palma.
- */
-
 public class DatabaseManager {
     private Connection dbCon;
 

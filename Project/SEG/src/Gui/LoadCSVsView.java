@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author Marco-Edoardo Palma
- */
 public class LoadCSVsView extends RPanel {
 
     public static Color BACKGROUND = GuiColors.BASE_LIGHT;

@@ -7,20 +7,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class GraphView extends RPanel {
     public enum Mode {SINGLE_MODE, CARD_MODE, GRID_MODE}
 
     private Mode mode;
-    private final List<GraphSpecs> graphsOnScreen;
+    private final Set<GraphSpecs> graphsOnScreen;
 
     public GraphView() {
         super(GuiColors.LIGHT, new BorderLayout());
-        this.graphsOnScreen = new LinkedList<GraphSpecs>();
+        this.graphsOnScreen = new HashSet<GraphSpecs>();
         this.mode = Mode.CARD_MODE;
     }
 
@@ -30,21 +28,24 @@ public class GraphView extends RPanel {
 
         if (this.mode == Mode.SINGLE_MODE) {
             if (this.graphsOnScreen.size() > 0) {
-                GraphSpecs ref = this.graphsOnScreen.get(0);
-                JPanel tmp = GraphManager.createChart(this, ref.getType(), ref.getData(), ref.getxAxisName(), ref.getyAxisName());
-                add(tmp, BorderLayout.CENTER);
+                GraphSpecs ref = this.graphsOnScreen.iterator().next();
+                JPanel tmp = GraphManager.createBarChar(ref.getData(), ref.getxAxisName(), ref.getyAxisName());
+                add(new GraphCardView(this, ref, tmp, true), BorderLayout.CENTER);
             } else {
                 setNoGraphMode();
             }
         } else if (this.mode == Mode.CARD_MODE) {
             if (this.graphsOnScreen.size() > 0) {
                 List<Component> cards = new LinkedList<Component>();
+
+                int i = 0;
                 for (GraphSpecs g : this.graphsOnScreen) {
-                    JPanel tmp = GraphManager.createChart(this, g.getType(), g.getData(), g.getxAxisName(), g.getyAxisName());
-                    cards.add(new GraphCardView(this, g, tmp));
+                    JPanel tmp = GraphManager.createBarChar(g.getData(), g.getxAxisName(), g.getyAxisName());
+                    cards.add(new GraphCardView(this, g, tmp, (i == (this.graphsOnScreen.size() - 1))));
+                    i++;
                 }
 
-                add(new ListView(getBackground(), cards).getWrappedInScroll(true));
+                add(new ListView(getBackground(), cards, false).getWrappedInScroll(true));
             } else {
                 setNoGraphMode();
             }
@@ -54,8 +55,7 @@ public class GraphView extends RPanel {
         revalidate();
     }
 
-    private void setNoGraphMode()
-    {
+    private void setNoGraphMode() {
         removeAll();
         TitleLabel message = new TitleLabel("NO GRAPH SELECTED", TitleLabel.CENTER, 22);
         message.setForeground(GuiColors.TEXT_SELECTED);
@@ -64,14 +64,13 @@ public class GraphView extends RPanel {
         revalidate();
     }
 
-    private void autoSetMode()
-    {
+    private void autoSetMode() {
         if (this.graphsOnScreen.size() <= 1) this.mode = Mode.SINGLE_MODE;
         if (this.graphsOnScreen.size() > 1) this.mode = Mode.CARD_MODE;
         //TODO grid
     }
 
-    public synchronized void pushGraphSpecs(GraphSpecs newGraphSpecs) {
+    public void pushGraphSpecs(GraphSpecs newGraphSpecs) {
         this.graphsOnScreen.add(newGraphSpecs);
 
         autoSetMode();
@@ -79,10 +78,18 @@ public class GraphView extends RPanel {
         refresh();
     }
 
-    public synchronized void popGraphSpecs(String id) {
-        for (GraphSpecs gs : this.graphsOnScreen)
-            if (gs.getId().equals(id))
-                this.graphsOnScreen.remove(gs);
+    public void popGraphSpecs(String id) {
+        GraphSpecs tmp = null;
+
+        for (GraphSpecs gs : this.graphsOnScreen) {
+            if (gs.getId().equals(id)) {
+                tmp = gs;
+                break;
+            }
+        }
+
+        if (tmp != null)
+            this.graphsOnScreen.remove(tmp);
 
         autoSetMode();
         refresh();
@@ -92,34 +99,33 @@ public class GraphView extends RPanel {
         return mode;
     }
 
-    public List<GraphSpecs> getGraphsOnScreen() {
-        return graphsOnScreen;
+    public boolean containsGraph(String id) {
+        Iterator it = this.graphsOnScreen.iterator();
+        while (it.hasNext())
+            if (((GraphSpecs) it.next()).getId().equals(id)) return true;
+
+        return false;
     }
 }
 
 class GraphCardView extends RPanel {
     private GraphView host;
-    public GraphCardView(GraphView host, GraphSpecs spec, JPanel graph) {
+
+    public GraphCardView(GraphView host, GraphSpecs spec, JPanel graph, boolean isLast) {
         super(GuiColors.BASE_LIGHT, new BorderLayout());
         this.host = host;
 
-        setBorder(BorderFactory.createMatteBorder(10, 10, 0, 10, GuiColors.TEXT_UNSELECTED));
+        if(!isLast)
+            setBorder(BorderFactory.createMatteBorder(24, 24, 0, 24, GuiColors.LIGHT));
+        else setBorder(BorderFactory.createMatteBorder(24, 24, 24, 24, GuiColors.LIGHT));
 
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(getBackground());
-        topPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.BASE_DARK));
+        topPanel.setPreferredSize(new Dimension(100, 50));
 
-        MenuLabel closeLabel = new MenuLabel("✕ ", MenuLabel.LEFT, 20);
-        closeLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                host.popGraphSpecs(spec.getId());
-            }
-        });
+        topPanel.add(new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16), BorderLayout.CENTER);
 
-        topPanel.add(new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16), BorderLayout.WEST);
-        topPanel.add(closeLabel, BorderLayout.EAST);
-
+        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
         add(topPanel, BorderLayout.NORTH);
         add(graph, BorderLayout.CENTER);
     }
@@ -131,8 +137,7 @@ class GraphCardView extends RPanel {
     }
 
     @Override
-    public void refresh()
-    {
+    public void refresh() {
         int width = host.getWidth();
         setPreferredSize(new Dimension(width, width / 2));
         repaint();
@@ -142,15 +147,13 @@ class GraphCardView extends RPanel {
 
 class GraphSpecs {
     private final String id, title, xAxisName, yAxisName;
-    private final GraphManager.ChartType type;
     private final Collection<Tuple<Number, Number>> data;
 
-    public GraphSpecs(String id, String title, String xAxisName, String yAxisName, GraphManager.ChartType type, Collection data) {
+    public GraphSpecs(String id, String title, String xAxisName, String yAxisName, Collection data) {
         this.id = id;
         this.title = title;
         this.xAxisName = xAxisName;
         this.yAxisName = yAxisName;
-        this.type = type;
         this.data = data;
     }
 
@@ -177,10 +180,6 @@ class GraphSpecs {
 
     public Collection getData() {
         return data;
-    }
-
-    public GraphManager.ChartType getType() {
-        return type;
     }
 
     public String getxAxisName() {

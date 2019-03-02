@@ -6,8 +6,6 @@ package Gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * Represents a standardized MenuButton in order to maintain the style though out the application constant

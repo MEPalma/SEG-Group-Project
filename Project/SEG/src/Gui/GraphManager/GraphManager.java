@@ -2,32 +2,23 @@ package Gui.GraphManager;
 
 import Commons.Tuple;
 import Gui.GuiColors;
-import Gui.RPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.util.Collection;
 
 public class GraphManager {
 
-    public static enum ChartType {
-        LINE_CHART
-    }
-
-    public static JPanel createChart(Component host, ChartType type, Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel) {
-        return createLineChart(host, data, xAxisLabel, yAxisLabel);
-    }
-
-    private static JPanel createLineChart(Component host, Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel) {
+    private static JPanel createLineChart(Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel) {
         //copy data
         XYSeriesCollection dataset = getLineChartDataset(data);
 
@@ -44,7 +35,7 @@ public class GraphManager {
         );
         chart.setBorderVisible(false);
         chart.setAntiAlias(true);
-        chart.setBackgroundPaint(GuiColors.LIGHT);
+        chart.setBackgroundPaint(Color.WHITE);
 
         //plot init
         XYPlot plot = chart.getXYPlot();
@@ -76,4 +67,49 @@ public class GraphManager {
 
         return dataset;
     }
+
+    public static JPanel createBarChar(Collection<Tuple<String, Number>> data, String xAxisLabel, String yAxisLabel)
+    {
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "",
+                xAxisLabel,
+                yAxisLabel,
+                getBarChartDataset(data),
+                PlotOrientation.VERTICAL,
+                true, true, false);
+        barChart.setBorderVisible(false);
+        barChart.setAntiAlias(true);
+        barChart.setBackgroundPaint(Color.WHITE);
+
+        XYPlot plot = barChart.getXYPlot();
+
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        renderer.setSeriesPaint(0, GuiColors.BASE_LIGHT);
+        renderer.setSeriesStroke(0, new BasicStroke(2.0f));
+
+        plot.setRenderer(renderer);
+        plot.setBackgroundPaint(GuiColors.DARK_GRAY);
+
+        plot.setRangeGridlinesVisible(true);
+        plot.setRangeGridlinePaint(GuiColors.LIGHT_GRAY);
+
+        plot.setDomainGridlinesVisible(true);
+        plot.setDomainGridlinePaint(GuiColors.LIGHT_GRAY);
+
+        ChartPanel chartPanel = new ChartPanel( barChart );
+
+        return chartPanel;
+    }
+
+    private static DefaultCategoryDataset getBarChartDataset(Collection<Tuple<String, Number>> data)
+    {
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+
+        for (Tuple<String, Number> i : data) {
+            dataset.addValue(i.getY(), i.getX(), "");
+        }
+
+        return dataset;
+    }
+
 }

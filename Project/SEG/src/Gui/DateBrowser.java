@@ -38,6 +38,7 @@ public class DateBrowser extends JPanel {
         DateBrowser thisBrowser = this;
 
         TextBox dateBox = new TextBox(getBackground());
+        dateBox.setForeground(GuiColors.TEXT_UNSELECTED);
         dateBox.setEditable(false);
         dateBox.setPreferredSize(new Dimension(150, 26));
         dateBox.setHorizontalAlignment(TextBox.CENTER);

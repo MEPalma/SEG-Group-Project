@@ -31,24 +31,22 @@ public class GraphView extends RPanel {
         if (this.mode == Mode.SINGLE_MODE) {
             if (this.graphsOnScreen.size() > 0) {
                 GraphSpecs ref = this.graphsOnScreen.get(0);
-                JPanel tmp = GraphManager.createChart(ref.getType(), ref.getData(), ref.getxAxisName(), ref.getyAxisName());
+                JPanel tmp = GraphManager.createChart(this, ref.getType(), ref.getData(), ref.getxAxisName(), ref.getyAxisName());
                 add(tmp, BorderLayout.CENTER);
             } else {
-                add(new TitleLabel("NO GRAPH SELECTED", TitleLabel.CENTER, 30), BorderLayout.CENTER);
-                //TODO NO GRAPH MESSAGE TEXT IN THE MIDDLE
+                setNoGraphMode();
             }
         } else if (this.mode == Mode.CARD_MODE) {
             if (this.graphsOnScreen.size() > 0) {
                 List<Component> cards = new LinkedList<Component>();
                 for (GraphSpecs g : this.graphsOnScreen) {
-                    JPanel tmp = GraphManager.createChart(g.getType(), g.getData(), g.getxAxisName(), g.getyAxisName());
+                    JPanel tmp = GraphManager.createChart(this, g.getType(), g.getData(), g.getxAxisName(), g.getyAxisName());
                     cards.add(new GraphCardView(this, g, tmp));
                 }
 
                 add(new ListView(getBackground(), cards).getWrappedInScroll(true));
             } else {
-                add(new TitleLabel("NO GRAPH SELECTED", TitleLabel.CENTER, 30), BorderLayout.CENTER);
-                //TODO NO GRAPH MESSAGE TEXT IN THE MIDDLE
+                setNoGraphMode();
             }
         }
 
@@ -56,8 +54,28 @@ public class GraphView extends RPanel {
         revalidate();
     }
 
+    private void setNoGraphMode()
+    {
+        removeAll();
+        TitleLabel message = new TitleLabel("NO GRAPH SELECTED", TitleLabel.CENTER, 22);
+        message.setForeground(GuiColors.TEXT_SELECTED);
+        add(message, BorderLayout.CENTER);
+        repaint();
+        revalidate();
+    }
+
+    private void autoSetMode()
+    {
+        if (this.graphsOnScreen.size() <= 1) this.mode = Mode.SINGLE_MODE;
+        if (this.graphsOnScreen.size() > 1) this.mode = Mode.CARD_MODE;
+        //TODO grid
+    }
+
     public synchronized void pushGraphSpecs(GraphSpecs newGraphSpecs) {
         this.graphsOnScreen.add(newGraphSpecs);
+
+        autoSetMode();
+
         refresh();
     }
 
@@ -65,6 +83,8 @@ public class GraphView extends RPanel {
         for (GraphSpecs gs : this.graphsOnScreen)
             if (gs.getId().equals(id))
                 this.graphsOnScreen.remove(gs);
+
+        autoSetMode();
         refresh();
     }
 
@@ -77,17 +97,19 @@ public class GraphView extends RPanel {
     }
 }
 
-class GraphCardView extends JPanel {
+class GraphCardView extends RPanel {
+    private GraphView host;
     public GraphCardView(GraphView host, GraphSpecs spec, JPanel graph) {
-        super(new BorderLayout());
-        setBackground(GuiColors.BASE_LIGHT);
+        super(GuiColors.BASE_LIGHT, new BorderLayout());
+        this.host = host;
+
         setBorder(BorderFactory.createMatteBorder(10, 10, 0, 10, GuiColors.TEXT_UNSELECTED));
 
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(getBackground());
         topPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.BASE_DARK));
 
-        MenuLabel closeLabel = new MenuLabel("x ", MenuLabel.LEFT, 16);
+        MenuLabel closeLabel = new MenuLabel("✕ ", MenuLabel.LEFT, 20);
         closeLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -100,6 +122,21 @@ class GraphCardView extends JPanel {
 
         add(topPanel, BorderLayout.NORTH);
         add(graph, BorderLayout.CENTER);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        refresh();
+    }
+
+    @Override
+    public void refresh()
+    {
+        int width = host.getWidth();
+        setPreferredSize(new Dimension(width, width / 2));
+        repaint();
+        revalidate();
     }
 }
 

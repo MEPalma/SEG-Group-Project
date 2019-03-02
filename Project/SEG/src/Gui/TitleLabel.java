@@ -1,9 +1,5 @@
 package Gui;
 
-/**
- * @author Marco-Edoardo Palma
- */
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;

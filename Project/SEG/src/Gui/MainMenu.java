@@ -47,17 +47,6 @@ public class MainMenu extends RPanel {
         });
         menus.add(getMenuCard(filtersLabel));
 
-        //Graph type
-        MenuLabel graphTypeLabel = new MenuLabel("Graph type", MenuLabel.LEFT, 14);
-        graphTypeLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                //TODO
-                this.mouseExited(e);
-            }
-        });
-        menus.add(getMenuCard(graphTypeLabel));
-
         //Load csvs
         MenuLabel loadCSVsLabel = new MenuLabel("Load CSVs", MenuLabel.LEFT, 14);
         loadCSVsLabel.addMouseListener(new MouseAdapter() {

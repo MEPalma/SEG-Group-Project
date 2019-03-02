@@ -4,32 +4,49 @@ package Gui;
  */
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.Collection;
 
 public class ListView extends JPanel implements Scrollable {
-    public static String SKIPSPACER = "ss";
 
-    public ListView(Color color, Collection<Component> cells) {
-        super(new GridBagLayout());
+    public ListView(Color color, Collection<Component> cells, boolean separatorsOn) {
+        super(new BorderLayout());
         setBackground(color);
         setBorder(BorderFactory.createEmptyBorder());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.BOTH;
+        JPanel refAddTo = this;
+        for (Component cellContent : cells) {
+            JPanel card = new JPanel(new BorderLayout());
+            card.setBackground(color);
+            card.setBorder(BorderFactory.createEmptyBorder());
 
-        for (Component cell : cells) {
-            add(cell, gbc);
-
-            if (cell.getName() == null || !cell.getName().equals(SKIPSPACER)) {
+            if(separatorsOn) {
                 JSeparator separator2 = new JSeparator(JToolBar.Separator.HORIZONTAL);
-                separator2.setPreferredSize(new Dimension(80, 10));
-                add(separator2, gbc);
+//                separator2.setPreferredSize(new Dimension(80, 10));
+                separator2.setBackground(color);
+                separator2.setForeground(Color.WHITE);
+
+                JPanel wrapperPanel = new JPanel(new BorderLayout());
+                wrapperPanel.setBackground(color);
+                wrapperPanel.setBorder(BorderFactory.createEmptyBorder());
+                wrapperPanel.add(cellContent, BorderLayout.NORTH);
+                wrapperPanel.add(separator2);
+
+                card.add(wrapperPanel, BorderLayout.NORTH);
             }
+            else {
+                card.add(cellContent, BorderLayout.NORTH);
+            }
+
+            refAddTo.add(card, BorderLayout.CENTER);
+            refAddTo = card;
         }
+
+    }
+
+    public ListView(Color color, Collection<Component> cells) {
+        this(color, cells, true);
     }
 
     public JScrollPane getWrappedInScroll(boolean visibleScrollbar) {

@@ -2,6 +2,7 @@ package Gui.GraphManager;
 
 import Commons.Tuple;
 import Gui.GuiColors;
+import Gui.RPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -12,6 +13,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.Collection;
 
@@ -21,11 +23,11 @@ public class GraphManager {
         LINE_CHART
     }
 
-    public static JPanel createChart(ChartType type, Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel) {
-        return createLineChart(data, xAxisLabel, yAxisLabel);
+    public static JPanel createChart(Component host, ChartType type, Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel) {
+        return createLineChart(host, data, xAxisLabel, yAxisLabel);
     }
 
-    private static JPanel createLineChart(Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel) {
+    private static JPanel createLineChart(Component host, Collection<Tuple<Number, Number>> data, String xAxisLabel, String yAxisLabel) {
         //copy data
         XYSeriesCollection dataset = getLineChartDataset(data);
 

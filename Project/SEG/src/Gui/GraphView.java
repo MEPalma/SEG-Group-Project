@@ -5,8 +5,6 @@ import Gui.GraphManager.GraphManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.*;
 
@@ -14,11 +12,11 @@ public class GraphView extends RPanel {
     public enum Mode {SINGLE_MODE, CARD_MODE, GRID_MODE}
 
     private Mode mode;
-    private final Set<GraphSpecs> graphsOnScreen;
+    private final List<GraphSpecs> graphsOnScreen;
 
     public GraphView() {
         super(GuiColors.LIGHT, new BorderLayout());
-        this.graphsOnScreen = new HashSet<GraphSpecs>();
+        this.graphsOnScreen = new LinkedList<GraphSpecs>();
         this.mode = Mode.CARD_MODE;
     }
 
@@ -28,7 +26,7 @@ public class GraphView extends RPanel {
 
         if (this.mode == Mode.SINGLE_MODE) {
             if (this.graphsOnScreen.size() > 0) {
-                GraphSpecs ref = this.graphsOnScreen.iterator().next();
+                GraphSpecs ref = this.graphsOnScreen.get(0);
                 JPanel tmp = GraphManager.createBarChar(ref.getData(), ref.getxAxisName(), ref.getyAxisName());
                 add(new GraphCardView(this, ref, tmp, true), BorderLayout.CENTER);
             } else {
@@ -115,7 +113,7 @@ class GraphCardView extends RPanel {
         super(GuiColors.BASE_LIGHT, new BorderLayout());
         this.host = host;
 
-        if(!isLast)
+        if (!isLast)
             setBorder(BorderFactory.createMatteBorder(24, 24, 0, 24, GuiColors.LIGHT));
         else setBorder(BorderFactory.createMatteBorder(24, 24, 24, 24, GuiColors.LIGHT));
 

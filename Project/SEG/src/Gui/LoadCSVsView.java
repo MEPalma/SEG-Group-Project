@@ -1,7 +1,6 @@
 package Gui;
 
 import DatabaseManager.CSVParser;
-import DatabaseManager.DataExchange;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -21,13 +20,11 @@ import java.util.logging.Logger;
 public class LoadCSVsView extends RPanel {
 
     public static Color BACKGROUND = GuiColors.BASE_LIGHT;
-    private final DataExchange dataExchange;
-    private final BreadCrumbs breadCrumbs;
+    private final MainController mainController;
 
-    public LoadCSVsView(DataExchange dataExchange, BreadCrumbs breadCrumbs) {
+    public LoadCSVsView(MainController mainController) {
         super(BACKGROUND, new BorderLayout());
-        this.dataExchange = dataExchange;
-        this.breadCrumbs = breadCrumbs;
+        this.mainController = mainController;
 
         refresh();
     }
@@ -67,15 +64,15 @@ public class LoadCSVsView extends RPanel {
                             SwingWorker<Void, Void> loadTask = new SwingWorker<Void, Void>() {
                                 @Override
                                 protected Void doInBackground() throws Exception {
-                                    breadCrumbs.startProgressBar();
-                                    CSVParser parser = new CSVParser(dataExchange, impressionLog, clickLog, serverLog);
+                                    mainController.startProgressBar();
+                                    CSVParser parser = new CSVParser(mainController.getDataExchange(), impressionLog, clickLog, serverLog);
                                     parser.parseAll();
-                                    breadCrumbs.stopProgressBar();
+                                    mainController.stopProgressBar();
                                     return null;
                                 }
                             };
 
-                            breadCrumbs.updateBackgroundTask(loadTask);
+                            mainController.setBackgroundTask(loadTask);
                             loadTask.execute();
                         } else {
                             //TODO error message
@@ -282,7 +279,7 @@ public class LoadCSVsView extends RPanel {
                 return false;
             }
         };
-        breadCrumbs.updateBackgroundTask(backgroundTask);
+        mainController.setBackgroundTask(backgroundTask);
         backgroundTask.execute();
     }
 

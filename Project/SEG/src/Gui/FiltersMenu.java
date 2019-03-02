@@ -1,6 +1,5 @@
 package Gui;
 
-import DatabaseManager.DataExchange;
 import DatabaseManager.Stringifiable;
 
 import javax.swing.*;
@@ -13,13 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FiltersMenu extends RPanel {
-    private final DataExchange dataExchange;//todo change with controller
-    private final BreadCrumbs breadCrumbs;
+    private final MainController mainController;
 
-    public FiltersMenu(DataExchange dataExchange, BreadCrumbs breadCrumbs) {
+    public FiltersMenu(MainController mainController) {
         super(GuiColors.BASE_LIGHT, new BorderLayout());
-        this.dataExchange = dataExchange;
-        this.breadCrumbs = breadCrumbs;
+        this.mainController = mainController;
         refresh();
     }
 

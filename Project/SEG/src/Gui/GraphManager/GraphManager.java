@@ -5,8 +5,14 @@ import Gui.GuiColors;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYSeries;
@@ -68,8 +74,7 @@ public class GraphManager {
         return dataset;
     }
 
-    public static JPanel createBarChar(Collection<Tuple<String, Number>> data, String xAxisLabel, String yAxisLabel)
-    {
+    public static JPanel createBarChar(Collection<Tuple<String, Number>> data, String xAxisLabel, String yAxisLabel) {
         JFreeChart barChart = ChartFactory.createBarChart(
                 "",
                 xAxisLabel,
@@ -79,35 +84,34 @@ public class GraphManager {
                 true, true, false);
         barChart.setBorderVisible(false);
         barChart.setAntiAlias(true);
+        barChart.removeLegend();
         barChart.setBackgroundPaint(Color.WHITE);
 
-        XYPlot plot = barChart.getXYPlot();
+        CategoryPlot cplot = (CategoryPlot)barChart.getPlot();
+        cplot.setBackgroundPaint(SystemColor.inactiveCaption);
 
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesPaint(0, GuiColors.BASE_LIGHT);
-        renderer.setSeriesStroke(0, new BasicStroke(2.0f));
+        ((BarRenderer)cplot.getRenderer()).setBarPainter(new StandardBarPainter());
 
-        plot.setRenderer(renderer);
-        plot.setBackgroundPaint(GuiColors.DARK_GRAY);
+        BarRenderer r = (BarRenderer)barChart.getCategoryPlot().getRenderer();
+        r.setSeriesPaint(0, GuiColors.BASE_LIGHT);
 
-        plot.setRangeGridlinesVisible(true);
-        plot.setRangeGridlinePaint(GuiColors.LIGHT_GRAY);
+        Plot plot = barChart.getPlot();
+        plot.setBackgroundPaint(Color.WHITE);
 
-        plot.setDomainGridlinesVisible(true);
-        plot.setDomainGridlinePaint(GuiColors.LIGHT_GRAY);
+        CategoryAxis axis = barChart.getCategoryPlot().getDomainAxis();
+        axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 
-        ChartPanel chartPanel = new ChartPanel( barChart );
-
-        return chartPanel;
+        return new ChartPanel(barChart);
     }
 
-    private static DefaultCategoryDataset getBarChartDataset(Collection<Tuple<String, Number>> data)
-    {
-        final DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+    private static DefaultCategoryDataset getBarChartDataset(Collection<Tuple<String, Number>> data) {
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         for (Tuple<String, Number> i : data) {
-            dataset.addValue(i.getY(), i.getX(), "");
+            dataset.addValue(i.getY(), "", i.getX());
         }
+
+
 
         return dataset;
     }

@@ -44,7 +44,7 @@ public class MetricsMenu extends RPanel {
                     for (int i = 0; i < 100; i++)
                         chartData.add(new Tuple<>(Math.random(), Math.random()));
 
-                    GraphSpecs tmp = new GraphSpecs("nImpressionsWeek", "Sample Chart", "xAxisName", "yAxiseName", GraphManager.ChartType.LINE_CHART, chartData);
+                    GraphSpecs tmp = new GraphSpecs("nImpressionsWeek", "Sample Chart", "xAxisName", "yAxiseName", chartData);
                     breadCrumbs.getGraphView().pushGraphSpecs(tmp);
                     //todo
                 }
@@ -63,7 +63,7 @@ public class MetricsMenu extends RPanel {
                     for (int i = 0; i < 100; i++)
                         chartData.add(new Tuple<>(Math.random(), Math.random()));
 
-                    GraphSpecs tmp = new GraphSpecs("nImpressionsDay", "Sample Chart", "xAxisName", "yAxiseName", GraphManager.ChartType.LINE_CHART, chartData);
+                    GraphSpecs tmp = new GraphSpecs("nImpressionsDay", "Sample Chart", "xAxisName", "yAxiseName", chartData);
                     breadCrumbs.getGraphView().pushGraphSpecs(tmp);
                     //todo
                 }
@@ -82,7 +82,7 @@ public class MetricsMenu extends RPanel {
                     for (int i = 0; i < 100; i++)
                         chartData.add(new Tuple<>(Math.random(), Math.random()));
 
-                    GraphSpecs tmp = new GraphSpecs("nImpressionsHour", "Sample Chart", "xAxisName", "yAxiseName", GraphManager.ChartType.LINE_CHART, chartData);
+                    GraphSpecs tmp = new GraphSpecs("nImpressionsHour", "Sample Chart", "xAxisName", "yAxiseName", chartData);
                     breadCrumbs.getGraphView().pushGraphSpecs(tmp);
                     //todo
                 }

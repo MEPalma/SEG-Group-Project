@@ -1,6 +1,8 @@
 package Gui;
 
 import DatabaseManager.DataExchange;
+import Gui.GuiComponents.TitleLabel;
+import Gui.SideMenus.MainMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +17,9 @@ public class Gui extends JFrame {
     private JPanel northView;
     private JPanel menuButtonsPane;
 
-    private BreadCrumbsHoster breadCrumbsHoster;
+    private MainController mainController;
 
-    public Gui(DataExchange dataExchange) {
+    public Gui(MainController mainController) {
         super("Dashboard App");
 //        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("")));
 
@@ -34,15 +36,13 @@ public class Gui extends JFrame {
         }
 
         this.dataExchange = dataExchange;
-        this.breadCrumbsHoster = new BreadCrumbsHoster();
+        this.mainController = mainController;
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                breadCrumbsHoster.getBreadCrumbs().cancelBackgroundTask();
-                breadCrumbsHoster.getBreadCrumbs().stopProgressBar();
-                dataExchange.close();
+                mainController.close();
                 System.exit(0);
             }
         });
@@ -62,7 +62,7 @@ public class Gui extends JFrame {
 
         this.mainView = new JPanel(new BorderLayout());
         this.mainView.setBackground(GuiColors.LIGHT);
-        this.mainView.add(this.breadCrumbsHoster, BorderLayout.CENTER);
+        this.mainView.add(this.mainController.getBreadCrumbsHoster(), BorderLayout.CENTER);
         getContentPane().add(this.mainView, BorderLayout.CENTER);
 
 
@@ -70,14 +70,8 @@ public class Gui extends JFrame {
         this.menuButtonsPane.setBackground(GuiColors.DARK_GRAY);
         this.menuButtonsPane.setPreferredSize(new Dimension(60, 60));
 
-        //BreadCrumbs
-        JPanel crumbsView = new JPanel(new BorderLayout());
-        crumbsView.setBackground(GuiColors.LIGHT);
-        crumbsView.setBorder(BorderFactory.createEmptyBorder());
 
-        this.breadCrumbsHoster.getBreadCrumbs().push("Campaign Name", new MainMenu(this.dataExchange, this.breadCrumbsHoster.getBreadCrumbs()));
-
-//        openHomeView();
+        this.mainController.pushNewViewOnBreadCrumbs("Campaign Name", new MainMenu(this.mainController));
     }
 
     @Override
@@ -92,17 +86,5 @@ public class Gui extends JFrame {
         }
         super.setVisible(visible);
     }
-
-//    private synchronized void openHomeView() {
-//
-//        this.breadCrumbs = new BreadCrumbs(this.mainView);
-//        breadCrumbs.clear();
-//        breadCrumbs.push("Home", new Deprecated_HomeView(dataExchange, breadCrumbs));
-//    }
-//
-//    public synchronized void openLoadCSVsView() {
-//        breadCrumbs.clear();
-//        breadCrumbs.push("Load CSVs", new LoadCSVsView(dataExchange, breadCrumbs));
-//    }
 
 }

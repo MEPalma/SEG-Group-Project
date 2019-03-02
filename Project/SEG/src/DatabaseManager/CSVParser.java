@@ -2,14 +2,14 @@ package DatabaseManager;
 
 import Commons.UserEntry;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
-
-/**
- * @author Marco-Edoardo Palma
- */
 
 /**
  * This class will take 3 file representing the 3 csv files, and will parse them
@@ -59,7 +59,7 @@ public class CSVParser {
         this.dataExchange.setForiegnKeyPragma(true);
     }
 
-    private void parseImpressionLogFile(Statement sqlStmt) throws FileNotFoundException, IOException, Exception {
+    private void parseImpressionLogFile(Statement sqlStmt) throws SQLException, IOException {
         // 0     1      2       3       4         5            6
         //DATE | ID | Gender | Age | Income | Context | impressionCost
         // im    us     us      us     us        im           im
@@ -87,7 +87,7 @@ public class CSVParser {
         }
     }
 
-    private void parseClickLogFile(Statement sqlStmt) throws FileNotFoundException, IOException, Exception {
+    private void parseClickLogFile(Statement sqlStmt) throws SQLException, IOException {
         // 0     1      2     
         //DATE | ID | clickcost
 
@@ -104,7 +104,7 @@ public class CSVParser {
         }
     }
 
-    private void parseServerLogFile(Statement sqlStmt) throws FileNotFoundException, IOException, Exception {
+    private void parseServerLogFile(Statement sqlStmt) throws SQLException, IOException {
         //     0       1      2           3            4
         //entryDATE | ID | exitDate | pagesViewed | conversions
 
@@ -142,12 +142,4 @@ public class CSVParser {
         }
     }
 
-//    private static ImpressionEntry.Context parseContext(String string)
-//    {
-//        if (string.equals("Social Media"))
-//        {
-//            return ImpressionEntry.Context.SocialMedia;
-//        }
-//        return ImpressionEntry.Context.valueOf(string);
-//    }
 }

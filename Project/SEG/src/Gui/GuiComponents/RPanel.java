@@ -1,7 +1,4 @@
-package Gui;
-/**
- * @author Marco-Edoardo Palma
- */
+package Gui.GuiComponents;
 
 import javax.swing.*;
 import java.awt.*;

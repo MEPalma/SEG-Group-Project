@@ -1,6 +1,10 @@
-package Gui;
+package Gui.DateBrowser;
 
 import DatabaseManager.Stringifiable;
+import Gui.GuiColors;
+import Gui.GuiComponents.MenuLabel;
+import Gui.GuiComponents.TextBox;
+import Gui.GuiComponents.TitleLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,9 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * @author MNarco-Edoardo Palma
- */
 public class DateBrowser extends JPanel {
 
     private SimpleDateFormat dateFormat;

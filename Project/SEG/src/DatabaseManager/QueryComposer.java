@@ -222,7 +222,7 @@ public class QueryComposer
     Number of Bounces
      */
     public static String getNumberOfBounces="select count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as GroupedValues from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1;";
-    public static String getNumberOfBouncesPerDay="select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfBouncesPerDay="select EntryDate as Entry,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%d',EntryDate) order by EntryDate;";
     public static String getNumberOfBouncesPerHour="select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%H:%d',EntryDate) order by EntryDate;";
     public static String getNumberOfBouncesPerWeek="select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%W',EntryDate);";
 

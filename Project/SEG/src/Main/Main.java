@@ -48,7 +48,7 @@ public class Main
 //        dataExchange.getTotalCostPerWeek();
 //        dataExchange.getCTRPerDay();
 //        dataExchange.getCTRPerWeek();
-//       dataExchange.getCTRPerHour();
+        dataExchange.getCTRPerHour();
 //        dataExchange.getCPCPerHour();
 //        dataExchange.getCPCPerDay();
 //        dataExchange.getCPCPerWeek();
@@ -56,7 +56,7 @@ public class Main
 //        dataExchange.getCPMPerWeek();
 //        dataExchange.getCPMPerHour();
 //        dataExchange.getBounceRatePerDay();
-        dataExchange.getBounceRatePerWeek();
+ //       dataExchange.getBounceRatePerWeek();
  //       dataExchange.getBounceRatePerHour();
 
 

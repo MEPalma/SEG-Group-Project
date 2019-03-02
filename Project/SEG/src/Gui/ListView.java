@@ -1,10 +1,6 @@
 package Gui;
-/**
- * Created by Marco-Edoardo Palma.
- */
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.util.Collection;
 
@@ -21,9 +17,8 @@ public class ListView extends JPanel implements Scrollable {
             card.setBackground(color);
             card.setBorder(BorderFactory.createEmptyBorder());
 
-            if(separatorsOn) {
+            if (separatorsOn) {
                 JSeparator separator2 = new JSeparator(JToolBar.Separator.HORIZONTAL);
-//                separator2.setPreferredSize(new Dimension(80, 10));
                 separator2.setBackground(color);
                 separator2.setForeground(Color.WHITE);
 
@@ -34,8 +29,7 @@ public class ListView extends JPanel implements Scrollable {
                 wrapperPanel.add(separator2);
 
                 card.add(wrapperPanel, BorderLayout.NORTH);
-            }
-            else {
+            } else {
                 card.add(cellContent, BorderLayout.NORTH);
             }
 

@@ -32,6 +32,7 @@ public class MetricsMenu extends RPanel {
 //TODO DO IN BACKGROUND!!!!!!!!
         //NUMBER OF IMPRESSIONS
         RadioButton nImpressionsWeek = new RadioButton("Week");
+        nImpressionsWeek.setSelected(breadCrumbs.getGraphView().containsGraph("nImpressionsWeek"));
         nImpressionsWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -51,6 +52,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton nImpressionsDay = new RadioButton("Day");
+        nImpressionsDay.setSelected(breadCrumbs.getGraphView().containsGraph("nImpressionsDay"));
         nImpressionsDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -69,6 +71,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton nImpressionsHour = new RadioButton("Hour");
+        nImpressionsHour.setSelected(breadCrumbs.getGraphView().containsGraph("nImpressionsHour"));
         nImpressionsHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -93,6 +96,7 @@ public class MetricsMenu extends RPanel {
 
         // Number of Clicks
         RadioButton nClicksWeek = new RadioButton("Week");
+        nClicksWeek.setSelected(breadCrumbs.getGraphView().containsGraph("nClicksWeek"));
         nClicksWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -105,6 +109,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton nClicksDay = new RadioButton("Day");
+        nClicksDay.setSelected(breadCrumbs.getGraphView().containsGraph("nClicksDay"));
         nClicksDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -117,6 +122,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton nClicksHour = new RadioButton("Hour");
+        nClicksHour.setSelected(breadCrumbs.getGraphView().containsGraph("nClicksHour"));
         nClicksHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -135,6 +141,7 @@ public class MetricsMenu extends RPanel {
 
         //Number of Uniques
         RadioButton nUniquesWeek = new RadioButton("Week");
+        nUniquesWeek.setSelected(breadCrumbs.getGraphView().containsGraph("nUniquesWeek"));
         nUniquesWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -147,6 +154,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton nUniquesDay = new RadioButton("Day");
+        nUniquesDay.setSelected(breadCrumbs.getGraphView().containsGraph("nUniquesDay"));
         nUniquesDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -159,6 +167,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton nUniquesHour = new RadioButton("Hour");
+        nUniquesHour.setSelected(breadCrumbs.getGraphView().containsGraph("nUniquesHour"));
         nUniquesHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -177,6 +186,7 @@ public class MetricsMenu extends RPanel {
 
         //Number of Bounces
         RadioButton nBouncesWeek = new RadioButton("Week");
+        nBouncesWeek.setSelected(breadCrumbs.getGraphView().containsGraph("nBouncesWeek"));
         nBouncesWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -189,6 +199,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton nBouncesDay = new RadioButton("Day");
+        nBouncesDay.setSelected(breadCrumbs.getGraphView().containsGraph("nBouncesDay"));
         nBouncesDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -201,6 +212,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton nBouncesHour = new RadioButton("Hour");
+        nBouncesHour.setSelected(breadCrumbs.getGraphView().containsGraph("nBouncesHour"));
         nBouncesHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -219,6 +231,7 @@ public class MetricsMenu extends RPanel {
 
         //Number of conversions
         RadioButton nConversionsWeek = new RadioButton("Week");
+        nConversionsWeek.setSelected(breadCrumbs.getGraphView().containsGraph("nConversionsWeek"));
         nConversionsWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -231,6 +244,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton nConversionsDay = new RadioButton("Day");
+        nConversionsDay.setSelected(breadCrumbs.getGraphView().containsGraph("nConversionsDay"));
         nConversionsDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -243,6 +257,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton nConversionsHour = new RadioButton("Hour");
+        nConversionsHour.setSelected(breadCrumbs.getGraphView().containsGraph("nConversionsHour"));
         nConversionsHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -261,6 +276,7 @@ public class MetricsMenu extends RPanel {
 
         //Total Cost
         RadioButton totalCostWeek = new RadioButton("Week");
+        totalCostWeek.setSelected(breadCrumbs.getGraphView().containsGraph("totalCostWeek"));
         totalCostWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -273,6 +289,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton totalCostDay = new RadioButton("Day");
+        totalCostDay.setSelected(breadCrumbs.getGraphView().containsGraph("totalCostDay"));
         totalCostDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -285,6 +302,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton totalCostHour = new RadioButton("Hour");
+        totalCostHour.setSelected(breadCrumbs.getGraphView().containsGraph("totalCostHour"));
         nConversionsHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -303,6 +321,7 @@ public class MetricsMenu extends RPanel {
 
         //CTR
         RadioButton ctrWeek = new RadioButton("Week");
+        ctrWeek.setSelected(breadCrumbs.getGraphView().containsGraph("ctrWeek"));
         ctrWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -315,6 +334,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton ctrDay = new RadioButton("Day");
+        ctrDay.setSelected(breadCrumbs.getGraphView().containsGraph("ctrDay"));
         ctrDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -327,6 +347,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton ctrHour = new RadioButton("Hour");
+        ctrHour.setSelected(breadCrumbs.getGraphView().containsGraph("ctrHour"));
         ctrHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -345,6 +366,7 @@ public class MetricsMenu extends RPanel {
 
         // CPA
         RadioButton cpaWeek = new RadioButton("Week");
+        cpaWeek.setSelected(breadCrumbs.getGraphView().containsGraph("cpaWeek"));
         cpaWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -357,6 +379,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton cpaDay = new RadioButton("Day");
+        cpaDay.setSelected(breadCrumbs.getGraphView().containsGraph("cpaDay"));
         cpaDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -369,6 +392,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton cpaHour = new RadioButton("Hour");
+        cpaHour.setSelected(breadCrumbs.getGraphView().containsGraph("cpaHour"));
         cpaHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -387,6 +411,7 @@ public class MetricsMenu extends RPanel {
 
         //CPC
         RadioButton cpcWeek = new RadioButton("Week");
+        cpcWeek.setSelected(breadCrumbs.getGraphView().containsGraph("cpcWeek"));
         cpcWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -399,6 +424,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton cpcDay = new RadioButton("Day");
+        cpcDay.setSelected(breadCrumbs.getGraphView().containsGraph("cpcDay"));
         cpcDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -411,6 +437,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton cpcHour = new RadioButton("Hour");
+        cpcHour.setSelected(breadCrumbs.getGraphView().containsGraph("cpcHour"));
         cpcHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -429,6 +456,7 @@ public class MetricsMenu extends RPanel {
 
         //CPM
         RadioButton cpmWeek = new RadioButton("Week");
+        cpmWeek.setSelected(breadCrumbs.getGraphView().containsGraph("cpmWeek"));
         cpmWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -441,6 +469,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton cpmDay = new RadioButton("Day");
+        cpmDay.setSelected(breadCrumbs.getGraphView().containsGraph("cpmDay"));
         cpmDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -453,6 +482,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton cpmHour = new RadioButton("Hour");
+        cpmHour.setSelected(breadCrumbs.getGraphView().containsGraph("cpmHour"));
         cpmHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -470,6 +500,7 @@ public class MetricsMenu extends RPanel {
 
         //Bounce Rate
         RadioButton bounceRateWeek = new RadioButton("Week");
+        bounceRateWeek.setSelected(breadCrumbs.getGraphView().containsGraph("bounceRateWeek"));
         bounceRateWeek.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -482,6 +513,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton bounceRateDay = new RadioButton("Day");
+        bounceRateDay.setSelected(breadCrumbs.getGraphView().containsGraph("bounceRateDay"));
         bounceRateDay.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -494,6 +526,7 @@ public class MetricsMenu extends RPanel {
         });
 
         RadioButton bounceRateHour = new RadioButton("Hour");
+        bounceRateHour.setSelected(breadCrumbs.getGraphView().containsGraph("bounceRateHour"));
         bounceRateHour.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

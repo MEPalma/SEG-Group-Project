@@ -617,9 +617,6 @@ public class DataExchange {
             while (resultTuple.next()) {
                 root.add(new Tuple<String, Number>(resultTuple.getString("d"), (resultTuple.getFloat("c"))));
             }
-            for (Tuple<String, Number> stringNumberTuple : root) {
-                System.out.println(stringNumberTuple.getX() + "    " + stringNumberTuple.getY());
-            }
 
             return root;
         } catch (SQLException ex) {
@@ -630,6 +627,8 @@ public class DataExchange {
     private List<Tuple<String, Number>> getInfoTupleDivision(ResultSet resultTuple1, ResultSet resultTuple2) {
         List<Tuple<String, Number>> root1 = new LinkedList<>();
         List<Tuple<String, Number>> root2 = new LinkedList<>();
+        List<Tuple<String, Number >> result=new LinkedList<>();
+
         List<Date> hour = new LinkedList<>();
         //Time hr;
         List<Number> number = new LinkedList<>();
@@ -642,23 +641,34 @@ public class DataExchange {
             while (resultTuple2.next()) {
                 root2.add(new Tuple<>(resultTuple2.getString("d"), (resultTuple2.getFloat("c"))));
             }
-            for (int i = 0; i < root1.size(); i++) {
-                System.out.println(root1.get(i).getX() + "   " + formatPrice(root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue()));
+
+            //return
+            for(int i=1;i<root2.size();i++)
+            {
+
+                result.add(new Tuple<>(root1.get(i).getX(),(root1.get(i).getY().floatValue()/root2.get(i).getY().floatValue())));
             }
+            return result;
+//            for(int i=1;i<result.size();i++)
+//                System.out.println(result.get(i).getX()+"  "+result.get(i).getY());
 
             //return <>
         } catch (SQLException ex) {
-            return null;
+
         }
         return new LinkedList<>();
-    }
 
-    private List<Tuple<String, Number>> getInfoTupleDivisionNoPrice(ResultSet resultTuple1, ResultSet resultTuple2) {
+    }
+    private List<Tuple<String, Number>> getInfoTupleDivisionCTRHOUR(ResultSet resultTuple1, ResultSet resultTuple2) {
         List<Tuple<String, Number>> root1 = new LinkedList<>();
         List<Tuple<String, Number>> root2 = new LinkedList<>();
+        List<Tuple<String, Number >> result=new LinkedList<>();
 
+        List<Date> hour = new LinkedList<>();
+        //Time hr;
+        List<Number> number = new LinkedList<>();
         try {
-
+            //hr=resultPerHour.getTime("GroupedValues");
             while (resultTuple1.next()) {
                 root1.add(new Tuple<String, Number>(resultTuple1.getString("d"), (resultTuple1.getFloat("c"))));
 
@@ -667,11 +677,24 @@ public class DataExchange {
                 root2.add(new Tuple<>(resultTuple2.getString("d"), (resultTuple2.getFloat("c"))));
             }
 
+            //return
+            for(int i=1;i<root2.size()-1;i++)
+            {
+
+                result.add(new Tuple<>(root1.get(i).getX(),(root1.get(i).getY().floatValue()/root2.get(i).getY().floatValue())));
+            }
+            return result;
+//            for(int i=1;i<result.size();i++)
+//                System.out.println(result.get(i).getX()+"  "+result.get(i).getY());
+
+            //return <>
         } catch (SQLException ex) {
-            return null;
+
         }
         return new LinkedList<>();
+
     }
+
 
     /*
     FOR TOTAL CPM--DIVIDE BY 1000
@@ -679,6 +702,7 @@ public class DataExchange {
     private List<Tuple<String, Number>> getInfoTupleDivisionCPM(ResultSet resultTuple1, ResultSet resultTuple2) {
         List<Tuple<String, Number>> root1 = new LinkedList<>();
         List<Tuple<String, Number>> root2 = new LinkedList<>();
+        List<Tuple<String, Number>> result = new LinkedList<>();
 
         try {
 
@@ -689,13 +713,15 @@ public class DataExchange {
             while (resultTuple2.next()) {
                 root2.add(new Tuple<>(resultTuple2.getString("d"), (resultTuple2.getFloat("c") / 1000)));
             }
-            for (int i = 0; i < root1.size(); i++) {
-                System.out.println(root1.get(i).getX() + "   " + formatPrice(root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue()));
+            for(int i=1;i<root2.size();i++)
+            {
+                result.add(new Tuple<>(root1.get(i).getX(),(root1.get(i).getY().floatValue()/root2.get(i).getY().floatValue())));
             }
+            return result;
 
             //return <>
         } catch (SQLException ex) {
-            return null;
+
         }
         return new LinkedList<>();
     }
@@ -707,7 +733,9 @@ public class DataExchange {
      */
     public List<Tuple<String, Number>> getNumberOfImpressionsPerWeek() {
         ResultSet resultPerWeek = this.dbM.query(QueryComposer.getNumberOfImpressionsPerWeek);
-        return getInfoTuple(resultPerWeek);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerWeek);
+        close(resultPerWeek);
+        return tmp;
     }
 
     /*
@@ -717,30 +745,40 @@ public class DataExchange {
 
     public List<Tuple<String, Number>> getNumberOfClicksPerWeek() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
 
     public Integer getNumberOfUniques() {
         ResultSet resultSetUniques = this.dbM.query(QueryComposer.getNumberOfUniques);
-        return getIntegerInfo(resultSetUniques);
+       Integer tmp= getIntegerInfo(resultSetUniques);
+        close(resultSetUniques);
+        return tmp;
 
     }
 
 
     public Integer getNumberOfBounces() {
         ResultSet resultSetBounce = this.dbM.query(QueryComposer.getNumberOfBounces);
-        return getIntegerInfo(resultSetBounce);
+        Integer tmp= getIntegerInfo(resultSetBounce);
+        close(resultSetBounce);
+        return tmp;
     }
 
     public Integer getNumberOfConversions() {
         ResultSet resultSetConversions = this.dbM.query(QueryComposer.getNumberOfConversions);
-        return getIntegerInfo(resultSetConversions);
+        Integer tmp= getIntegerInfo(resultSetConversions);
+        close(resultSetConversions);
+        return tmp;
     }
 
     public Double getTotalCost() {
         ResultSet resultTotalCost = this.dbM.query(QueryComposer.getTotalCost);
-        return getDoubleInfo(resultTotalCost);
+        Double tmp= getDoubleInfo(resultTotalCost);
+        close(resultTotalCost);
+        return tmp;
     }
 
 
@@ -749,12 +787,16 @@ public class DataExchange {
      */
     public List<Tuple<String, Number>> getNumberOfImpressionsPerHour() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getNumberOfImpressionsPerDay() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfImpressionsPerDay);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     /*
@@ -762,12 +804,16 @@ public class DataExchange {
      */
     public List<Tuple<String, Number>> getNumberOfClicksPerHour() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getNumberOfClicksPerDay() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     /*
@@ -775,17 +821,23 @@ public class DataExchange {
      */
     public List<Tuple<String, Number>> getNumberOfUniquesPerHour() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getGetNumberOfUniquesPerHours);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getNumberOfUniquesPerDay() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getGetNumberOfUniquesPerDay);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getNumberOfUniquesPerWeek() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getGetNumberOfUniquesPerWeek);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
 
@@ -796,17 +848,23 @@ public class DataExchange {
 
     public List<Tuple<String, Number>> getNumberOfBouncesPerHour() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfBouncesPerHour);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getNumberOfBouncesPerDay() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfBouncesPerDay);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getNumberOfBouncesPerWeek() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfBouncesPerWeek);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     /*
@@ -815,17 +873,23 @@ public class DataExchange {
 
     public List<Tuple<String, Number>> getNumberOfConversionsPerHour() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfConversionsPerHour);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getNumberOfConversionsPerDay() {
         ResultSet resultPerDay = this.dbM.query(QueryComposer.getNumberOfConversionsPerDay);
-        return getInfoTuple(resultPerDay);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerDay);
+        close(resultPerDay);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getNumberOfConversionsPerWeek() {
         ResultSet resultPerWeek = this.dbM.query(QueryComposer.getNumberOfConversionsPerWeek);
-        return getInfoTuple(resultPerWeek);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerWeek);
+        close(resultPerWeek);
+        return tmp;
     }
 
     /*
@@ -833,17 +897,23 @@ public class DataExchange {
      */
     public List<Tuple<String, Number>> getTotalCostPerHour() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getTotalCostPerHour);
-        return getInfoTuple(resultPerHour);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerHour);
+        close(resultPerHour);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getTotalCostPerDay() {
         ResultSet resultPerDay = this.dbM.query(QueryComposer.getTotalCostPerDay);
-        return getInfoTuple(resultPerDay);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerDay);
+        close(resultPerDay);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getTotalCostPerWeek() {
         ResultSet resultPerWeek = this.dbM.query(QueryComposer.getTotalCostPerWeek);
-        return getInfoTuple(resultPerWeek);
+        List<Tuple<String, Number>> tmp= getInfoTuple(resultPerWeek);
+        close(resultPerWeek);
+        return tmp;
     }
 
     /*
@@ -855,7 +925,7 @@ public class DataExchange {
         //return getInfoTuple(resultPerHour);
         ResultSet resultTotalImpressionPerHour = this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
         ResultSet resultTotalClicksPerHour = this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
-        List<Tuple<String, Number>> tmp = getInfoTupleDivisionNoPrice(resultTotalClicksPerHour, resultTotalImpressionPerHour);
+        List<Tuple<String, Number>> tmp = getInfoTupleDivisionCTRHOUR(resultTotalClicksPerHour, resultTotalImpressionPerHour);
         close(resultTotalClicksPerHour);
         close(resultTotalImpressionPerHour);
         return tmp;
@@ -866,7 +936,7 @@ public class DataExchange {
 //        return getInfoTuple(resultPerDay);
         ResultSet resultTotalImpressionPerDay = this.dbM.query(QueryComposer.getNumberOfImpressionsPerDay);
         ResultSet resultTotalClicksPerDay = this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
-        List<Tuple<String, Number>> tmp = getInfoTupleDivisionNoPrice(resultTotalClicksPerDay, resultTotalImpressionPerDay);
+        List<Tuple<String, Number>> tmp = getInfoTupleDivision(resultTotalClicksPerDay, resultTotalImpressionPerDay);
         close(resultTotalClicksPerDay);
         close(resultTotalImpressionPerDay);
         return tmp;
@@ -877,7 +947,7 @@ public class DataExchange {
 //        return getInfoTuple(resultPerWeek);
         ResultSet resultTotalImpressionPerWeek = this.dbM.query(QueryComposer.getNumberOfImpressionsPerWeek);
         ResultSet resultTotalClicksPerWeek = this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
-        List<Tuple<String, Number>> tmp = getInfoTupleDivisionNoPrice(resultTotalClicksPerWeek, resultTotalImpressionPerWeek);
+        List<Tuple<String, Number>> tmp = getInfoTupleDivision(resultTotalClicksPerWeek, resultTotalImpressionPerWeek);
         close(resultTotalClicksPerWeek);
         close(resultTotalImpressionPerWeek);
         return tmp;
@@ -890,17 +960,17 @@ public class DataExchange {
 
         //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
         //return getInfoTuple(resultPerHour);
-        ResultSet resultTotalConversionPerHour = this.dbM.query(QueryComposer.getNumberOfConversionsPerHour);
-        return getTuples(resultTotalConversionPerHour);
-    }
 
-    private List<Tuple<String, Number>> getTuples(ResultSet resultTotalConversionPerHour) {
-        ResultSet restultTotalCost = this.dbM.query(QueryComposer.getTotalCostPerHour);
-        List<Tuple<String, Number>> tmp = getInfoTupleDivision(restultTotalCost, resultTotalConversionPerHour);
+        ResultSet resultTotalConversionPerHour = this.dbM.query(QueryComposer.getNumberOfConversionsPerHour);
+        ResultSet resultTotalCostPerHour=this.dbM.query(QueryComposer.getTotalCostPerHour);
+        List<Tuple<String, Number>> tmp = getInfoTupleDivision(resultTotalCostPerHour,resultTotalConversionPerHour);
+
         close(resultTotalConversionPerHour);
-        close(restultTotalCost);
+        close(resultTotalCostPerHour);
         return tmp;
     }
+
+
 
     public List<Tuple<String, Number>> getCPAPerDay() {
 //        ResultSet resultPerDay=this.dbM.query(QueryComposer.getCTRPerDay);
@@ -932,8 +1002,12 @@ public class DataExchange {
 
         //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
         //return getInfoTuple(resultPerHour);
-        ResultSet resultTotalClicksPerHour = this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
-        return getTuples(resultTotalClicksPerHour);
+        ResultSet resultTotalClickPerHour = this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
+        ResultSet resultTotalCostPerHour = this.dbM.query(QueryComposer.getTotalCostPerHour);
+        List<Tuple<String, Number>> tmp = getInfoTupleDivision(resultTotalCostPerHour, resultTotalClickPerHour);
+        close(resultTotalClickPerHour);
+        close(resultTotalCostPerHour);
+        return tmp;
     }
 
     public List<Tuple<String, Number>> getCPCPerDay() {
@@ -1007,7 +1081,7 @@ public class DataExchange {
         //return getInfoTuple(resultPerHour);
         ResultSet resultBounceRatePerHour = this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
         ResultSet resultClickPerHour = this.dbM.query(QueryComposer.getNumberOfClicksPerHour);
-        List<Tuple<String, Number>> tmp = getInfoTupleDivisionNoPrice(resultBounceRatePerHour, resultClickPerHour);
+        List<Tuple<String, Number>> tmp = getInfoTupleDivision(resultBounceRatePerHour, resultClickPerHour);
         close(resultBounceRatePerHour);
         close(resultClickPerHour);
         return tmp;
@@ -1018,7 +1092,7 @@ public class DataExchange {
 //        return getInfoTuple(resultPerDay);
         ResultSet resultBounceRatePerDay = this.dbM.query(QueryComposer.getNumberOfBouncesPerDay);
         ResultSet resultClickPerDay = this.dbM.query(QueryComposer.getNumberOfClicksPerDay);
-        List<Tuple<String, Number>> tmp = getInfoTupleDivisionNoPrice(resultBounceRatePerDay, resultClickPerDay);
+        List<Tuple<String, Number>> tmp = getInfoTupleDivision(resultBounceRatePerDay, resultClickPerDay);
         close(resultBounceRatePerDay);
         close(resultClickPerDay);
         return tmp;
@@ -1029,7 +1103,7 @@ public class DataExchange {
 //        return getInfoTuple(resultPerDay);
         ResultSet resultBouncePerWeek = this.dbM.query(QueryComposer.getNumberOfBouncesPerWeek);
         ResultSet resultClickPerWeek = this.dbM.query(QueryComposer.getNumberOfClicksPerWeek);
-        List<Tuple<String, Number>> tmp = getInfoTupleDivisionNoPrice(resultBouncePerWeek, resultClickPerWeek);
+        List<Tuple<String, Number>> tmp = getInfoTupleDivision(resultBouncePerWeek, resultClickPerWeek);
         close(resultBouncePerWeek);
         close(resultClickPerWeek);
         return tmp;

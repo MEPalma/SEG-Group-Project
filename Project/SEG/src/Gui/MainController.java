@@ -534,7 +534,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CTR [Per Week]", "Week", "CTR", dataExchange.getCPAPerWeek());
+                tmp = new GraphSpecs(id, "CTR [Per Week]", "Week", "CTR", dataExchange.getCTRPerWeek());
                 return null;
             }
 
@@ -720,7 +720,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CPC [Per Hour]", "Hour", "CPA", dataExchange.getCPCPerHour());
+                tmp = new GraphSpecs(id, "CPC [Per Hour]", "Hour", "CPC", dataExchange.getCPCPerHour());
                 return null;
             }
 

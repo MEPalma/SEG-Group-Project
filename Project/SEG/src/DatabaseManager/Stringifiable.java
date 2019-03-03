@@ -2,9 +2,6 @@ package DatabaseManager;
 
 import java.text.SimpleDateFormat;
 
-/**
- * @author Marco Edoardo Palma
- */
 public interface Stringifiable {
     /**
      * This is a SimpleDateFormat able to parse and format dates based on the requirements

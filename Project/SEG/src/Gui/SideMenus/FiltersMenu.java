@@ -1,7 +1,14 @@
-package Gui;
+package Gui.SideMenus;
 
-import DatabaseManager.DataExchange;
 import DatabaseManager.Stringifiable;
+import Gui.DateBrowser.DateBrowser;
+import Gui.DateBrowser.DateChangedListener;
+import Gui.GuiColors;
+import Gui.GuiComponents.ListView;
+import Gui.GuiComponents.RPanel;
+import Gui.GuiComponents.RadioButton;
+import Gui.GuiComponents.TitleLabel;
+import Gui.MainController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,13 +20,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FiltersMenu extends RPanel {
-    private final DataExchange dataExchange;//todo change with controller
-    private final BreadCrumbs breadCrumbs;
+    private final MainController mainController;
 
-    public FiltersMenu(DataExchange dataExchange, BreadCrumbs breadCrumbs) {
+    public FiltersMenu(MainController mainController) {
         super(GuiColors.BASE_LIGHT, new BorderLayout());
-        this.dataExchange = dataExchange;
-        this.breadCrumbs = breadCrumbs;
+        this.mainController = mainController;
         refresh();
     }
 

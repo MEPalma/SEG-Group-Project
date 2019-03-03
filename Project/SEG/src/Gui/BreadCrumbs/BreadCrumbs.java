@@ -1,4 +1,9 @@
-package Gui;
+package Gui.BreadCrumbs;
+
+import Gui.GraphView;
+import Gui.GuiColors;
+import Gui.GuiComponents.RPanel;
+import Gui.GuiComponents.TitleLabel;
 
 import javax.swing.*;
 import java.awt.*;

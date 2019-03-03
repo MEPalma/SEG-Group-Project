@@ -1,6 +1,11 @@
-package Gui;
+package Gui.SideMenus;
 
-import DatabaseManager.DataExchange;
+import Gui.GuiColors;
+import Gui.GuiComponents.ListView;
+import Gui.GuiComponents.MenuLabel;
+import Gui.GuiComponents.RPanel;
+import Gui.GuiComponents.TitleLabel;
+import Gui.MainController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,13 +15,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MainMenu extends RPanel {
-    private final DataExchange dataExchange;//todo change with controller
-    private final BreadCrumbs breadCrumbs;
+    private final MainController mainController;
 
-    public MainMenu(DataExchange dataExchange, BreadCrumbs breadCrumbs) {
+    public MainMenu(MainController mainController) {
         super(GuiColors.BASE_LIGHT, new BorderLayout());
-        this.dataExchange = dataExchange;
-        this.breadCrumbs = breadCrumbs;
+        this.mainController = mainController;
         refresh();
     }
 
@@ -30,7 +33,7 @@ public class MainMenu extends RPanel {
         chooseMetricsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                breadCrumbs.push("Choose metrics", new MetricsMenu(dataExchange, breadCrumbs));
+                mainController.pushNewViewOnBreadCrumbs("Choose metrics", new MetricsMenu(mainController));
                 this.mouseExited(e);
             }
         });
@@ -41,7 +44,7 @@ public class MainMenu extends RPanel {
         filtersLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                breadCrumbs.push("Filters", new FiltersMenu(dataExchange, breadCrumbs));
+                mainController.pushNewViewOnBreadCrumbs("Filters", new FiltersMenu(mainController));
                 this.mouseExited(e);
             }
         });
@@ -52,7 +55,7 @@ public class MainMenu extends RPanel {
         loadCSVsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                breadCrumbs.push("Load CSVs", new LoadCSVsView(dataExchange, breadCrumbs));
+                mainController.pushNewViewOnBreadCrumbs("Load CSVs", new LoadCSVsView(mainController));
                 this.mouseExited(e);
             }
         });

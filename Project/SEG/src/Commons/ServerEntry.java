@@ -4,9 +4,6 @@ import DatabaseManager.Stringifiable;
 
 import java.util.Date;
 
-/**
- * @author Marco-Edoardo Palma
- */
 public class ServerEntry implements Stringifiable {
     public static int AUTO_INDEX = -1;
 

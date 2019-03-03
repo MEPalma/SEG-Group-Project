@@ -2,9 +2,6 @@ package Commons;
 
 import DatabaseManager.Stringifiable;
 
-/**
- * @author Marco-Edoardo Palma
- */
 public class UserEntry implements Stringifiable {
 
     public static enum Gender {

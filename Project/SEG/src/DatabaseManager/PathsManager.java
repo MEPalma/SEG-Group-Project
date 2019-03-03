@@ -1,9 +1,5 @@
 package DatabaseManager;
 
-/*
- * @author Marco-Edoardo Palma
- */
-
 import java.io.File;
 import java.io.IOException;
 

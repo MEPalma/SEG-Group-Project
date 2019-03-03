@@ -55,7 +55,7 @@ public class MainMenu extends RPanel {
         loadCSVsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                mainController.pushNewViewOnBreadCrumbs("Load CSVs", new LoadCSVsView(mainController));
+                mainController.pushNewViewOnBreadCrumbs("Load CSVs", new LoadCSVsMenu(mainController));
                 this.mouseExited(e);
             }
         });

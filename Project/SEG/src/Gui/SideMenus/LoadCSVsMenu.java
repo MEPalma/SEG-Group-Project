@@ -20,12 +20,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoadCSVsView extends RPanel {
+public class LoadCSVsMenu extends RPanel {
 
     public static Color BACKGROUND = GuiColors.BASE_LIGHT;
     private final MainController mainController;
 
-    public LoadCSVsView(MainController mainController) {
+    public LoadCSVsMenu(MainController mainController) {
         super(BACKGROUND, new BorderLayout());
         this.mainController = mainController;
 
@@ -277,7 +277,7 @@ public class LoadCSVsView extends RPanel {
                         return true;
                     }
                 } catch (IOException ex) {
-                    Logger.getLogger(LoadCSVsView.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(LoadCSVsMenu.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return false;
             }

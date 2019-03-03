@@ -260,11 +260,11 @@ public class MetricsMenu extends RPanel {
         totalCostWeek.setSelected(mainController.doesGraphViewContainGraph("totalCostWeek"));
         totalCostWeek.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (totalCostWeek.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("totalCostWeek");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfTotalCostPerWeek("totalCostWeek");
                 }
             }
         });
@@ -273,24 +273,24 @@ public class MetricsMenu extends RPanel {
         totalCostDay.setSelected(mainController.doesGraphViewContainGraph("totalCostDay"));
         totalCostDay.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (totalCostDay.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("totalCostDay");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfTotalCostPerDay("totalCostDay");
                 }
             }
         });
 
         RadioButton totalCostHour = new RadioButton("Hour");
         totalCostHour.setSelected(mainController.doesGraphViewContainGraph("totalCostHour"));
-        nConversionsHour.addMouseListener(new MouseAdapter() {
+        totalCostHour.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if (nBouncesHour.isSelected()) {
-                    //todo remove from pool
+            public void mousePressed(MouseEvent e) {
+                if (totalCostHour.isSelected()) {
+                    mainController.popFromGraphView("totalCostHour");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfTotalCostPerHour("totalCostHour");
                 }
             }
         });
@@ -305,11 +305,11 @@ public class MetricsMenu extends RPanel {
         ctrWeek.setSelected(mainController.doesGraphViewContainGraph("ctrWeek"));
         ctrWeek.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (ctrWeek.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("ctrWeek");
                 } else {
-                    //todo
+                    mainController.pushNewCTRPerWeek("ctrWeek");
                 }
             }
         });
@@ -318,11 +318,11 @@ public class MetricsMenu extends RPanel {
         ctrDay.setSelected(mainController.doesGraphViewContainGraph("ctrDay"));
         ctrDay.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (ctrDay.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("ctrDay");
                 } else {
-                    //todo
+                    mainController.pushNewCTRPerDay("ctrDay");
                 }
             }
         });
@@ -331,11 +331,11 @@ public class MetricsMenu extends RPanel {
         ctrHour.setSelected(mainController.doesGraphViewContainGraph("ctrHour"));
         ctrHour.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (ctrHour.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("ctrHour");
                 } else {
-                    //todo
+                    mainController.pushNewCTRPerHour("ctrHour");
                 }
             }
         });
@@ -350,11 +350,11 @@ public class MetricsMenu extends RPanel {
         cpaWeek.setSelected(mainController.doesGraphViewContainGraph("cpaWeek"));
         cpaWeek.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (cpaWeek.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("cpaWeek");
                 } else {
-                    //todo
+                    mainController.pushNewCPAPerWeek("cpaWeek");
                 }
             }
         });
@@ -363,11 +363,11 @@ public class MetricsMenu extends RPanel {
         cpaDay.setSelected(mainController.doesGraphViewContainGraph("cpaDay"));
         cpaDay.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (cpaDay.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("cpaDay");
                 } else {
-                    //todo
+                    mainController.pushNewCPAPerDay("cpaDay");
                 }
             }
         });
@@ -376,11 +376,11 @@ public class MetricsMenu extends RPanel {
         cpaHour.setSelected(mainController.doesGraphViewContainGraph("cpaHour"));
         cpaHour.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (cpaHour.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("cpaHour");
                 } else {
-                    //todo
+                    mainController.pushNewCPAPerHour("cpaHour");
                 }
             }
         });
@@ -395,11 +395,11 @@ public class MetricsMenu extends RPanel {
         cpcWeek.setSelected(mainController.doesGraphViewContainGraph("cpcWeek"));
         cpcWeek.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (cpcWeek.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("cpcWeek");
                 } else {
-                    //todo
+                    mainController.pushNewCPCPerWeek("cpcWeek");
                 }
             }
         });
@@ -408,11 +408,11 @@ public class MetricsMenu extends RPanel {
         cpcDay.setSelected(mainController.doesGraphViewContainGraph("cpcDay"));
         cpcDay.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (cpcDay.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("cpcDay");
                 } else {
-                    //todo
+                    mainController.pushNewCPCPerDay("cpcDay");
                 }
             }
         });
@@ -421,11 +421,11 @@ public class MetricsMenu extends RPanel {
         cpcHour.setSelected(mainController.doesGraphViewContainGraph("cpcHour"));
         cpcHour.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (cpcHour.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("cpcHour");
                 } else {
-                    //todo
+                    mainController.pushNewCPCPerHour("cpcHour");
                 }
             }
         });
@@ -440,11 +440,11 @@ public class MetricsMenu extends RPanel {
         cpmWeek.setSelected(mainController.doesGraphViewContainGraph("cpmWeek"));
         cpmWeek.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (cpmWeek.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("cpmWeek");
                 } else {
-                    //todo
+                    mainController.pushNewCPMPerWeek("cpmWeek");
                 }
             }
         });
@@ -453,11 +453,11 @@ public class MetricsMenu extends RPanel {
         cpmDay.setSelected(mainController.doesGraphViewContainGraph("cpmDay"));
         cpmDay.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (cpmDay.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("cpmDay");
                 } else {
-                    //todo
+                    mainController.pushNewCPMPerDay("cpmDay");
                 }
             }
         });
@@ -466,11 +466,11 @@ public class MetricsMenu extends RPanel {
         cpmHour.setSelected(mainController.doesGraphViewContainGraph("cpmHour"));
         cpmHour.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (cpmHour.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("cpmHour");
                 } else {
-                    //todo
+                    mainController.pushNewCPMPerHour("cpMHour");
                 }
             }
         });
@@ -484,11 +484,11 @@ public class MetricsMenu extends RPanel {
         bounceRateWeek.setSelected(mainController.doesGraphViewContainGraph("bounceRateWeek"));
         bounceRateWeek.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (bounceRateWeek.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("bounceRateWeek");
                 } else {
-                    //todo
+                    mainController.pushNewBounceRatePerWeek("bounceRateWeek");
                 }
             }
         });
@@ -497,11 +497,11 @@ public class MetricsMenu extends RPanel {
         bounceRateDay.setSelected(mainController.doesGraphViewContainGraph("bounceRateDay"));
         bounceRateDay.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (bounceRateDay.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("bounceRateDay");
                 } else {
-                    //todo
+                    mainController.pushNewBounceRatePerDay("bounceRateDay");
                 }
             }
         });
@@ -510,11 +510,11 @@ public class MetricsMenu extends RPanel {
         bounceRateHour.setSelected(mainController.doesGraphViewContainGraph("bounceRateHour"));
         bounceRateHour.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (bounceRateHour.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("bounceRateHour");
                 } else {
-                    //todo
+                    mainController.pushNewBounceRatePerHour("bounceRateHour");
                 }
             }
         });

@@ -75,7 +75,7 @@ public class LoadCSVsView extends RPanel {
                                 }
                             };
 
-                            mainController.setBackgroundTask(loadTask);
+                            mainController.setMainBackgroundTask(loadTask);
                             loadTask.execute();
                         } else {
                             //TODO error message
@@ -282,7 +282,7 @@ public class LoadCSVsView extends RPanel {
                 return false;
             }
         };
-        mainController.setBackgroundTask(backgroundTask);
+        mainController.setMainBackgroundTask(backgroundTask);
         backgroundTask.execute();
     }
 

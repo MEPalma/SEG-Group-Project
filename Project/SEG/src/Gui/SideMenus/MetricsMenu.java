@@ -39,7 +39,7 @@ public class MetricsMenu extends RPanel {
                 if (nImpressionsWeek.isSelected()) {
                     mainController.popFromGraphView("nImpressionsWeek");
                 } else {
-                    mainController.pushToGraphView("nImpressionsWeek", "Sample Chart", "xAxisName", "yAxiseName", null);
+                    mainController.pushNewNumberOfImpressionsPerWeek("nImpressionsWeek");
                 }
             }
         });
@@ -52,7 +52,7 @@ public class MetricsMenu extends RPanel {
                 if (nImpressionsDay.isSelected()) {
                     mainController.popFromGraphView("nImpressionsDay");
                 } else {
-                    mainController.pushToGraphView("nImpressionsWeek", "Sample Chart", "xAxisName", "yAxiseName", null);
+                    mainController.pushNewNumberOfImpressionsPerDay("nImpressionsDay");
                 }
             }
         });
@@ -65,6 +65,7 @@ public class MetricsMenu extends RPanel {
                 if (nImpressionsHour.isSelected()) {
                     mainController.popFromGraphView("nImpressionsHour");
                 } else {
+                    mainController.pushNewNumberOfImpressionsPerHour("nImpressionsHour");
                 }
             }
         });
@@ -79,11 +80,11 @@ public class MetricsMenu extends RPanel {
         nClicksWeek.setSelected(mainController.doesGraphViewContainGraph("nClicksWeek"));
         nClicksWeek.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nClicksWeek.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nClicksWeek");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfClicksPerWeek("nClicksWeek");
                 }
             }
         });
@@ -92,11 +93,11 @@ public class MetricsMenu extends RPanel {
         nClicksDay.setSelected(mainController.doesGraphViewContainGraph("nClicksDay"));
         nClicksDay.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nClicksDay.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nClicksDay");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfClicksPerDay("nClicksDay");
                 }
             }
         });
@@ -105,11 +106,11 @@ public class MetricsMenu extends RPanel {
         nClicksHour.setSelected(mainController.doesGraphViewContainGraph("nClicksHour"));
         nClicksHour.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nClicksHour.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nClicksHour");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfClicksPerHour("nClicksHour");
                 }
             }
         });
@@ -124,11 +125,11 @@ public class MetricsMenu extends RPanel {
         nUniquesWeek.setSelected(mainController.doesGraphViewContainGraph("nUniquesWeek"));
         nUniquesWeek.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nUniquesWeek.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nUniquesWeek");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfUniquesPerWeek("nUniquesWeek");
                 }
             }
         });
@@ -137,11 +138,11 @@ public class MetricsMenu extends RPanel {
         nUniquesDay.setSelected(mainController.doesGraphViewContainGraph("nUniquesDay"));
         nUniquesDay.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nUniquesDay.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nUniquesDay");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfUniquesPerDay("nUniquesDay");
                 }
             }
         });
@@ -150,11 +151,11 @@ public class MetricsMenu extends RPanel {
         nUniquesHour.setSelected(mainController.doesGraphViewContainGraph("nUniquesHour"));
         nUniquesHour.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nUniquesHour.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nUniquesHour");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfUniquesPerHour("nUniquesHour");
                 }
             }
         });
@@ -169,11 +170,11 @@ public class MetricsMenu extends RPanel {
         nBouncesWeek.setSelected(mainController.doesGraphViewContainGraph("nBouncesWeek"));
         nBouncesWeek.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nBouncesWeek.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nBouncesWeek");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfBouncesPerWeek("nBouncesWeek");
                 }
             }
         });
@@ -182,11 +183,11 @@ public class MetricsMenu extends RPanel {
         nBouncesDay.setSelected(mainController.doesGraphViewContainGraph("nBouncesDay"));
         nBouncesDay.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nBouncesDay.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nBouncesDay");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfBouncesPerDay("nBouncesDay");
                 }
             }
         });
@@ -195,11 +196,11 @@ public class MetricsMenu extends RPanel {
         nBouncesHour.setSelected(mainController.doesGraphViewContainGraph("nBouncesHour"));
         nBouncesHour.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nBouncesHour.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nBouncesHour");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfBouncesPerHour("nBouncesHour");
                 }
             }
         });
@@ -214,11 +215,11 @@ public class MetricsMenu extends RPanel {
         nConversionsWeek.setSelected(mainController.doesGraphViewContainGraph("nConversionsWeek"));
         nConversionsWeek.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nConversionsWeek.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nConversionsWeek");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfConversionsPerWeek("nConversionsWeek");
                 }
             }
         });
@@ -227,11 +228,11 @@ public class MetricsMenu extends RPanel {
         nConversionsDay.setSelected(mainController.doesGraphViewContainGraph("nConversionsDay"));
         nConversionsDay.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nConversionsDay.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nConversionsDay");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfConversionsPerDay("nConversionsDay");
                 }
             }
         });
@@ -240,11 +241,11 @@ public class MetricsMenu extends RPanel {
         nConversionsHour.setSelected(mainController.doesGraphViewContainGraph("nConversionsHour"));
         nConversionsHour.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (nBouncesHour.isSelected()) {
-                    //todo remove from pool
+                    mainController.popFromGraphView("nConversionsHour");
                 } else {
-                    //todo
+                    mainController.pushNewNumberOfConversionsPerHour("nConversionsHour");
                 }
             }
         });

@@ -453,4 +453,425 @@ public class MainController {
         backgroundTask.execute();
         removeDataLoadingTask(backgroundTask);
     }
+
+    //Total Cost
+    public void pushNewNumberOfTotalCostPerWeek(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "Total Cost [Per Week]", "Week", "Total Cost", dataExchange.getTotalCostPerWeek());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewNumberOfTotalCostPerDay(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "Total Cost [Per Day]", "Day", "Total Cost", dataExchange.getTotalCostPerDay());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewNumberOfTotalCostPerHour(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "Total Cost [Per Hour]", "Hour", "Total Cost", dataExchange.getTotalCostPerHour());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+
+    //CTR
+    public void pushNewCTRPerWeek(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CTR [Per Week]", "Week", "CTR", dataExchange.getCPAPerWeek());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewCTRPerDay(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CTR [Per Day]", "Day", "CTR", dataExchange.getCTRPerDay());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewCTRPerHour(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CTR [Per Hour]", "Hour", "CTR", dataExchange.getCTRPerHour());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    //CPA
+    public void pushNewCPAPerWeek(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CPA [Per Week]", "Week", "CPA", dataExchange.getCPAPerWeek());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewCPAPerDay(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CPA [Per Day]", "Day", "CPA", dataExchange.getCPAPerDay());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewCPAPerHour(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CPA [Per Hour]", "Hour", "CPA", dataExchange.getCPAPerHour());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    //CPC
+    public void pushNewCPCPerWeek(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CPC [Per Week]", "Week", "CPC", dataExchange.getCPCPerWeek());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewCPCPerDay(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CPC [Per Day]", "Day", "CPC", dataExchange.getCPCPerDay());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewCPCPerHour(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CPC [Per Hour]", "Hour", "CPA", dataExchange.getCPCPerHour());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    //CPM
+    public void pushNewCPMPerWeek(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CPM [Per Week]", "Week", "CPM", dataExchange.getCPMPerWeek());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewCPMPerDay(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CPM [Per Day]", "Day", "CPM", dataExchange.getCPMPerDay());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewCPMPerHour(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "CPM [Per Hour]", "Hour", "CPM", dataExchange.getCPMPerHour());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    //BounceRate
+    public void pushNewBounceRatePerWeek(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "Bounce Rate [Per Week]", "Week", "Bounce Rate", dataExchange.getBounceRatePerWeek());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewBounceRatePerDay(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "Bounce Rate [Per Day]", "Day", "Bounce Rate", dataExchange.getBounceRatePerDay());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
+
+    public void pushNewBounceRatePerHour(String id)
+    {
+        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
+            GraphSpecs tmp;
+
+            @Override
+            protected Void doInBackground() {
+                startProgressBar();
+                tmp = new GraphSpecs(id, "Bounce Rate [Per Hour]", "Hour", "Bounce Rate", dataExchange.getBounceRatePerHour());
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                stopProgressBar();
+                pushToGraphView(tmp);
+            }
+        };
+        addDataLoadingTask(backgroundTask);
+        backgroundTask.execute();
+        removeDataLoadingTask(backgroundTask);
+    }
 }

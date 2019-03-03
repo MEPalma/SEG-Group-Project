@@ -11,8 +11,6 @@ import java.util.List;
 
 public class Gui extends JFrame {
 
-    private DataExchange dataExchange;
-
     private JPanel mainView;
     private JPanel northView;
     private JPanel menuButtonsPane;
@@ -34,8 +32,6 @@ public class Gui extends JFrame {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
-        this.dataExchange = dataExchange;
         this.mainController = mainController;
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

@@ -34,7 +34,7 @@ public class GraphView extends RPanel {
 
         //mode view chooser
         JPanel topMenuPanel = new JPanel(new BorderLayout());
-        topMenuPanel.setPreferredSize(new Dimension(100, 51));
+        topMenuPanel.setPreferredSize(new Dimension(100, 50));
         topMenuPanel.setBackground(GuiColors.BASE_WHITE);
         topMenuPanel.setBorder(BorderFactory.createMatteBorder(0, 10, 0, 10, getBackground()));
 
@@ -44,7 +44,7 @@ public class GraphView extends RPanel {
         modeChooser.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         modeChooser.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (mode == Mode.CARD_MODE)
                     mode = Mode.GRID_MODE;
                 else mode = Mode.CARD_MODE;

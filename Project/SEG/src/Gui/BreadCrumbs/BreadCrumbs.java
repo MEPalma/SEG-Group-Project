@@ -45,7 +45,7 @@ public class BreadCrumbs extends JPanel {
 
         setBackground(BACKGROUND);
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_WHITE));
-        setPreferredSize(new Dimension(250, 52));
+        setPreferredSize(new Dimension(250, 50));
 
         this.panesStacks = new Stack<RPanel>();
         this.crumbsStack = new Stack<JPanel>();

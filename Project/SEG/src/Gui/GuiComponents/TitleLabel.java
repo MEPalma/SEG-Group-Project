@@ -30,14 +30,13 @@ public class TitleLabel extends JLabel {
         setBackground(new Color(0, 0, 0, 0));
     }
 
-    public TitleLabel(String title, int horizontalAlignment, int size, MouseListener listener) {
+    public TitleLabel(String title, int horizontalAlignment, int size, Color foreground) {
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
-        super.setForeground(GuiColors.TEXT_ORANGE_UNSELECTED);
+        super.setForeground(foreground);
         super.setFont(new Font("Verdana", Font.PLAIN, size));
         super.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setBackground(new Color(0, 0, 0, 0));
-        addMouseListener(listener);
     }
 }

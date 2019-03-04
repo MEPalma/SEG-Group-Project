@@ -39,7 +39,6 @@ public class DateBrowser extends JPanel {
         DateBrowser thisBrowser = this;
 
         TextBox dateBox = new TextBox(getBackground());
-        dateBox.setForeground(GuiColors.TEXT_UNSELECTED);
         dateBox.setEditable(false);
         dateBox.setPreferredSize(new Dimension(150, 26));
         dateBox.setHorizontalAlignment(TextBox.CENTER);
@@ -145,7 +144,7 @@ class DateBrowserFrame extends JFrame {
         cal.setTime(dateBrowser.getDate());
 
         //these will need to be updated
-        TitleLabel lspYearAndMonthAndDayLabel = new TitleLabel(dateBrowser.getDateFormat().format(dateBrowser.getDate()), TitleLabel.CENTER, 16);
+        TitleLabel lspYearAndMonthAndDayLabel = new TitleLabel(dateBrowser.getDateFormat().format(dateBrowser.getDate()), TitleLabel.CENTER, 16, GuiColors.BASE_WHITE);
 
         //CENTER VIEW --> Date Browser
         JPanel centerViewPanel = new JPanel(new BorderLayout(10, 10));
@@ -159,6 +158,7 @@ class DateBrowserFrame extends JFrame {
         cvpNorthPanel.setBackground(getBackground());
 
         MenuLabel goBackOneMonthLabel = new MenuLabel("<", MenuLabel.CENTER, 14);
+        goBackOneMonthLabel.setForeground(GuiColors.BASE_WHITE);
         goBackOneMonthLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -172,6 +172,7 @@ class DateBrowserFrame extends JFrame {
             }
         });
         MenuLabel goForewordOneMonthLabel = new MenuLabel(">", MenuLabel.CENTER, 14);
+        goForewordOneMonthLabel.setForeground(GuiColors.BASE_WHITE);
         goForewordOneMonthLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -206,13 +207,13 @@ class DateBrowserFrame extends JFrame {
         c.add(Calendar.DAY_OF_MONTH, 1);
         Date endDate = (Date) c.getTime().clone();
 
-        cvpDaysViewPanel.add(new TitleLabel("MO", TitleLabel.CENTER, 8));
-        cvpDaysViewPanel.add(new TitleLabel("TU", TitleLabel.CENTER, 8));
-        cvpDaysViewPanel.add(new TitleLabel("WE", TitleLabel.CENTER, 8));
-        cvpDaysViewPanel.add(new TitleLabel("TH", TitleLabel.CENTER, 8));
-        cvpDaysViewPanel.add(new TitleLabel("FR", TitleLabel.CENTER, 8));
-        cvpDaysViewPanel.add(new TitleLabel("SA", TitleLabel.CENTER, 8));
-        cvpDaysViewPanel.add(new TitleLabel("SU", TitleLabel.CENTER, 8));
+        cvpDaysViewPanel.add(new TitleLabel("MO", TitleLabel.CENTER, 8, GuiColors.BASE_WHITE));
+        cvpDaysViewPanel.add(new TitleLabel("TU", TitleLabel.CENTER, 8, GuiColors.BASE_WHITE));
+        cvpDaysViewPanel.add(new TitleLabel("WE", TitleLabel.CENTER, 8, GuiColors.BASE_WHITE));
+        cvpDaysViewPanel.add(new TitleLabel("TH", TitleLabel.CENTER, 8, GuiColors.BASE_WHITE));
+        cvpDaysViewPanel.add(new TitleLabel("FR", TitleLabel.CENTER, 8, GuiColors.BASE_WHITE));
+        cvpDaysViewPanel.add(new TitleLabel("SA", TitleLabel.CENTER, 8, GuiColors.BASE_WHITE));
+        cvpDaysViewPanel.add(new TitleLabel("SU", TitleLabel.CENTER, 8, GuiColors.BASE_WHITE));
 
         int added = 0;
         int lastDayNumber = 1;
@@ -229,6 +230,27 @@ class DateBrowserFrame extends JFrame {
             lastDayNumber = dayNumTMP;
 
             MenuLabel dayChooser = new MenuLabel(Integer.toString(ctmp.get(Calendar.DAY_OF_MONTH)), TitleLabel.CENTER, 12);
+            dayChooser.setForeground(GuiColors.BASE_WHITE);
+            for (MouseListener l : dayChooser.getMouseListeners())
+                dayChooser.removeMouseListener(l);
+            dayChooser.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    dayChooser.setForeground(GuiColors.DARK_GRAY);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    dayChooser.setForeground(GuiColors.BASE_WHITE);
+                }
+
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    dateBrowser.setDate(ctmp.getTime());
+                    setVisible(false);
+                }
+            });
+
             if (ctmp.getTime().equals(dateBrowser.getDate())) {
                 for (MouseListener ml : dayChooser.getMouseListeners()) {
                     dayChooser.removeMouseListener(ml);
@@ -236,13 +258,6 @@ class DateBrowserFrame extends JFrame {
 
                 dayChooser.setForeground(new Color(105, 175, 205));
             }
-            dayChooser.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    dateBrowser.setDate(ctmp.getTime());
-                    setVisible(false);
-                }
-            });
             cvpDaysViewPanel.add(dayChooser);
             added++;
         }

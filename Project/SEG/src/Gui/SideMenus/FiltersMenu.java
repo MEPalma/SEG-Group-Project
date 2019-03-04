@@ -45,7 +45,6 @@ public class FiltersMenu extends RPanel {
 
     private JPanel getDateRange() {
         TitleLabel titleLabel = new TitleLabel("Date range", TitleLabel.LEFT, 20);
-        titleLabel.setForeground(GuiColors.BASE_WHITE);
 
         DateBrowser startDate = new DateBrowser(getBackground(), Stringifiable.globalDateFormat, new Date());
         startDate.setDateChangedListener(new DateChangedListener() {
@@ -95,7 +94,6 @@ public class FiltersMenu extends RPanel {
 
     private JPanel getAudianceSegments() {
         TitleLabel titleLabel = new TitleLabel("Audience segments", TitleLabel.LEFT, 20);
-        titleLabel.setForeground(GuiColors.BASE_WHITE);
 
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.add(titleLabel, BorderLayout.NORTH);
@@ -297,7 +295,7 @@ public class FiltersMenu extends RPanel {
         sections.add(subWrapperAge);
         sections.add(subWrapperContext);
 
-        wrapper.add(new ListView(wrapper.getBackground(), sections), BorderLayout.CENTER);
+        wrapper.add(new ListView(wrapper.getBackground(), sections, false), BorderLayout.CENTER);
 
         return wrapper;
     }

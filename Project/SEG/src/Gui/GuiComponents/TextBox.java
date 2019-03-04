@@ -10,9 +10,9 @@ public class TextBox extends JTextField {
         super();
         setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.WHITE));
         setFont(new Font("Verdana", Font.PLAIN, 14));
-        setForeground(GuiColors.DARK_GRAY);
+        setForeground(Color.BLACK);
         setBackground(background);
         setAlignmentX(JTextField.CENTER);
-        setCaretColor(GuiColors.DARK_GRAY);
+        setCaretColor(Color.BLACK);
     }
 }

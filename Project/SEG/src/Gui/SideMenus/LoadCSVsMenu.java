@@ -40,7 +40,7 @@ public class LoadCSVsMenu extends RPanel {
             File impressionLog, clickLog, serverLog;
 
             @Override
-            protected Void doInBackground() throws Exception {
+            protected Void doInBackground() {
                 return null;
             }
 

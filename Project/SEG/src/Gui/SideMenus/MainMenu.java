@@ -34,7 +34,7 @@ public class MainMenu extends RPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 mainController.pushNewViewOnBreadCrumbs("Choose metrics", new MetricsMenu(mainController));
-                this.mouseExited(e);
+                super.mouseExited(e);
             }
         });
         menus.add(getMenuCard(chooseMetricsLabel));
@@ -45,7 +45,8 @@ public class MainMenu extends RPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 mainController.pushNewViewOnBreadCrumbs("Filters", new FiltersMenu(mainController));
-                this.mouseExited(e);
+                JOptionPane.showMessageDialog(mainController.getBreadCrumbsHoster(), "Features not supported yet", "Unsupported features", JOptionPane.WARNING_MESSAGE);
+                super.mouseExited(e);
             }
         });
         menus.add(getMenuCard(filtersLabel));
@@ -56,7 +57,7 @@ public class MainMenu extends RPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 mainController.pushNewViewOnBreadCrumbs("Load CSVs", new LoadCSVsMenu(mainController));
-                this.mouseExited(e);
+                super.mouseExited(e);
             }
         });
         menus.add(getMenuCard(loadCSVsLabel));
@@ -67,6 +68,7 @@ public class MainMenu extends RPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //TODO
+                JOptionPane.showMessageDialog(mainController.getBreadCrumbsHoster(), "Features not supported yet", "Unsupported features", JOptionPane.WARNING_MESSAGE);
                 this.mouseExited(e);
             }
         });

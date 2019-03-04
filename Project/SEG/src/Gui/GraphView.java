@@ -51,7 +51,7 @@ public class GraphView extends RPanel {
                 refresh();
             }
         });
-        topMenuPanel.add(new TitleLabel("Graohs:", TitleLabel.LEFT, 16), BorderLayout.WEST);
+        topMenuPanel.add(new TitleLabel("Graphs:", TitleLabel.LEFT, 16), BorderLayout.WEST);
         topMenuPanel.add(new TitleLabel("Organise in:", TitleLabel.RIGHT, 14), BorderLayout.CENTER);
         topMenuPanel.add(modeChooser, BorderLayout.EAST);
 

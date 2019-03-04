@@ -4,10 +4,7 @@ import DatabaseManager.Stringifiable;
 import Gui.DateBrowser.DateBrowser;
 import Gui.DateBrowser.DateChangedListener;
 import Gui.GuiColors;
-import Gui.GuiComponents.ListView;
-import Gui.GuiComponents.RPanel;
-import Gui.GuiComponents.RadioButton;
-import Gui.GuiComponents.TitleLabel;
+import Gui.GuiComponents.*;
 import Gui.MainController;
 
 import javax.swing.*;
@@ -35,6 +32,10 @@ public class FiltersMenu extends RPanel {
         menus.add(getDateRange());
         menus.add(getAudianceSegments());
         menus.add(getContext());
+
+        MenuLabel clearFiltersLabel = new MenuLabel("Clear all filters", MenuLabel.LEFT, 16);
+        clearFiltersLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
+        menus.add(clearFiltersLabel);
 
         add(new ListView(getBackground(), menus).getWrappedInScroll(true), BorderLayout.CENTER);
 

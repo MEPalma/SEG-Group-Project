@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.*;
 
 public class GraphView extends RPanel {
-    public enum Mode {SINGLE_MODE, CARD_MODE, GRID_MODE}
+    public enum Mode {CARD_MODE, GRID_MODE}
 
     private Mode mode;
     private final List<GraphSpecs> graphsOnScreen;

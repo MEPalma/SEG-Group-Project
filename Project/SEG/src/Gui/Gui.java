@@ -1,13 +1,10 @@
 package Gui;
 
-import DatabaseManager.DataExchange;
 import Gui.GuiComponents.TitleLabel;
 import Gui.SideMenus.MainMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Gui extends JFrame {
 
@@ -46,7 +43,7 @@ public class Gui extends JFrame {
 
         this.northView = new JPanel(new BorderLayout());
         getContentPane().add(this.northView, BorderLayout.NORTH);
-        this.northView.setBackground(GuiColors.TEXT_ORANGE_UNSELECTED);
+        this.northView.setBackground(GuiColors.BASE_PRIME);
         this.northView.setLayout(new BorderLayout());
         this.northView.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_SMOKE));
 

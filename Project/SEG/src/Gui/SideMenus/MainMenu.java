@@ -29,7 +29,7 @@ public class MainMenu extends RPanel {
         List<Component> menus = new LinkedList<>();
 
         //ChooseMetrics menu
-        MenuLabel chooseMetricsLabel = new MenuLabel("Choose metrics", MenuLabel.LEFT, 16);
+        MenuLabel chooseMetricsLabel = new MenuLabel("Choose metrics", MenuLabel.LEFT, 14);
         chooseMetricsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -40,7 +40,7 @@ public class MainMenu extends RPanel {
         menus.add(getMenuCard(chooseMetricsLabel));
 
         //FILTERS
-        MenuLabel filtersLabel = new MenuLabel("Filters", MenuLabel.LEFT, 16);
+        MenuLabel filtersLabel = new MenuLabel("Filters", MenuLabel.LEFT, 14);
         filtersLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -51,7 +51,7 @@ public class MainMenu extends RPanel {
         menus.add(getMenuCard(filtersLabel));
 
         //Load csvs
-        MenuLabel loadCSVsLabel = new MenuLabel("Load CSVs", MenuLabel.LEFT, 16);
+        MenuLabel loadCSVsLabel = new MenuLabel("Load CSVs", MenuLabel.LEFT, 14);
         loadCSVsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -62,7 +62,7 @@ public class MainMenu extends RPanel {
         menus.add(getMenuCard(loadCSVsLabel));
 
         //settings
-        MenuLabel settingsLabel = new MenuLabel("Settings", MenuLabel.LEFT, 16);
+        MenuLabel settingsLabel = new MenuLabel("Settings", MenuLabel.LEFT, 14);
         settingsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

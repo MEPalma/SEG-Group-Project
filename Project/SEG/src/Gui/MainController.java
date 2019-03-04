@@ -7,10 +7,10 @@ import Gui.BreadCrumbs.BreadCrumbs;
 import Gui.BreadCrumbs.BreadCrumbsHoster;
 import Gui.GuiComponents.RPanel;
 
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.*;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainController {
     private final DataExchange dataExchange;
@@ -40,8 +40,7 @@ public class MainController {
     }
 
     private void killDataLoadingTasks() {
-        synchronized (this.dataLoadingTasks)
-        {
+        synchronized (this.dataLoadingTasks) {
             for (SwingWorker task : this.dataLoadingTasks)
                 task.cancel(true);
 
@@ -49,10 +48,8 @@ public class MainController {
         }
     }
 
-    private void removeDataLoadingTask(SwingWorker task)
-    {
-        synchronized (this.dataLoadingTasks)
-        {
+    private void removeDataLoadingTask(SwingWorker task) {
+        synchronized (this.dataLoadingTasks) {
             this.dataLoadingTasks.remove(task);
         }
     }
@@ -69,6 +66,10 @@ public class MainController {
         killMainBackgroundTask();
         killDataLoadingTasks();
         this.dataExchange.close();
+    }
+
+    public void showErrorMessage(String title, String details) {
+        this.breadCrumbs.showErrorMessage(title, details);
     }
 
     public BreadCrumbsHoster getBreadCrumbsHoster() {
@@ -105,8 +106,7 @@ public class MainController {
      */
 
     // Impressions
-    public void pushNewNumberOfImpressionsPerWeek(String id)
-    {
+    public void pushNewNumberOfImpressionsPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -128,8 +128,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfImpressionsPerDay(String id)
-    {
+    public void pushNewNumberOfImpressionsPerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -151,8 +150,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfImpressionsPerHour(String id)
-    {
+    public void pushNewNumberOfImpressionsPerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -175,8 +173,7 @@ public class MainController {
     }
 
     //Clicks
-    public void pushNewNumberOfClicksPerWeek(String id)
-    {
+    public void pushNewNumberOfClicksPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -198,8 +195,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfClicksPerDay(String id)
-    {
+    public void pushNewNumberOfClicksPerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -221,8 +217,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfClicksPerHour(String id)
-    {
+    public void pushNewNumberOfClicksPerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -245,8 +240,7 @@ public class MainController {
     }
 
     //Uniques
-    public void pushNewNumberOfUniquesPerWeek(String id)
-    {
+    public void pushNewNumberOfUniquesPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -268,8 +262,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfUniquesPerDay(String id)
-    {
+    public void pushNewNumberOfUniquesPerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -291,8 +284,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfUniquesPerHour(String id)
-    {
+    public void pushNewNumberOfUniquesPerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -315,8 +307,7 @@ public class MainController {
     }
 
     //Bounces
-    public void pushNewNumberOfBouncesPerWeek(String id)
-    {
+    public void pushNewNumberOfBouncesPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -338,8 +329,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfBouncesPerDay(String id)
-    {
+    public void pushNewNumberOfBouncesPerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -361,8 +351,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfBouncesPerHour(String id)
-    {
+    public void pushNewNumberOfBouncesPerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -385,8 +374,7 @@ public class MainController {
     }
 
     //Conversions
-    public void pushNewNumberOfConversionsPerWeek(String id)
-    {
+    public void pushNewNumberOfConversionsPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -408,8 +396,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfConversionsPerDay(String id)
-    {
+    public void pushNewNumberOfConversionsPerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -431,8 +418,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfConversionsPerHour(String id)
-    {
+    public void pushNewNumberOfConversionsPerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -455,8 +441,7 @@ public class MainController {
     }
 
     //Total Cost
-    public void pushNewNumberOfTotalCostPerWeek(String id)
-    {
+    public void pushNewNumberOfTotalCostPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -478,8 +463,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfTotalCostPerDay(String id)
-    {
+    public void pushNewNumberOfTotalCostPerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -501,8 +485,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewNumberOfTotalCostPerHour(String id)
-    {
+    public void pushNewNumberOfTotalCostPerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -526,8 +509,7 @@ public class MainController {
 
 
     //CTR
-    public void pushNewCTRPerWeek(String id)
-    {
+    public void pushNewCTRPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -549,8 +531,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewCTRPerDay(String id)
-    {
+    public void pushNewCTRPerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -572,8 +553,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewCTRPerHour(String id)
-    {
+    public void pushNewCTRPerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -596,8 +576,7 @@ public class MainController {
     }
 
     //CPA
-    public void pushNewCPAPerWeek(String id)
-    {
+    public void pushNewCPAPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -619,8 +598,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewCPAPerDay(String id)
-    {
+    public void pushNewCPAPerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -642,8 +620,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewCPAPerHour(String id)
-    {
+    public void pushNewCPAPerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -666,8 +643,7 @@ public class MainController {
     }
 
     //CPC
-    public void pushNewCPCPerWeek(String id)
-    {
+    public void pushNewCPCPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -689,8 +665,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewCPCPerDay(String id)
-    {
+    public void pushNewCPCPerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -712,8 +687,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewCPCPerHour(String id)
-    {
+    public void pushNewCPCPerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -736,8 +710,7 @@ public class MainController {
     }
 
     //CPM
-    public void pushNewCPMPerWeek(String id)
-    {
+    public void pushNewCPMPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -759,8 +732,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewCPMPerDay(String id)
-    {
+    public void pushNewCPMPerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -782,8 +754,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewCPMPerHour(String id)
-    {
+    public void pushNewCPMPerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -806,8 +777,7 @@ public class MainController {
     }
 
     //BounceRate
-    public void pushNewBounceRatePerWeek(String id)
-    {
+    public void pushNewBounceRatePerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -829,8 +799,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewBounceRatePerDay(String id)
-    {
+    public void pushNewBounceRatePerDay(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 
@@ -852,8 +821,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-    public void pushNewBounceRatePerHour(String id)
-    {
+    public void pushNewBounceRatePerHour(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             GraphSpecs tmp;
 

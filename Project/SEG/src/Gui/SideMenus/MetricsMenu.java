@@ -296,7 +296,7 @@ public class MetricsMenu extends RPanel {
         });
         menus.add(getMenuCard(
                 "Total Cost",
-                "??The total of the click cost and impression cost.??",
+                "The total of the click cost and impression cost.",
                 new Component[]{totalCostWeek, totalCostDay, totalCostHour}));
 
 

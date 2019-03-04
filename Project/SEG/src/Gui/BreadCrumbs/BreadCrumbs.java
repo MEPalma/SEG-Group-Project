@@ -2,7 +2,9 @@ package Gui.BreadCrumbs;
 
 import Gui.GraphView;
 import Gui.GuiColors;
+import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
+import Gui.GuiComponents.TextView;
 import Gui.GuiComponents.TitleLabel;
 
 import javax.swing.*;
@@ -21,6 +23,9 @@ public class BreadCrumbs extends JPanel {
 
     private JProgressBar progressBar;
     private boolean visibleProgressBar;
+
+    private JPanel errorPanel;
+    private boolean visibleErrorPanel;
 
     private Stack<RPanel> panesStacks;
     private Stack<JPanel> crumbsStack;
@@ -55,7 +60,7 @@ public class BreadCrumbs extends JPanel {
         JPanel crumb = new JPanel(new BorderLayout());
 
         if (this.crumbsStack.size() > 0) crumb.setBackground(SELECTED);
-        else crumb.setBackground(GuiColors.TEXT_ORANGE_UNSELECTED);
+        else crumb.setBackground(GuiColors.BASE_PRIME);
         crumb.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_SMOKE));
         crumb.add(new TitleLabel(text, JLabel.CENTER, 16), BorderLayout.CENTER);
 
@@ -201,5 +206,61 @@ public class BreadCrumbs extends JPanel {
     public GraphView getGraphView() {
         return graphView;
     }
+
+    public void showErrorMessage(String title, String details) {
+        hideErrorMessage();
+
+        this.errorPanel = new JPanel(new BorderLayout());
+        errorPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        errorPanel.setBackground(GuiColors.RED_ERROR);
+        errorPanel.setPreferredSize(new Dimension(this.viewPanel.getWidth(), 300));
+
+        MenuLabel closeLabel = new MenuLabel("Close", MenuLabel.CENTER, 14);
+        closeLabel.setForeground(GuiColors.BASE_WHITE);
+        closeLabel.dropAllListeners();
+        closeLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                hideErrorMessage();
+            }
+        });
+
+        JPanel detailsWrapper = new JPanel(new GridLayout(1, 1));
+        detailsWrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        detailsWrapper.setBackground(GuiColors.RED_ERROR);
+
+        TextView detailsLabel = new TextView(details, 10, GuiColors.RED_ERROR);
+        detailsLabel.setForeground(GuiColors.BASE_WHITE);
+        detailsWrapper.add(detailsLabel);
+
+        JScrollPane scrollDetails = new JScrollPane(detailsWrapper, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollDetails.setBackground(GuiColors.RED_ERROR);
+        scrollDetails.setBorder(BorderFactory.createEmptyBorder());
+
+        errorPanel.add(new TitleLabel(title, TitleLabel.CENTER, 12, GuiColors.BASE_WHITE), BorderLayout.NORTH);
+        errorPanel.add(scrollDetails, BorderLayout.CENTER);
+        errorPanel.add(closeLabel, BorderLayout.SOUTH);
+
+
+        this.visibleErrorPanel = true;
+
+        viewPanel.add(this.errorPanel, BorderLayout.SOUTH);
+
+        repaint();
+        revalidate();
+    }
+
+    public void hideErrorMessage() {
+        if (this.visibleErrorPanel && this.errorPanel != null) {
+            this.viewPanel.remove(this.errorPanel);
+            this.visibleErrorPanel = false;
+            this.errorPanel = null;
+            this.viewPanel.repaint();
+            this.viewPanel.revalidate();
+            repaint();
+            revalidate();
+        }
+    }
+
 }
 

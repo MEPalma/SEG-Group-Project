@@ -53,11 +53,6 @@ public class LoadCSVsMenu extends RPanel {
                 components.add(getClickLogFileFinderPanel());
                 components.add(getServerLogFileFinderPanel());
 
-                ListView listView = new ListView(BACKGROUND, components);
-
-                add(new TitleLabel(" Import data from CSV files", TitleLabel.LEFT), BorderLayout.NORTH);
-                add(listView.getWrappedInScroll(true), BorderLayout.CENTER);
-
                 MenuLabel parseButton = new MenuLabel("LOAD", MenuLabel.CENTER);
                 parseButton.addMouseListener(new MouseAdapter() {
                     @Override
@@ -68,7 +63,7 @@ public class LoadCSVsMenu extends RPanel {
                                 @Override
                                 protected Void doInBackground() throws Exception {
                                     mainController.startProgressBar();
-                                    CSVParser parser = new CSVParser(mainController.getDataExchange(), impressionLog, clickLog, serverLog);
+                                    CSVParser parser = new CSVParser(mainController, impressionLog, clickLog, serverLog);
                                     parser.parseAll();
                                     mainController.stopProgressBar();
                                     return null;
@@ -83,8 +78,12 @@ public class LoadCSVsMenu extends RPanel {
                     }
 
                 });
+                components.add(parseButton);
 
-                add(parseButton, BorderLayout.SOUTH);
+                ListView listView = new ListView(BACKGROUND, components);
+
+                add(new TitleLabel(" Import data from CSV files", TitleLabel.LEFT), BorderLayout.NORTH);
+                add(listView.getWrappedInScroll(true), BorderLayout.CENTER);
 
                 revalidate();
                 repaint();

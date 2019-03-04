@@ -1,7 +1,5 @@
 package Main;
 
-import DatabaseManager.DataExchange;
-import DatabaseManager.DatabaseManager;
 import Gui.Gui;
 import Gui.MainController;
 

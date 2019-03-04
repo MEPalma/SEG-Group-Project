@@ -20,7 +20,7 @@ public class DateBrowser extends JPanel {
     private DateChangedListener listener;
 
     public DateBrowser() {
-        this(GuiColors.TEXT_ORANGE_UNSELECTED, Stringifiable.globalDateFormat, new Date());//TODO change to simple data format
+        this(GuiColors.BASE_PRIME, Stringifiable.globalDateFormat, new Date());//TODO change to simple data format
     }
 
     public DateBrowser(Color background, SimpleDateFormat dateFormat, Date date) {
@@ -123,7 +123,7 @@ class DateBrowserFrame extends JFrame {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setUndecorated(true);
         setSize(WIDTH, HEIGHT);
-        setBackground(GuiColors.TEXT_ORANGE_UNSELECTED);
+        setBackground(GuiColors.BASE_PRIME);
         getContentPane().setBackground(getBackground());
 
         addFocusListener(new FocusAdapter() {

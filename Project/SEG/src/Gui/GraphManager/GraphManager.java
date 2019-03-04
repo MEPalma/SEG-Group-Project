@@ -96,16 +96,16 @@ public class GraphManager {
         ((BarRenderer) cplot.getRenderer()).setBarPainter(new StandardBarPainter());
 
         BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
-        r.setSeriesPaint(0, GuiColors.TEXT_ORANGE_UNSELECTED);
+        r.setSeriesPaint(0, GuiColors.BASE_PRIME);
 
         Plot plot = barChart.getPlot();
         plot.setBackgroundPaint(Color.WHITE);
 
         barChart.getCategoryPlot().getRangeAxis().setLabelFont(new Font("Verdana", Font.PLAIN, 12));
-        barChart.getCategoryPlot().getDomainAxis().setLabelFont( barChart.getCategoryPlot().getRangeAxis().getLabelFont());
+        barChart.getCategoryPlot().getDomainAxis().setLabelFont(barChart.getCategoryPlot().getRangeAxis().getLabelFont());
 
         barChart.getCategoryPlot().getRangeAxis().setTickLabelFont(new Font("Verdana", Font.PLAIN, 8));
-        barChart.getCategoryPlot().getDomainAxis().setTickLabelFont( barChart.getCategoryPlot().getRangeAxis().getTickLabelFont());
+        barChart.getCategoryPlot().getDomainAxis().setTickLabelFont(barChart.getCategoryPlot().getRangeAxis().getTickLabelFont());
 
         if (data.size() > 24) barChart.getCategoryPlot().getDomainAxis().setTickLabelsVisible(false);
 
@@ -121,7 +121,6 @@ public class GraphManager {
         for (Tuple<String, Number> i : data) {
             dataset.addValue(i.getY(), "", i.getX());
         }
-
 
         return dataset;
     }

@@ -6,10 +6,8 @@ import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
-import org.jfree.chart.title.Title;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -61,13 +59,11 @@ public class GraphView extends RPanel {
         //display
         if (this.graphsOnScreen.size() == 0) {
             setNoGraphMode();
-        }
-        else if (this.graphsOnScreen.size() == 1) {
+        } else if (this.graphsOnScreen.size() == 1) {
             GraphSpecs ref = this.graphsOnScreen.get(0);
             JPanel tmp = GraphManager.createBarChar(ref.getData(), ref.getxAxisName(), ref.getyAxisName());
             add(new GraphCardView(this, ref, tmp, true), BorderLayout.CENTER);
-        }
-        else if (this.mode == Mode.CARD_MODE) {
+        } else if (this.mode == Mode.CARD_MODE) {
             if (this.graphsOnScreen.size() > 0) {
                 List<Component> cards = new LinkedList<Component>();
 
@@ -80,14 +76,11 @@ public class GraphView extends RPanel {
 
                 add(new ListView(getBackground(), cards, false).getWrappedInScroll(true), BorderLayout.CENTER);
             }
-        }
-        else if (this.mode == Mode.GRID_MODE)
-        {
+        } else if (this.mode == Mode.GRID_MODE) {
             if (this.graphsOnScreen.size() > 0) {
                 List<Component> rows = new LinkedList<Component>();
 
-                for (int i = 0; i < this.graphsOnScreen.size(); i++)
-                {
+                for (int i = 0; i < this.graphsOnScreen.size(); i++) {
                     JPanel rowWrapper = new JPanel(new GridLayout(1, 2));
                     rowWrapper.setBackground(getBackground());
                     rowWrapper.setBorder(BorderFactory.createEmptyBorder());
@@ -96,8 +89,7 @@ public class GraphView extends RPanel {
                     JPanel leftGraph = GraphManager.createBarChar(leftSpec.getData(), leftSpec.getxAxisName(), leftSpec.getyAxisName());
                     rowWrapper.add(new GraphCardView(this, leftSpec, leftGraph, false));
 
-                    if (i + 1 <= this.graphsOnScreen.size() - 1)
-                    {
+                    if (i + 1 <= this.graphsOnScreen.size() - 1) {
                         GraphSpecs rightSpec = this.graphsOnScreen.get(i + 1);
                         JPanel rightGraph = GraphManager.createBarChar(rightSpec.getData(), rightSpec.getxAxisName(), rightSpec.getyAxisName());
                         rowWrapper.add(new GraphCardView(this, rightSpec, rightGraph, false));
@@ -166,7 +158,7 @@ class GraphCardView extends RPanel {
         else setBorder(BorderFactory.createMatteBorder(24, 24, 24, 24, GuiColors.BASE_SMOKE));
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(GuiColors.TEXT_ORANGE_UNSELECTED);
+        topPanel.setBackground(GuiColors.BASE_PRIME);
         topPanel.setPreferredSize(new Dimension(100, 50));
 
         TitleLabel titleLabel = new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16);

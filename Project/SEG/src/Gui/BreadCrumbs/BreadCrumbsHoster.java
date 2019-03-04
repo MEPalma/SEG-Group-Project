@@ -19,7 +19,7 @@ public class BreadCrumbsHoster extends RPanel {
 
         // LEFT INIT
         this.leftPanel = new JPanel(new BorderLayout());
-        this.leftPanel.setBackground(GuiColors.BASE_LIGHT);
+        this.leftPanel.setBackground(GuiColors.BASE_SMOKE);
         this.leftPanel.setBorder(BorderFactory.createEmptyBorder());
         add(this.leftPanel, BorderLayout.WEST);
 
@@ -27,7 +27,7 @@ public class BreadCrumbsHoster extends RPanel {
 
         // RIGHT INIT
         this.rightPanel = new JPanel(new BorderLayout());
-        this.rightPanel.setBackground(GuiColors.BASE_LIGHT);
+        this.rightPanel.setBackground(GuiColors.BASE_SMOKE);
         this.rightPanel.setBorder(BorderFactory.createEmptyBorder());
         this.rightPanel.add(graphView, BorderLayout.CENTER);
         add(this.rightPanel, BorderLayout.CENTER);

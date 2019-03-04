@@ -6,6 +6,7 @@ import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
+import org.jfree.chart.title.Title;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,7 +23,7 @@ public class GraphView extends RPanel {
     private final List<GraphSpecs> graphsOnScreen;
 
     public GraphView() {
-        super(GuiColors.LIGHT, new BorderLayout());
+        super(GuiColors.BASE_SMOKE, new BorderLayout());
         this.graphsOnScreen = new LinkedList<GraphSpecs>();
         this.mode = Mode.CARD_MODE;
     }
@@ -34,7 +35,7 @@ public class GraphView extends RPanel {
         //mode view chooser
         JPanel topMenuPanel = new JPanel(new BorderLayout());
         topMenuPanel.setPreferredSize(new Dimension(100, 51));
-        topMenuPanel.setBackground(GuiColors.BASE_LIGHT);
+        topMenuPanel.setBackground(GuiColors.BASE_WHITE);
         topMenuPanel.setBorder(BorderFactory.createMatteBorder(0, 10, 0, 10, getBackground()));
 
         String modeText = "Cards";
@@ -157,20 +158,22 @@ class GraphCardView extends RPanel {
     private GraphView host;
 
     public GraphCardView(GraphView host, GraphSpecs spec, JPanel graph, boolean isLast) {
-        super(GuiColors.BASE_LIGHT, new BorderLayout());
+        super(GuiColors.BASE_SMOKE, new BorderLayout());
         this.host = host;
 
         if (!isLast)
-            setBorder(BorderFactory.createMatteBorder(24, 24, 0, 24, GuiColors.LIGHT));
-        else setBorder(BorderFactory.createMatteBorder(24, 24, 24, 24, GuiColors.LIGHT));
+            setBorder(BorderFactory.createMatteBorder(24, 24, 0, 24, GuiColors.BASE_SMOKE));
+        else setBorder(BorderFactory.createMatteBorder(24, 24, 24, 24, GuiColors.BASE_SMOKE));
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(getBackground());
+        topPanel.setBackground(GuiColors.TEXT_ORANGE_UNSELECTED);
         topPanel.setPreferredSize(new Dimension(100, 50));
 
-        topPanel.add(new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16), BorderLayout.CENTER);
+        TitleLabel titleLabel = new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16);
+        titleLabel.setForeground(GuiColors.BASE_WHITE);
+        topPanel.add(titleLabel, BorderLayout.CENTER);
 
-        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
+        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_WHITE));
         add(topPanel, BorderLayout.NORTH);
         add(graph, BorderLayout.CENTER);
     }

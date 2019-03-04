@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 public class LoadCSVsMenu extends RPanel {
 
-    public static Color BACKGROUND = GuiColors.BASE_LIGHT;
+    public static Color BACKGROUND = GuiColors.BASE_WHITE;
     private final MainController mainController;
 
     public LoadCSVsMenu(MainController mainController) {

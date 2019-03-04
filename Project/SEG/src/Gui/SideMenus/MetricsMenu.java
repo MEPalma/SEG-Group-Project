@@ -19,7 +19,7 @@ public class MetricsMenu extends RPanel {
     private final MainController mainController;
 
     public MetricsMenu(MainController mainController) {
-        super(GuiColors.BASE_LIGHT, new BorderLayout());
+        super(GuiColors.BASE_WHITE, new BorderLayout());
         this.mainController = mainController;
         refresh();
     }
@@ -530,21 +530,20 @@ public class MetricsMenu extends RPanel {
         JPanel tmp = new JPanel(new BorderLayout());
 
         TitleLabel titleLabel = new TitleLabel(title, TitleLabel.LEFT, 20);
-        titleLabel.setForeground(GuiColors.LIGHT);
 
         tmp.add(titleLabel, BorderLayout.NORTH);
         tmp.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         tmp.setBackground(getBackground());
 
         TitleLabel descriptionLabel = new TitleLabel("<html>" + description + "</html>", TitleLabel.LEFT, 12);
-        descriptionLabel.setForeground(GuiColors.LIGHT);
+        descriptionLabel.setForeground(GuiColors.DARK_GRAY);
         tmp.add(descriptionLabel, BorderLayout.CENTER);
 
         JPanel optionsWrapperPanel = new JPanel(new BorderLayout());
         optionsWrapperPanel.setBackground(getBackground());
         optionsWrapperPanel.setBorder(BorderFactory.createEmptyBorder());
         TitleLabel orderByLabel = new TitleLabel("Order by:", TitleLabel.LEFT, 12);
-        orderByLabel.setForeground(GuiColors.LIGHT);
+        orderByLabel.setForeground(GuiColors.DARK_GRAY);
         optionsWrapperPanel.add(orderByLabel, BorderLayout.NORTH);
 
         JPanel optionsPanel = new JPanel(new GridLayout(1, options.length, 4, 4));

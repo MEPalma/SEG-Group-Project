@@ -18,7 +18,7 @@ public class MainMenu extends RPanel {
     private final MainController mainController;
 
     public MainMenu(MainController mainController) {
-        super(GuiColors.BASE_LIGHT, new BorderLayout());
+        super(GuiColors.BASE_WHITE, new BorderLayout());
         this.mainController = mainController;
         refresh();
     }
@@ -29,7 +29,7 @@ public class MainMenu extends RPanel {
         List<Component> menus = new LinkedList<>();
 
         //ChooseMetrics menu
-        MenuLabel chooseMetricsLabel = new MenuLabel("Choose metrics", MenuLabel.LEFT, 14);
+        MenuLabel chooseMetricsLabel = new MenuLabel("Choose metrics", MenuLabel.LEFT, 16);
         chooseMetricsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -40,7 +40,7 @@ public class MainMenu extends RPanel {
         menus.add(getMenuCard(chooseMetricsLabel));
 
         //FILTERS
-        MenuLabel filtersLabel = new MenuLabel("Filters", MenuLabel.LEFT, 14);
+        MenuLabel filtersLabel = new MenuLabel("Filters", MenuLabel.LEFT, 16);
         filtersLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -51,7 +51,7 @@ public class MainMenu extends RPanel {
         menus.add(getMenuCard(filtersLabel));
 
         //Load csvs
-        MenuLabel loadCSVsLabel = new MenuLabel("Load CSVs", MenuLabel.LEFT, 14);
+        MenuLabel loadCSVsLabel = new MenuLabel("Load CSVs", MenuLabel.LEFT, 16);
         loadCSVsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -62,7 +62,7 @@ public class MainMenu extends RPanel {
         menus.add(getMenuCard(loadCSVsLabel));
 
         //settings
-        MenuLabel settingsLabel = new MenuLabel("Settings", MenuLabel.LEFT, 14);
+        MenuLabel settingsLabel = new MenuLabel("Settings", MenuLabel.LEFT, 16);
         settingsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -72,7 +72,7 @@ public class MainMenu extends RPanel {
         });
         menus.add(getMenuCard(settingsLabel));
 
-        add(new ListView(getBackground(), menus).getWrappedInScroll(true), BorderLayout.CENTER);
+        add(new ListView(GuiColors.BASE_WHITE, menus).getWrappedInScroll(true), BorderLayout.CENTER);
 
         repaint();
         revalidate();

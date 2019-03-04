@@ -1,5 +1,7 @@
 package Gui.GuiComponents;
 
+import Gui.GuiColors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
@@ -20,7 +22,7 @@ public class ListView extends JPanel implements Scrollable {
             if (separatorsOn) {
                 JSeparator separator2 = new JSeparator(JToolBar.Separator.HORIZONTAL);
                 separator2.setBackground(color);
-                separator2.setForeground(Color.WHITE);
+                separator2.setForeground(GuiColors.BASE_SMOKE);
 
                 JPanel wrapperPanel = new JPanel(new BorderLayout());
                 wrapperPanel.setBackground(color);

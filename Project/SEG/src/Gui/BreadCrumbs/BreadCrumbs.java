@@ -12,8 +12,8 @@ import java.awt.event.MouseEvent;
 import java.util.Stack;
 
 public class BreadCrumbs extends JPanel {
-    private Color BACKGROUND = GuiColors.BASE_DARK;
-    private Color SELECTED = GuiColors.BASE_LIGHT;
+    private Color BACKGROUND = GuiColors.BASE_SMOKE;
+    private Color SELECTED = GuiColors.BASE_WHITE;
 
     private JPanel viewPanel;
     private GraphView graphView;
@@ -44,7 +44,7 @@ public class BreadCrumbs extends JPanel {
         this.progressBar.setBorderPainted(false);
 
         setBackground(BACKGROUND);
-        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.LIGHT_GRAY));
+        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_WHITE));
         setPreferredSize(new Dimension(250, 52));
 
         this.panesStacks = new Stack<RPanel>();
@@ -53,8 +53,10 @@ public class BreadCrumbs extends JPanel {
 
     private JPanel getNewCrumb(String text) {
         JPanel crumb = new JPanel(new BorderLayout());
-        crumb.setBackground(SELECTED);
-        crumb.setBorder(BorderFactory.createEmptyBorder());
+
+        if (this.crumbsStack.size() > 0) crumb.setBackground(SELECTED);
+        else crumb.setBackground(GuiColors.TEXT_ORANGE_UNSELECTED);
+        crumb.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_SMOKE));
         crumb.add(new TitleLabel(text, JLabel.CENTER, 16), BorderLayout.CENTER);
 
         final int myIndex = crumbsStack.size();

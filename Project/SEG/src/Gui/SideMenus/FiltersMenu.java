@@ -20,7 +20,7 @@ public class FiltersMenu extends RPanel {
     private final MainController mainController;
 
     public FiltersMenu(MainController mainController) {
-        super(GuiColors.BASE_LIGHT, new BorderLayout());
+        super(GuiColors.BASE_WHITE, new BorderLayout());
         this.mainController = mainController;
         refresh();
     }
@@ -45,7 +45,7 @@ public class FiltersMenu extends RPanel {
 
     private JPanel getDateRange() {
         TitleLabel titleLabel = new TitleLabel("Date range", TitleLabel.LEFT, 20);
-        titleLabel.setForeground(GuiColors.LIGHT);
+        titleLabel.setForeground(GuiColors.BASE_WHITE);
 
         DateBrowser startDate = new DateBrowser(getBackground(), Stringifiable.globalDateFormat, new Date());
         startDate.setDateChangedListener(new DateChangedListener() {
@@ -95,7 +95,7 @@ public class FiltersMenu extends RPanel {
 
     private JPanel getAudianceSegments() {
         TitleLabel titleLabel = new TitleLabel("Audience segments", TitleLabel.LEFT, 20);
-        titleLabel.setForeground(GuiColors.LIGHT);
+        titleLabel.setForeground(GuiColors.BASE_WHITE);
 
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.add(titleLabel, BorderLayout.NORTH);
@@ -269,13 +269,10 @@ public class FiltersMenu extends RPanel {
         JPanel contexts = wrapInRow(new Component[]{opNews, opShopping, opSocialMedia, opTravels, opHobbies, opBlog});
 
         TitleLabel genderTitle = new TitleLabel("Gender", TitleLabel.LEFT, 16);
-        genderTitle.setForeground(GuiColors.LIGHT);
 
         TitleLabel ageTitle = new TitleLabel("Age", TitleLabel.LEFT, 16);
-        ageTitle.setForeground(GuiColors.LIGHT);
 
         TitleLabel contextTitle = new TitleLabel("Context", TitleLabel.LEFT, 16);
-        contextTitle.setForeground(GuiColors.LIGHT);
 
         JPanel subWrapperGender = new JPanel(new GridLayout(2, 1, 4, 4));
         subWrapperGender.setBorder(BorderFactory.createEmptyBorder());
@@ -307,7 +304,6 @@ public class FiltersMenu extends RPanel {
 
     private JPanel getContext() {
         TitleLabel contextTitle = new TitleLabel("Context", TitleLabel.LEFT, 20);
-        contextTitle.setForeground(GuiColors.LIGHT);
 
         // Low, Medium, High,
         RadioButton opLowIncome = new RadioButton("Low");
@@ -349,7 +345,7 @@ public class FiltersMenu extends RPanel {
 
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
-        wrapper.setBackground(GuiColors.BASE_LIGHT);
+        wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.add(contextTitle, BorderLayout.NORTH);
         wrapper.add(contexts, BorderLayout.CENTER);
 

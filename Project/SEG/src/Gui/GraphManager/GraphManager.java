@@ -47,7 +47,7 @@ public class GraphManager {
         XYPlot plot = chart.getXYPlot();
 
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesPaint(0, GuiColors.BASE_LIGHT);
+        renderer.setSeriesPaint(0, GuiColors.BASE_WHITE);
         renderer.setSeriesStroke(0, new BasicStroke(2.0f));
 
         plot.setRenderer(renderer);
@@ -58,6 +58,9 @@ public class GraphManager {
 
         plot.setDomainGridlinesVisible(true);
         plot.setDomainGridlinePaint(GuiColors.LIGHT_GRAY);
+
+        plot.getDomainAxis().setLabelFont(new Font("Verdana", Font.PLAIN, 8));
+        plot.getRangeAxis().setLabelFont(plot.getDomainAxis().getLabelFont());
 
         return new ChartPanel(chart);
     }
@@ -93,10 +96,16 @@ public class GraphManager {
         ((BarRenderer) cplot.getRenderer()).setBarPainter(new StandardBarPainter());
 
         BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
-        r.setSeriesPaint(0, GuiColors.BASE_LIGHT);
+        r.setSeriesPaint(0, GuiColors.TEXT_ORANGE_UNSELECTED);
 
         Plot plot = barChart.getPlot();
         plot.setBackgroundPaint(Color.WHITE);
+
+        barChart.getCategoryPlot().getRangeAxis().setLabelFont(new Font("Verdana", Font.PLAIN, 12));
+        barChart.getCategoryPlot().getDomainAxis().setLabelFont( barChart.getCategoryPlot().getRangeAxis().getLabelFont());
+
+        barChart.getCategoryPlot().getRangeAxis().setTickLabelFont(new Font("Verdana", Font.PLAIN, 8));
+        barChart.getCategoryPlot().getDomainAxis().setTickLabelFont( barChart.getCategoryPlot().getRangeAxis().getTickLabelFont());
 
         CategoryAxis axis = barChart.getCategoryPlot().getDomainAxis();
         axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);

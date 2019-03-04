@@ -10,6 +10,6 @@ public class TextView extends JTextPane {
         setFont(new Font("Verdana", Font.PLAIN, fontSize));
         setBackground(background);
         setBorder(BorderFactory.createEmptyBorder());
-        setForeground(Color.WHITE);
+        setForeground(Color.DARK_GRAY);
     }
 }

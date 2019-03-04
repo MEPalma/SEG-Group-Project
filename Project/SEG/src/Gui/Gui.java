@@ -46,24 +46,22 @@ public class Gui extends JFrame {
 
         this.northView = new JPanel(new BorderLayout());
         getContentPane().add(this.northView, BorderLayout.NORTH);
-        this.northView.setBackground(GuiColors.BASE_LIGHT);
+        this.northView.setBackground(GuiColors.TEXT_ORANGE_UNSELECTED);
         this.northView.setLayout(new BorderLayout());
-        this.northView.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.LIGHT_GRAY));
+        this.northView.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_SMOKE));
 
-        List<JLabel> menuLabels = new ArrayList<JLabel>(5);
-
-        TitleLabel titleLabel = new TitleLabel("Dashboard App", JLabel.LEFT);
-
-        this.northView.add(titleLabel, BorderLayout.NORTH);
+        TitleLabel appTitleLabel = new TitleLabel("Dashboard App", JLabel.LEFT);
+        appTitleLabel.setForeground(GuiColors.BASE_WHITE);
+        this.northView.add(appTitleLabel, BorderLayout.NORTH);
 
         this.mainView = new JPanel(new BorderLayout());
-        this.mainView.setBackground(GuiColors.LIGHT);
+        this.mainView.setBackground(GuiColors.BASE_SMOKE);
         this.mainView.add(this.mainController.getBreadCrumbsHoster(), BorderLayout.CENTER);
         getContentPane().add(this.mainView, BorderLayout.CENTER);
 
 
         this.menuButtonsPane = new JPanel(new GridLayout(10, 1, 4, 4));
-        this.menuButtonsPane.setBackground(GuiColors.DARK_GRAY);
+        this.menuButtonsPane.setBackground(GuiColors.BASE_SMOKE);
         this.menuButtonsPane.setPreferredSize(new Dimension(60, 60));
 
 

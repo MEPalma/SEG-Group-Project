@@ -9,7 +9,7 @@ public class RadioButton extends JRadioButton {
     public RadioButton(String text) {
         super(text);
         setBorder(BorderFactory.createEmptyBorder());
-        setForeground(GuiColors.LIGHT);
+        setForeground(GuiColors.DARK_GRAY);
         setFont(new Font("Verdana", Font.PLAIN, 14));
         setBackground(new Color(0, 0, 0, 0));
     }
@@ -17,7 +17,7 @@ public class RadioButton extends JRadioButton {
     public RadioButton(String text, int size) {
         super(text);
         setBorder(BorderFactory.createEmptyBorder());
-        setForeground(GuiColors.LIGHT);
+        setForeground(GuiColors.DARK_GRAY);
         setFont(new Font("Verdana", Font.PLAIN, size));
         setBackground(new Color(0, 0, 0, 0));
     }

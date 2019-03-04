@@ -107,6 +107,8 @@ public class GraphManager {
         barChart.getCategoryPlot().getRangeAxis().setTickLabelFont(new Font("Verdana", Font.PLAIN, 8));
         barChart.getCategoryPlot().getDomainAxis().setTickLabelFont( barChart.getCategoryPlot().getRangeAxis().getTickLabelFont());
 
+        if (data.size() > 24) barChart.getCategoryPlot().getDomainAxis().setTickLabelsVisible(false);
+
         CategoryAxis axis = barChart.getCategoryPlot().getDomainAxis();
         axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 

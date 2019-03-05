@@ -568,6 +568,23 @@ public class DataExchange {
         }
     }
 
+    /*
+        Settings
+     */
+    public void setCampaignName(String name) {
+        this.dbM.writeQuery(QueryComposer.setCampaignName(name));
+    }
+
+    public String getCampaignName() {
+        ResultSet resultSet = this.dbM.query(QueryComposer.getCampaignName);
+        try {
+            return resultSet.getString("v");
+        } catch (SQLException ex) {
+            setCampaignName("Campaign name");
+            return getCampaignName();
+        }
+    }
+
 
     /*
     Method that avoids duplicates for lists;

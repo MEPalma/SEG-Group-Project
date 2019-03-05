@@ -28,6 +28,7 @@ public class MainMenu extends RPanel {
 
         List<Component> menus = new LinkedList<>();
 
+
         //ChooseMetrics menu
         MenuLabel chooseMetricsLabel = new MenuLabel("Choose metrics", MenuLabel.LEFT, 14);
         chooseMetricsLabel.addMouseListener(new MouseAdapter() {

@@ -16,7 +16,7 @@ public class Gui extends JFrame {
 
     public Gui(MainController mainController) {
         super("Dashboard App");
-//        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Icons/logo.png")));
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -62,7 +62,7 @@ public class Gui extends JFrame {
         this.menuButtonsPane.setPreferredSize(new Dimension(60, 60));
 
 
-        this.mainController.pushNewViewOnBreadCrumbs("Campaign Name", new MainMenu(this.mainController));
+        this.mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new MainMenu(this.mainController));
     }
 
     @Override

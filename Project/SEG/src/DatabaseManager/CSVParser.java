@@ -50,11 +50,10 @@ public class CSVParser {
      * @throws Exception
      */
     public synchronized void parseAll() throws Exception {
-        this.dataExchange.dropAll_noSettings();
-
         this.dataExchange.setForiegnKeyPragma(false);
         this.dataExchange.setAutoCommit(false);
 
+        this.dataExchange.dropAll_noSettings();
         this.dataExchange.commitNow();
 
         Statement insertionStatement = this.dataExchange.getSqlStatement();

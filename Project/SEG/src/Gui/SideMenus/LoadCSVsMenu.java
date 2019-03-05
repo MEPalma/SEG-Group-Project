@@ -6,9 +6,13 @@ import Gui.GuiComponents.*;
 import Gui.MainController;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -25,16 +29,20 @@ public class LoadCSVsMenu extends RPanel {
     public static Color BACKGROUND = GuiColors.BASE_WHITE;
     private final MainController mainController;
 
+    private String campaignName;
+
     public LoadCSVsMenu(MainController mainController) {
         super(BACKGROUND, new BorderLayout());
         this.mainController = mainController;
+
+        this.campaignName = "Today's campaign";
 
         refresh();
     }
 
     @Override
     public void refresh() {
-        JPanel thisView = this;
+        RPanel thisView = this;
 
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             File impressionLog, clickLog, serverLog;
@@ -58,6 +66,17 @@ public class LoadCSVsMenu extends RPanel {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         if (impressionLog != null && clickLog != null && serverLog != null) {
+
+                            if (campaignName.trim().equals("") || campaignName.trim().equals(" "))
+                                campaignName = "Today's campaign";
+                            else campaignName = campaignName.trim().replace("-", "").replace("'", "").replace("\"", "");
+
+                            mainController.setCampaignName(campaignName);
+
+                            mainController.getBreadCrumbsHoster().getBreadCrumbs().clear();
+                            mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new MainMenu(mainController));
+                            mainController.pushNewViewOnBreadCrumbs("Load CSVs", thisView);
+
                             //new background thread
                             SwingWorker<Void, Void> loadTask = new SwingWorker<Void, Void>() {
                                 @Override
@@ -66,18 +85,22 @@ public class LoadCSVsMenu extends RPanel {
                                     CSVParser parser = new CSVParser(mainController, impressionLog, clickLog, serverLog);
                                     parser.parseAll();
                                     mainController.stopProgressBar();
+
                                     return null;
                                 }
                             };
 
                             mainController.setMainBackgroundTask(loadTask);
                             loadTask.execute();
+
+
                         } else {
-                            //TODO error message
+                            mainController.showErrorMessage("Invalid or missing files", "All files must be present and of the right format, for them to be parsed correctly.\nPlease try again.");
                         }
                     }
 
                 });
+                components.add(getChooseCampaignName());
                 components.add(parseButton);
 
                 ListView listView = new ListView(BACKGROUND, components);
@@ -87,6 +110,36 @@ public class LoadCSVsMenu extends RPanel {
 
                 revalidate();
                 repaint();
+            }
+
+            private JPanel getChooseCampaignName() {
+                JPanel wrapper = new JPanel(new BorderLayout());
+                wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+                wrapper.setBackground(BACKGROUND);
+
+                wrapper.add(new TitleLabel("Campaign Name", TitleLabel.LEFT, 14), BorderLayout.WEST);
+
+                TextBox campaignChooser = new TextBox(BACKGROUND);
+                campaignChooser.setText(campaignName);
+                campaignChooser.getDocument().addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        campaignName = campaignChooser.getText();
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        campaignName = campaignChooser.getText();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+                        campaignName = campaignChooser.getText();
+                    }
+                });
+                wrapper.add(campaignChooser, BorderLayout.CENTER);
+
+                return wrapper;
             }
 
             private JPanel getImpressionLogFileFinderPanel() {

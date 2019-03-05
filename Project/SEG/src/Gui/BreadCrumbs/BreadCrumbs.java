@@ -211,7 +211,7 @@ public class BreadCrumbs extends JPanel {
         hideErrorMessage();
 
         this.errorPanel = new JPanel(new BorderLayout());
-        errorPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        errorPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_WHITE));
         errorPanel.setBackground(GuiColors.RED_ERROR);
         errorPanel.setPreferredSize(new Dimension(this.viewPanel.getWidth(), 300));
 

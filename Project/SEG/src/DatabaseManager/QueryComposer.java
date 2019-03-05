@@ -179,6 +179,16 @@ public class QueryComposer {
     public static String selectByNameFrom_SETTINGS(String name) {
         return "SELECT * FROM SETTINGS WHERE SETTINGS.name='" + name + "' LIMIT 1;";
     }
+
+    /*
+        Settigns
+     */
+    public static String setCampaignName(String name) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('campaignName', '" + name + "');";
+    }
+
+    public static String getCampaignName = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='campaignName';";
+
     /*
     Number of impressions by week query.
      */

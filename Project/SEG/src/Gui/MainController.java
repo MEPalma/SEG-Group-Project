@@ -80,6 +80,14 @@ public class MainController {
         return this.dataExchange;
     }
 
+    public String getCampaignName() {
+        return this.dataExchange.getCampaignName();
+    }
+
+    public void setCampaignName(String name) {
+        this.dataExchange.setCampaignName(name);
+    }
+
     public void pushNewViewOnBreadCrumbs(String title, RPanel view) {
         this.breadCrumbs.push(title, view);
     }

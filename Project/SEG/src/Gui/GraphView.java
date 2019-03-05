@@ -61,7 +61,7 @@ public class GraphView extends RPanel {
             setNoGraphMode();
         } else if (this.graphsOnScreen.size() == 1) {
             GraphSpecs ref = this.graphsOnScreen.get(0);
-            JPanel tmp = GraphManager.createBarChar(ref.getData(), ref.getxAxisName(), ref.getyAxisName());
+            JPanel tmp = GraphManager.createBarChar(ref.getData(), ref.getxAxisName(), ref.getyAxisName(), ref.getTypeColor());
             add(new GraphCardView(this, ref, tmp, true), BorderLayout.CENTER);
         } else if (this.mode == Mode.CARD_MODE) {
             if (this.graphsOnScreen.size() > 0) {
@@ -69,7 +69,7 @@ public class GraphView extends RPanel {
 
                 int i = 0;
                 for (GraphSpecs g : this.graphsOnScreen) {
-                    JPanel tmp = GraphManager.createBarChar(g.getData(), g.getxAxisName(), g.getyAxisName());
+                    JPanel tmp = GraphManager.createBarChar(g.getData(), g.getxAxisName(), g.getyAxisName(), g.getTypeColor());
                     cards.add(new GraphCardView(this, g, tmp, (i == (this.graphsOnScreen.size() - 1))));
                     i++;
                 }
@@ -86,12 +86,12 @@ public class GraphView extends RPanel {
                     rowWrapper.setBorder(BorderFactory.createEmptyBorder());
 
                     GraphSpecs leftSpec = this.graphsOnScreen.get(i);
-                    JPanel leftGraph = GraphManager.createBarChar(leftSpec.getData(), leftSpec.getxAxisName(), leftSpec.getyAxisName());
+                    JPanel leftGraph = GraphManager.createBarChar(leftSpec.getData(), leftSpec.getxAxisName(), leftSpec.getyAxisName(), leftSpec.getTypeColor());
                     rowWrapper.add(new GraphCardView(this, leftSpec, leftGraph, false));
 
                     if (i + 1 <= this.graphsOnScreen.size() - 1) {
                         GraphSpecs rightSpec = this.graphsOnScreen.get(i + 1);
-                        JPanel rightGraph = GraphManager.createBarChar(rightSpec.getData(), rightSpec.getxAxisName(), rightSpec.getyAxisName());
+                        JPanel rightGraph = GraphManager.createBarChar(rightSpec.getData(), rightSpec.getxAxisName(), rightSpec.getyAxisName(), rightSpec.getTypeColor());
                         rowWrapper.add(new GraphCardView(this, rightSpec, rightGraph, false));
                         i++;
                     }
@@ -158,7 +158,7 @@ class GraphCardView extends RPanel {
         else setBorder(BorderFactory.createMatteBorder(24, 24, 24, 24, GuiColors.BASE_SMOKE));
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(GuiColors.BASE_PRIME);
+        topPanel.setBackground(spec.getTypeColor());
         topPanel.setPreferredSize(new Dimension(100, 50));
 
         TitleLabel titleLabel = new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16);
@@ -186,15 +186,19 @@ class GraphCardView extends RPanel {
 }
 
 class GraphSpecs {
+    public enum Type { WEEK_SPAN, DAY_SPAN, HOUR_SPAN };
+
     private final String id, title, xAxisName, yAxisName;
     private final Collection<Tuple<Number, Number>> data;
+    private final Type type;
 
-    public GraphSpecs(String id, String title, String xAxisName, String yAxisName, Collection data) {
+    public GraphSpecs(String id, String title, String xAxisName, String yAxisName, Collection data, Type type) {
         this.id = id;
         this.title = title;
         this.xAxisName = xAxisName;
         this.yAxisName = yAxisName;
         this.data = data;
+        this.type = type;
     }
 
     @Override
@@ -228,5 +232,15 @@ class GraphSpecs {
 
     public String getyAxisName() {
         return yAxisName;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public Color getTypeColor() {
+        if (getType() == GraphSpecs.Type.WEEK_SPAN) return GuiColors.OPTION_GREENBLUE;
+        else if (getType() == GraphSpecs.Type.DAY_SPAN) return GuiColors.OPTION_ORANGE;
+        else return GuiColors.OPTION_GREEN;
     }
 }

@@ -16,4 +16,8 @@ public class GuiColors {
     public static Color BASE_SMOKE = new Color(246, 245, 245);
 
     public static Color RED_ERROR = new Color(242, 58, 48);
+
+    public static Color OPTION_GREEN = new Color(59, 150, 42);
+    public static Color OPTION_ORANGE = new Color(244, 112, 1);
+    public static Color OPTION_GREENBLUE = new Color(0, 139, 125);
 }

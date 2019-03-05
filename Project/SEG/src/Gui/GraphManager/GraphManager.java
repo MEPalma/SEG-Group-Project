@@ -77,7 +77,7 @@ public class GraphManager {
         return dataset;
     }
 
-    public static JPanel createBarChar(Collection<Tuple<String, Number>> data, String xAxisLabel, String yAxisLabel) {
+    public static JPanel createBarChar(Collection<Tuple<String, Number>> data, String xAxisLabel, String yAxisLabel, Color barColors) {
         JFreeChart barChart = ChartFactory.createBarChart(
                 "",
                 xAxisLabel,
@@ -96,7 +96,7 @@ public class GraphManager {
         ((BarRenderer) cplot.getRenderer()).setBarPainter(new StandardBarPainter());
 
         BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
-        r.setSeriesPaint(0, GuiColors.BASE_PRIME);
+        r.setSeriesPaint(0, barColors);
 
         Plot plot = barChart.getPlot();
         plot.setBackgroundPaint(Color.WHITE);

@@ -1,4 +1,4 @@
-package DatabaseManager;
+package JUnitTests;
 
 import static org.junit.jupiter.api.Assertions.*;
 

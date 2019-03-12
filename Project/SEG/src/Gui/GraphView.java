@@ -139,7 +139,7 @@ public class GraphView extends RPanel {
                 dialogView.setBackground(GuiColors.BASE_WHITE);
                 dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_WHITE, 10, true));
 
-                dialogView.add(new ChooseNewGraphPanel(mainController), BorderLayout.CENTER);
+                dialogView.add(new ChooseNewGraphPanel(mainController, dialog), BorderLayout.CENTER);
 
 
                 /*
@@ -201,6 +201,35 @@ public class GraphView extends RPanel {
 
         return false;
     }
+
+    private int getGraphPosition(String id) {
+        int index = 0;
+
+        for (GraphSpecs gs : this.graphsOnScreen) {
+            if (gs.getId().equals(id)) {
+                break;
+            } else ++index;
+        }
+
+        return index;
+    }
+
+    public void moveGraphUp(String id) {
+        int index = getGraphPosition(id);
+        if (index > 0) {
+            Collections.swap(this.graphsOnScreen, index, index - 1);
+            refresh();
+        }
+    }
+
+    public void moveGraphDown(String id) {
+        int index = getGraphPosition(id);
+
+        if (index < this.graphsOnScreen.size() - 1) {
+            Collections.swap(this.graphsOnScreen, index, index + 1);
+            refresh();
+        }
+    }
 }
 
 class GraphCardView extends RPanel {
@@ -217,6 +246,41 @@ class GraphCardView extends RPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(spec.getTypeColor());
         topPanel.setPreferredSize(new Dimension(100, 50));
+
+        JPanel functionsPanel = new JPanel(new GridLayout(1, 3, 4, 4));
+        functionsPanel.setBackground(GuiColors.BASE_WHITE);
+        functionsPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 0, spec.getTypeColor()));
+
+        MenuLabel moveUpLabel = new MenuLabel("up", MenuLabel.CENTER, 10);
+        moveUpLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                host.moveGraphUp(spec.getId());
+            }
+        });
+        functionsPanel.add(moveUpLabel);
+
+        if (!isLast) {
+            MenuLabel moveDownLabel = new MenuLabel("down", MenuLabel.CENTER, 10);
+            moveDownLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    host.moveGraphDown(spec.getId());
+                }
+            });
+            functionsPanel.add(moveDownLabel);
+        }
+
+        MenuLabel deleteLabel = new MenuLabel("x", MenuLabel.CENTER, 10);
+        deleteLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                host.popGraphSpecs(spec.getId());
+            }
+        });
+        functionsPanel.add(deleteLabel);
+
+        topPanel.add(functionsPanel, BorderLayout.EAST);
 
         TitleLabel titleLabel = new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16);
         titleLabel.setForeground(GuiColors.BASE_WHITE);
@@ -237,6 +301,7 @@ class GraphCardView extends RPanel {
     public void refresh() {
         int width = host.getWidth();
         setPreferredSize(new Dimension(width, width / 2));
+
         repaint();
         revalidate();
     }

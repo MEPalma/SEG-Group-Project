@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class ChooseNewGraphPanel extends RPanel {
     private static String[] METRICS = {
@@ -53,10 +54,13 @@ public class ChooseNewGraphPanel extends RPanel {
     private final JComboBox bounceDefinitionChooser;
     private final JComboBox timespanChooser;
 
-    public ChooseNewGraphPanel(MainController mainController) {
+    private final JFrame host;
+
+    public ChooseNewGraphPanel(MainController mainController, JFrame host) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
 
         this.mainController = mainController;
+        this.host = host;
 
         this.descriptionLabel = new TitleLabel("", TitleLabel.LEFT, 10);
 
@@ -87,25 +91,31 @@ public class ChooseNewGraphPanel extends RPanel {
 
         add(this.messageLabel, BorderLayout.NORTH);
 
-        MenuLabel addLabel = new MenuLabel("ADD", MenuLabel.CENTER, 14);
-        addLabel.dropAllListeners();
+        MenuLabel addLabel = new MenuLabel("ADD", MenuLabel.CENTER, 16);
         addLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                //TODO
+                if (handleAdd()) host.setVisible(false);
             }
         });
         add(addLabel, BorderLayout.SOUTH);
 
         List<Component> items = new LinkedList<Component>();
         items.add(getMetricsChooserCell());
-        items.add(getBouceChooserCell());
+        items.add(getBounceChooserCell());
         items.add(getTimeSpanChooserCell());
 
         add(new ListView(GuiColors.BASE_WHITE, items, true).getWrappedInScroll(true), BorderLayout.CENTER);
 
         repaint();
         revalidate();
+    }
+
+    private boolean handleAdd() {
+        mainController.pushNewNumberOfBouncesPerWeek(Integer.toString(new Random().nextInt()));
+        return true;
+
+        //else error message in message dialog and return false
     }
 
     private JPanel getMetricsChooserCell() {
@@ -122,7 +132,7 @@ public class ChooseNewGraphPanel extends RPanel {
         return wrapper;
     }
 
-    private JPanel getBouceChooserCell() {
+    private JPanel getBounceChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.setBorder(BorderFactory.createEmptyBorder());

@@ -30,15 +30,15 @@ public class MainMenu extends RPanel {
 
 
         //ChooseMetrics menu
-        MenuLabel chooseMetricsLabel = new MenuLabel("Choose metrics", MenuLabel.LEFT, 14);
-        chooseMetricsLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                mainController.pushNewViewOnBreadCrumbs("Choose metrics", new MetricsMenu(mainController));
-                super.mouseExited(e);
-            }
-        });
-        menus.add(getMenuCard(chooseMetricsLabel));
+//        MenuLabel chooseMetricsLabel = new MenuLabel("Choose metrics", MenuLabel.LEFT, 14);
+//        chooseMetricsLabel.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                mainController.pushNewViewOnBreadCrumbs("Choose metrics", new MetricsMenu(mainController));
+//                super.mouseExited(e);
+//            }
+//        });
+//        menus.add(getMenuCard(chooseMetricsLabel));
 
         //FILTERS
         MenuLabel filtersLabel = new MenuLabel("Filters", MenuLabel.LEFT, 14);

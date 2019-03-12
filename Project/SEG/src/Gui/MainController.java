@@ -21,7 +21,7 @@ public class MainController {
 
     public MainController() {
         this.dataExchange = new DataExchange(new DatabaseManager());
-        this.breadCrumbsHoster = new BreadCrumbsHoster();
+        this.breadCrumbsHoster = new BreadCrumbsHoster(new GraphView(this));
         this.breadCrumbs = this.breadCrumbsHoster.getBreadCrumbs();
         this.graphView = this.breadCrumbsHoster.getBreadCrumbs().getGraphView();
         this.dataLoadingTasks = new LinkedList<>();

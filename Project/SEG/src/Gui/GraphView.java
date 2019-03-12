@@ -6,11 +6,12 @@ import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
+import org.jfree.chart.title.Title;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.List;
 import java.util.*;
 
@@ -18,10 +19,12 @@ public class GraphView extends RPanel {
     public enum Mode {CARD_MODE, GRID_MODE}
 
     private Mode mode;
+    private final MainController mainController;
     private final List<GraphSpecs> graphsOnScreen;
 
-    public GraphView() {
+    public GraphView(MainController mainController) {
         super(GuiColors.BASE_SMOKE, new BorderLayout());
+        this.mainController = mainController;
         this.graphsOnScreen = new LinkedList<GraphSpecs>();
         this.mode = Mode.CARD_MODE;
     }
@@ -102,8 +105,62 @@ public class GraphView extends RPanel {
             }
         }
 
+        add(getAddGraphMenuLabel(), BorderLayout.SOUTH);
+
         repaint();
         revalidate();
+    }
+
+    private JPanel getAddGraphMenuLabel() {
+
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_SMOKE));
+
+        MenuLabel menuLabel = new MenuLabel("+", MenuLabel.CENTER, 26);
+        menuLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JFrame dialog = new JFrame();
+                dialog.setUndecorated(true);
+                dialog.getContentPane().setLayout(new BorderLayout());
+                dialog.addWindowFocusListener(new WindowAdapter() {
+                    @Override
+                    public void windowLostFocus(WindowEvent e) {
+                        dialog.setVisible(false);
+                    }
+                });
+                dialog.getContentPane().add(new TitleLabel("Add new graph", TitleLabel.CENTER, 18));
+
+                /*
+                    setup dialog view
+                 */
+                JPanel dialogView = new JPanel(new BorderLayout());
+                dialogView.setBackground(GuiColors.BASE_WHITE);
+                dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_WHITE, 10, true));
+
+                dialogView.add(new ChooseNewGraphPanel(mainController), BorderLayout.CENTER);
+
+
+                /*
+                    display dialog
+                 */
+                int dfWidth = 450;
+                int dfHeight = 300;
+                dialog.setSize(new Dimension(dfWidth, dfHeight));
+
+                int centerXtmp = menuLabel.getLocationOnScreen().x + (menuLabel.getWidth() / 2) - (dfWidth / 2);
+                int centerYtmp = menuLabel.getLocationOnScreen().y + (menuLabel.getHeight() / 2) - dfHeight;
+                dialog.setLocation(centerXtmp, centerYtmp);
+
+                dialog.getContentPane().add(dialogView, BorderLayout.CENTER);
+                dialog.setVisible(true);
+            }
+        });
+
+
+        wrapper.add(menuLabel, BorderLayout.CENTER);
+        return wrapper;
     }
 
     private void setNoGraphMode() {

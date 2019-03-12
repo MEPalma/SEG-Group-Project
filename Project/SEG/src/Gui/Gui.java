@@ -46,10 +46,11 @@ public class Gui extends JFrame {
         this.northView.setBackground(GuiColors.BASE_PRIME);
         this.northView.setLayout(new BorderLayout());
         this.northView.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_SMOKE));
+        this.northView.setPreferredSize(new Dimension(300, 56));
 
-        TitleLabel appTitleLabel = new TitleLabel("Dashboard App", JLabel.LEFT);
+        TitleLabel appTitleLabel = new TitleLabel(" Dashboard App", JLabel.LEFT, 26);
         appTitleLabel.setForeground(GuiColors.BASE_WHITE);
-        this.northView.add(appTitleLabel, BorderLayout.NORTH);
+        this.northView.add(appTitleLabel, BorderLayout.CENTER);
 
         this.mainView = new JPanel(new BorderLayout());
         this.mainView.setBackground(GuiColors.BASE_SMOKE);

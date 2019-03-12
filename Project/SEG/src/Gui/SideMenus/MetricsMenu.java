@@ -1,10 +1,7 @@
 package Gui.SideMenus;
 
 import Gui.GuiColors;
-import Gui.GuiComponents.ListView;
-import Gui.GuiComponents.RPanel;
-import Gui.GuiComponents.RadioButton;
-import Gui.GuiComponents.TitleLabel;
+import Gui.GuiComponents.*;
 import Gui.MainController;
 
 import javax.swing.*;
@@ -31,7 +28,7 @@ public class MetricsMenu extends RPanel {
         List<Component> menus = new LinkedList<Component>();
 //TODO DO IN BACKGROUND!!!!!!!!
         //NUMBER OF IMPRESSIONS
-        RadioButton nImpressionsWeek = new RadioButton("Week");
+        CheckBox nImpressionsWeek = new CheckBox("Week");
         nImpressionsWeek.setSelected(mainController.doesGraphViewContainGraph("nImpressionsWeek"));
         nImpressionsWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -44,7 +41,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton nImpressionsDay = new RadioButton("Day");
+        CheckBox nImpressionsDay = new CheckBox("Day");
         nImpressionsDay.setSelected(mainController.doesGraphViewContainGraph("nImpressionsDay"));
         nImpressionsDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -57,7 +54,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton nImpressionsHour = new RadioButton("Hour");
+        CheckBox nImpressionsHour = new CheckBox("Hour");
         nImpressionsHour.setSelected(mainController.doesGraphViewContainGraph("nImpressionsHour"));
         nImpressionsHour.addMouseListener(new MouseAdapter() {
             @Override
@@ -76,7 +73,7 @@ public class MetricsMenu extends RPanel {
 
 
         // Number of Clicks
-        RadioButton nClicksWeek = new RadioButton("Week");
+        CheckBox nClicksWeek = new CheckBox("Week");
         nClicksWeek.setSelected(mainController.doesGraphViewContainGraph("nClicksWeek"));
         nClicksWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -89,7 +86,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton nClicksDay = new RadioButton("Day");
+        CheckBox nClicksDay = new CheckBox("Day");
         nClicksDay.setSelected(mainController.doesGraphViewContainGraph("nClicksDay"));
         nClicksDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -102,7 +99,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton nClicksHour = new RadioButton("Hour");
+        CheckBox nClicksHour = new CheckBox("Hour");
         nClicksHour.setSelected(mainController.doesGraphViewContainGraph("nClicksHour"));
         nClicksHour.addMouseListener(new MouseAdapter() {
             @Override
@@ -121,7 +118,7 @@ public class MetricsMenu extends RPanel {
 
 
         //Number of Uniques
-        RadioButton nUniquesWeek = new RadioButton("Week");
+        CheckBox nUniquesWeek = new CheckBox("Week");
         nUniquesWeek.setSelected(mainController.doesGraphViewContainGraph("nUniquesWeek"));
         nUniquesWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -134,7 +131,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton nUniquesDay = new RadioButton("Day");
+        CheckBox nUniquesDay = new CheckBox("Day");
         nUniquesDay.setSelected(mainController.doesGraphViewContainGraph("nUniquesDay"));
         nUniquesDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -147,7 +144,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton nUniquesHour = new RadioButton("Hour");
+        CheckBox nUniquesHour = new CheckBox("Hour");
         nUniquesHour.setSelected(mainController.doesGraphViewContainGraph("nUniquesHour"));
         nUniquesHour.addMouseListener(new MouseAdapter() {
             @Override
@@ -166,7 +163,7 @@ public class MetricsMenu extends RPanel {
 
 
         //Number of Bounces
-        RadioButton nBouncesWeek = new RadioButton("Week");
+        CheckBox nBouncesWeek = new CheckBox("Week");
         nBouncesWeek.setSelected(mainController.doesGraphViewContainGraph("nBouncesWeek"));
         nBouncesWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -179,7 +176,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton nBouncesDay = new RadioButton("Day");
+        CheckBox nBouncesDay = new CheckBox("Day");
         nBouncesDay.setSelected(mainController.doesGraphViewContainGraph("nBouncesDay"));
         nBouncesDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -192,7 +189,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton nBouncesHour = new RadioButton("Hour");
+        CheckBox nBouncesHour = new CheckBox("Hour");
         nBouncesHour.setSelected(mainController.doesGraphViewContainGraph("nBouncesHour"));
         nBouncesHour.addMouseListener(new MouseAdapter() {
             @Override
@@ -211,7 +208,7 @@ public class MetricsMenu extends RPanel {
 
 
         //Number of conversions
-        RadioButton nConversionsWeek = new RadioButton("Week");
+        CheckBox nConversionsWeek = new CheckBox("Week");
         nConversionsWeek.setSelected(mainController.doesGraphViewContainGraph("nConversionsWeek"));
         nConversionsWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -224,7 +221,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton nConversionsDay = new RadioButton("Day");
+        CheckBox nConversionsDay = new CheckBox("Day");
         nConversionsDay.setSelected(mainController.doesGraphViewContainGraph("nConversionsDay"));
         nConversionsDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -237,7 +234,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton nConversionsHour = new RadioButton("Hour");
+        CheckBox nConversionsHour = new CheckBox("Hour");
         nConversionsHour.setSelected(mainController.doesGraphViewContainGraph("nConversionsHour"));
         nConversionsHour.addMouseListener(new MouseAdapter() {
             @Override
@@ -256,7 +253,7 @@ public class MetricsMenu extends RPanel {
 
 
         //Total Cost
-        RadioButton totalCostWeek = new RadioButton("Week");
+        CheckBox totalCostWeek = new CheckBox("Week");
         totalCostWeek.setSelected(mainController.doesGraphViewContainGraph("totalCostWeek"));
         totalCostWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -269,7 +266,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton totalCostDay = new RadioButton("Day");
+        CheckBox totalCostDay = new CheckBox("Day");
         totalCostDay.setSelected(mainController.doesGraphViewContainGraph("totalCostDay"));
         totalCostDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -282,7 +279,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton totalCostHour = new RadioButton("Hour");
+        CheckBox totalCostHour = new CheckBox("Hour");
         totalCostHour.setSelected(mainController.doesGraphViewContainGraph("totalCostHour"));
         totalCostHour.addMouseListener(new MouseAdapter() {
             @Override
@@ -301,7 +298,7 @@ public class MetricsMenu extends RPanel {
 
 
         //CTR
-        RadioButton ctrWeek = new RadioButton("Week");
+        CheckBox ctrWeek = new CheckBox("Week");
         ctrWeek.setSelected(mainController.doesGraphViewContainGraph("ctrWeek"));
         ctrWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -314,7 +311,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton ctrDay = new RadioButton("Day");
+        CheckBox ctrDay = new CheckBox("Day");
         ctrDay.setSelected(mainController.doesGraphViewContainGraph("ctrDay"));
         ctrDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -327,7 +324,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton ctrHour = new RadioButton("Hour");
+        CheckBox ctrHour = new CheckBox("Hour");
         ctrHour.setSelected(mainController.doesGraphViewContainGraph("ctrHour"));
         ctrHour.addMouseListener(new MouseAdapter() {
             @Override
@@ -346,7 +343,7 @@ public class MetricsMenu extends RPanel {
 
 
         // CPA
-        RadioButton cpaWeek = new RadioButton("Week");
+        CheckBox cpaWeek = new CheckBox("Week");
         cpaWeek.setSelected(mainController.doesGraphViewContainGraph("cpaWeek"));
         cpaWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -359,7 +356,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton cpaDay = new RadioButton("Day");
+        CheckBox cpaDay = new CheckBox("Day");
         cpaDay.setSelected(mainController.doesGraphViewContainGraph("cpaDay"));
         cpaDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -372,7 +369,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton cpaHour = new RadioButton("Hour");
+        CheckBox cpaHour = new CheckBox("Hour");
         cpaHour.setSelected(mainController.doesGraphViewContainGraph("cpaHour"));
         cpaHour.addMouseListener(new MouseAdapter() {
             @Override
@@ -391,7 +388,7 @@ public class MetricsMenu extends RPanel {
 
 
         //CPC
-        RadioButton cpcWeek = new RadioButton("Week");
+        CheckBox cpcWeek = new CheckBox("Week");
         cpcWeek.setSelected(mainController.doesGraphViewContainGraph("cpcWeek"));
         cpcWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -404,7 +401,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton cpcDay = new RadioButton("Day");
+        CheckBox cpcDay = new CheckBox("Day");
         cpcDay.setSelected(mainController.doesGraphViewContainGraph("cpcDay"));
         cpcDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -417,7 +414,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton cpcHour = new RadioButton("Hour");
+        CheckBox cpcHour = new CheckBox("Hour");
         cpcHour.setSelected(mainController.doesGraphViewContainGraph("cpcHour"));
         cpcHour.addMouseListener(new MouseAdapter() {
             @Override
@@ -436,7 +433,7 @@ public class MetricsMenu extends RPanel {
 
 
         //CPM
-        RadioButton cpmWeek = new RadioButton("Week");
+        CheckBox cpmWeek = new CheckBox("Week");
         cpmWeek.setSelected(mainController.doesGraphViewContainGraph("cpmWeek"));
         cpmWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -449,7 +446,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton cpmDay = new RadioButton("Day");
+        CheckBox cpmDay = new CheckBox("Day");
         cpmDay.setSelected(mainController.doesGraphViewContainGraph("cpmDay"));
         cpmDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -462,7 +459,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton cpmHour = new RadioButton("Hour");
+        CheckBox cpmHour = new CheckBox("Hour");
         cpmHour.setSelected(mainController.doesGraphViewContainGraph("cpmHour"));
         cpmHour.addMouseListener(new MouseAdapter() {
             @Override
@@ -480,7 +477,7 @@ public class MetricsMenu extends RPanel {
                 new Component[]{cpmWeek, cpmDay, cpmHour}));
 
         //Bounce Rate
-        RadioButton bounceRateWeek = new RadioButton("Week");
+        CheckBox bounceRateWeek = new CheckBox("Week");
         bounceRateWeek.setSelected(mainController.doesGraphViewContainGraph("bounceRateWeek"));
         bounceRateWeek.addMouseListener(new MouseAdapter() {
             @Override
@@ -493,7 +490,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton bounceRateDay = new RadioButton("Day");
+        CheckBox bounceRateDay = new CheckBox("Day");
         bounceRateDay.setSelected(mainController.doesGraphViewContainGraph("bounceRateDay"));
         bounceRateDay.addMouseListener(new MouseAdapter() {
             @Override
@@ -506,7 +503,7 @@ public class MetricsMenu extends RPanel {
             }
         });
 
-        RadioButton bounceRateHour = new RadioButton("Hour");
+        CheckBox bounceRateHour = new CheckBox("Hour");
         bounceRateHour.setSelected(mainController.doesGraphViewContainGraph("bounceRateHour"));
         bounceRateHour.addMouseListener(new MouseAdapter() {
             @Override

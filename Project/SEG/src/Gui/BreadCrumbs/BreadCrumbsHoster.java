@@ -3,6 +3,7 @@ package Gui.BreadCrumbs;
 import Gui.GraphView;
 import Gui.GuiColors;
 import Gui.GuiComponents.RPanel;
+import Gui.MainController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,9 +14,9 @@ public class BreadCrumbsHoster extends RPanel {
 
     private JPanel leftPanel, rightPanel;
 
-    public BreadCrumbsHoster() {
+    public BreadCrumbsHoster(GraphView graphView) {
         super(Color.WHITE, new BorderLayout());
-        this.graphView = new GraphView();
+        this.graphView = graphView;
 
         // LEFT INIT
         this.leftPanel = new JPanel(new BorderLayout());

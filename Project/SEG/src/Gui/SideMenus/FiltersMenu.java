@@ -102,7 +102,7 @@ public class FiltersMenu extends RPanel {
 
 
         // GENDER
-        RadioButton maleOption = new RadioButton("Male");
+        CheckBox maleOption = new CheckBox("Male");
         maleOption.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -114,7 +114,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton femaleOption = new RadioButton("Female");
+        CheckBox femaleOption = new CheckBox("Female");
         femaleOption.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -129,7 +129,7 @@ public class FiltersMenu extends RPanel {
         JPanel genders = wrapInRow(new Component[]{maleOption, femaleOption});
 
         //AGE
-        RadioButton opAge_less_than_25 = new RadioButton("<25");
+        CheckBox opAge_less_than_25 = new CheckBox("<25");
         opAge_less_than_25.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -141,7 +141,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton opAge_25_34 = new RadioButton("25-34");
+        CheckBox opAge_25_34 = new CheckBox("25-34");
         opAge_25_34.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -153,7 +153,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton opAge_35_44 = new RadioButton("35-44");
+        CheckBox opAge_35_44 = new CheckBox("35-44");
         opAge_35_44.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -165,7 +165,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton opAge_45_54 = new RadioButton("45-54");
+        CheckBox opAge_45_54 = new CheckBox("45-54");
         opAge_45_54.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -177,7 +177,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton opAge_more_than_54 = new RadioButton(">54");
+        CheckBox opAge_more_than_54 = new CheckBox(">54");
         opAge_more_than_54.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -192,7 +192,7 @@ public class FiltersMenu extends RPanel {
 
 
         //INCOME
-        RadioButton opNews = new RadioButton("News");
+        CheckBox opNews = new CheckBox("News");
         opNews.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -204,7 +204,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton opShopping = new RadioButton("Shopping");
+        CheckBox opShopping = new CheckBox("Shopping");
         opShopping.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -216,7 +216,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton opSocialMedia = new RadioButton("Social Media");
+        CheckBox opSocialMedia = new CheckBox("Social Media");
         opSocialMedia.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -228,7 +228,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton opTravels = new RadioButton("Travels");
+        CheckBox opTravels = new CheckBox("Travels");
         opTravels.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -240,7 +240,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton opHobbies = new RadioButton("Hobbies");
+        CheckBox opHobbies = new CheckBox("Hobbies");
         opHobbies.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -252,7 +252,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton opBlog = new RadioButton("Blog");
+        CheckBox opBlog = new CheckBox("Blog");
         opBlog.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -304,7 +304,7 @@ public class FiltersMenu extends RPanel {
         TitleLabel contextTitle = new TitleLabel("Context", TitleLabel.LEFT, 20);
 
         // Low, Medium, High,
-        RadioButton opLowIncome = new RadioButton("Low");
+        CheckBox opLowIncome = new CheckBox("Low");
         opLowIncome.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -316,7 +316,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton opMediumIncome = new RadioButton("Medium");
+        CheckBox opMediumIncome = new CheckBox("Medium");
         opMediumIncome.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -328,7 +328,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        RadioButton highIncome = new RadioButton("High");
+        CheckBox highIncome = new CheckBox("High");
         highIncome.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

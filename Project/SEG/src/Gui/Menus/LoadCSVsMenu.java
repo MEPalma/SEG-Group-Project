@@ -1,4 +1,4 @@
-package Gui.SideMenus;
+package Gui.Menus;
 
 import DatabaseManager.CSVParser;
 import Gui.GuiColors;
@@ -11,8 +11,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;

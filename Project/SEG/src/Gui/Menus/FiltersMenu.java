@@ -1,4 +1,4 @@
-package Gui.SideMenus;
+package Gui.Menus;
 
 import Commons.ImpressionEntry;
 import Commons.UserEntry;

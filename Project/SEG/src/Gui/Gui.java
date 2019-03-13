@@ -1,7 +1,7 @@
 package Gui;
 
 import Gui.GuiComponents.TitleLabel;
-import Gui.SideMenus.MainMenu;
+import Gui.Menus.MainMenu;
 
 import javax.swing.*;
 import java.awt.*;

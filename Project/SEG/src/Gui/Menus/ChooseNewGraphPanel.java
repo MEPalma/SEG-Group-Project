@@ -1,9 +1,11 @@
-package Gui;
+package Gui.Menus;
 
+import Gui.GuiColors;
 import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
+import Gui.MainController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +31,7 @@ public class ChooseNewGraphPanel extends RPanel {
             "CPM",
             "Bounce Rate"};
 
-    private static String[] METRICS_DESCRIPTIONs = {
+    private static String[] METRICS_DESCRIPTIONS = {
             "An impression occurs whenever an ad is shown to a user, regardless of whether they click on it.",
             "A click occurs when a user clicks on an ad that is shown to them.",
             "The number of unique users that click on an ad during the course of a campaign.",
@@ -71,7 +73,7 @@ public class ChooseNewGraphPanel extends RPanel {
         this.metricsChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                descriptionLabel.setText("<html>" + METRICS_DESCRIPTIONs[metricsChooser.getSelectedIndex()] + "</html>");
+                descriptionLabel.setText("<html>" + METRICS_DESCRIPTIONS[metricsChooser.getSelectedIndex()] + "</html>");
                 refresh();
             }
         });
@@ -123,7 +125,7 @@ public class ChooseNewGraphPanel extends RPanel {
         wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.setBorder(BorderFactory.createEmptyBorder());
 
-        this.descriptionLabel.setText("<html>" + METRICS_DESCRIPTIONs[metricsChooser.getSelectedIndex()] + "</html>");
+        this.descriptionLabel.setText("<html>" + METRICS_DESCRIPTIONS[metricsChooser.getSelectedIndex()] + "</html>");
 
         wrapper.add(new TitleLabel("Metric", TitleLabel.LEFT, 16), BorderLayout.NORTH);
         wrapper.add(this.metricsChooser, BorderLayout.SOUTH);

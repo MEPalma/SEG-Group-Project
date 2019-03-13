@@ -1,4 +1,4 @@
-package Gui.SideMenus;
+package Gui.Menus;
 
 import Gui.GuiColors;
 import Gui.GuiComponents.ListView;
@@ -41,16 +41,16 @@ public class MainMenu extends RPanel {
 //        menus.add(getMenuCard(chooseMetricsLabel));
 
         //FILTERS
-        MenuLabel filtersLabel = new MenuLabel("Filters", MenuLabel.LEFT, 14);
-        filtersLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                mainController.pushNewViewOnBreadCrumbs("Filters", new FiltersMenu(mainController));
-                JOptionPane.showMessageDialog(mainController.getBreadCrumbsHoster(), "Features not supported yet", "Unsupported features", JOptionPane.WARNING_MESSAGE);
-                super.mouseExited(e);
-            }
-        });
-        menus.add(getMenuCard(filtersLabel));
+//        MenuLabel filtersLabel = new MenuLabel("Filters", MenuLabel.LEFT, 14);
+//        filtersLabel.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                mainController.pushNewViewOnBreadCrumbs("Filters", new FiltersMenu(mainController));
+//                JOptionPane.showMessageDialog(mainController.getBreadCrumbsHoster(), "Features not supported yet", "Unsupported features", JOptionPane.WARNING_MESSAGE);
+//                super.mouseExited(e);
+//            }
+//        });
+//        menus.add(getMenuCard(filtersLabel));
 
         //Load csvs
         MenuLabel loadCSVsLabel = new MenuLabel("Load CSVs", MenuLabel.LEFT, 14);

@@ -6,6 +6,8 @@ import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
+import Gui.Menus.ChooseNewGraphPanel;
+import Gui.Menus.FiltersMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -93,8 +95,9 @@ public class GraphView extends RPanel {
                     if (i + 1 <= this.graphsOnScreen.size() - 1) {
                         GraphSpecs rightSpec = this.graphsOnScreen.get(i + 1);
                         JPanel rightGraph = GraphManager.createBarChar(rightSpec.getData(), rightSpec.getxAxisName(), rightSpec.getyAxisName(), rightSpec.getTypeColor());
-                        rightGraph.setBorder(BorderFactory.createMatteBorder(24, 0, 24, 24, GuiColors.BASE_SMOKE));
-                        rowWrapper.add(new GraphCardView(this, rightSpec, rightGraph, false));
+                        JPanel rightPanel = new GraphCardView(this, rightSpec, rightGraph, false);
+                        rightPanel.setBorder(BorderFactory.createMatteBorder(24, 0, 24, 24, GuiColors.BASE_SMOKE));
+                        rowWrapper.add(rightPanel);
                         i++;
                     }
                     rows.add(rowWrapper);
@@ -104,10 +107,65 @@ public class GraphView extends RPanel {
             }
         }
 
-        add(getAddGraphMenuLabel(), BorderLayout.SOUTH);
+        add(getBottomFunctionsPanel(), BorderLayout.SOUTH);
 
         repaint();
         revalidate();
+    }
+
+    private JPanel getBottomFunctionsPanel() {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBackground(GuiColors.BASE_SMOKE);
+
+        wrapper.add(getAddGraphMenuLabel(), BorderLayout.EAST);
+        wrapper.add(getShowFiltersMenuLabel(), BorderLayout.WEST);
+
+        return wrapper;
+    }
+
+    private JPanel getShowFiltersMenuLabel() {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_SMOKE));
+
+        MenuLabel menuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16);
+        menuLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JFrame dialog = new JFrame();
+                dialog.setUndecorated(true);
+                dialog.getContentPane().setLayout(new BorderLayout());
+                dialog.addWindowFocusListener(new WindowAdapter() {
+                    @Override
+                    public void windowLostFocus(WindowEvent e) {
+                        int x = MouseInfo.getPointerInfo().getLocation().x;
+                        int y = MouseInfo.getPointerInfo().getLocation().y;
+
+                        if (x > dialog.getLocation().x + dialog.getWidth() || x < dialog.getLocation().x || y > dialog.getLocation().y + dialog.getHeight() || y < dialog.getLocation().y)
+                                dialog.setVisible(false);
+
+                    }
+                });
+                dialog.getContentPane().add(new TitleLabel("Filters", TitleLabel.CENTER, 18), BorderLayout.NORTH);
+
+                int dfWidth = 450;
+                int dfHeight = 600;
+                dialog.setSize(new Dimension(dfWidth, dfHeight));
+
+                int centerXtmp = menuLabel.getLocationOnScreen().x + (menuLabel.getWidth() / 2) - (dfWidth / 2);
+                int centerYtmp = menuLabel.getLocationOnScreen().y + (menuLabel.getHeight() / 2) - dfHeight;
+                dialog.setLocation(centerXtmp, centerYtmp);
+
+                dialog.getContentPane().add(new FiltersMenu(mainController), BorderLayout.CENTER);
+                dialog.setVisible(true);
+            }
+        });
+
+
+        wrapper.add(menuLabel, BorderLayout.CENTER);
+
+        return wrapper;
     }
 
     private JPanel getAddGraphMenuLabel() {
@@ -129,7 +187,7 @@ public class GraphView extends RPanel {
                         dialog.setVisible(false);
                     }
                 });
-                dialog.getContentPane().add(new TitleLabel("Add new graph", TitleLabel.CENTER, 18));
+                dialog.getContentPane().add(new TitleLabel("Add new graph", TitleLabel.CENTER, 18), BorderLayout.NORTH);
 
                 /*
                     setup dialog view

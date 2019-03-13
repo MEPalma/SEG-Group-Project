@@ -13,7 +13,7 @@ public class GuiColors {
     public static Color BASE_OPTION = new Color(0, 167, 255);
 
     public static Color BASE_WHITE = new Color(255, 255, 255);
-    public static Color BASE_SMOKE = new Color(246, 245, 245);
+    public static Color BASE_SMOKE = new Color(236, 235, 235);
 
     public static Color RED_ERROR = new Color(242, 58, 48);
 

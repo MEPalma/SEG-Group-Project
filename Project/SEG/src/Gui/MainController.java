@@ -1,6 +1,6 @@
 package Gui;
 
-import Commons.Tuple;
+import DatabaseManager.GraphSpecs;
 import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
 import Gui.BreadCrumbs.BreadCrumbs;
@@ -100,9 +100,9 @@ public class MainController {
         this.graphView.pushGraphSpecs(newGraphSpecs);
     }
 
-    public void pushToGraphView(String id, String title, String xAxisName, String yAxisName, Collection<Tuple<String, Number>> chartData, GraphSpecs.Type type) {
-        this.pushToGraphView(new GraphSpecs(id, title, xAxisName, yAxisName, chartData, type));
-    }
+//    public void pushToGraphView(String id, String title, String xAxisName, String yAxisName, Collection<Tuple<String, Number>> chartData, GraphSpecs.Type type) {
+//        this.pushToGraphView(new GraphSpecs(id, title, xAxisName, yAxisName, chartData, type, new List<>(), new List<>(), new List<>(), new List<>()));
+//    }
 
     public void popFromGraphView(String graphId) {
         this.graphView.popGraphSpecs(graphId);
@@ -121,7 +121,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Week]", "Week", "N. Impressions", dataExchange.getNumberOfImpressionsPerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Impressions [Per Week]", "Week", "N. Impressions", dataExchange.getNumberOfImpressionsPerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -143,7 +143,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Day]", "Day", "N. Impressions", dataExchange.getNumberOfImpressionsPerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Impressions [Per Day]", "Day", "N. Impressions", dataExchange.getNumberOfImpressionsPerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -165,7 +165,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Hour]", "Hour", "N. Impressions", dataExchange.getNumberOfImpressionsPerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Impressions [Per Hour]", "Hour", "N. Impressions", dataExchange.getNumberOfImpressionsPerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 
@@ -188,7 +188,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Week]", "Week", "N. Clicks", dataExchange.getNumberOfClicksPerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Impressions [Per Week]", "Week", "N. Clicks", dataExchange.getNumberOfClicksPerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -210,7 +210,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Click [Per Day]", "Day", "N. Clicks", dataExchange.getNumberOfClicksPerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Click [Per Day]", "Day", "N. Clicks", dataExchange.getNumberOfClicksPerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -232,7 +232,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Clicks [Per Hour]", "Hour", "N. Clicks", dataExchange.getNumberOfClicksPerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Clicks [Per Hour]", "Hour", "N. Clicks", dataExchange.getNumberOfClicksPerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 
@@ -255,7 +255,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Uniques [Per Week]", "Week", "N. Uniques", dataExchange.getNumberOfUniquesPerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Uniques [Per Week]", "Week", "N. Uniques", dataExchange.getNumberOfUniquesPerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -277,7 +277,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Uniques [Per Day]", "Day", "N. Uniques", dataExchange.getNumberOfUniquesPerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Uniques [Per Day]", "Day", "N. Uniques", dataExchange.getNumberOfUniquesPerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -299,7 +299,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Uniques [Per Hour]", "Hour", "N. Uniques", dataExchange.getNumberOfUniquesPerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Uniques [Per Hour]", "Hour", "N. Uniques", dataExchange.getNumberOfUniquesPerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 
@@ -322,7 +322,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Bounces [Per Week]", "Week", "N. Bounces", dataExchange.getNumberOfBouncesPerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Bounces [Per Week]", "Week", "N. Bounces", dataExchange.getNumberOfBouncesPerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -344,7 +344,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Bounces [Per Day]", "Day", "N. Bounces", dataExchange.getNumberOfBouncesPerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Bounces [Per Day]", "Day", "N. Bounces", dataExchange.getNumberOfBouncesPerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -366,7 +366,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Bounces [Per Hour]", "Hour", "N. Bounces", dataExchange.getNumberOfBouncesPerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Bounces [Per Hour]", "Hour", "N. Bounces", dataExchange.getNumberOfBouncesPerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 
@@ -389,7 +389,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Conversions [Per Week]", "Week", "N. Conversions", dataExchange.getNumberOfConversionsPerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Conversions [Per Week]", "Week", "N. Conversions", dataExchange.getNumberOfConversionsPerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -411,7 +411,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Conversions [Per Day]", "Day", "N. Conversions", dataExchange.getNumberOfConversionsPerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Conversions [Per Day]", "Day", "N. Conversions", dataExchange.getNumberOfConversionsPerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -433,7 +433,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Conversions [Per Hour]", "Hour", "N. Conversions", dataExchange.getNumberOfConversionsPerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "Number of Conversions [Per Hour]", "Hour", "N. Conversions", dataExchange.getNumberOfConversionsPerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 
@@ -456,7 +456,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Total Cost [Per Week]", "Week", "Total Cost", dataExchange.getTotalCostPerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "Total Cost [Per Week]", "Week", "Total Cost", dataExchange.getTotalCostPerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -478,7 +478,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Total Cost [Per Day]", "Day", "Total Cost", dataExchange.getTotalCostPerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "Total Cost [Per Day]", "Day", "Total Cost", dataExchange.getTotalCostPerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -500,7 +500,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Total Cost [Per Hour]", "Hour", "Total Cost", dataExchange.getTotalCostPerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "Total Cost [Per Hour]", "Hour", "Total Cost", dataExchange.getTotalCostPerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 
@@ -524,7 +524,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CTR [Per Week]", "Week", "CTR", dataExchange.getCTRPerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "CTR [Per Week]", "Week", "CTR", dataExchange.getCTRPerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -546,7 +546,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CTR [Per Day]", "Day", "CTR", dataExchange.getCTRPerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "CTR [Per Day]", "Day", "CTR", dataExchange.getCTRPerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -568,7 +568,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CTR [Per Hour]", "Hour", "CTR", dataExchange.getCTRPerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "CTR [Per Hour]", "Hour", "CTR", dataExchange.getCTRPerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 
@@ -591,7 +591,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CPA [Per Week]", "Week", "CPA", dataExchange.getCPAPerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "CPA [Per Week]", "Week", "CPA", dataExchange.getCPAPerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -613,7 +613,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CPA [Per Day]", "Day", "CPA", dataExchange.getCPAPerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "CPA [Per Day]", "Day", "CPA", dataExchange.getCPAPerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -635,7 +635,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CPA [Per Hour]", "Hour", "CPA", dataExchange.getCPAPerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "CPA [Per Hour]", "Hour", "CPA", dataExchange.getCPAPerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 
@@ -658,7 +658,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CPC [Per Week]", "Week", "CPC", dataExchange.getCPCPerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "CPC [Per Week]", "Week", "CPC", dataExchange.getCPCPerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -680,7 +680,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CPC [Per Day]", "Day", "CPC", dataExchange.getCPCPerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "CPC [Per Day]", "Day", "CPC", dataExchange.getCPCPerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -702,7 +702,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CPC [Per Hour]", "Hour", "CPC", dataExchange.getCPCPerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "CPC [Per Hour]", "Hour", "CPC", dataExchange.getCPCPerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 
@@ -725,7 +725,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CPM [Per Week]", "Week", "CPM", dataExchange.getCPMPerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "CPM [Per Week]", "Week", "CPM", dataExchange.getCPMPerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -747,7 +747,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CPM [Per Day]", "Day", "CPM", dataExchange.getCPMPerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "CPM [Per Day]", "Day", "CPM", dataExchange.getCPMPerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -769,7 +769,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "CPM [Per Hour]", "Hour", "CPM", dataExchange.getCPMPerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "CPM [Per Hour]", "Hour", "CPM", dataExchange.getCPMPerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 
@@ -792,7 +792,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Bounce Rate [Per Week]", "Week", "Bounce Rate", dataExchange.getBounceRatePerWeek(), GraphSpecs.Type.WEEK_SPAN);
+//                tmp = new GraphSpecs(id, "Bounce Rate [Per Week]", "Week", "Bounce Rate", dataExchange.getBounceRatePerWeek(), GraphSpecs.Type.WEEK_SPAN);
                 return null;
             }
 
@@ -814,7 +814,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Bounce Rate [Per Day]", "Day", "Bounce Rate", dataExchange.getBounceRatePerDay(), GraphSpecs.Type.DAY_SPAN);
+//                tmp = new GraphSpecs(id, "Bounce Rate [Per Day]", "Day", "Bounce Rate", dataExchange.getBounceRatePerDay(), GraphSpecs.Type.DAY_SPAN);
                 return null;
             }
 
@@ -836,7 +836,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Bounce Rate [Per Hour]", "Hour", "Bounce Rate", dataExchange.getBounceRatePerHour(), GraphSpecs.Type.HOUR_SPAN);
+//                tmp = new GraphSpecs(id, "Bounce Rate [Per Hour]", "Hour", "Bounce Rate", dataExchange.getBounceRatePerHour(), GraphSpecs.Type.HOUR_SPAN);
                 return null;
             }
 

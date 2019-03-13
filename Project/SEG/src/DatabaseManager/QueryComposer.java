@@ -189,6 +189,38 @@ public class QueryComposer {
 
     public static String getCampaignName = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='campaignName';";
 
+
+    public static String composeQuery(GraphSpecs graphSpecs) {
+        if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions) {
+
+            StringBuilder tmp = new StringBuilder("select Date as d,count(impressionCost) as c from impression_logs ");
+
+            //TODO empty where
+            //WHERE
+            tmp.append("WHERE ");
+
+            //context
+            tmp.append("");
+            for (int i = 0; i < graphSpecs.getContexts().size(); ++i) {
+                if (i < graphSpecs.getContexts().size() - 1) {
+                    tmp.append("CONTEXT = '"  + graphSpecs.getContexts().get(i).toString() + "' || ");
+                } else tmp.append("CONTEXT = '"  + graphSpecs.getContexts().get(i).toString());
+            }
+
+            //date
+            tmp.append("date >= '" + graphSpecs.getStartDate() + "' AND date <= '" + graphSpecs.getEndDate() + "' ");
+
+            if (graphSpecs.getTimespan() == GraphSpecs.TIME_SPAN.WEEK_SPAN) tmp.append("group by strftime('%W', Date)");
+            else if (graphSpecs.getTimespan() == GraphSpecs.TIME_SPAN.DAY_SPAN) tmp.append("group by strftime('%d', Date)");
+            else tmp.append("group by strftime('%H:%d', Date)");
+
+            tmp.append(";");
+            return tmp.toString();
+        }
+
+        return null;
+    }
+
     /*
     Number of impressions by week query.
      */

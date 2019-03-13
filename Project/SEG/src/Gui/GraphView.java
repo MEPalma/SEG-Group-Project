@@ -1,6 +1,9 @@
 package Gui;
 
+import Commons.ImpressionEntry;
 import Commons.Tuple;
+import Commons.UserEntry;
+import DatabaseManager.GraphSpecs;
 import Gui.GraphManager.GraphManager;
 import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.MenuLabel;
@@ -95,6 +98,7 @@ public class GraphView extends RPanel {
                     if (i + 1 <= this.graphsOnScreen.size() - 1) {
                         GraphSpecs rightSpec = this.graphsOnScreen.get(i + 1);
                         JPanel rightGraph = GraphManager.createBarChar(rightSpec.getData(), rightSpec.getxAxisName(), rightSpec.getyAxisName(), rightSpec.getTypeColor());
+                        rightGraph.setBorder(BorderFactory.createMatteBorder(24, 0, 24, 24, GuiColors.BASE_SMOKE));
                         rowWrapper.add(new GraphCardView(this, rightSpec, rightGraph, false));
                         i++;
                     }
@@ -261,7 +265,8 @@ class GraphCardView extends RPanel {
         functionsPanel.add(moveUpLabel);
 
         if (!isLast) {
-            MenuLabel moveDownLabel = new MenuLabel("down", MenuLabel.CENTER, 10);
+            MenuLabel moveDownLabel = new MenuLabel("");
+            moveDownLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/down.png")));
             moveDownLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -307,62 +312,3 @@ class GraphCardView extends RPanel {
     }
 }
 
-class GraphSpecs {
-    public enum Type { WEEK_SPAN, DAY_SPAN, HOUR_SPAN };
-
-    private final String id, title, xAxisName, yAxisName;
-    private final Collection<Tuple<Number, Number>> data;
-    private final Type type;
-
-    public GraphSpecs(String id, String title, String xAxisName, String yAxisName, Collection data, Type type) {
-        this.id = id;
-        this.title = title;
-        this.xAxisName = xAxisName;
-        this.yAxisName = yAxisName;
-        this.data = data;
-        this.type = type;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GraphSpecs that = (GraphSpecs) o;
-        return id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Collection getData() {
-        return data;
-    }
-
-    public String getxAxisName() {
-        return xAxisName;
-    }
-
-    public String getyAxisName() {
-        return yAxisName;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public Color getTypeColor() {
-        if (getType() == GraphSpecs.Type.WEEK_SPAN) return GuiColors.OPTION_GREENBLUE;
-        else if (getType() == GraphSpecs.Type.DAY_SPAN) return GuiColors.OPTION_ORANGE;
-        else return GuiColors.OPTION_GREEN;
-    }
-}

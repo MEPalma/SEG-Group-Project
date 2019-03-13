@@ -1,18 +1,13 @@
 package Gui;
 
-import Commons.ImpressionEntry;
-import Commons.Tuple;
-import Commons.UserEntry;
-import DatabaseManager.GraphSpecs;
+import Commons.GraphSpecs;
 import Gui.GraphManager.GraphManager;
 import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
-import org.jfree.chart.title.Title;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -252,10 +247,11 @@ class GraphCardView extends RPanel {
         topPanel.setPreferredSize(new Dimension(100, 50));
 
         JPanel functionsPanel = new JPanel(new GridLayout(1, 3, 4, 4));
-        functionsPanel.setBackground(GuiColors.BASE_WHITE);
+        functionsPanel.setBackground(spec.getTypeColor());
         functionsPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 0, spec.getTypeColor()));
 
         MenuLabel moveUpLabel = new MenuLabel("up", MenuLabel.CENTER, 10);
+        moveUpLabel.setIcon(new ImageIcon(getClass().getResource("Icons/up.png")));
         moveUpLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -276,7 +272,8 @@ class GraphCardView extends RPanel {
             functionsPanel.add(moveDownLabel);
         }
 
-        MenuLabel deleteLabel = new MenuLabel("x", MenuLabel.CENTER, 10);
+        MenuLabel deleteLabel = new MenuLabel("", MenuLabel.CENTER, 10);
+        deleteLabel.setIcon(new ImageIcon(getClass().getResource("Icons/x.png")));
         deleteLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

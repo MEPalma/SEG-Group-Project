@@ -1,11 +1,10 @@
 package Main;
 
-import DatabaseManager.GraphSpecs;
-import DatabaseManager.QueryComposer;
+import Commons.UserEntry;
 import Gui.Gui;
 import Gui.MainController;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
-import java.util.LinkedList;
 import java.util.Locale;
 
 /**
@@ -14,23 +13,23 @@ import java.util.Locale;
 public class Main {
     public static void main(String[] args) {
         Locale.setDefault(Locale.ENGLISH);
-//        new Gui(new MainController()).setVisible(true);
-        GraphSpecs tmp = new GraphSpecs(
-                "id",
-                "title",
-                "xAxis",
-                "yAxis",
-                new LinkedList(),
-                GraphSpecs.METRICS.NumberImpressions,
-                GraphSpecs.TIME_SPAN.DAY_SPAN,
-                "2015-01-01 12:00:02",
-                "2015-01-14 12:00:00",
-                new LinkedList<>(),
-                new LinkedList<>(),
-                new LinkedList<>(),
-                new LinkedList<>()
-        );
-
-        System.out.println(QueryComposer.composeQuery(tmp));
+        new Gui(new MainController()).setVisible(true);
+//        GraphSpecs tmp = new GraphSpecs(
+//                "id",
+//                "title",
+//                "xAxis",
+//                "yAxis",
+//                new LinkedList(),
+//                GraphSpecs.METRICS.NumberImpressions,
+//                GraphSpecs.TIME_SPAN.DAY_SPAN,
+//                "2015-01-01 12:00:02",
+//                "2015-01-14 12:00:00",
+//                new LinkedList<>(),
+//                new LinkedList<>(),
+//                new LinkedList<>(),
+//                new LinkedList<>()
+//        );
+//
+//        System.out.println(QueryComposer.composeQuery(tmp));
     }
 }

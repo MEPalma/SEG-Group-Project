@@ -1,12 +1,10 @@
-package DatabaseManager;
+package Commons;
 
-import Commons.ImpressionEntry;
-import Commons.Tuple;
-import Commons.UserEntry;
 import Gui.GuiColors;
 
 import java.awt.*;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,31 +25,24 @@ public class GraphSpecs {
             BounceRate};
 
     private final String id, title, xAxisName, yAxisName;
-    private final Collection<Tuple<Number, Number>> data;
+    private Collection<Tuple<Number, Number>> data;
 
     private final METRICS metric;
     private final TIME_SPAN timespan;
-    private final String startDate;
-    private final String endDate;
-    private final List<UserEntry.Gender> genders;
-    private final List<UserEntry.Age> ages;
-    private final List<UserEntry.Income> incomes;
-    private final List<ImpressionEntry.Context> contexts;
 
-    public GraphSpecs(String id, String title, String xAxisName, String yAxisName, Collection<Tuple<Number, Number>> data, METRICS metric, TIME_SPAN timespan, String startDate, String endDate, List<UserEntry.Gender> genders, List<UserEntry.Age> ages, List<UserEntry.Income> incomes, List<ImpressionEntry.Context> contexts) {
+    private final FilterSpecs filterSpecs;
+
+    public GraphSpecs(String id, String title, String xAxisName, String yAxisName, METRICS metric, TIME_SPAN timespan, FilterSpecs filterSpecs) {
         this.id = id;
         this.title = title;
         this.xAxisName = xAxisName;
         this.yAxisName = yAxisName;
-        this.data = data;
-        this.startDate = startDate;
-        this.endDate = endDate;
         this.metric = metric;
         this.timespan = timespan;
-        this.genders = genders;
-        this.ages = ages;
-        this.incomes = incomes;
-        this.contexts = contexts;
+
+        this.data = new LinkedList<>();
+
+        this.filterSpecs = filterSpecs;
     }
 
     @Override
@@ -106,26 +97,31 @@ public class GraphSpecs {
     }
 
     public List<UserEntry.Gender> getGenders() {
-        return genders;
+        return this.filterSpecs.getGenders();
     }
 
     public List<UserEntry.Age> getAges() {
-        return ages;
+        return this.filterSpecs.getAges();
     }
 
     public List<UserEntry.Income> getIncomes() {
-        return incomes;
+        return this.filterSpecs.getIncomes();
     }
 
     public List<ImpressionEntry.Context> getContexts() {
-        return contexts;
+        return this.filterSpecs.getContexts();
     }
 
     public String getStartDate() {
-        return startDate;
+        return this.filterSpecs.getStartDate();
     }
 
     public String getEndDate() {
-        return endDate;
+        return this.filterSpecs.getEndDate();
     }
+
+    public void setData(Collection<Tuple<Number, Number>> data) {
+        this.data = data;
+    }
+
 }

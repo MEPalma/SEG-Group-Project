@@ -11,11 +11,11 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MetricsMenu extends RPanel {
+public class Deprecated_MetricsMenu extends RPanel {
 
     private final MainController mainController;
 
-    public MetricsMenu(MainController mainController) {
+    public Deprecated_MetricsMenu(MainController mainController) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
         this.mainController = mainController;
         refresh();

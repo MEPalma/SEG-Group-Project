@@ -34,7 +34,7 @@ public class MainMenu extends RPanel {
 //        chooseMetricsLabel.addMouseListener(new MouseAdapter() {
 //            @Override
 //            public void mouseClicked(MouseEvent e) {
-//                mainController.pushNewViewOnBreadCrumbs("Choose metrics", new MetricsMenu(mainController));
+//                mainController.pushNewViewOnBreadCrumbs("Choose metrics", new Deprecated_MetricsMenu(mainController));
 //                super.mouseExited(e);
 //            }
 //        });

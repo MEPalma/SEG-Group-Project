@@ -128,8 +128,10 @@ public class GraphView extends RPanel {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_SMOKE));
+        wrapper.setPreferredSize(new Dimension(120, 70));
 
         MenuLabel menuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16);
+        menuLabel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_WHITE));
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -153,8 +155,8 @@ public class GraphView extends RPanel {
                 int dfHeight = 600;
                 dialog.setSize(new Dimension(dfWidth, dfHeight));
 
-                int centerXtmp = menuLabel.getLocationOnScreen().x + (menuLabel.getHeight() / 2);
-                int centerYtmp = menuLabel.getLocationOnScreen().y + (menuLabel.getHeight() / 2) - dfHeight;
+                int centerXtmp = menuLabel.getLocationOnScreen().x + 10;
+                int centerYtmp = menuLabel.getLocationOnScreen().y + 10 - dfHeight;
                 dialog.setLocation(centerXtmp, centerYtmp);
 
                 dialog.getContentPane().add(new FiltersMenu(mainController), BorderLayout.CENTER);
@@ -173,8 +175,10 @@ public class GraphView extends RPanel {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_SMOKE));
+        wrapper.setPreferredSize(new Dimension(120, 70));
 
-        MenuLabel menuLabel = new MenuLabel("+", MenuLabel.CENTER, 26);
+        MenuLabel menuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16);
+        menuLabel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_WHITE));
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -206,8 +210,8 @@ public class GraphView extends RPanel {
                 int dfHeight = 300;
                 dialog.setSize(new Dimension(dfWidth, dfHeight));
 
-                int centerXtmp = menuLabel.getLocationOnScreen().x + (menuLabel.getHeight() / 2) - dfWidth;
-                int centerYtmp = menuLabel.getLocationOnScreen().y + (menuLabel.getHeight() / 2) - dfHeight;
+                int centerXtmp = menuLabel.getLocationOnScreen().x + 90 - dfWidth;
+                int centerYtmp = menuLabel.getLocationOnScreen().y + 10 - dfHeight;
                 dialog.setLocation(centerXtmp, centerYtmp);
 
                 dialog.getContentPane().add(dialogView, BorderLayout.CENTER);

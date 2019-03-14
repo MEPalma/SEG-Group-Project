@@ -190,11 +190,28 @@ public class QueryComposer {
     public static String composeQuery(GraphSpecs graphSpecs) {
         if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions) {
 
-            StringBuilder tmp = new StringBuilder("select Date as d,count(impressionCost) as c from impression_logs ");
-
+            StringBuilder tmp = new StringBuilder("select Date as d,count(Users.id) as c from impression_logs ");
             //TODO empty where
+            if(graphSpecs.getGenders()!=null)
+                tmp.append("inner join Users on impression_logs.userid=Users.id ");
             //WHERE
             tmp.append("WHERE ");
+    
+            //gender
+
+            tmp.append("");
+            for (int i = 0; i < graphSpecs.getGenders().size(); ++i) {
+                if (i < graphSpecs.getGenders().size()-1) {
+                    tmp.append("Gender = '"  + graphSpecs.getGenders().get(i).toString() + "' || ");
+                } else tmp.append("Gender = '"  + graphSpecs.getGenders().get(i).toString()+"' ");
+            }
+            //age
+
+            for (int i = 0; i < graphSpecs.getAges().size(); ++i) {
+                if (i < graphSpecs.getAges().size()-1) {
+                    tmp.append("Age = '"  + graphSpecs.getAges().get(i).toString() + "' || ");
+                } else tmp.append("Age = '"  + graphSpecs.getAges().get(i).toString()+"' ");
+            }
 
             //context
             tmp.append("");
@@ -205,14 +222,19 @@ public class QueryComposer {
             }
 
             //date
-            tmp.append("date >= '" + graphSpecs.getStartDate() + "' AND date <= '" + graphSpecs.getEndDate() + "' ");
+           // tmp.append("date >= '" + graphSpecs.getStartDate() + "' AND date <= '" + graphSpecs.getEndDate() + "' ");
 
             if (graphSpecs.getTimespan() == GraphSpecs.TIME_SPAN.WEEK_SPAN) tmp.append("group by strftime('%W', Date)");
             else if (graphSpecs.getTimespan() == GraphSpecs.TIME_SPAN.DAY_SPAN) tmp.append("group by strftime('%d', Date)");
             else tmp.append("group by strftime('%H:%d', Date)");
 
+
+
+
             tmp.append(";");
             return tmp.toString();
+
+
         }
 
         return null;
@@ -279,5 +301,11 @@ public class QueryComposer {
     public static String getCTRPerDay = "SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%d',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%d',date) order by date;";
     public static String getCTRPerHour = "SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%H:%d',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%H:%d',date) order by date;";
 
+    /*
+    Inner Join Number of Impressions
+     */
+    public static String getImpressionsInnerJoinWeek = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%W', Date) order by Date;";
+    public static String getImpressionsInnerJoinHour = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%H:%d', Date) order by Date;";
+    public static String getImpressionsInnerJoinDay = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%d', Date) order by Date;";
 
 }

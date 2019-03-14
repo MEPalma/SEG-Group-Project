@@ -1,6 +1,7 @@
 package Gui.DateBrowser;
 
 import DatabaseManager.Stringifiable;
+import Gui.Gui;
 import Gui.GuiColors;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.TextBox;
@@ -190,7 +191,7 @@ class DateBrowserFrame extends JFrame {
         cvpNorthPanel.add(lspYearAndMonthAndDayLabel, BorderLayout.CENTER);
         cvpNorthPanel.add(goForewordOneMonthLabel, BorderLayout.EAST);
 
-        centerViewPanel.add(cvpNorthPanel, BorderLayout.NORTH);
+        getContentPane().add(cvpNorthPanel, BorderLayout.NORTH);
 
         ////CENTER VIEW --> day of the months choosers
         JPanel cvpDaysViewPanel = new JPanel(new GridLayout(7, 7, 0, 0));
@@ -231,8 +232,7 @@ class DateBrowserFrame extends JFrame {
 
             MenuLabel dayChooser = new MenuLabel(Integer.toString(ctmp.get(Calendar.DAY_OF_MONTH)), TitleLabel.CENTER, 12);
             dayChooser.setForeground(GuiColors.BASE_WHITE);
-            for (MouseListener l : dayChooser.getMouseListeners())
-                dayChooser.removeMouseListener(l);
+            dayChooser.dropAllListeners();
             dayChooser.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
@@ -267,6 +267,199 @@ class DateBrowserFrame extends JFrame {
         }
 
         centerViewPanel.add(cvpDaysViewPanel, BorderLayout.CENTER);
+
+
+        /*
+            TIME EDITOR
+         */
+
+        SimpleDateFormat timeDate = new SimpleDateFormat("hh:mm:ss");
+
+
+        JPanel timeEditorPanel = new JPanel(new BorderLayout());
+        timeEditorPanel.setBorder(BorderFactory.createEmptyBorder(0, 4, 4, 4));
+        timeEditorPanel.setBackground(getBackground());
+
+        TitleLabel timeDisplayBottomEditor = new TitleLabel(timeDate.format(dateBrowser.getDate()), TitleLabel.CENTER, 12, GuiColors.BASE_WHITE);
+        timeDisplayBottomEditor.setForeground(GuiColors.BASE_WHITE);
+        timeEditorPanel.add(timeDisplayBottomEditor, BorderLayout.CENTER);
+
+        JPanel leftButtonsTimeEditor = new JPanel(new GridLayout(1, 2, 4, 0));
+        leftButtonsTimeEditor.setBorder(BorderFactory.createEmptyBorder());
+        leftButtonsTimeEditor.setBackground(getBackground());
+        timeEditorPanel.add(leftButtonsTimeEditor, BorderLayout.WEST);
+
+        MenuLabel addHourMB = new MenuLabel("+h", MenuLabel.CENTER, 12);
+        addHourMB.setForeground(GuiColors.BASE_WHITE);
+        addHourMB.dropAllListeners();
+        addHourMB.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                addHourMB.setForeground(GuiColors.DARK_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                addHourMB.setForeground(GuiColors.BASE_WHITE);
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Calendar cTMP = Calendar.getInstance();
+                cTMP.setTime(dateBrowser.getDate());
+                cTMP.add(Calendar.HOUR, +1);
+                dateBrowser.setDate(cTMP.getTime());
+                refresh();
+                repaint();
+                revalidate();
+            }
+        });
+        leftButtonsTimeEditor.add(addHourMB);
+
+        MenuLabel addMinuteMB = new MenuLabel("+m", MenuLabel.CENTER, 12);
+        addMinuteMB.setForeground(GuiColors.BASE_WHITE);
+        addMinuteMB.dropAllListeners();
+        addMinuteMB.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                addMinuteMB.setForeground(GuiColors.DARK_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                addMinuteMB.setForeground(GuiColors.BASE_WHITE);
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Calendar cTMP = Calendar.getInstance();
+                cTMP.setTime(dateBrowser.getDate());
+                cTMP.add(Calendar.MINUTE, +1);
+                dateBrowser.setDate(cTMP.getTime());
+                refresh();
+                repaint();
+                revalidate();
+            }
+        });
+        leftButtonsTimeEditor.add(addMinuteMB);
+
+        MenuLabel addSecondMB = new MenuLabel("+s", MenuLabel.CENTER, 12);
+        addSecondMB.setForeground(GuiColors.BASE_WHITE);
+        addSecondMB.dropAllListeners();
+        addSecondMB.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                addSecondMB.setForeground(GuiColors.DARK_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                addSecondMB.setForeground(GuiColors.BASE_WHITE);
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Calendar cTMP = Calendar.getInstance();
+                cTMP.setTime(dateBrowser.getDate());
+                cTMP.add(Calendar.SECOND, +1);
+                dateBrowser.setDate(cTMP.getTime());
+                refresh();
+                repaint();
+                revalidate();
+            }
+        });
+        leftButtonsTimeEditor.add(addSecondMB);
+
+
+        JPanel rightButtonsTimeEditor = new JPanel(new GridLayout(1, 2, 4, 0));
+        rightButtonsTimeEditor.setBorder(BorderFactory.createEmptyBorder());
+        rightButtonsTimeEditor.setBackground(getBackground());
+        timeEditorPanel.add(rightButtonsTimeEditor, BorderLayout.EAST);
+
+
+        MenuLabel rmHourMB = new MenuLabel("-h", MenuLabel.CENTER, 12);
+        rmHourMB.setForeground(GuiColors.BASE_WHITE);
+        rmHourMB.dropAllListeners();
+        rmHourMB.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                rmHourMB.setForeground(GuiColors.DARK_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                rmHourMB.setForeground(GuiColors.BASE_WHITE);
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Calendar cTMP = Calendar.getInstance();
+                cTMP.setTime(dateBrowser.getDate());
+                cTMP.add(Calendar.HOUR, -1);
+                dateBrowser.setDate(cTMP.getTime());
+                refresh();
+                repaint();
+                revalidate();
+            }
+        });
+        rightButtonsTimeEditor.add(rmHourMB);
+
+        MenuLabel rmMinuteMB = new MenuLabel("-m", MenuLabel.CENTER, 12);
+        rmMinuteMB.setForeground(GuiColors.BASE_WHITE);
+        rmMinuteMB.dropAllListeners();
+        rmMinuteMB.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                rmMinuteMB.setForeground(GuiColors.DARK_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                rmMinuteMB.setForeground(GuiColors.BASE_WHITE);
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Calendar cTMP = Calendar.getInstance();
+                cTMP.setTime(dateBrowser.getDate());
+                cTMP.add(Calendar.MINUTE, -1);
+                dateBrowser.setDate(cTMP.getTime());
+                refresh();
+                repaint();
+                revalidate();
+            }
+        });
+        rightButtonsTimeEditor.add(rmMinuteMB);
+
+        MenuLabel rmSecondMB = new MenuLabel("-s", MenuLabel.CENTER, 12);
+        rmSecondMB.setForeground(GuiColors.BASE_WHITE);
+        rmSecondMB.dropAllListeners();
+        rmSecondMB.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                rmSecondMB.setForeground(GuiColors.DARK_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                rmSecondMB.setForeground(GuiColors.BASE_WHITE);
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Calendar cTMP = Calendar.getInstance();
+                cTMP.setTime(dateBrowser.getDate());
+                cTMP.add(Calendar.SECOND, -1);
+                dateBrowser.setDate(cTMP.getTime());
+                refresh();
+                repaint();
+                revalidate();
+            }
+        });
+        rightButtonsTimeEditor.add(rmSecondMB);
+
+
+        centerViewPanel.add(timeEditorPanel, BorderLayout.NORTH);
 
         getContentPane().add(centerViewPanel, BorderLayout.CENTER);
     }

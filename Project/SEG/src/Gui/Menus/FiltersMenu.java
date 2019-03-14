@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +36,7 @@ public class FiltersMenu extends RPanel {
         List<Component> menus = new LinkedList<>();
 
         menus.add(getDateRange());
-        menus.add(getAudianceSegments());
+        menus.add(getAudienceSegments());
         menus.add(getIncome());
 
         MenuLabel clearFiltersLabel = new MenuLabel("Clear all filters", MenuLabel.LEFT, 16);
@@ -112,7 +111,7 @@ public class FiltersMenu extends RPanel {
         return wrapper;
     }
 
-    private JPanel getAudianceSegments() {
+    private JPanel getAudienceSegments() {
         TitleLabel titleLabel = new TitleLabel("Audience segments", TitleLabel.LEFT, 20);
 
         JPanel wrapper = new JPanel(new BorderLayout());

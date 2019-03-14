@@ -136,7 +136,7 @@ public class BreadCrumbs extends JPanel {
     }
 
     private void refresh() {
-        setPreferredSize(new Dimension((this.crumbsStack.size() * 150), 52));
+        setPreferredSize(new Dimension((this.crumbsStack.size() * 200), 52));
 
         removeAll();
         this.graphView.refresh();//todo check needed?

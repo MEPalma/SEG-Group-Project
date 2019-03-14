@@ -1,9 +1,6 @@
 package DatabaseManager;
 
-import Commons.ClickEntry;
-import Commons.ImpressionEntry;
-import Commons.ServerEntry;
-import Commons.UserEntry;
+import Commons.*;
 
 /*
  * This class is a container for all of the queries that can be made to the database.

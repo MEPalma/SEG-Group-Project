@@ -1,7 +1,7 @@
 package Gui;
 
 import Gui.GuiComponents.TitleLabel;
-import Gui.SideMenus.MainMenu;
+import Gui.Menus.MainMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,6 +64,8 @@ public class Gui extends JFrame {
 
 
         this.mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new MainMenu(this.mainController));
+
+        this.mainController.startProgressBar();
     }
 
     @Override

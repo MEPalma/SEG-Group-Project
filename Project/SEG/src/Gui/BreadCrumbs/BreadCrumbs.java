@@ -21,9 +21,6 @@ public class BreadCrumbs extends JPanel {
     private GraphView graphView;
     private BreadCrumbsHoster breadCrumbsHoster;
 
-    private JProgressBar progressBar;
-    private boolean visibleProgressBar;
-
     private JPanel errorPanel;
     private boolean visibleErrorPanel;
 
@@ -41,12 +38,7 @@ public class BreadCrumbs extends JPanel {
         this.graphView = graphView;
         this.breadCrumbsHoster = breadCrumbsHoster;
 
-        this.visibleProgressBar = false;
-        this.progressBar = new JProgressBar();
-        this.progressBar.setIndeterminate(true);
-        this.progressBar.setBorderPainted(false);
-        this.progressBar.setPreferredSize(new Dimension(30, 30));
-        this.progressBar.setBorderPainted(false);
+
 
         setBackground(BACKGROUND);
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_WHITE));
@@ -92,7 +84,7 @@ public class BreadCrumbs extends JPanel {
 
     private void navigateTo(int index) {
         cancelBackgroundTask();
-        stopProgressBar();
+        breadCrumbsHoster.stopProgressBar();
 
         if (index < 0) {
             viewPanel.removeAll();
@@ -116,7 +108,6 @@ public class BreadCrumbs extends JPanel {
 
             viewPanel.add(this, BorderLayout.NORTH);
             viewPanel.add(panesStacks.get(index), BorderLayout.CENTER);
-            if (this.visibleProgressBar) viewPanel.add(this.progressBar, BorderLayout.SOUTH);
 
             panesStacks.get(index).repaint();
             panesStacks.get(index).revalidate();
@@ -162,36 +153,6 @@ public class BreadCrumbs extends JPanel {
 
     public synchronized void clear() {
         navigateTo(-1);
-    }
-
-    public synchronized void startProgressBar() {
-        if (!this.visibleProgressBar) {
-            this.visibleProgressBar = true;
-
-            viewPanel.add(this.progressBar, BorderLayout.SOUTH);
-            panesStacks.get(panesStacks.size() - 1).repaint();
-            panesStacks.get(panesStacks.size() - 1).revalidate();
-
-            this.viewPanel.repaint();
-            this.viewPanel.revalidate();
-            repaint();
-            revalidate();
-        }
-    }
-
-    public synchronized void stopProgressBar() {
-        if (this.visibleProgressBar) {
-            this.visibleProgressBar = false;
-
-            viewPanel.remove(this.progressBar);
-            panesStacks.get(panesStacks.size() - 1).repaint();
-            panesStacks.get(panesStacks.size() - 1).revalidate();
-
-            this.viewPanel.repaint();
-            this.viewPanel.revalidate();
-            repaint();
-            revalidate();
-        }
     }
 
     public synchronized void updateBackgroundTask(SwingWorker backgroundTask) {

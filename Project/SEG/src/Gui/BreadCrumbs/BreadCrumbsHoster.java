@@ -12,6 +12,9 @@ public class BreadCrumbsHoster extends RPanel {
     private BreadCrumbs breadCrumbs;
     private GraphView graphView;
 
+    private final JProgressBar progressBar;
+    private boolean visibleProgressBar;
+
     private JPanel leftPanel, rightPanel;
 
     public BreadCrumbsHoster(GraphView graphView) {
@@ -33,6 +36,13 @@ public class BreadCrumbsHoster extends RPanel {
         this.rightPanel.add(graphView, BorderLayout.CENTER);
         add(this.rightPanel, BorderLayout.CENTER);
 
+        this.visibleProgressBar = false;
+        this.progressBar = new JProgressBar();
+        this.progressBar.setOrientation(SwingConstants.HORIZONTAL);
+        this.progressBar.setIndeterminate(true);
+        this.progressBar.setBorderPainted(false);
+        this.progressBar.setPreferredSize(new Dimension(30, 30));
+        this.progressBar.setBorderPainted(false);
     }
 
     @Override
@@ -43,5 +53,25 @@ public class BreadCrumbsHoster extends RPanel {
 
     public BreadCrumbs getBreadCrumbs() {
         return breadCrumbs;
+    }
+
+    public synchronized void startProgressBar() {
+        if (!this.visibleProgressBar) {
+            this.visibleProgressBar = true;
+
+            add(this.progressBar, BorderLayout.NORTH);
+
+            refresh();
+        }
+    }
+
+    public synchronized void stopProgressBar() {
+        if (this.visibleProgressBar) {
+            this.visibleProgressBar = false;
+
+            remove(this.progressBar);
+
+            refresh();
+        }
     }
 }

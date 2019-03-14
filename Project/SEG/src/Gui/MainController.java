@@ -56,11 +56,11 @@ public class MainController {
     }
 
     public void startProgressBar() {
-        this.breadCrumbs.startProgressBar();
+        this.breadCrumbsHoster.startProgressBar();
     }
 
     public void stopProgressBar() {
-        this.breadCrumbs.stopProgressBar();
+        this.breadCrumbsHoster.stopProgressBar();
     }
 
     public void close() {
@@ -871,15 +871,17 @@ public class MainController {
         synchronized (this.filterSpecs) {
             this.filterSpecs.setAges(newFilterSpecs.getAges());
             this.filterSpecs.setContexts(newFilterSpecs.getContexts());
-            this.filterSpecs.setEndDate(newFilterSpecs.getEndDate());
-            this.filterSpecs.setStartDate(newFilterSpecs.getStartDate());
+//            this.filterSpecs.setEndDate(newFilterSpecs.getEndDate());//todo read this back from db
+//            this.filterSpecs.setStartDate(newFilterSpecs.getStartDate());//todo read this back from db
             this.filterSpecs.setGenders(newFilterSpecs.getGenders());
             this.filterSpecs.setIncomes(newFilterSpecs.getIncomes());
         }
     }
 
     public void refreshGraphs() {
+        startProgressBar();
         this.graphView.refresh();//TODO check if filters changed, if not then do not query again
+        stopProgressBar();
     }
 
     public void clearFiltersSpecs() {

@@ -10,6 +10,8 @@ import Gui.MainController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Calendar;
@@ -30,6 +32,8 @@ public class FiltersMenu extends RPanel {
 
     @Override
     public void refresh() {
+        removeAll();
+
         List<Component> menus = new LinkedList<>();
 
         menus.add(getDateRange());
@@ -44,6 +48,7 @@ public class FiltersMenu extends RPanel {
                 //TODO Are you sure message
                 mainController.clearFiltersSpecs();
                 mainController.refreshGraphs();
+                refresh();
             }
         });
         menus.add(clearFiltersLabel);
@@ -58,33 +63,31 @@ public class FiltersMenu extends RPanel {
         TitleLabel titleLabel = new TitleLabel("Date range", TitleLabel.LEFT, 20);
 
         DateBrowser startDate = new DateBrowser(getBackground(), globalDateFormat, new Date());
+        try {
+            startDate.setDate(globalDateFormat.parse(mainController.getFilterSpecs().getStartDate()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("INIT THIS FROM THE LOADING!!!!!!!!!!!!!");
+        }
         startDate.setDateChangedListener(new DateChangedListener() {
             @Override
             public void takeAction() {
-                Calendar tmpC = Calendar.getInstance();
-                tmpC.setTime(startDate.getDate());
-                if (tmpC.get(Calendar.DAY_OF_MONTH) > 15) {
-                    tmpC.add(Calendar.MONTH, 1);
-                    tmpC.set(Calendar.DAY_OF_MONTH, tmpC.getActualMaximum(Calendar.DAY_OF_MONTH));
-                } else tmpC.set(Calendar.DAY_OF_MONTH, tmpC.getActualMaximum(Calendar.DAY_OF_MONTH));
-
-                mainController.getFilterSpecs().setEndDate(globalDateFormat.format(tmpC.getTime()));
+                mainController.getFilterSpecs().setStartDate(globalDateFormat.format(startDate.getDate()));
                 mainController.refreshGraphs();
             }
         });
 
         DateBrowser endDate = new DateBrowser(getBackground(), globalDateFormat, new Date());
+        try {
+            endDate.setDate(globalDateFormat.parse(mainController.getFilterSpecs().getEndDate()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("INIT THIS FROM THE LOADING!!!!!!!!!!!!!");
+        }
         endDate.setDateChangedListener(new DateChangedListener() {
             @Override
             public void takeAction() {
-                Calendar tmpC = Calendar.getInstance();
-                tmpC.setTime(endDate.getDate());
-                if (tmpC.get(Calendar.DAY_OF_MONTH) > 15) {
-                    tmpC.add(Calendar.MONTH, 1);
-                    tmpC.set(Calendar.DAY_OF_MONTH, tmpC.getActualMaximum(Calendar.DAY_OF_MONTH));
-                } else tmpC.set(Calendar.DAY_OF_MONTH, tmpC.getActualMaximum(Calendar.DAY_OF_MONTH));
-
-                mainController.getFilterSpecs().setEndDate(globalDateFormat.format(tmpC.getTime()));
+                mainController.getFilterSpecs().setEndDate(globalDateFormat.format(endDate.getDate()));
                 mainController.refreshGraphs();
             }
         });
@@ -120,9 +123,10 @@ public class FiltersMenu extends RPanel {
 
         // GENDER
         CheckBox maleOption = new CheckBox("Male");
-        maleOption.addMouseListener(new MouseAdapter() {
+        maleOption.setSelected(mainController.getFilterSpecs().getGenders().contains(UserEntry.Gender.Male));
+        maleOption.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (maleOption.isSelected()) {
                     mainController.getFilterSpecs().getGenders().add(UserEntry.Gender.Male);
                     mainController.refreshGraphs();
@@ -134,9 +138,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox femaleOption = new CheckBox("Female");
-        femaleOption.addMouseListener(new MouseAdapter() {
+        femaleOption.setSelected(mainController.getFilterSpecs().getGenders().contains(UserEntry.Gender.Female));
+        femaleOption.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (femaleOption.isSelected()) {
                     mainController.getFilterSpecs().getGenders().add(UserEntry.Gender.Female);
                     mainController.refreshGraphs();
@@ -151,9 +156,10 @@ public class FiltersMenu extends RPanel {
 
         //AGE
         CheckBox opAge_less_than_25 = new CheckBox("<25");
-        opAge_less_than_25.addMouseListener(new MouseAdapter() {
+        opAge_less_than_25.setSelected(mainController.getFilterSpecs().getAges().contains(UserEntry.Age.Age_less_than_25));
+        opAge_less_than_25.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opAge_less_than_25.isSelected()) {
                     mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_less_than_25);
                     mainController.refreshGraphs();
@@ -165,9 +171,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox opAge_25_34 = new CheckBox("25-34");
-        opAge_25_34.addMouseListener(new MouseAdapter() {
+        opAge_25_34.setSelected(mainController.getFilterSpecs().getAges().contains(UserEntry.Age.Age_25_34));
+        opAge_25_34.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opAge_25_34.isSelected()) {
                     mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_25_34);
                     mainController.refreshGraphs();
@@ -179,9 +186,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox opAge_35_44 = new CheckBox("35-44");
-        opAge_35_44.addMouseListener(new MouseAdapter() {
+        opAge_35_44.setSelected(mainController.getFilterSpecs().getAges().contains(UserEntry.Age.Age_35_44));
+        opAge_35_44.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opAge_35_44.isSelected()) {
                     mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_35_44);
                     mainController.refreshGraphs();
@@ -193,9 +201,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox opAge_45_54 = new CheckBox("45-54");
-        opAge_45_54.addMouseListener(new MouseAdapter() {
+        opAge_45_54.setSelected(mainController.getFilterSpecs().getAges().contains(UserEntry.Age.Age_45_54));
+        opAge_45_54.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opAge_45_54.isSelected()) {
                     mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_45_54);
                     mainController.refreshGraphs();
@@ -207,9 +216,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox opAge_more_than_54 = new CheckBox(">54");
-        opAge_more_than_54.addMouseListener(new MouseAdapter() {
+        opAge_more_than_54.setSelected(mainController.getFilterSpecs().getAges().contains(UserEntry.Age.Age_more_than_54));
+        opAge_more_than_54.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opAge_more_than_54.isSelected()) {
                     mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_more_than_54);
                     mainController.refreshGraphs();
@@ -224,9 +234,10 @@ public class FiltersMenu extends RPanel {
 
         //INCOME
         CheckBox opNews = new CheckBox("News");
-        opNews.addMouseListener(new MouseAdapter() {
+        opNews.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.News));
+        opNews.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opNews.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.News);
                     mainController.refreshGraphs();
@@ -238,9 +249,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox opShopping = new CheckBox("Shopping");
-        opShopping.addMouseListener(new MouseAdapter() {
+        opShopping.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.Shopping));
+        opShopping.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opShopping.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Shopping);
                     mainController.refreshGraphs();
@@ -252,9 +264,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox opSocialMedia = new CheckBox("Social Media");
-        opSocialMedia.addMouseListener(new MouseAdapter() {
+        opSocialMedia.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.SocialMedia));
+        opSocialMedia.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opSocialMedia.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.SocialMedia);
                     mainController.refreshGraphs();
@@ -266,9 +279,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox opTravels = new CheckBox("Travels");
-        opTravels.addMouseListener(new MouseAdapter() {
+        opTravels.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.Travel));
+        opTravels.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opTravels.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Travel);
                     mainController.refreshGraphs();
@@ -280,9 +294,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox opHobbies = new CheckBox("Hobbies");
-        opHobbies.addMouseListener(new MouseAdapter() {
+        opHobbies.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.Hobbies));
+        opHobbies.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opHobbies.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Hobbies);
                     mainController.refreshGraphs();
@@ -294,9 +309,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox opBlog = new CheckBox("Blog");
-        opBlog.addMouseListener(new MouseAdapter() {
+        opBlog.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.Blog));
+        opBlog.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opBlog.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Blog);
                     mainController.refreshGraphs();
@@ -348,9 +364,10 @@ public class FiltersMenu extends RPanel {
 
         // Low, Medium, High,
         CheckBox opLowIncome = new CheckBox("Low");
-        opLowIncome.addMouseListener(new MouseAdapter() {
+        opLowIncome.setSelected(mainController.getFilterSpecs().getIncomes().contains(UserEntry.Income.Low));
+        opLowIncome.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opLowIncome.isSelected()) {
                     mainController.getFilterSpecs().getIncomes().add(UserEntry.Income.Low);
                     mainController.refreshGraphs();
@@ -362,9 +379,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox opMediumIncome = new CheckBox("Medium");
-        opMediumIncome.addMouseListener(new MouseAdapter() {
+        opMediumIncome.setSelected(mainController.getFilterSpecs().getIncomes().contains(UserEntry.Income.Medium));
+        opMediumIncome.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (opMediumIncome.isSelected()) {
                     mainController.getFilterSpecs().getIncomes().add(UserEntry.Income.Medium);
                     mainController.refreshGraphs();
@@ -376,9 +394,10 @@ public class FiltersMenu extends RPanel {
         });
 
         CheckBox highIncome = new CheckBox("High");
-        highIncome.addMouseListener(new MouseAdapter() {
+        highIncome.setSelected(mainController.getFilterSpecs().getIncomes().contains(UserEntry.Income.High));
+        highIncome.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (highIncome.isSelected()) {
                     mainController.getFilterSpecs().getIncomes().add(UserEntry.Income.High);
                     mainController.refreshGraphs();

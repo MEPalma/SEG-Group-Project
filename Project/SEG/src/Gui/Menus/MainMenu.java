@@ -20,6 +20,7 @@ public class MainMenu extends RPanel {
     public MainMenu(MainController mainController) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
         this.mainController = mainController;
+
         refresh();
     }
 

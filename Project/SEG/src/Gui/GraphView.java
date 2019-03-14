@@ -153,7 +153,7 @@ public class GraphView extends RPanel {
                 int dfHeight = 600;
                 dialog.setSize(new Dimension(dfWidth, dfHeight));
 
-                int centerXtmp = menuLabel.getLocationOnScreen().x + (menuLabel.getWidth() / 2) - (dfWidth / 2);
+                int centerXtmp = menuLabel.getLocationOnScreen().x + (menuLabel.getHeight() / 2);
                 int centerYtmp = menuLabel.getLocationOnScreen().y + (menuLabel.getHeight() / 2) - dfHeight;
                 dialog.setLocation(centerXtmp, centerYtmp);
 
@@ -206,7 +206,7 @@ public class GraphView extends RPanel {
                 int dfHeight = 300;
                 dialog.setSize(new Dimension(dfWidth, dfHeight));
 
-                int centerXtmp = menuLabel.getLocationOnScreen().x + (menuLabel.getWidth() / 2) - (dfWidth / 2);
+                int centerXtmp = menuLabel.getLocationOnScreen().x + (menuLabel.getHeight() / 2) - dfWidth;
                 int centerYtmp = menuLabel.getLocationOnScreen().y + (menuLabel.getHeight() / 2) - dfHeight;
                 dialog.setLocation(centerXtmp, centerYtmp);
 

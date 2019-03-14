@@ -64,6 +64,8 @@ public class Gui extends JFrame {
 
 
         this.mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new MainMenu(this.mainController));
+
+        this.mainController.startProgressBar();
     }
 
     @Override

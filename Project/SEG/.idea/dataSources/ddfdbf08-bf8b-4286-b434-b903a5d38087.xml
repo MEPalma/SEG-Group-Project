@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="DashboardProject.database">
+  <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.14">
+    <root id="1">
+      <ServerVersion>3.25.1</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="main">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <collation id="3" parent="1" name="BINARY"/>
+    <collation id="4" parent="1" name="NOCASE"/>
+    <collation id="5" parent="1" name="RTRIM"/>
+    <table id="6" parent="2" name="CLICK_LOGS"/>
+    <table id="7" parent="2" name="IMPRESSION_LOGS"/>
+    <table id="8" parent="2" name="SERVER_LOGS"/>
+    <table id="9" parent="2" name="SETTINGS"/>
+    <table id="10" parent="2" name="USERS"/>
+    <table id="11" parent="2" name="sqlite_master">
+      <System>1</System>
+    </table>
+    <table id="12" parent="2" name="sqlite_sequence">
+      <System>1</System>
+    </table>
+    <column id="13" parent="6" name="id">
+      <Position>1</Position>
+      <DataType>INTEGER|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="14" parent="6" name="userId">
+      <Position>2</Position>
+      <DataType>VARCHAR(255)|0s</DataType>
+    </column>
+    <column id="15" parent="6" name="date">
+      <Position>3</Position>
+      <DataType>DATE|0s</DataType>
+    </column>
+    <column id="16" parent="6" name="clickCost">
+      <Position>4</Position>
+      <DataType>NUMERIC|0s</DataType>
+    </column>
+    <index id="17" parent="6" name="CLICK_LOGS_DATE_INDEX">
+      <ColNames>date</ColNames>
+      <ColumnCollations></ColumnCollations>
+    </index>
+    <key id="18" parent="6">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="19" parent="6">
+      <ColNames>userId</ColNames>
+      <RefTableName>USERS</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="20" parent="7" name="id">
+      <Position>1</Position>
+      <DataType>INTEGER|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="21" parent="7" name="userId">
+      <Position>2</Position>
+      <DataType>VARCHAR(255)|0s</DataType>
+    </column>
+    <column id="22" parent="7" name="date">
+      <Position>3</Position>
+      <DataType>DATE|0s</DataType>
+    </column>
+    <column id="23" parent="7" name="context">
+      <Position>4</Position>
+      <DataType>VARCHAR(255)|0s</DataType>
+    </column>
+    <column id="24" parent="7" name="impressionCost">
+      <Position>5</Position>
+      <DataType>NUMERIC|0s</DataType>
+    </column>
+    <index id="25" parent="7" name="IMPRESSION_LOGS_DATE_INDEX">
+      <ColNames>date</ColNames>
+      <ColumnCollations></ColumnCollations>
+    </index>
+    <key id="26" parent="7">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="27" parent="7">
+      <ColNames>userId</ColNames>
+      <RefTableName>USERS</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="28" parent="8" name="id">
+      <Position>1</Position>
+      <DataType>INTEGER|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="29" parent="8" name="userId">
+      <Position>2</Position>
+      <DataType>VARCHAR(255)|0s</DataType>
+    </column>
+    <column id="30" parent="8" name="entryDate">
+      <Position>3</Position>
+      <DataType>DATE|0s</DataType>
+    </column>
+    <column id="31" parent="8" name="exitDate">
+      <Position>4</Position>
+      <DataType>DATE|0s</DataType>
+    </column>
+    <column id="32" parent="8" name="pagesViewed">
+      <Position>5</Position>
+      <DataType>INTEGER|0s</DataType>
+    </column>
+    <column id="33" parent="8" name="conversion">
+      <Position>6</Position>
+      <DataType>VARCHAR(55)|0s</DataType>
+    </column>
+    <index id="34" parent="8" name="SERVER_LOGS_ENTRY_DATE_INDEX">
+      <ColNames>entryDate</ColNames>
+      <ColumnCollations></ColumnCollations>
+    </index>
+    <index id="35" parent="8" name="SERVER_LOGS_EXIT_DATE_INDEX">
+      <ColNames>exitDate</ColNames>
+      <ColumnCollations></ColumnCollations>
+    </index>
+    <key id="36" parent="8">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="37" parent="8">
+      <ColNames>userId</ColNames>
+      <RefTableName>USERS</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="38" parent="9" name="name">
+      <Position>1</Position>
+      <DataType>VARCHAR(255)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="39" parent="9" name="value">
+      <Position>2</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <index id="40" parent="9" name="sqlite_autoindex_SETTINGS_1">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>name</ColNames>
+      <ColumnCollations></ColumnCollations>
+      <Unique>1</Unique>
+    </index>
+    <key id="41" parent="9">
+      <ColNames>name</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_SETTINGS_1</UnderlyingIndexName>
+    </key>
+    <column id="42" parent="10" name="id">
+      <Position>1</Position>
+      <DataType>VARCHAR(255)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="43" parent="10" name="gender">
+      <Position>2</Position>
+      <DataType>VARCHAR(55)|0s</DataType>
+    </column>
+    <column id="44" parent="10" name="age">
+      <Position>3</Position>
+      <DataType>VARCHAR(55)|0s</DataType>
+    </column>
+    <column id="45" parent="10" name="income">
+      <Position>4</Position>
+      <DataType>VARCHAR(55)|0s</DataType>
+    </column>
+    <index id="46" parent="10" name="sqlite_autoindex_USERS_1">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <ColumnCollations></ColumnCollations>
+      <Unique>1</Unique>
+    </index>
+    <key id="47" parent="10">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_USERS_1</UnderlyingIndexName>
+    </key>
+    <column id="48" parent="11" name="type">
+      <Position>1</Position>
+      <DataType>text|0s</DataType>
+    </column>
+    <column id="49" parent="11" name="name">
+      <Position>2</Position>
+      <DataType>text|0s</DataType>
+    </column>
+    <column id="50" parent="11" name="tbl_name">
+      <Position>3</Position>
+      <DataType>text|0s</DataType>
+    </column>
+    <column id="51" parent="11" name="rootpage">
+      <Position>4</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="52" parent="11" name="sql">
+      <Position>5</Position>
+      <DataType>text|0s</DataType>
+    </column>
+    <column id="53" parent="12" name="name">
+      <Position>1</Position>
+    </column>
+    <column id="54" parent="12" name="seq">
+      <Position>2</Position>
+    </column>
+  </database-model>
+</dataSource>

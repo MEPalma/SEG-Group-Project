@@ -124,7 +124,9 @@ public class ChooseNewGraphPanel extends RPanel {
             mainController.pushToGraphView(graphSpecs);
         }
         else {
-            //TODO show error
+            this.messageLabel.setText("You already have this graph.");
+            repaint();
+            revalidate();
         }
         return true;
     }

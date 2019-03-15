@@ -196,9 +196,10 @@ public class QueryComposer {
                 tmp.append("inner join Users on impression_logs.userid=Users.id ");
             //WHERE
             tmp.append("WHERE ");
-    
+
             //gender
 
+            //You need to add 'AND' +query if any buttons have been pressed
             tmp.append("");
             for (int i = 0; i < graphSpecs.getGenders().size(); ++i) {
                 if (i < graphSpecs.getGenders().size()-1) {

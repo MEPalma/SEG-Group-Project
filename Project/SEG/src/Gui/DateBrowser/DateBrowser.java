@@ -1,7 +1,6 @@
 package Gui.DateBrowser;
 
 import DatabaseManager.Stringifiable;
-import Gui.Gui;
 import Gui.GuiColors;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.TextBox;

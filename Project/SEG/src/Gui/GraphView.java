@@ -11,9 +11,14 @@ import Gui.Menus.FiltersMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
 
 public class GraphView extends RPanel {
     public enum Mode {CARD_MODE, GRID_MODE}
@@ -145,7 +150,7 @@ public class GraphView extends RPanel {
                         int y = MouseInfo.getPointerInfo().getLocation().y;
 
                         if (x > dialog.getLocation().x + dialog.getWidth() || x < dialog.getLocation().x || y > dialog.getLocation().y + dialog.getHeight() || y < dialog.getLocation().y)
-                                dialog.setVisible(false);
+                            dialog.setVisible(false);
                     }
                 });
                 dialog.getContentPane().add(new TitleLabel("Filters", TitleLabel.CENTER, 18), BorderLayout.NORTH);

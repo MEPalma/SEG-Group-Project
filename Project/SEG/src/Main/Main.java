@@ -4,10 +4,9 @@ import Commons.FilterSpecs;
 import Commons.GraphSpecs;
 import Commons.UserEntry;
 import DatabaseManager.QueryComposer;
-import Gui.Gui;
 import Gui.MainController;
+import Gui.Gui;
 
-import java.util.LinkedList;
 import java.util.Locale;
 
 /**
@@ -16,11 +15,12 @@ import java.util.Locale;
 public class Main {
     public static void main(String[] args) {
         Locale.setDefault(Locale.ENGLISH);
-        //new Gui(new MainController()).setVisible(true);
+        new Gui(new MainController()).setVisible(true);
 
-        FilterSpecs filter= new FilterSpecs();
+        FilterSpecs filter = new FilterSpecs();
         filter.getGenders().add(UserEntry.Gender.Male);
         filter.getAges().add(UserEntry.Age.Age_25_34);
+        filter.getIncomes().add(UserEntry.Income.High);
         GraphSpecs tmp = new GraphSpecs(
                 "id",
                 "title",

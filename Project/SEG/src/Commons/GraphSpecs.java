@@ -9,20 +9,25 @@ import java.util.List;
 import java.util.Objects;
 
 public class GraphSpecs {
-    public enum TIME_SPAN { WEEK_SPAN, DAY_SPAN, HOUR_SPAN };
+    public enum TIME_SPAN {WEEK_SPAN, DAY_SPAN, HOUR_SPAN}
+
+    ;
 
     public enum METRICS {
-            NumberImpressions,
-            NumberClicks,
-            NumberUniques,
-            NumberBounces,
-            NumberConversions,
-            TotalCost,
-            CTR,
-            CPA,
-            CPC,
-            CPM,
-            BounceRate};
+        NumberImpressions,
+        NumberClicks,
+        NumberUniques,
+        NumberBounces,
+        NumberConversions,
+        TotalCost,
+        CTR,
+        CPA,
+        CPC,
+        CPM,
+        BounceRate
+    }
+
+    ;
 
     private final String id, title, xAxisName, yAxisName;
     private Collection<Tuple<Number, Number>> data;
@@ -122,6 +127,10 @@ public class GraphSpecs {
 
     public void setData(Collection<Tuple<Number, Number>> data) {
         this.data = data;
+    }
+
+    public boolean containsFilters() {
+        return this.filterSpecs.containsFilters();
     }
 
 }

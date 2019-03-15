@@ -145,7 +145,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Day]", "Day", "N. Impressions",  GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
+                tmp = new GraphSpecs(id, "Number of Impressions [Per Day]", "Day", "N. Impressions", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
                 return null;
             }
 
@@ -167,7 +167,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Hour]", "Hour", "N. Impressions",  GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
+                tmp = new GraphSpecs(id, "Number of Impressions [Per Hour]", "Hour", "N. Impressions", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
                 return null;
             }
 
@@ -190,7 +190,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Week]", "Week", "N. Clicks",  GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
+                tmp = new GraphSpecs(id, "Number of Impressions [Per Week]", "Week", "N. Clicks", GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
                 return null;
             }
 
@@ -212,7 +212,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Click [Per Day]", "Day", "N. Clicks",  GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
+                tmp = new GraphSpecs(id, "Number of Click [Per Day]", "Day", "N. Clicks", GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
                 return null;
             }
 

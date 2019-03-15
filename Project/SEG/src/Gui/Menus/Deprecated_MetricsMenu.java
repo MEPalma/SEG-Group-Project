@@ -1,7 +1,10 @@
 package Gui.Menus;
 
 import Gui.GuiColors;
-import Gui.GuiComponents.*;
+import Gui.GuiComponents.CheckBox;
+import Gui.GuiComponents.ListView;
+import Gui.GuiComponents.RPanel;
+import Gui.GuiComponents.TitleLabel;
 import Gui.MainController;
 
 import javax.swing.*;

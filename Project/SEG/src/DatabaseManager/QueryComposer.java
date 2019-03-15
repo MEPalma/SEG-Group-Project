@@ -2,6 +2,9 @@ package DatabaseManager;
 
 import Commons.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /*
  * This class is a container for all of the queries that can be made to the database.
  */
@@ -189,11 +192,101 @@ public class QueryComposer {
 
     public static String composeQuery(GraphSpecs graphSpecs) {
         if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions) {
+            return getNumberOfImpressions(graphSpecs);
+        }
 
-            StringBuilder tmp = new StringBuilder("select Date as d,count(Users.id) as c from impression_logs ");
-            //TODO empty where
-            if(graphSpecs.getGenders()!=null)
-                tmp.append("inner join Users on impression_logs.userid=Users.id ");
+        return null;
+    }
+    private static String getTimeSpanGroup(GraphSpecs.TIME_SPAN timeSpan)
+    {
+        if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return " group by strftime('%W', Date)";
+        else if (timeSpan == GraphSpecs.TIME_SPAN.DAY_SPAN)
+            return " group by strftime('%d', Date)";
+        return " group by strftime('%H:%d', Date)";
+
+    }
+
+    private static String getNumberOfImpressions(GraphSpecs graphSpecs) {
+        StringBuilder tmp = new StringBuilder("select Date as d,count(Users.id) as c from impression_logs ");
+        tmp.append(getFilters(graphSpecs));
+       tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+
+
+        tmp.append(";");
+        return tmp.toString();
+    }
+
+    private static String getNumberOfClicks(GraphSpecs graphSpecs) {
+        StringBuilder tmp = new StringBuilder("select Date as d,count(ClickCost) as c from click_logs");
+        tmp.append(getFilters(graphSpecs));
+        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+
+        tmp.append(";");
+        return tmp.toString();
+    }
+    private static String getNumberOfUniques(GraphSpecs graphSpecs) {
+        StringBuilder tmp = new StringBuilder("select Date as d,count(distinct  userid) as c from click_logs");
+        tmp.append(getFilters(graphSpecs));
+        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+
+        tmp.append(";");
+        return tmp.toString();
+    }
+    /*
+    ADD AN AND FOR THIS ONE !
+     */
+    private static String getNumberOfBounces(GraphSpecs graphSpecs) {
+        StringBuilder tmp = new StringBuilder("select EntryDate as d,count(strftime('%Y-%m-%d %H:%M:%S', ExitDate) - strftime('%Y-%m-%d %H:%M:%S', EntryDate)) as c from server_logs");
+        tmp.append(getFilters(graphSpecs));
+        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+
+        tmp.append(";");
+        return tmp.toString();
+    }
+    /*
+    HERE AS WELL
+     */
+    private static String getNumberOfConversions(GraphSpecs graphSpecs) {
+        StringBuilder tmp = new StringBuilder("select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No'");
+        tmp.append(getFilters(graphSpecs));
+        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+
+        tmp.append(";");
+        return tmp.toString();
+    }
+
+    private static String getTotalCost(GraphSpecs graphSpecs) {
+        StringBuilder tmp = new StringBuilder("select d,sum(total) as c  from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u ");
+        tmp.append(getFilters(graphSpecs));
+        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+
+        tmp.append(";");
+        return tmp.toString();
+    }
+
+    private static String getCTR(GraphSpecs graphSpecs) {
+        StringBuilder tmp = new StringBuilder("");
+        tmp.append(getFilters(graphSpecs));
+        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+
+        tmp.append(";");
+        return tmp.toString();
+    }
+
+
+
+
+
+        private  static String getFilters(GraphSpecs graphSpecs)
+    {   StringBuilder tmp=new StringBuilder("");
+        List<String> filters =new LinkedList<>();
+        filters.add("Date > '" + graphSpecs.getStartDate()+"' ");
+        filters.add("Date < '" + graphSpecs.getEndDate()+"' ");
+        if (graphSpecs.containsFilters()) {
+
+
+
+            tmp.append("inner join Users on userid=Users.id ");
             //WHERE
             tmp.append("WHERE ");
 
@@ -202,44 +295,47 @@ public class QueryComposer {
             //You need to add 'AND' +query if any buttons have been pressed
             tmp.append("");
             for (int i = 0; i < graphSpecs.getGenders().size(); ++i) {
-                if (i < graphSpecs.getGenders().size()-1) {
-                    tmp.append("Gender = '"  + graphSpecs.getGenders().get(i).toString() + "' || ");
-                } else tmp.append("Gender = '"  + graphSpecs.getGenders().get(i).toString()+"' ");
+                filters.add("Gender = '" + graphSpecs.getGenders().get(i).toString() + "' ");
             }
             //age
 
             for (int i = 0; i < graphSpecs.getAges().size(); ++i) {
-                if (i < graphSpecs.getAges().size()-1) {
-                    tmp.append("Age = '"  + graphSpecs.getAges().get(i).toString() + "' || ");
-                } else tmp.append("Age = '"  + graphSpecs.getAges().get(i).toString()+"' ");
+                filters.add("Age = '" + graphSpecs.getAges().get(i).toString() + "' ");
             }
 
             //context
             tmp.append("");
             for (int i = 0; i < graphSpecs.getContexts().size(); ++i) {
-                if (i < graphSpecs.getContexts().size() - 1) {
-                    tmp.append("CONTEXT = '"  + graphSpecs.getContexts().get(i).toString() + "' || ");
-                } else tmp.append("CONTEXT = '"  + graphSpecs.getContexts().get(i).toString());
+                filters.add("CONTEXT = '" + graphSpecs.getContexts().get(i).toString());
             }
 
-            //date
-           // tmp.append("date >= '" + graphSpecs.getStartDate() + "' AND date <= '" + graphSpecs.getEndDate() + "' ");
+            //income
 
-            if (graphSpecs.getTimespan() == GraphSpecs.TIME_SPAN.WEEK_SPAN) tmp.append("group by strftime('%W', Date)");
-            else if (graphSpecs.getTimespan() == GraphSpecs.TIME_SPAN.DAY_SPAN) tmp.append("group by strftime('%d', Date)");
-            else tmp.append("group by strftime('%H:%d', Date)");
-
-
-
-
-            tmp.append(";");
-            return tmp.toString();
-
+            for (int i = 0; i < graphSpecs.getIncomes().size(); ++i) {
+                filters.add("Income = '" + graphSpecs.getIncomes().get(i).toString() + "' ");
+            }
 
         }
 
-        return null;
+        for(int i=0;i<filters.size();++i)
+        {
+
+            if(i==filters.size()-1)
+                tmp.append(filters.get(i));
+            else tmp.append(filters.get(i)+ " AND ");
+        }
+        return tmp.toString();
     }
+
+    /*
+    Start and end dates
+     */
+//    public static String getStartDateImpression="";
+//    public static String getEndDate="";
+//    public static String getStartDate="";
+//    public static String getStartDate="";
+//    public static String getStartDate="";
+//    public static String getStartDate="";
 
     /*
     Number of impressions by week query.
@@ -260,9 +356,9 @@ public class QueryComposer {
      *Number of uniques
      */
     public static String getNumberOfUniques = "select count (distinct ID) as GroupedValues from click_logs;";
-    public static String getGetNumberOfUniquesPerDay = "select Date as d,count( id) as c from click_logs group by strftime('%d', Date) order by Date;";
+    public static String getGetNumberOfUniquesPerDay = "select Date as d,count(distinct userid) as c from click_logs group by strftime('%d', Date) order by Date;";
     public static String getGetNumberOfUniquesPerWeek = "select Date as d,count(distinct id) as c from click_logs group by strftime('%W', Date) order by Date;";
-    public static String getGetNumberOfUniquesPerHours = "select Date as d,count( id) as c from click_logs group by strftime('%H:%d', Date) order by Date;";
+    public static String getGetNumberOfUniquesPerHours = "select Date as d,count(distinct id) as c from click_logs group by strftime('%H:%d', Date) order by Date;";
 
 
     /*

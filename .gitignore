@@ -1,5 +1,9 @@
 /bin/
 .*
-.idea/
-/out/
 *.iml
+*/out/
+/test/
+/.idea/
+Project/SEG/out/
+Project/SEG/test/
+Project/SEG/src/META-INF/

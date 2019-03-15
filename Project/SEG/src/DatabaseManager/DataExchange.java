@@ -585,6 +585,44 @@ public class DataExchange {
         }
     }
 
+    public List<Tuple<String, Number>> getGraphData(GraphSpecs graphSpecs) {
+        try {
+
+            ResultSet resultSet = this.dbM.query(QueryComposer.composeQuery(graphSpecs));
+
+            if(graphSpecs.getMetric()== GraphSpecs.METRICS.CTR) {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(graphSpecs.getId(), "", "", "!", GraphSpecs.METRICS.NumberClicks, graphSpecs.getTimespan(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(graphSpecs.getId(), "", "", "!", GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(), graphSpecs.getFilterSpecs())));
+                getInfoTupleDivision(leftSet, rightSet);
+            }
+            else
+                if(graphSpecs.getMetric()==GraphSpecs.METRICS.CPA)
+                {
+                    ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(graphSpecs.getId(), "", "", "!", GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(), graphSpecs.getFilterSpecs())));
+                    ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(graphSpecs.getId(), "", "", "!", GraphSpecs.METRICS.NumberConversions, graphSpecs.getTimespan(), graphSpecs.getFilterSpecs())));
+                    getInfoTupleDivision(leftSet, rightSet);
+                }
+                else
+                    if(graphSpecs.getMetric()==GraphSpecs.METRICS.CPC)
+                    {
+                        ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(graphSpecs.getId(), "", "", "!", GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(), graphSpecs.getFilterSpecs())));
+                        ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(graphSpecs.getId(), "", "", "!", GraphSpecs.METRICS.NumberClicks, graphSpecs.getTimespan(), graphSpecs.getFilterSpecs())));
+                        getInfoTupleDivision(leftSet, rightSet);
+                    }
+                    else
+                        {
+                            ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(graphSpecs.getId(), "", "", "!", GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(), graphSpecs.getFilterSpecs())));
+                            ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(graphSpecs.getId(), "", "", "!", GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(), graphSpecs.getFilterSpecs())));
+                            getInfoTupleDivisionCTRHOUR(leftSet, rightSet);
+                        }
+
+            List tmp = getInfoTuple(resultSet);
+            close(resultSet);
+            return tmp;
+        } catch (Exception ex) {
+            return new LinkedList<>();
+        }
+    }
 
     /*
     Method that avoids duplicates for lists;
@@ -682,10 +720,10 @@ public class DataExchange {
         List<Tuple<String, Number>> result = new LinkedList<>();
 
         List<Date> hour = new LinkedList<>();
-        //Time hr;
+
         List<Number> number = new LinkedList<>();
         try {
-            //hr=resultPerHour.getTime("GroupedValues");
+
             while (resultTuple1.next()) {
                 root1.add(new Tuple<String, Number>(resultTuple1.getString("d"), (resultTuple1.getFloat("c"))));
 
@@ -700,8 +738,6 @@ public class DataExchange {
                 result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue())));
             }
             return result;
-//            for(int i=1;i<result.size();i++)
-//                System.out.println(result.get(i).getX()+"  "+result.get(i).getY());
 
             //return <>
         } catch (SQLException ex) {

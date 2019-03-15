@@ -264,14 +264,6 @@ public class QueryComposer {
         return tmp.toString();
     }
 
-    private static String getCTR(GraphSpecs graphSpecs) {
-        StringBuilder tmp = new StringBuilder("");
-        tmp.append(getFilters(graphSpecs));
-        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
-
-        tmp.append(";");
-        return tmp.toString();
-    }
 
 
 

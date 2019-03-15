@@ -2,11 +2,13 @@ package Gui;
 
 import Commons.FilterSpecs;
 import Commons.GraphSpecs;
+import Commons.Tuple;
 import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
 import Gui.BreadCrumbs.BreadCrumbs;
 import Gui.BreadCrumbs.BreadCrumbsHoster;
 import Gui.GuiComponents.RPanel;
+import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import javax.swing.*;
 import java.util.LinkedList;
@@ -98,8 +100,12 @@ public class MainController {
     }
 
     public void pushToGraphView(GraphSpecs newGraphSpecs) {
-        //TODO get data with query composer!
+        newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
         this.graphView.pushGraphSpecs(newGraphSpecs);
+    }
+
+    public List<Tuple<String, Number>> getGraphSpecData(GraphSpecs graphSpecs) {
+        return this.dataExchange.getGraphData(graphSpecs);
     }
 
 //    public void pushToGraphView(String id, String title, String xAxisName, String yAxisName, Collection<Tuple<String, Number>> chartData, GraphSpecs.Type type) {
@@ -876,6 +882,8 @@ public class MainController {
             this.filterSpecs.setGenders(newFilterSpecs.getGenders());
             this.filterSpecs.setIncomes(newFilterSpecs.getIncomes());
         }
+
+        this.graphView.updateGraphsData();
     }
 
     public void refreshGraphs() {
@@ -887,6 +895,12 @@ public class MainController {
     public void clearFiltersSpecs() {
         updateFilterSpecs(new FilterSpecs());
     }
+
+    private String[] getGraphDescription(GraphSpecs graphSpecs)
+    {
+        return new String[] {"TODOTitle", "TODOxAxis", "TODOyAXIS"};
+    }
+
 
 
 }

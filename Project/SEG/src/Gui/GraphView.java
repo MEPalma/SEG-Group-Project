@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GraphView extends RPanel {
+
     public enum Mode {CARD_MODE, GRID_MODE}
 
     private Mode mode;
@@ -294,6 +295,11 @@ public class GraphView extends RPanel {
             refresh();
         }
     }
+
+    public void updateGraphsData() {
+        for (GraphSpecs gs : this.graphsOnScreen)
+            gs.setData(mainController.getGraphSpecData(gs));
+    }
 }
 
 class GraphCardView extends RPanel {
@@ -316,7 +322,7 @@ class GraphCardView extends RPanel {
         functionsPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 0, spec.getTypeColor()));
 
         MenuLabel moveUpLabel = new MenuLabel("up", MenuLabel.CENTER, 10);
-        moveUpLabel.setIcon(new ImageIcon(getClass().getResource("Icons/up.png")));
+//        moveUpLabel.setIcon(new ImageIcon(getClass().getResource("Icons/up.png")));
         moveUpLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -327,7 +333,7 @@ class GraphCardView extends RPanel {
 
         if (!isLast) {
             MenuLabel moveDownLabel = new MenuLabel("");
-            moveDownLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/down.png")));
+//            moveDownLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/down.png")));
             moveDownLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -338,7 +344,7 @@ class GraphCardView extends RPanel {
         }
 
         MenuLabel deleteLabel = new MenuLabel("", MenuLabel.CENTER, 10);
-        deleteLabel.setIcon(new ImageIcon(getClass().getResource("Icons/x.png")));
+//        deleteLabel.setIcon(new ImageIcon(getClass().getResource("Icons/x.png")));
         deleteLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

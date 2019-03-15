@@ -1,5 +1,6 @@
 package Gui.Menus;
 
+import Commons.GraphSpecs;
 import Gui.GuiColors;
 import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.MenuLabel;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ChooseNewGraphPanel extends RPanel {
-    private static String[] METRICS = {
+    public static String[] METRICS = {
             "Number of Impressions",
             "Number of Clicks",
             "Number of Uniques",
@@ -43,8 +44,8 @@ public class ChooseNewGraphPanel extends RPanel {
             "The average number of bounces per click."};
 
 
-    private static String[] BOUNCE_DEF = {"DEF 1", "DEF 2"};
-    private static String[] TIME_SPANS = {"WEEK", "DAY", "HOUR"};
+    public static String[] BOUNCE_DEF = {"DEF 1", "DEF 2"};
+    public static String[] TIME_SPANS = {"WEEK", "DAY", "HOUR"};
 
     private final MainController mainController;
 
@@ -119,8 +120,6 @@ public class ChooseNewGraphPanel extends RPanel {
     private boolean handleAdd() {
         mainController.pushNewNumberOfBouncesPerWeek(Integer.toString(new Random().nextInt()));
         return true;
-
-        //todo else error message in message dialog and return false
     }
 
     private JPanel getMetricsChooserCell() {

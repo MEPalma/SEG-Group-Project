@@ -798,7 +798,7 @@ public class DataExchange {
 
 
     /*
-    NUMBER OF IMPRESSIONS
+    NUMBER OF IMPRESSION_LOGS
      */
     public List<Tuple<String, Number>> getNumberOfImpressionsPerHour() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfImpressionsPerHour);
@@ -815,7 +815,7 @@ public class DataExchange {
     }
 
     /*
-    NUMBER OF CLICKS
+    NUMBER OF CLICK_LOGS
      */
     public List<Tuple<String, Number>> getNumberOfClicksPerHour() {
         ResultSet resultPerHour = this.dbM.query(QueryComposer.getNumberOfClicksPerHour);

@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 
 public class LoadCSVsMenu extends RPanel {
 
+    private enum FileType {IMPRESSION_LOGS, CLICK_LOGS, SERVER_LOGS, UNRECOCNISED};
+
     public static Color BACKGROUND = GuiColors.BASE_WHITE;
     private final MainController mainController;
 
@@ -173,18 +175,15 @@ public class LoadCSVsMenu extends RPanel {
                         if (returnValue == JFileChooser.APPROVE_OPTION) {
                             impressionLog = jfc.getSelectedFile().getAbsoluteFile();
 
-                            //check the first row to verify it is the right file
-                            String[] entries =
-                                    {
-                                            "Date", "ID", "Gender", "Age", "Income", "Context", "Impression Cost"
-                                    };
-                            if (checkFirstRow(impressionLog, entries)) {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GREEN));
-                                pathTextBox.setText(impressionLog.getAbsolutePath());
-                            } else {
+                            FileType thisFileType = getFileType(impressionLog);
+                            if (thisFileType != FileType.IMPRESSION_LOGS) {
                                 pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED));
                                 pathTextBox.setText("INVALID FILE");
                                 impressionLog = null;
+                                mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.IMPRESSION_LOGS, thisFileType));
+                            } else {
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GREEN));
+                                pathTextBox.setText(impressionLog.getAbsolutePath());
                             }
                         }
                     }
@@ -230,20 +229,18 @@ public class LoadCSVsMenu extends RPanel {
                         if (returnValue == JFileChooser.APPROVE_OPTION) {
                             clickLog = jfc.getSelectedFile().getAbsoluteFile();
 
-                            //check the first row to verify it is the right file
-                            String[] entries =
-                                    {
-                                            "Date", "ID", "Click Cost"
-                                    };
-                            if (checkFirstRow(clickLog, entries)) {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GREEN));
-                                pathTextBox.setText(clickLog.getAbsolutePath());
-                            } else {
+                            FileType thisFileType = getFileType(clickLog);
+                            if (thisFileType != FileType.CLICK_LOGS) {
                                 pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED));
                                 pathTextBox.setText("INVALID FILE");
                                 clickLog = null;
+                                mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.CLICK_LOGS, thisFileType));
+                            } else {
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GREEN));
+                                pathTextBox.setText(clickLog.getAbsolutePath());
                             }
                         }
+
                     }
 
                 });
@@ -287,18 +284,15 @@ public class LoadCSVsMenu extends RPanel {
                         if (returnValue == JFileChooser.APPROVE_OPTION) {
                             serverLog = jfc.getSelectedFile().getAbsoluteFile();
 
-                            //check the first row to verify it is the right file
-                            String[] entries =
-                                    {
-                                            "Entry Date", "ID", "Exit Date", "Pages Viewed", "Conversion"
-                                    };
-                            if (checkFirstRow(serverLog, entries)) {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GREEN));
-                                pathTextBox.setText(serverLog.getAbsolutePath());
-                            } else {
+                            FileType thisFileType = getFileType(serverLog);
+                            if (thisFileType != FileType.SERVER_LOGS) {
                                 pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED));
                                 pathTextBox.setText("INVALID FILE");
                                 serverLog = null;
+                                mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.SERVER_LOGS, thisFileType));
+                            } else {
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GREEN));
+                                pathTextBox.setText(serverLog.getAbsolutePath());
                             }
                         }
                     }
@@ -309,6 +303,23 @@ public class LoadCSVsMenu extends RPanel {
                 panel.add(pathFinderPanel, BorderLayout.CENTER);
 
                 return panel;
+            }
+
+            private String getErrorMessage(FileType expected, FileType given) {
+                return "Expected file " + expected.toString() + " but given file " + given.toString();
+            }
+
+            private FileType getFileType(File file) {
+                String[] impressionsFileStructure = { "Date", "ID", "Gender", "Age", "Income", "Context", "Impression Cost" };
+                if (checkFirstRow(file, impressionsFileStructure)) return FileType.IMPRESSION_LOGS;
+
+                String[] clicksFileStructure = { "Date", "ID", "Click Cost" };
+                if (checkFirstRow(file, clicksFileStructure)) return FileType.CLICK_LOGS;
+
+                String[] serverFileStructure = { "Entry Date", "ID", "Exit Date", "Pages Viewed", "Conversion" };
+                if (checkFirstRow(file, serverFileStructure)) return FileType.SERVER_LOGS;
+
+                else return FileType.UNRECOCNISED;
             }
 
             private boolean checkFirstRow(File file, String[] entries) {
@@ -326,14 +337,15 @@ public class LoadCSVsMenu extends RPanel {
                         }
                         return true;
                     }
-                } catch (IOException ex) {
-                    Logger.getLogger(LoadCSVsMenu.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    return false;
                 }
                 return false;
             }
+
+
         };
         mainController.setMainBackgroundTask(backgroundTask);
         backgroundTask.execute();
     }
-
 }

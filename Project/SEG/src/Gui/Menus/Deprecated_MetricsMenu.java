@@ -27,7 +27,7 @@ public class Deprecated_MetricsMenu extends RPanel {
 
         List<Component> menus = new LinkedList<Component>();
 //TODO DO IN BACKGROUND!!!!!!!!
-        //NUMBER OF IMPRESSIONS
+        //NUMBER OF IMPRESSION_LOGS
         CheckBox nImpressionsWeek = new CheckBox("Week");
         nImpressionsWeek.setSelected(mainController.doesGraphViewContainGraph("nImpressionsWeek"));
         nImpressionsWeek.addMouseListener(new MouseAdapter() {

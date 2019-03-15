@@ -8,7 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="000b1ed3-ac2b-41da-b561-fe8cb8c938ae" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../../ATT59813.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Gui/Menus/ChooseNewGraphPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Gui/Menus/ChooseNewGraphPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../git_comm_push.sh" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -560,16 +559,15 @@
       <workItem from="1552513233303" duration="107000" />
       <workItem from="1552557604267" duration="8246000" />
       <workItem from="1552572946100" duration="1631000" />
-      <workItem from="1552647669064" duration="10374000" />
+      <workItem from="1552647669064" duration="10981000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="53797000" />
+    <option name="totallyTimeSpent" value="54404000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="2560" height="1372" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11874504" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />

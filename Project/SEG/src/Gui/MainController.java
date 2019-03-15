@@ -8,6 +8,7 @@ import DatabaseManager.DatabaseManager;
 import Gui.BreadCrumbs.BreadCrumbs;
 import Gui.BreadCrumbs.BreadCrumbsHoster;
 import Gui.GuiComponents.RPanel;
+import Gui.Menus.ChooseNewGraphPanel;
 import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import javax.swing.*;
@@ -95,32 +96,24 @@ public class MainController {
         this.breadCrumbs.push(title, view);
     }
 
-    public boolean doesGraphViewContainGraph(String graphId) {
-        return this.graphView.containsGraph(graphId);
-    }
-
-    public void pushToGraphView(GraphSpecs newGraphSpecs) {
-        newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
-        this.graphView.pushGraphSpecs(newGraphSpecs);
-    }
-
     public List<Tuple<String, Number>> getGraphSpecData(GraphSpecs graphSpecs) {
         return this.dataExchange.getGraphData(graphSpecs);
     }
 
-//    public void pushToGraphView(String id, String title, String xAxisName, String yAxisName, Collection<Tuple<String, Number>> chartData, GraphSpecs.Type type) {
-//        this.pushToGraphView(new GraphSpecs(id, title, xAxisName, yAxisName, chartData, type, new List<>(), new List<>(), new List<>(), new List<>()));
-//    }
-
-    public void popFromGraphView(String graphId) {
-        this.graphView.popGraphSpecs(graphId);
+    public void pushToGraphView(GraphSpecs newGraphSpecs) {
+        newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
+        String[] titles = getGraphDescription(newGraphSpecs);
+        newGraphSpecs.setTitle(titles[0]);
+        newGraphSpecs.setxAxisName(titles[1]);
+        newGraphSpecs.setyAxisName(titles[2]);
+        this.graphView.pushGraphSpecs(newGraphSpecs);
     }
-
 
     /*
         Graphs
      */
 
+    /*
     // Impressions
     public void pushNewNumberOfImpressionsPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
@@ -859,10 +852,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-
-
-
-
+*/
     /*
         FILTERS
      */
@@ -898,9 +888,22 @@ public class MainController {
 
     private String[] getGraphDescription(GraphSpecs graphSpecs)
     {
-        return new String[] {"TODOTitle", "TODOxAxis", "TODOyAXIS"};
+        String yAxis = graphSpecs.getTimespan().toString();
+        String xAxis = graphSpecs.getMetric().toString();
+        String title = graphSpecs.getMetric().toString() + " [Per " + graphSpecs.getTimespan() + "]";
+
+        if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate)
+            title += " based on " + graphSpecs.getBounceDef().toString();
+
+
+        return new String[] {title, xAxis, yAxis};
     }
 
+    public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
+        GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getFilterSpecs());
 
+        if (this.graphView.containsGraph(graphSpecs)) return null;
+        else return graphSpecs;
+    }
 
 }

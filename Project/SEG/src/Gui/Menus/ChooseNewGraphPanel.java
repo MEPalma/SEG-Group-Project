@@ -1,5 +1,6 @@
 package Gui.Menus;
 
+import Commons.FilterSpecs;
 import Commons.GraphSpecs;
 import Gui.GuiColors;
 import Gui.GuiComponents.ListView;
@@ -44,7 +45,7 @@ public class ChooseNewGraphPanel extends RPanel {
             "The average number of bounces per click."};
 
 
-    public static String[] BOUNCE_DEF = {"DEF 1", "DEF 2"};
+    public static String[] BOUNCE_DEF = {"Time", "Number of Pages"};
     public static String[] TIME_SPANS = {"WEEK", "DAY", "HOUR"};
 
     private final MainController mainController;
@@ -118,7 +119,13 @@ public class ChooseNewGraphPanel extends RPanel {
     }
 
     private boolean handleAdd() {
-        mainController.pushNewNumberOfBouncesPerWeek(Integer.toString(new Random().nextInt()));
+        GraphSpecs graphSpecs = mainController.proposeNewGraph(getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
+        if (graphSpecs != null) {
+            mainController.pushToGraphView(graphSpecs);
+        }
+        else {
+            //TODO show error
+        }
         return true;
     }
 
@@ -155,5 +162,17 @@ public class ChooseNewGraphPanel extends RPanel {
         wrapper.add(this.timespanChooser, BorderLayout.CENTER);
 
         return wrapper;
+    }
+
+    private GraphSpecs.METRICS getChosenMetric() {
+        return GraphSpecs.METRICS.values()[this.metricsChooser.getSelectedIndex()];
+    }
+
+    private GraphSpecs.TIME_SPAN getChosenTimeSpan() {
+        return GraphSpecs.TIME_SPAN.values()[this.timespanChooser.getSelectedIndex()];
+    }
+
+    private GraphSpecs.BOUNCE_DEF getChosenBounceDef() {
+        return GraphSpecs.BOUNCE_DEF.values()[this.bounceDefinitionChooser.getSelectedIndex()];
     }
 }

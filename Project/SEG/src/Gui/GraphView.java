@@ -128,7 +128,7 @@ public class GraphView extends RPanel {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_SMOKE));
-        wrapper.setPreferredSize(new Dimension(120, 70));
+        wrapper.setPreferredSize(new Dimension(120, 60));
 
         MenuLabel menuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16);
         menuLabel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_WHITE));
@@ -146,7 +146,6 @@ public class GraphView extends RPanel {
 
                         if (x > dialog.getLocation().x + dialog.getWidth() || x < dialog.getLocation().x || y > dialog.getLocation().y + dialog.getHeight() || y < dialog.getLocation().y)
                                 dialog.setVisible(false);
-
                     }
                 });
                 dialog.getContentPane().add(new TitleLabel("Filters", TitleLabel.CENTER, 18), BorderLayout.NORTH);
@@ -175,9 +174,9 @@ public class GraphView extends RPanel {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_SMOKE));
-        wrapper.setPreferredSize(new Dimension(120, 70));
+        wrapper.setPreferredSize(new Dimension(120, 60));
 
-        MenuLabel menuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16);
+        MenuLabel menuLabel = new MenuLabel("Add", MenuLabel.CENTER, 16);
         menuLabel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_WHITE));
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -197,17 +196,16 @@ public class GraphView extends RPanel {
                     setup dialog view
                  */
                 JPanel dialogView = new JPanel(new BorderLayout());
-                dialogView.setBackground(GuiColors.BASE_WHITE);
-                dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_WHITE, 10, true));
-
+                dialogView.setBackground(GuiColors.BASE_SMOKE);
+                dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_SMOKE, 10, true));
                 dialogView.add(new ChooseNewGraphPanel(mainController, dialog), BorderLayout.CENTER);
 
 
                 /*
                     display dialog
                  */
-                int dfWidth = 450;
-                int dfHeight = 300;
+                int dfWidth = 300;
+                int dfHeight = 400;
                 dialog.setSize(new Dimension(dfWidth, dfHeight));
 
                 int centerXtmp = menuLabel.getLocationOnScreen().x + 90 - dfWidth;
@@ -226,7 +224,7 @@ public class GraphView extends RPanel {
 
     private void setNoGraphMode() {
         removeAll();
-        TitleLabel message = new TitleLabel("NO GRAPH SELECTED", TitleLabel.CENTER, 22);
+        TitleLabel message = new TitleLabel("CLICK ON ADD TO ADD A NEW GRAPH", TitleLabel.CENTER, 22);
         message.setForeground(GuiColors.TEXT_SELECTED);
         add(message, BorderLayout.CENTER);
         repaint();

@@ -9,8 +9,6 @@ import Gui.MainController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -59,7 +57,7 @@ public class ChooseNewGraphPanel extends RPanel {
     private final JFrame host;
 
     public ChooseNewGraphPanel(MainController mainController, JFrame host) {
-        super(GuiColors.BASE_WHITE, new BorderLayout());
+        super(GuiColors.BASE_SMOKE, new BorderLayout());
 
         this.mainController = mainController;
         this.host = host;
@@ -70,12 +68,9 @@ public class ChooseNewGraphPanel extends RPanel {
 
         this.metricsChooser = new JComboBox(METRICS);
         this.metricsChooser.setSelectedIndex(0);
-        this.metricsChooser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                descriptionLabel.setText("<html>" + METRICS_DESCRIPTIONS[metricsChooser.getSelectedIndex()] + "</html>");
-                refresh();
-            }
+        this.metricsChooser.addActionListener(e -> {
+            descriptionLabel.setText("<html>" + METRICS_DESCRIPTIONS[metricsChooser.getSelectedIndex()] + "</html>");
+            refresh();
         });
 
         this.bounceDefinitionChooser = new JComboBox(BOUNCE_DEF);
@@ -100,11 +95,19 @@ public class ChooseNewGraphPanel extends RPanel {
                 if (handleAdd()) host.setVisible(false);
             }
         });
-        add(addLabel, BorderLayout.SOUTH);
+
+        JPanel addLabelWrapper = new JPanel(new GridLayout(1, 1));
+        addLabelWrapper.setBackground(GuiColors.BASE_WHITE);
+        addLabelWrapper.setBorder(BorderFactory.createMatteBorder(8, 0, 0, 0, GuiColors.BASE_SMOKE));
+        addLabelWrapper.add(addLabel);
+
+        add(addLabelWrapper, BorderLayout.SOUTH);
 
         List<Component> items = new LinkedList<Component>();
         items.add(getMetricsChooserCell());
-        items.add(getBounceChooserCell());
+
+        if (this.metricsChooser.getSelectedIndex() == 3)//Bounce
+            items.add(getBounceChooserCell());
         items.add(getTimeSpanChooserCell());
 
         add(new ListView(GuiColors.BASE_WHITE, items, true).getWrappedInScroll(true), BorderLayout.CENTER);
@@ -117,19 +120,19 @@ public class ChooseNewGraphPanel extends RPanel {
         mainController.pushNewNumberOfBouncesPerWeek(Integer.toString(new Random().nextInt()));
         return true;
 
-        //else error message in message dialog and return false
+        //todo else error message in message dialog and return false
     }
 
     private JPanel getMetricsChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createMatteBorder(0, 8, 0, 8, GuiColors.BASE_WHITE));
 
         this.descriptionLabel.setText("<html>" + METRICS_DESCRIPTIONS[metricsChooser.getSelectedIndex()] + "</html>");
 
-        wrapper.add(new TitleLabel("Metric", TitleLabel.LEFT, 16), BorderLayout.NORTH);
-        wrapper.add(this.metricsChooser, BorderLayout.SOUTH);
-        wrapper.add(this.descriptionLabel, BorderLayout.CENTER);
+        wrapper.add(new TitleLabel("Metric", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(this.metricsChooser, BorderLayout.CENTER);
+        wrapper.add(this.descriptionLabel, BorderLayout.SOUTH);
 
         return wrapper;
     }
@@ -137,7 +140,7 @@ public class ChooseNewGraphPanel extends RPanel {
     private JPanel getBounceChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createMatteBorder(8, 8, 0, 8, GuiColors.BASE_WHITE));
 
         wrapper.add(new TitleLabel("Bounce Definition", TitleLabel.LEFT, 18), BorderLayout.NORTH);
         wrapper.add(this.bounceDefinitionChooser, BorderLayout.CENTER);
@@ -147,7 +150,7 @@ public class ChooseNewGraphPanel extends RPanel {
     private JPanel getTimeSpanChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createMatteBorder(8, 8, 0, 8, GuiColors.BASE_WHITE));
 
         wrapper.add(new TitleLabel("Time Grouping", TitleLabel.LEFT, 18), BorderLayout.NORTH);
         wrapper.add(this.timespanChooser, BorderLayout.CENTER);

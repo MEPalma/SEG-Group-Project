@@ -25,7 +25,7 @@ public class GraphSpecs {
             BounceRate};
 
     private final String id, title, xAxisName, yAxisName;
-    private Collection<Tuple<Number, Number>> data;
+    private Collection<Tuple<String, Number>> data;
 
     private final METRICS metric;
     private final TIME_SPAN timespan;
@@ -120,7 +120,7 @@ public class GraphSpecs {
         return this.filterSpecs.getEndDate();
     }
 
-    public void setData(Collection<Tuple<Number, Number>> data) {
+    public void setData(Collection<Tuple<String, Number>> data) {
         this.data = data;
     }
 

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.*;
 
 public class GraphView extends RPanel {
+
     public enum Mode {CARD_MODE, GRID_MODE}
 
     private Mode mode;
@@ -288,6 +289,11 @@ public class GraphView extends RPanel {
             Collections.swap(this.graphsOnScreen, index, index + 1);
             refresh();
         }
+    }
+
+    public void updateGraphsData() {
+        for (GraphSpecs gs : this.graphsOnScreen)
+            gs.setData(mainController.getGraphSpecData(gs));
     }
 }
 

@@ -585,6 +585,16 @@ public class DataExchange {
         }
     }
 
+    public List<Tuple<String, Number>> getGraphData(GraphSpecs graphSpecs) {
+        try {
+            ResultSet resultSet = this.dbM.query(QueryComposer.composeQuery(graphSpecs));
+            List tmp = getInfoTuple(resultSet);
+            close(resultSet);
+            return tmp;
+        } catch (Exception ex) {
+            return new LinkedList<>();
+        }
+    }
 
     /*
     Method that avoids duplicates for lists;

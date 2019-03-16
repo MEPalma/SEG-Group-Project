@@ -49,12 +49,12 @@ public class Gui extends JFrame {
             TABBED VIEW INITIALIZATION
          */
         JPanel tabbedViewTabsHoster = new JPanel(new BorderLayout());
-        tabbedViewTabsHoster.setBorder(BorderFactory.createEmptyBorder());
-        tabbedViewTabsHoster.setBackground(GuiColors.BASE_WHITE);
+        tabbedViewTabsHoster.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        tabbedViewTabsHoster.setBackground(GuiColors.BASE_SMOKE);
 
         JPanel tabbedViewContentHoster = new JPanel(new BorderLayout());
         tabbedViewContentHoster.setBorder(BorderFactory.createEmptyBorder());
-        tabbedViewTabsHoster.setBackground(GuiColors.BASE_WHITE);
+        tabbedViewTabsHoster.setBackground(GuiColors.BASE_SMOKE);
 
 
         /*
@@ -93,13 +93,13 @@ public class Gui extends JFrame {
 
         JPanel tabbedViewTopWrapper = new JPanel(new BorderLayout());
         tabbedViewTopWrapper.setBorder(BorderFactory.createEmptyBorder());
-        tabbedViewTopWrapper.setBackground(GuiColors.BASE_WHITE);
+        tabbedViewTopWrapper.setBackground(GuiColors.BASE_SMOKE);
         tabbedViewTopWrapper.add(tabbedViewTabsHoster, BorderLayout.CENTER);
         tabbedViewTopWrapper.add(getTopRightFunctions(), BorderLayout.EAST);
 
         JPanel tabbedViewWrapper = new JPanel(new BorderLayout());
         tabbedViewWrapper.setBorder(BorderFactory.createEmptyBorder());
-        tabbedViewWrapper.setBackground(GuiColors.BASE_WHITE);
+        tabbedViewWrapper.setBackground(GuiColors.BASE_SMOKE);
         tabbedViewWrapper.add(tabbedViewTopWrapper, BorderLayout.NORTH);
         tabbedViewWrapper.add(tabbedViewContentHoster, BorderLayout.CENTER);
         this.mainView.add(tabbedViewWrapper, BorderLayout.CENTER);
@@ -125,11 +125,11 @@ public class Gui extends JFrame {
     private JPanel getShowFiltersMenuLabel() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_SMOKE));
+        wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
         wrapper.setPreferredSize(new Dimension(120, 60));
 
         MenuLabel menuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16);
-        menuLabel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_WHITE));
+        menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -163,11 +163,11 @@ public class Gui extends JFrame {
 
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_SMOKE));
+        wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
         wrapper.setPreferredSize(new Dimension(120, 60));
 
         MenuLabel menuLabel = new MenuLabel("Add", MenuLabel.CENTER, 16);
-        menuLabel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, GuiColors.BASE_WHITE));
+        menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

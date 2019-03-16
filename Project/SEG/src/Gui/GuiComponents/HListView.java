@@ -4,64 +4,85 @@ import Gui.GuiColors;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.Collection;
 
 public class HListView extends JPanel implements Scrollable {
 
-    public HListView(Color color, Collection<Component> cells, boolean separatorsOn) {
-        super(new BorderLayout());
+    public HListView(Color color, Collection<Component> cells)
+    {
+        super(new GridBagLayout());
         setBackground(color);
         setBorder(BorderFactory.createEmptyBorder());
 
-        JPanel refAddTo = this;
-        for (Component cellContent : cells) {
-            JPanel card = new JPanel(new BorderLayout());
-            card.setBackground(color);
-            card.setBorder(BorderFactory.createEmptyBorder());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.VERTICAL;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-            if (separatorsOn) {
-                JSeparator separator2 = new JSeparator(JToolBar.Separator.VERTICAL);
-                separator2.setBackground(color);
-                separator2.setForeground(GuiColors.BASE_SMOKE);
-
-                JPanel wrapperPanel = new JPanel(new BorderLayout());
-                wrapperPanel.setBackground(color);
-                wrapperPanel.setBorder(BorderFactory.createEmptyBorder());
-                wrapperPanel.add(cellContent, BorderLayout.WEST);
-                wrapperPanel.add(separator2);
-
-                card.add(wrapperPanel, BorderLayout.WEST);
-            } else {
-                card.add(cellContent, BorderLayout.WEST);
-            }
-
-            refAddTo.add(card, BorderLayout.CENTER);
-            refAddTo = card;
+        for (Component cell : cells)
+        {
+            add(cell, gbc);
         }
-
     }
 
-    public HListView(Color color, Collection<Component> cells) {
-        this(color, cells, true);
-    }
+    public JPanel getWrappedInScroll()
+    {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBorder(BorderFactory.createEmptyBorder());
 
-    public JScrollPane getWrappedInScroll(boolean visibleScrollbar) {
-        JScrollPane listScroller;
-        if (visibleScrollbar)
-            listScroller = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        else
-            listScroller = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JPanel innerWrapper = new JPanel(new BorderLayout());
+        innerWrapper.setBackground(getBackground());
+        innerWrapper.setBorder(BorderFactory.createEmptyBorder());
+        innerWrapper.add(this, BorderLayout.CENTER);
+
+        JScrollPane listScroller = new JScrollPane(innerWrapper, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         listScroller.setBackground(this.getBackground());
-        listScroller.setOpaque(true);
-        listScroller.setForeground(this.getBackground());
+        listScroller.setWheelScrollingEnabled(false);
         listScroller.setBorder(this.getBorder());
-        listScroller.getVerticalScrollBar().setUnitIncrement(16);
+        listScroller.getVerticalScrollBar().setUnitIncrement(1);
         listScroller.getVerticalScrollBar().setBackground(listScroller.getBackground());
         listScroller.getVerticalScrollBar().setBorder(this.getBorder());
-        listScroller.getViewport().setBackground(this.getBackground());
-        listScroller.getViewport().scrollRectToVisible(new Rectangle(0, 0, 0, 0));
+        listScroller.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() + 16*e.getWheelRotation());
+                listScroller.repaint();
+                listScroller.revalidate();
+                System.out.println("oi" + e.getWheelRotation());
+            }
+        });
+        wrapper.add(listScroller);
 
-        return listScroller;
+        MenuLabel goLeftLabel = new MenuLabel("<", MenuLabel.CENTER, 20);
+        goLeftLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() - 150);
+                listScroller.repaint();
+                listScroller.revalidate();
+            }
+        });
+        wrapper.add(goLeftLabel, BorderLayout.WEST);
+
+        MenuLabel goRightLabel = new MenuLabel(">", MenuLabel.CENTER, 20);
+        goRightLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() + 150);
+                if (listScroller.getHorizontalScrollBar().getValue() == listScroller.getHorizontalScrollBar().getMaximum())
+                    goRightLabel.setVisible(false);
+                listScroller.repaint();
+                listScroller.revalidate();
+            }
+        });
+        wrapper.add(goRightLabel, BorderLayout.EAST);
+
+        return wrapper;
     }
 
     @Override

@@ -45,7 +45,7 @@ public class TabbedView {
             tabCells.add(createTab(t.getTitle(), t.getColor(), i));
         }
 
-        this.tabsHost.add(new HListView(GuiColors.BASE_WHITE, tabCells, false).getWrappedInScroll(true), BorderLayout.CENTER);
+        this.tabsHost.add(new HListView(GuiColors.BASE_SMOKE, tabCells).getWrappedInScroll(), BorderLayout.CENTER);
         this.contentHost.add(this.tabs.get(this.selectedIndex).getContent(), BorderLayout.CENTER);
 
         this.tabsHost.repaint();
@@ -87,7 +87,7 @@ public class TabbedView {
         JPanel tab = new JPanel(new BorderLayout());
         tab.setBackground(color);
         tab.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
-        tab.setPreferredSize(new Dimension(80, 40));
+        tab.setPreferredSize(new Dimension(200, 50));
         tab.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -102,7 +102,7 @@ public class TabbedView {
         tab.add(titleLabel, BorderLayout.CENTER);
 
         MenuLabel popLabel = new MenuLabel("", MenuLabel.CENTER, 0);
-//        popLabel.setIcon(new ImageIcon("/Icons/x.png"));
+        popLabel.setIcon(new ImageIcon("/Icons/x.png"));
         popLabel.dropAllListeners();
         popLabel.addMouseListener(new MouseAdapter() {
             @Override

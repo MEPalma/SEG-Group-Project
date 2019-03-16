@@ -8,13 +8,19 @@ import DatabaseManager.DatabaseManager;
 import Gui.BreadCrumbs.BreadCrumbs;
 import Gui.BreadCrumbs.BreadCrumbsHoster;
 import Gui.GraphManager.GraphManager;
+import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import DatabaseManager.Stringifiable;
+import Gui.GuiComponents.TitleLabel;
 import Gui.TabbedView.TabbedView;
 import com.sun.corba.se.impl.orbutil.graph.Graph;
 import sun.awt.image.ImageWatched;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -122,9 +128,9 @@ public class MainController {
         newGraphSpecs.setxAxisName(titles[1]);
         newGraphSpecs.setyAxisName(titles[2]);
 
-        JPanel graph = GraphManager.createBarChar(newGraphSpecs.getData(), newGraphSpecs.getxAxisName(), newGraphSpecs.getyAxisName(), newGraphSpecs.getTypeColor());
 
-        this.tabbedView.push(titles[0], newGraphSpecs.getTypeColor(), graph, newGraphSpecs);
+
+        this.tabbedView.push(titles[0], newGraphSpecs.getTypeColor(), getGraphCard(newGraphSpecs), newGraphSpecs);
     }
 
 
@@ -191,6 +197,28 @@ public class MainController {
 
         if (this.tabbedView.containsComparable(graphSpecs)) return null;
         else return graphSpecs;
+    }
+
+    private JPanel getGraphCard(GraphSpecs spec) {
+        JPanel card = new JPanel(new BorderLayout());
+        card.setBackground(spec.getTypeColor());
+        card.setBorder(BorderFactory.createEmptyBorder(10, 10,10, 10));
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(spec.getTypeColor());
+        topPanel.setPreferredSize(new Dimension(100, 50));
+
+        TitleLabel titleLabel = new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16);
+        titleLabel.setForeground(GuiColors.BASE_WHITE);
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+
+        JPanel graph = GraphManager.createBarChar(spec.getData(), spec.getxAxisName(), spec.getyAxisName(), spec.getTypeColor());
+
+        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_WHITE));
+        card.add(topPanel, BorderLayout.NORTH);
+        card.add(graph, BorderLayout.CENTER);
+
+        return card;
     }
 
 }

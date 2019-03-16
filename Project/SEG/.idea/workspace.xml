@@ -8,6 +8,8 @@
   <component name="ChangeListManager">
     <list default="true" id="000b1ed3-ac2b-41da-b561-fe8cb8c938ae" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../../ATT59813.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../SEG.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../git_comm_push.sh" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -80,8 +82,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Gui/GraphView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="780">
-              <caret line="186" column="44" selection-start-line="186" selection-start-column="44" selection-end-line="186" selection-end-column="44" />
+            <state relative-caret-position="593">
+              <caret line="175" column="44" selection-start-line="175" selection-start-column="44" selection-end-line="175" selection-end-column="44" />
               <folding>
                 <element signature="e#9942#9943#0" expanded="true" />
                 <element signature="e#9564#9565#0" expanded="true" />
@@ -114,8 +116,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DatabaseManager/CSVParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="50" column="7" lean-forward="true" selection-start-line="50" selection-start-column="7" selection-end-line="50" selection-end-column="7" />
+            <state relative-caret-position="323">
+              <caret line="30" selection-start-line="30" selection-end-line="30" />
+              <folding>
+                <element signature="e#2768#2777#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -123,8 +128,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Gui/Menus/ChooseNewGraphPanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
-              <caret line="50" column="48" selection-start-line="50" selection-start-column="48" selection-end-line="50" selection-end-column="48" />
+            <state relative-caret-position="680">
+              <caret line="45" column="48" selection-start-line="45" selection-start-column="48" selection-end-line="45" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -132,8 +137,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DatabaseManager/QueryComposer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1749">
-              <caret line="196" column="5" selection-start-line="196" selection-start-column="5" selection-end-line="196" selection-end-column="5" />
+            <state relative-caret-position="3092">
+              <caret line="275" column="5" selection-start-line="275" selection-start-column="5" selection-end-line="275" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -144,8 +149,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DatabaseManager/DataExchange.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1056">
-              <caret line="593" column="32" selection-start-line="593" selection-start-column="32" selection-end-line="593" selection-end-column="32" />
+            <state relative-caret-position="1515">
+              <caret line="620" column="32" selection-start-line="620" selection-start-column="32" selection-end-line="620" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -154,7 +159,7 @@
         <entry file="file://$PROJECT_DIR$/src/DatabaseManager/DatabaseManager.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="867">
-              <caret line="54" column="13" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="13" />
+              <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -226,74 +231,7 @@
     <panes>
       <pane id="PackagesPane" />
       <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="SEG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEG" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SEG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEG" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SEG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEG" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Commons" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SEG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEG" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="DatabaseManager" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SEG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEG" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Gui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SEG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEG" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Gui" type="462c0819:PsiDirectoryNode" />
-              <item name="BreadCrumbs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SEG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEG" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Gui" type="462c0819:PsiDirectoryNode" />
-              <item name="DateBrowser" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SEG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEG" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Gui" type="462c0819:PsiDirectoryNode" />
-              <item name="GuiComponents" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SEG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEG" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Gui" type="462c0819:PsiDirectoryNode" />
-              <item name="Menus" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SEG" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEG" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Main" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -360,11 +298,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54425000" />
+    <option name="totallyTimeSpent" value="54699000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="2560" height="1372" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12867355" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -557,22 +494,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DatabaseManager/CSVParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="50" column="7" lean-forward="true" selection-start-line="50" selection-start-column="7" selection-end-line="50" selection-end-column="7" />
+        <state relative-caret-position="323">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
+          <folding>
+            <element signature="e#2768#2777#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DatabaseManager/DatabaseManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="867">
-          <caret line="54" column="13" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="13" />
+          <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DatabaseManager/DataExchange.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1056">
-          <caret line="593" column="32" selection-start-line="593" selection-start-column="32" selection-end-line="593" selection-end-column="32" />
+        <state relative-caret-position="1515">
+          <caret line="620" column="32" selection-start-line="620" selection-start-column="32" selection-end-line="620" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -585,8 +525,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DatabaseManager/QueryComposer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1749">
-          <caret line="196" column="5" selection-start-line="196" selection-start-column="5" selection-end-line="196" selection-end-column="5" />
+        <state relative-caret-position="3092">
+          <caret line="275" column="5" selection-start-line="275" selection-start-column="5" selection-end-line="275" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -683,8 +623,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Gui/GraphView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="186" column="44" selection-start-line="186" selection-start-column="44" selection-end-line="186" selection-end-column="44" />
+        <state relative-caret-position="593">
+          <caret line="175" column="44" selection-start-line="175" selection-start-column="44" selection-end-line="175" selection-end-column="44" />
           <folding>
             <element signature="e#9942#9943#0" expanded="true" />
             <element signature="e#9564#9565#0" expanded="true" />
@@ -694,8 +634,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Gui/Menus/ChooseNewGraphPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="50" column="48" selection-start-line="50" selection-start-column="48" selection-end-line="50" selection-end-column="48" />
+        <state relative-caret-position="680">
+          <caret line="45" column="48" selection-start-line="45" selection-start-column="48" selection-end-line="45" selection-end-column="48" />
         </state>
       </provider>
     </entry>

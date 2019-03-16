@@ -7,8 +7,12 @@ import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
 import Gui.BreadCrumbs.BreadCrumbs;
 import Gui.BreadCrumbs.BreadCrumbsHoster;
+import Gui.GraphManager.GraphManager;
 import Gui.GuiComponents.RPanel;
 import DatabaseManager.Stringifiable;
+import Gui.TabbedView.TabbedView;
+import com.sun.corba.se.impl.orbutil.graph.Graph;
+import sun.awt.image.ImageWatched;
 
 import javax.swing.*;
 import java.util.Date;
@@ -19,14 +23,16 @@ public class MainController {
     private final DataExchange dataExchange;
     private final BreadCrumbsHoster breadCrumbsHoster;
     private final BreadCrumbs breadCrumbs;
-    private final GraphView graphView;
+//    private final GraphView graphView;
+    private final TabbedView tabbedView;
     private final List<SwingWorker> dataLoadingTasks;
 
     public MainController() {
         this.dataExchange = new DataExchange(new DatabaseManager());
         this.breadCrumbsHoster = new BreadCrumbsHoster(new GraphView(this));
         this.breadCrumbs = this.breadCrumbsHoster.getBreadCrumbs();
-        this.graphView = this.breadCrumbsHoster.getBreadCrumbs().getGraphView();
+//        this.graphView = this.breadCrumbsHoster.getBreadCrumbs().getGraphView();
+        this.tabbedView = new TabbedView(null, null);//TODO fix me
         this.dataLoadingTasks = new LinkedList<>();
         this.filterSpecs = new FilterSpecs();
         clearFiltersSpecs();
@@ -110,12 +116,17 @@ public class MainController {
     }
 
     public void pushToGraphView(GraphSpecs newGraphSpecs) {
+
+        //TODO do me in backgorund!!!!!!!!!!!
         newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
         String[] titles = getGraphDescription(newGraphSpecs);
         newGraphSpecs.setTitle(titles[0]);
         newGraphSpecs.setxAxisName(titles[1]);
         newGraphSpecs.setyAxisName(titles[2]);
-        this.graphView.pushGraphSpecs(newGraphSpecs);
+
+        JPanel graph = GraphManager.createBarChar(newGraphSpecs.getData(), newGraphSpecs.getxAxisName(), newGraphSpecs.getyAxisName(), newGraphSpecs.getTypeColor());
+
+        this.tabbedView.push(titles[0], newGraphSpecs.getTypeColor(), graph, newGraphSpecs);
     }
 
 
@@ -139,12 +150,24 @@ public class MainController {
             this.filterSpecs.setIncomes(newFilterSpecs.getIncomes());
         }
 
-        this.graphView.updateGraphsData();
+        refreshGraphs();
     }
 
     public void refreshGraphs() {
+
+        //TODO do me in background!!!!!!!!!!
         startProgressBar();
-        this.graphView.refresh();//TODO check if filters changed, if not then do not query again
+
+        List<Object> graphSpecs = this.tabbedView.getAllComparables();
+
+        this.tabbedView.clear();
+
+        for (Object g : graphSpecs) {
+            GraphSpecs tmp = (GraphSpecs) g;
+            tmp.setData(this.dataExchange.getGraphData(tmp));
+            this.pushToGraphView(tmp);
+        }
+
         stopProgressBar();
     }
 
@@ -168,7 +191,7 @@ public class MainController {
     public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
         GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getFilterSpecs());
 
-        if (this.graphView.containsGraph(graphSpecs)) return null;
+        if (this.tabbedView.containsComparable(graphSpecs)) return null;
         else return graphSpecs;
     }
 

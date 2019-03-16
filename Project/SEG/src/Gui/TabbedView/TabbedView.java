@@ -32,7 +32,7 @@ public class TabbedView {
         this.contentHost.setLayout(new BorderLayout());
     }
 
-    public void refresh() {
+    public synchronized void refresh() {
         this.tabsHost.removeAll();
         this.contentHost.removeAll();
 
@@ -55,14 +55,32 @@ public class TabbedView {
     }
 
     public void push(String title, Color tabColor, JPanel content, Object comparable) {
-        this.tabs.add(new Tab(title, tabColor, content, comparable));
+        synchronized (this) {
+            this.tabs.add(new Tab(title, tabColor, content, comparable));
+        }
         refresh();
     }
 
-    public boolean containsComparable(Object comparable) {
+    public synchronized void clear() {
+        this.tabs.clear();
+    }
+
+    public synchronized boolean containsComparable(Object comparable) {
         for (Tab tab : this.tabs) {
             if (tab.equals(comparable)) return true;
         }  return false;
+    }
+
+    public synchronized List<Object> getAllComparables() {
+        List<Object> dump = new LinkedList<>();
+
+        synchronized (this) {
+            for (Tab t : this.tabs) {
+                dump.add(t.getComparable());
+            }
+        }
+
+        return dump;
     }
 
     private JPanel createTab(String title, Color color, int myIndex) {

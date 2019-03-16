@@ -191,7 +191,7 @@ public class GraphView extends RPanel {
                     display dialog
                  */
                 int dfWidth = 300;
-                int dfHeight = 400;
+                int dfHeight = 320;
                 dialog.setSize(new Dimension(dfWidth, dfHeight));
 
                 int centerXtmp = menuLabel.getLocationOnScreen().x + 90 - dfWidth;

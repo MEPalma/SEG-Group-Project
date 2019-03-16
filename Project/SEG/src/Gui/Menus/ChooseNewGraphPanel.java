@@ -4,6 +4,7 @@ import Commons.GraphSpecs;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;
 import Gui.MainController;
+import Gui.TakeActionListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,11 +64,21 @@ public class ChooseNewGraphPanel extends RPanel {
 
         this.messageLabel = new TitleLabel("", TitleLabel.CENTER, 12);
 
+        TakeActionListener takeActionListener = new TakeActionListener() {
+            @Override
+            public void takeAction() {
+                refresh();
+            }
+        };
+
         this.metricsChooser = new DropDown(METRICS, METRICS_DESCRIPTIONS, 0);
+        this.metricsChooser.addTakeActionListener(takeActionListener);
 
         this.bounceDefinitionChooser = new DropDown(BOUNCE_DEF, null, 0);
+        this.bounceDefinitionChooser.addTakeActionListener(takeActionListener);
 
         this.timespanChooser = new DropDown(TIME_SPANS, null, 0);
+        this.timespanChooser.addTakeActionListener(takeActionListener);
 
         refresh();
     }
@@ -98,6 +109,7 @@ public class ChooseNewGraphPanel extends RPanel {
 
         if (this.metricsChooser.getSelectedIndex() == 3)//Bounce
             items.add(getBounceChooserCell());
+
         items.add(getTimeSpanChooserCell());
 
         add(new ListView(GuiColors.BASE_WHITE, items, true).getWrappedInScroll(true), BorderLayout.CENTER);
@@ -122,11 +134,8 @@ public class ChooseNewGraphPanel extends RPanel {
         wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.setBorder(BorderFactory.createMatteBorder(0, 8, 0, 8, GuiColors.BASE_WHITE));
 
-        this.descriptionLabel.setText("<html>" + METRICS_DESCRIPTIONS[metricsChooser.getSelectedIndex()] + "</html>");
-
         wrapper.add(new TitleLabel("Metric", TitleLabel.LEFT, 18), BorderLayout.NORTH);
         wrapper.add(this.metricsChooser, BorderLayout.CENTER);
-        wrapper.add(this.descriptionLabel, BorderLayout.SOUTH);
 
         return wrapper;
     }

@@ -16,7 +16,7 @@ public class DropDown extends RPanel {
     private String[] choices, descriptions;
     private int selectedIndex;
     private TakeActionListener takeActionListener;
-    private DropDownPopUp dropDownPopUp;
+    private MenuLabel openPopupLabel;
 
     public DropDown(String[] choices, String[] descriptions, int selectedIndex) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
@@ -25,7 +25,7 @@ public class DropDown extends RPanel {
         this.choices = choices;
         this.descriptions = descriptions;
         this.selectedIndex = selectedIndex;
-        this.dropDownPopUp = new DropDownPopUp();
+        this.openPopupLabel = new MenuLabel(this.choices[this.selectedIndex], MenuLabel.CENTER, 14);
 
         refresh();
     }
@@ -38,11 +38,11 @@ public class DropDown extends RPanel {
     public void refresh() {
         removeAll();
 
-        MenuLabel openPopupLabel = new MenuLabel(this.choices[this.selectedIndex], MenuLabel.CENTER, 14);
+        openPopupLabel.setText(this.choices[this.selectedIndex]);
         openPopupLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                dropDownPopUp.setVisible(false);
+                DropDownPopUp dropDownPopUp = new DropDownPopUp();
                 dropDownPopUp.init( openPopupLabel.getLocationOnScreen().x,
                         openPopupLabel.getLocationOnScreen().y + openPopupLabel.getHeight(),
                         choices,
@@ -72,7 +72,6 @@ public class DropDown extends RPanel {
 
 class DropDownPopUp extends JDialog {
     public static int WIDTH = 250;
-    public static int HEIGHT = 200;
 
     private int x, y;
     private String[] choices, descriptions;
@@ -101,6 +100,13 @@ class DropDownPopUp extends JDialog {
         getContentPane().add(getDropDownChoices(), BorderLayout.CENTER);
 
         addWindowFocusListener(new RecursiveLostFocus(this));
+
+//        addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseExited(MouseEvent e) {
+//                helperRef.setVisible(false);
+//            }
+//        });
     }
 
     private JPanel getDropDownChoices() {
@@ -116,19 +122,18 @@ class DropDownPopUp extends JDialog {
             cell.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
             cell.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mousePressed(MouseEvent e) {
+                public void mouseReleased(MouseEvent e) {
                     selectedIndex = indexChoice;
                     if (takeActionListener != null)
                         takeActionListener.takeAction();
                     setVisible(false);
-                    helperRef.setVisible(false);
                 }
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     cell.setBackground(GuiColors.BASE_SMOKE);
                     if (descriptions != null) {
-                        if (descriptions[indexChoice] != null){
+                        if (descriptions[indexChoice] != null) {
                             helperRef.setText(descriptions[indexChoice]);
                             helperRef.setVisible(true);
                             helperRef.refresh();
@@ -139,7 +144,6 @@ class DropDownPopUp extends JDialog {
                 @Override
                 public void mouseExited(MouseEvent e) {
                     cell.setBackground(GuiColors.BASE_WHITE);
-//                    helperRef.setVisible(false);
                 }
             });
 
@@ -149,7 +153,7 @@ class DropDownPopUp extends JDialog {
             cells.add(cell);
         }
 
-        wrapper.add(new ListView(wrapper.getBackground(), cells, true).getWrappedInScroll(true), BorderLayout.CENTER);
+        wrapper.add(new ListView(wrapper.getBackground(), cells, false).getWrappedInScroll(true), BorderLayout.CENTER);
 
         return wrapper;
     }
@@ -160,14 +164,14 @@ class DropDownPopUp extends JDialog {
 
     @Override
     public void setVisible(boolean b) {
-        setSize(new Dimension(WIDTH, HEIGHT));
+        if (this.choices.length > 5)
+            setSize(new Dimension(WIDTH, 200));
+        else setSize(new Dimension(WIDTH, this.choices.length * 32));
         setLocation(x, y);
-        super.setVisible(b);
         if (!b) {
-            if (this.helperRef != null) {
-                this.helperRef.setVisible(false);
-            }
+            this.helperRef.setVisible(false);
         }
+        super.setVisible(b);
     }
 }
 

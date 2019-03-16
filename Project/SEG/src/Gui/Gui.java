@@ -5,7 +5,7 @@ import Gui.GuiComponents.RecursiveLostFocus;
 import Gui.GuiComponents.TitleLabel;
 import Gui.Menus.ChooseNewGraphPanel;
 import Gui.Menus.FiltersMenu;
-import Gui.Menus.MainMenu;
+import Gui.Menus.SideMenu;
 import Gui.TabbedView.TabbedView;
 
 import javax.swing.*;
@@ -106,7 +106,7 @@ public class Gui extends JFrame {
 
         getContentPane().add(this.mainView, BorderLayout.CENTER);
 
-        this.mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new MainMenu(this.mainController));
+        this.mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new SideMenu(this.mainController));
 
         repaint();
         revalidate();
@@ -144,8 +144,8 @@ public class Gui extends JFrame {
                 int dfHeight = 600;
                 dialog.setSize(new Dimension(dfWidth, dfHeight));
 
-                int centerXtmp = menuLabel.getLocationOnScreen().x + 10 -dfWidth;
-                int centerYtmp = menuLabel.getLocationOnScreen().y + 10 + dfHeight;
+                int centerXtmp = menuLabel.getLocationOnScreen().x + 10 - dfWidth;
+                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
                 dialog.setLocation(centerXtmp, centerYtmp);
 
                 dialog.getContentPane().add(new FiltersMenu(mainController), BorderLayout.CENTER);
@@ -194,7 +194,7 @@ public class Gui extends JFrame {
                 dialog.setSize(new Dimension(dfWidth, dfHeight));
 
                 int centerXtmp = menuLabel.getLocationOnScreen().x + 90 - dfWidth;
-                int centerYtmp = menuLabel.getLocationOnScreen().y + 10 + dfHeight;
+                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
                 dialog.setLocation(centerXtmp, centerYtmp);
 
                 dialog.getContentPane().add(dialogView, BorderLayout.CENTER);

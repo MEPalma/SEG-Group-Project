@@ -14,10 +14,10 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainMenu extends RPanel {
+public class SideMenu extends RPanel {
     private final MainController mainController;
 
-    public MainMenu(MainController mainController) {
+    public SideMenu(MainController mainController) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
         this.mainController = mainController;
 

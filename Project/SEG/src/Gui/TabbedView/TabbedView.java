@@ -46,7 +46,8 @@ public class TabbedView {
         }
 
         this.tabsHost.add(new HListView(GuiColors.BASE_SMOKE, tabCells).getWrappedInScroll(), BorderLayout.CENTER);
-        this.contentHost.add(this.tabs.get(this.selectedIndex).getContent(), BorderLayout.CENTER);
+        if (this.selectedIndex >= 0)
+            this.contentHost.add(this.tabs.get(this.selectedIndex).getContent(), BorderLayout.CENTER);
 
         this.tabsHost.repaint();
         this.tabsHost.revalidate();
@@ -57,12 +58,16 @@ public class TabbedView {
     public void push(String title, Color tabColor, JPanel content, Object comparable) {
         synchronized (this) {
             this.tabs.add(new Tab(title, tabColor, content, comparable));
+            this.selectedIndex = this.tabs.size() - 1;
         }
         refresh();
     }
 
-    public synchronized void clear() {
-        this.tabs.clear();
+    public void clear() {
+        synchronized (this) {
+            this.tabs.clear();
+        }
+        refresh();
     }
 
     public synchronized boolean containsComparable(Object comparable) {

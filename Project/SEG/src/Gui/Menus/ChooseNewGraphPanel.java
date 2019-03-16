@@ -46,7 +46,6 @@ public class ChooseNewGraphPanel extends RPanel {
 
     private final MainController mainController;
 
-    private final TitleLabel descriptionLabel;
     private final TitleLabel messageLabel;
     private final DropDown metricsChooser;
     private final DropDown bounceDefinitionChooser;
@@ -60,13 +59,13 @@ public class ChooseNewGraphPanel extends RPanel {
         this.mainController = mainController;
         this.host = host;
 
-        this.descriptionLabel = new TitleLabel("", TitleLabel.LEFT, 10);
-
         this.messageLabel = new TitleLabel("", TitleLabel.CENTER, 12);
+        messageLabel.setForeground(GuiColors.RED_ERROR);
 
         TakeActionListener takeActionListener = new TakeActionListener() {
             @Override
             public void takeAction() {
+                messageLabel.setText("");
                 refresh();
             }
         };
@@ -94,6 +93,10 @@ public class ChooseNewGraphPanel extends RPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (handleAdd()) host.setVisible(false);
+                else {
+                    messageLabel.setText("You already have this graph!");
+                    refresh();
+                }
             }
         });
 
@@ -122,11 +125,9 @@ public class ChooseNewGraphPanel extends RPanel {
         GraphSpecs graphSpecs = mainController.proposeNewGraph(getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
         if (graphSpecs != null) {
             mainController.pushToGraphView(graphSpecs);
+            return true;
         }
-        else {
-            //TODO show error
-        }
-        return true;
+        return false;
     }
 
     private JPanel getMetricsChooserCell() {

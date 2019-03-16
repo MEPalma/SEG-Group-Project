@@ -587,13 +587,41 @@ public class DataExchange {
 
     public List<Tuple<String, Number>> getGraphData(GraphSpecs graphSpecs) {
         try {
+
             ResultSet resultSet = this.dbM.query(QueryComposer.composeQuery(graphSpecs));
-            List tmp = getInfoTuple(resultSet);
-            close(resultSet);
-            return tmp;
+
+            if(graphSpecs.getMetric()== GraphSpecs.METRICS.CTR) {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                getInfoTupleDivision(leftSet, rightSet);
+            }
+            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.CPA)
+            {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberConversions,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                getInfoTupleDivision(leftSet, rightSet);
+            }
+            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.CPC)
+            {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberClicks,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                getInfoTupleDivision(leftSet, rightSet);
+            }
+            else if (graphSpecs.getMetric()==GraphSpecs.METRICS.CPM)
+            {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberImpressions,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                getInfoTupleDivisionCTRHOUR(leftSet, rightSet);
+            }
+            else {
+                List tmp = getInfoTuple(resultSet);
+                close(resultSet);
+                return tmp;
+            }
         } catch (Exception ex) {
             return new LinkedList<>();
         }
+        return new LinkedList<>();
     }
 
     /*
@@ -692,10 +720,10 @@ public class DataExchange {
         List<Tuple<String, Number>> result = new LinkedList<>();
 
         List<Date> hour = new LinkedList<>();
-        //Time hr;
+
         List<Number> number = new LinkedList<>();
         try {
-            //hr=resultPerHour.getTime("GroupedValues");
+
             while (resultTuple1.next()) {
                 root1.add(new Tuple<String, Number>(resultTuple1.getString("d"), (resultTuple1.getFloat("c"))));
 
@@ -710,8 +738,6 @@ public class DataExchange {
                 result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue())));
             }
             return result;
-//            for(int i=1;i<result.size();i++)
-//                System.out.println(result.get(i).getX()+"  "+result.get(i).getY());
 
             //return <>
         } catch (SQLException ex) {
@@ -1131,6 +1157,31 @@ public class DataExchange {
         close(resultBouncePerWeek);
         close(resultClickPerWeek);
         return tmp;
+    }
+
+    public Date getStartDate()
+    {
+        try {
+            ResultSet resultStartDate = this.dbM.query(QueryComposer.getStartDate);
+            Date tmp = globalDateFormat.parse(resultStartDate.getString("d"));
+            close(resultStartDate);
+            return tmp;
+        }catch (Exception e)
+        {
+            return new Date();
+        }
+    }
+    public Date getEndDate()
+    {
+        try {
+            ResultSet resultStartDate = this.dbM.query(QueryComposer.getEndDate);
+            Date tmp = globalDateFormat.parse(resultStartDate.getString("d"));
+            close(resultStartDate);
+            return tmp;
+        }catch (Exception e)
+        {
+            return new Date();
+        }
     }
 
 

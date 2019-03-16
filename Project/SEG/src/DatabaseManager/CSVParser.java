@@ -25,8 +25,6 @@ public class CSVParser {
     private File clickLogFile;
     private File serverLogfile;
 
-    private StringBuilder errors;
-
     public CSVParser(MainController mainController, File impressionLogFile, File clickLogFile, File serverLogfile) {
         this.mainController = mainController;
         this.dataExchange = this.mainController.getDataExchange();
@@ -34,8 +32,6 @@ public class CSVParser {
         this.impressionLogFile = impressionLogFile;
         this.clickLogFile = clickLogFile;
         this.serverLogfile = serverLogfile;
-
-        this.errors = new StringBuilder(50);
     }
 
     /**
@@ -68,14 +64,7 @@ public class CSVParser {
         this.dataExchange.setAutoCommit(true);
         this.dataExchange.setForiegnKeyPragma(true);
 
-        if (this.errors.length() > 0) {
-            this.mainController.showErrorMessage("Some entries were not added", "Impossible to parse:\n" + this.errors.toString());
-
-            JOptionPane.showMessageDialog(this.mainController.getBreadCrumbsHoster(), "Successfully updated the library with some errors.", "Alert", JOptionPane.WARNING_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this.mainController.getBreadCrumbsHoster(), "Successfully updated the library", "Alert", JOptionPane.INFORMATION_MESSAGE);
-        }
-
+        JOptionPane.showMessageDialog(this.mainController.getBreadCrumbsHoster(), "Successfully updated the library", "Alert", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void parseImpressionLogFile(Statement sqlStmt) throws SQLException, IOException {
@@ -99,8 +88,6 @@ public class CSVParser {
                 if (!tk[0].equals("n/a")) {
                     sqlStmt.addBatch("INSERT INTO IMPRESSION_LOGS VALUES (NULL, '" + tk[1] + "', '" + tk[0] + "', '" + tk[5].replace(" ", "") + "', '" + Double.parseDouble(tk[6]) + "');");
 
-                } else {
-                    this.errors.append(line + "\n");
                 }
             }
 
@@ -119,8 +106,6 @@ public class CSVParser {
                 String[] tk = line.split(",");
                 if (!tk[0].equals("n/a")) {
                     sqlStmt.addBatch("INSERT INTO CLICK_LOGS VALUES (NULL, '" + tk[1] + "','" + tk[0] + "','" + Double.parseDouble(tk[2]) + "');");
-                } else {
-                    this.errors.append(line + "\n");
                 }
             }
             br.close();
@@ -138,8 +123,6 @@ public class CSVParser {
                 String[] tk = line.split(",");
                 if (!tk[0].equals("n/a") && !tk[2].equals("n/a")) {
                     sqlStmt.addBatch("INSERT INTO SERVER_LOGS VALUES (NULL,'" + tk[1] + "','" + tk[0] + "','" + tk[2] + "','" + Integer.parseInt(tk[3]) + "','" + tk[4] + "');");
-                } else {
-                    this.errors.append(line + "\n");
                 }
             }
             br.close();

@@ -1,11 +1,11 @@
 package Gui.DateBrowser;
 
 import DatabaseManager.Stringifiable;
-import Gui.Gui;
 import Gui.GuiColors;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.TextBox;
 import Gui.GuiComponents.TitleLabel;
+import Gui.TakeActionListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class DateBrowser extends JPanel {
 
     private SimpleDateFormat dateFormat;
     private Date date;
-    private DateChangedListener listener;
+    private TakeActionListener listener;
 
     public DateBrowser() {
         this(GuiColors.BASE_PRIME, Stringifiable.globalDateFormat, new Date());//TODO change to simple data format
@@ -91,7 +91,7 @@ public class DateBrowser extends JPanel {
         return this.dateFormat.format(this.date);
     }
 
-    public DateChangedListener getDateChangedListener() {
+    public TakeActionListener getDateChangedListener() {
         return listener;
     }
 
@@ -105,7 +105,7 @@ public class DateBrowser extends JPanel {
         notifyListener();
     }
 
-    public void setDateChangedListener(DateChangedListener listener) {
+    public void setDateChangedListener(TakeActionListener listener) {
         this.listener = listener;
     }
 }

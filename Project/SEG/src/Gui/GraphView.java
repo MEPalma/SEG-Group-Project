@@ -2,10 +2,7 @@ package Gui;
 
 import Commons.GraphSpecs;
 import Gui.GraphManager.GraphManager;
-import Gui.GuiComponents.ListView;
-import Gui.GuiComponents.MenuLabel;
-import Gui.GuiComponents.RPanel;
-import Gui.GuiComponents.TitleLabel;
+import Gui.GuiComponents.*;
 import Gui.Menus.ChooseNewGraphPanel;
 import Gui.Menus.FiltersMenu;
 import com.sun.corba.se.impl.orbutil.graph.Graph;
@@ -137,19 +134,11 @@ public class GraphView extends RPanel {
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JFrame dialog = new JFrame();
+                JDialog dialog = new JDialog();
                 dialog.setUndecorated(true);
                 dialog.getContentPane().setLayout(new BorderLayout());
-                dialog.addWindowFocusListener(new WindowAdapter() {
-                    @Override
-                    public void windowLostFocus(WindowEvent e) {
-                        int x = MouseInfo.getPointerInfo().getLocation().x;
-                        int y = MouseInfo.getPointerInfo().getLocation().y;
 
-                        if (x > dialog.getLocation().x + dialog.getWidth() || x < dialog.getLocation().x || y > dialog.getLocation().y + dialog.getHeight() || y < dialog.getLocation().y)
-                                dialog.setVisible(false);
-                    }
-                });
+                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
                 dialog.getContentPane().add(new TitleLabel("Filters", TitleLabel.CENTER, 18), BorderLayout.NORTH);
 
                 int dfWidth = 450;
@@ -183,15 +172,10 @@ public class GraphView extends RPanel {
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JFrame dialog = new JFrame();
+                JDialog dialog = new JDialog();
                 dialog.setUndecorated(true);
                 dialog.getContentPane().setLayout(new BorderLayout());
-                dialog.addWindowFocusListener(new WindowAdapter() {
-                    @Override
-                    public void windowLostFocus(WindowEvent e) {
-                        dialog.setVisible(false);
-                    }
-                });
+                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
                 dialog.getContentPane().add(new TitleLabel("Add new graph", TitleLabel.CENTER, 18), BorderLayout.NORTH);
 
                 /*

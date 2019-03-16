@@ -3,7 +3,7 @@ package Gui.Menus;
 import Commons.ImpressionEntry;
 import Commons.UserEntry;
 import Gui.DateBrowser.DateBrowser;
-import Gui.DateBrowser.DateChangedListener;
+import Gui.TakeActionListener;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;
 import Gui.MainController;
@@ -68,7 +68,7 @@ public class FiltersMenu extends RPanel {
             e.printStackTrace();
             System.out.println("INIT THIS FROM THE LOADING!!!!!!!!!!!!!");
         }
-        startDate.setDateChangedListener(new DateChangedListener() {
+        startDate.setDateChangedListener(new TakeActionListener() {
             @Override
             public void takeAction() {
                 mainController.getFilterSpecs().setStartDate(globalDateFormat.format(startDate.getDate()));
@@ -83,7 +83,7 @@ public class FiltersMenu extends RPanel {
             e.printStackTrace();
             System.out.println("INIT THIS FROM THE LOADING!!!!!!!!!!!!!");
         }
-        endDate.setDateChangedListener(new DateChangedListener() {
+        endDate.setDateChangedListener(new TakeActionListener() {
             @Override
             public void takeAction() {
                 mainController.getFilterSpecs().setEndDate(globalDateFormat.format(endDate.getDate()));

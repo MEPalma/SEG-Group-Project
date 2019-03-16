@@ -1,0 +1,157 @@
+package Gui.TabbedView;
+
+
+import Gui.GuiColors;
+import Gui.GuiComponents.HListView;
+import Gui.GuiComponents.MenuLabel;
+import Gui.GuiComponents.TitleLabel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.LinkedList;
+import java.util.List;
+
+public class TabbedView {
+
+    private final JPanel tabsHost;
+    private final JPanel contentHost;
+
+    private final List<Tab> tabs;
+
+    private int selectedIndex;
+
+    public TabbedView(JPanel tabsHost, JPanel contentHost) {
+        this.tabsHost = tabsHost;
+        this.contentHost = contentHost;
+        this.tabs = new LinkedList<>();
+        this.selectedIndex = -1;
+
+        this.tabsHost.setLayout(new BorderLayout());
+        this.contentHost.setLayout(new BorderLayout());
+    }
+
+    public void refresh() {
+        this.tabsHost.removeAll();
+        this.contentHost.removeAll();
+
+        if (this.selectedIndex > this.tabs.size() - 1)
+            this.selectedIndex = this.tabs.size() - 1;
+
+        List<Component> tabCells = new LinkedList<>();
+        for (int i = 0; i < this.tabs.size(); ++i){
+            Tab t = this.tabs.get(i);
+            tabCells.add(createTab(t.getTitle(), t.getColor(), i));
+        }
+
+        this.tabsHost.add(new HListView(GuiColors.BASE_WHITE, tabCells, false).getWrappedInScroll(true), BorderLayout.CENTER);
+        this.contentHost.add(this.tabs.get(this.selectedIndex).getContent(), BorderLayout.CENTER);
+
+        this.tabsHost.repaint();
+        this.tabsHost.revalidate();
+        this.contentHost.repaint();
+        this.contentHost.revalidate();
+    }
+
+    public void push(String title, Color tabColor, JPanel content, Object comparable) {
+        this.tabs.add(new Tab(title, tabColor, content, comparable));
+        refresh();
+    }
+
+    public boolean containsComparable(Object comparable) {
+        for (Tab tab : this.tabs) {
+            if (tab.equals(comparable)) return true;
+        }  return false;
+    }
+
+    private JPanel createTab(String title, Color color, int myIndex) {
+        JPanel tab = new JPanel(new BorderLayout());
+        tab.setBackground(color);
+        tab.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
+        tab.setPreferredSize(new Dimension(80, 40));
+        tab.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                selectedIndex = myIndex;
+                refresh();
+            }
+        });
+
+        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 12);
+        titleLabel.setForeground(GuiColors.BASE_WHITE);
+
+        tab.add(titleLabel, BorderLayout.CENTER);
+
+        MenuLabel popLabel = new MenuLabel("", MenuLabel.CENTER, 0);
+//        popLabel.setIcon(new ImageIcon("/Icons/x.png"));
+        popLabel.dropAllListeners();
+        popLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                tabs.remove(myIndex);
+                refresh();
+            }
+        });
+
+        return tab;
+    }
+}
+
+class Tab {
+    private String title;
+    private Color color;
+    private JPanel content;
+    private Object comparable;
+
+    public Tab(String title, Color color, JPanel content, Object comparable) {
+        this.title = title;
+        this.color = color;
+        this.content = content;
+        this.comparable = comparable;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Tab) {
+            return this.comparable.equals((Tab)obj);
+        } return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.comparable.hashCode();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public JPanel getContent() {
+        return content;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public Object getComparable() {
+        return comparable;
+    }
+
+    public void setContent(JPanel content) {
+        this.content = content;
+    }
+
+    public void setComparable(Object comparable) {
+        this.comparable = comparable;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+}

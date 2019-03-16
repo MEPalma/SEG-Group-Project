@@ -23,16 +23,14 @@ public class MainController {
     private final DataExchange dataExchange;
     private final BreadCrumbsHoster breadCrumbsHoster;
     private final BreadCrumbs breadCrumbs;
-//    private final GraphView graphView;
     private final TabbedView tabbedView;
     private final List<SwingWorker> dataLoadingTasks;
 
-    public MainController() {
+    public MainController(TabbedView tabbedView) {
         this.dataExchange = new DataExchange(new DatabaseManager());
-        this.breadCrumbsHoster = new BreadCrumbsHoster(new GraphView(this));
+        this.breadCrumbsHoster = new BreadCrumbsHoster();
         this.breadCrumbs = this.breadCrumbsHoster.getBreadCrumbs();
-//        this.graphView = this.breadCrumbsHoster.getBreadCrumbs().getGraphView();
-        this.tabbedView = new TabbedView(null, null);//TODO fix me
+        this.tabbedView = tabbedView;
         this.dataLoadingTasks = new LinkedList<>();
         this.filterSpecs = new FilterSpecs();
         clearFiltersSpecs();

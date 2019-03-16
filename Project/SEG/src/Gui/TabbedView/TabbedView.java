@@ -26,7 +26,7 @@ public class TabbedView {
         this.tabsHost = tabsHost;
         this.contentHost = contentHost;
         this.tabs = new LinkedList<>();
-        this.selectedIndex = -1;
+        this.selectedIndex = 0;
 
         this.tabsHost.setLayout(new BorderLayout());
         this.contentHost.setLayout(new BorderLayout());

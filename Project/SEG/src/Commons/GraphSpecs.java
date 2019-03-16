@@ -142,4 +142,11 @@ public class GraphSpecs {
     public void setyAxisName(String yAxisName) {
         this.yAxisName = yAxisName;
     }
+
+    public boolean containsFilters() {
+        return (getGenders().size() > 0 ||
+                getIncomes().size() > 0 ||
+                getAges().size() > 0 ||
+                getContexts().size() > 0);
+    }
 }

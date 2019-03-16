@@ -41,13 +41,7 @@ public class HListView extends JPanel implements Scrollable {
         innerWrapper.add(this, BorderLayout.CENTER);
 
         JScrollPane listScroller = new JScrollPane(innerWrapper, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        listScroller.setBackground(this.getBackground());
-        listScroller.setWheelScrollingEnabled(false);
-        listScroller.setBorder(this.getBorder());
-        listScroller.getVerticalScrollBar().setUnitIncrement(1);
-        listScroller.getVerticalScrollBar().setBackground(listScroller.getBackground());
-        listScroller.getVerticalScrollBar().setBorder(this.getBorder());
-        listScroller.addMouseListener(new MouseAdapter() {
+        listScroller.addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() + 16*e.getWheelRotation());
@@ -56,6 +50,12 @@ public class HListView extends JPanel implements Scrollable {
                 System.out.println("oi" + e.getWheelRotation());
             }
         });
+        listScroller.setBackground(this.getBackground());
+        listScroller.setWheelScrollingEnabled(false);
+        listScroller.setBorder(this.getBorder());
+        listScroller.getVerticalScrollBar().setUnitIncrement(1);
+        listScroller.getVerticalScrollBar().setBackground(listScroller.getBackground());
+        listScroller.getVerticalScrollBar().setBorder(this.getBorder());
         wrapper.add(listScroller);
 
         MenuLabel goLeftLabel = new MenuLabel("<", MenuLabel.CENTER, 20);
@@ -74,8 +74,6 @@ public class HListView extends JPanel implements Scrollable {
             @Override
             public void mousePressed(MouseEvent e) {
                 listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() + 150);
-                if (listScroller.getHorizontalScrollBar().getValue() == listScroller.getHorizontalScrollBar().getMaximum())
-                    goRightLabel.setVisible(false);
                 listScroller.repaint();
                 listScroller.revalidate();
             }

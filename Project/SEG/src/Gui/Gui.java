@@ -115,7 +115,7 @@ public class Gui extends JFrame {
         this.getContentPane().add(this.mainView, BorderLayout.CENTER);
 
         //Wellcome view
-        if (true) { //(mainController.isDbEmpty()) {
+        if (mainController.isDbEmpty()) {
             WelcomeProcedure welcomeProcedure = new WelcomeProcedure(mainController);
             welcomeProcedure.setOnClose(new TakeActionListener() {
                 @Override

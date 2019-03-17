@@ -109,7 +109,10 @@ public class LoadCSVsMenu extends RPanel {
 
                 ListView listView = new ListView(BACKGROUND, components);
 
-                add(new TitleLabel(" Import data from CSV files", TitleLabel.LEFT), BorderLayout.NORTH);
+                TitleLabel titleLabel = new TitleLabel(" Import data from CSV files", TitleLabel.LEFT);
+                titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 10, 0));
+                add(titleLabel, BorderLayout.NORTH);
+
                 add(listView.getWrappedInScroll(true), BorderLayout.CENTER);
 
                 mainController.removeDataLoadingTask(this);

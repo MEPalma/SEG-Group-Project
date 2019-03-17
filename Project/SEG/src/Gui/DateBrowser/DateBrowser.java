@@ -110,14 +110,14 @@ public class DateBrowser extends JPanel {
     }
 }
 
-class DateBrowserFrame extends JFrame {
+class DateBrowserFrame extends JDialog {
 
     public static int HEIGHT = 230;
     public static int WIDTH = 250;
     private DateBrowser dateBrowser;
 
     public DateBrowserFrame(DateBrowser dateBrowser, int x, int y) throws HeadlessException {
-        super("Dashboard App");
+        super();
         this.dateBrowser = dateBrowser;
 
         setLocation(x, y);

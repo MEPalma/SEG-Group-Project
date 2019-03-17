@@ -639,6 +639,7 @@ public class DataExchange {
                 ResultSet resultSet = this.dbM.query(QueryComposer.composeQuery(graphSpecs));
                 List tmp = getInfoTuple(resultSet);
                 close(resultSet);
+                System.out.println(resultSet);
                 return tmp;
             }
         } catch (Exception ex) {
@@ -680,7 +681,7 @@ public class DataExchange {
         double unique = 0;
         try {
             unique = resultInts.getInt("GroupedValues");
-            System.out.println(unique);
+
             return unique;
         } catch (SQLException ex) {
             return null;

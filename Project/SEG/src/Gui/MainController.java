@@ -7,10 +7,19 @@ import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
 import Gui.BreadCrumbs.BreadCrumbs;
 import Gui.BreadCrumbs.BreadCrumbsHoster;
+import Gui.GraphManager.GraphManager;
+import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import DatabaseManager.Stringifiable;
+import Gui.GuiComponents.TitleLabel;
+import Gui.TabbedView.TabbedView;
+
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,14 +28,14 @@ public class MainController {
     private final DataExchange dataExchange;
     private final BreadCrumbsHoster breadCrumbsHoster;
     private final BreadCrumbs breadCrumbs;
-    private final GraphView graphView;
+    private final TabbedView tabbedView;
     private final List<SwingWorker> dataLoadingTasks;
 
-    public MainController() {
+    public MainController(TabbedView tabbedView) {
         this.dataExchange = new DataExchange(new DatabaseManager());
-        this.breadCrumbsHoster = new BreadCrumbsHoster(new GraphView(this));
+        this.breadCrumbsHoster = new BreadCrumbsHoster();
         this.breadCrumbs = this.breadCrumbsHoster.getBreadCrumbs();
-        this.graphView = this.breadCrumbsHoster.getBreadCrumbs().getGraphView();
+        this.tabbedView = tabbedView;
         this.dataLoadingTasks = new LinkedList<>();
         this.filterSpecs = new FilterSpecs();
         clearFiltersSpecs();
@@ -110,758 +119,20 @@ public class MainController {
     }
 
     public void pushToGraphView(GraphSpecs newGraphSpecs) {
+
+        //TODO do me in backgorund!!!!!!!!!!!
         newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
         String[] titles = getGraphDescription(newGraphSpecs);
         newGraphSpecs.setTitle(titles[0]);
         newGraphSpecs.setxAxisName(titles[1]);
         newGraphSpecs.setyAxisName(titles[2]);
-        this.graphView.pushGraphSpecs(newGraphSpecs);
-    }
 
-    /*
-        Graphs
-     */
 
-    /*
-    // Impressions
-    public void pushNewNumberOfImpressionsPerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
 
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Week]", "Week", "N. Impressions", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfImpressionsPerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Day]", "Day", "N. Impressions",  GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfImpressionsPerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Hour]", "Hour", "N. Impressions",  GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    //Clicks
-    public void pushNewNumberOfClicksPerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Week]", "Week", "N. Clicks",  GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfClicksPerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Click [Per Day]", "Day", "N. Clicks",  GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfClicksPerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Clicks [Per Hour]", "Hour", "N. Clicks", GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    //Uniques
-    public void pushNewNumberOfUniquesPerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Uniques [Per Week]", "Week", "N. Uniques", GraphSpecs.METRICS.NumberUniques, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfUniquesPerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Uniques [Per Day]", "Day", "N. Uniques", GraphSpecs.METRICS.NumberUniques, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfUniquesPerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Uniques [Per Hour]", "Hour", "N. Uniques", GraphSpecs.METRICS.NumberUniques, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    //Bounces
-    public void pushNewNumberOfBouncesPerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Bounces [Per Week]", "Week", "N. Bounces", GraphSpecs.METRICS.BounceRate, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfBouncesPerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Bounces [Per Day]", "Day", "N. Bounces", GraphSpecs.METRICS.BounceRate, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfBouncesPerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Bounces [Per Hour]", "Hour", "N. Bounces", GraphSpecs.METRICS.BounceRate, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    //Conversions
-    public void pushNewNumberOfConversionsPerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Conversions [Per Week]", "Week", "N. Conversions", GraphSpecs.METRICS.NumberConversions, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfConversionsPerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Conversions [Per Day]", "Day", "N. Conversions", GraphSpecs.METRICS.NumberConversions, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfConversionsPerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Conversions [Per Hour]", "Hour", "N. Conversions", GraphSpecs.METRICS.NumberConversions, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    //Total Cost
-    public void pushNewNumberOfTotalCostPerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Total Cost [Per Week]", "Week", "Total Cost", GraphSpecs.METRICS.TotalCost, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfTotalCostPerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Total Cost [Per Day]", "Day", "Total Cost", GraphSpecs.METRICS.TotalCost, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewNumberOfTotalCostPerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Total Cost [Per Hour]", "Hour", "Total Cost", GraphSpecs.METRICS.TotalCost, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
+        this.tabbedView.push(titles[0], newGraphSpecs.getTypeColor(), getGraphCard(newGraphSpecs), newGraphSpecs);
     }
 
 
-    //CTR
-    public void pushNewCTRPerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CTR [Per Week]", "Week", "CTR", GraphSpecs.METRICS.CTR, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewCTRPerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CTR [Per Day]", "Day", "CTR", GraphSpecs.METRICS.CTR, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewCTRPerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CTR [Per Hour]", "Hour", "CTR", GraphSpecs.METRICS.CTR, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    //CPA
-    public void pushNewCPAPerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CPA [Per Week]", "Week", "CPA", GraphSpecs.METRICS.CPA, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewCPAPerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CPA [Per Day]", "Day", "CPA", GraphSpecs.METRICS.CPA, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewCPAPerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CPA [Per Hour]", "Hour", "CPA", GraphSpecs.METRICS.CPA, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    //CPC
-    public void pushNewCPCPerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CPC [Per Week]", "Week", "CPC", GraphSpecs.METRICS.CPC, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewCPCPerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CPC [Per Day]", "Day", "CPC", GraphSpecs.METRICS.CPC, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewCPCPerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CPC [Per Hour]", "Hour", "CPC", GraphSpecs.METRICS.CPC, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    //CPM
-    public void pushNewCPMPerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CPM [Per Week]", "Week", "CPM", GraphSpecs.METRICS.CPM, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewCPMPerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CPM [Per Day]", "Day", "CPM", GraphSpecs.METRICS.CPM, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewCPMPerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "CPM [Per Hour]", "Hour", "CPM", GraphSpecs.METRICS.CPM, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    //BounceRate
-    public void pushNewBounceRatePerWeek(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Bounce Rate [Per Week]", "Week", "Bounce Rate", GraphSpecs.METRICS.BounceRate, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewBounceRatePerDay(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Bounce Rate [Per Day]", "Day", "Bounce Rate", GraphSpecs.METRICS.BounceRate, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-    public void pushNewBounceRatePerHour(String id) {
-        SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
-            GraphSpecs tmp;
-
-            @Override
-            protected Void doInBackground() {
-                startProgressBar();
-                tmp = new GraphSpecs(id, "Bounce Rate [Per Hour]", "Hour", "Bounce Rate", GraphSpecs.METRICS.BounceRate, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                stopProgressBar();
-                pushToGraphView(tmp);
-            }
-        };
-        addDataLoadingTask(backgroundTask);
-        backgroundTask.execute();
-        removeDataLoadingTask(backgroundTask);
-    }
-
-*/
     /*
         FILTERS
      */
@@ -882,12 +153,24 @@ public class MainController {
             this.filterSpecs.setIncomes(newFilterSpecs.getIncomes());
         }
 
-        this.graphView.updateGraphsData();
+        refreshGraphs();
     }
 
     public void refreshGraphs() {
+
+        //TODO do me in background!!!!!!!!!!
         startProgressBar();
-        this.graphView.refresh();//TODO check if filters changed, if not then do not query again
+
+        List<Object> graphSpecs = this.tabbedView.getAllComparables();
+
+        this.tabbedView.clear();
+
+        for (Object g : graphSpecs) {
+            GraphSpecs tmp = (GraphSpecs) g;
+            tmp.setData(this.dataExchange.getGraphData(tmp));
+            this.pushToGraphView(tmp);
+        }
+
         stopProgressBar();
     }
 
@@ -911,8 +194,30 @@ public class MainController {
     public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
         GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getFilterSpecs());
 
-        if (this.graphView.containsGraph(graphSpecs)) return null;
+        if (this.tabbedView.containsComparable(graphSpecs)) return null;
         else return graphSpecs;
+    }
+
+    private JPanel getGraphCard(GraphSpecs spec) {
+        JPanel card = new JPanel(new BorderLayout());
+        card.setBackground(spec.getTypeColor());
+        card.setBorder(BorderFactory.createEmptyBorder(10, 10,10, 10));
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(spec.getTypeColor());
+        topPanel.setPreferredSize(new Dimension(100, 50));
+
+        TitleLabel titleLabel = new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16);
+        titleLabel.setForeground(GuiColors.BASE_WHITE);
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+
+        JPanel graph = GraphManager.createBarChar(spec.getData(), spec.getxAxisName(), spec.getyAxisName(), spec.getTypeColor());
+
+        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_WHITE));
+        card.add(topPanel, BorderLayout.NORTH);
+        card.add(graph, BorderLayout.CENTER);
+
+        return card;
     }
 
 }

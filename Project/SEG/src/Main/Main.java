@@ -1,12 +1,6 @@
 package Main;
 
-import Commons.FilterSpecs;
-import Commons.GraphSpecs;
-import Commons.UserEntry;
-import DatabaseManager.QueryComposer;
 import Gui.Gui;
-import Gui.MainController;
-//import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import java.util.Locale;
 
@@ -16,6 +10,6 @@ import java.util.Locale;
 public class Main {
     public static void main(String[] args) {
         Locale.setDefault(Locale.ENGLISH);
-        new Gui(new MainController()).setVisible(true);
+        new Gui().setVisible(true);
     }
 }

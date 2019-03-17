@@ -4,6 +4,7 @@ import Commons.GraphSpecs;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;
 import Gui.MainController;
+import Gui.TakeActionListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,29 +46,38 @@ public class ChooseNewGraphPanel extends RPanel {
 
     private final MainController mainController;
 
-    private final TitleLabel descriptionLabel;
     private final TitleLabel messageLabel;
     private final DropDown metricsChooser;
     private final DropDown bounceDefinitionChooser;
     private final DropDown timespanChooser;
 
-    private final JFrame host;
+    private final JDialog host;
 
-    public ChooseNewGraphPanel(MainController mainController, JFrame host) {
+    public ChooseNewGraphPanel(MainController mainController, JDialog host) {
         super(GuiColors.BASE_SMOKE, new BorderLayout());
 
         this.mainController = mainController;
         this.host = host;
 
-        this.descriptionLabel = new TitleLabel("", TitleLabel.LEFT, 10);
-
         this.messageLabel = new TitleLabel("", TitleLabel.CENTER, 12);
+        messageLabel.setForeground(GuiColors.RED_ERROR);
+
+        TakeActionListener takeActionListener = new TakeActionListener() {
+            @Override
+            public void takeAction() {
+                messageLabel.setText("");
+                refresh();
+            }
+        };
 
         this.metricsChooser = new DropDown(METRICS, METRICS_DESCRIPTIONS, 0);
+        this.metricsChooser.addTakeActionListener(takeActionListener);
 
         this.bounceDefinitionChooser = new DropDown(BOUNCE_DEF, null, 0);
+        this.bounceDefinitionChooser.addTakeActionListener(takeActionListener);
 
         this.timespanChooser = new DropDown(TIME_SPANS, null, 0);
+        this.timespanChooser.addTakeActionListener(takeActionListener);
 
         refresh();
     }
@@ -83,6 +93,10 @@ public class ChooseNewGraphPanel extends RPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (handleAdd()) host.setVisible(false);
+                else {
+                    messageLabel.setText("You already have this graph!");
+                    refresh();
+                }
             }
         });
 
@@ -98,6 +112,7 @@ public class ChooseNewGraphPanel extends RPanel {
 
         if (this.metricsChooser.getSelectedIndex() == 3)//Bounce
             items.add(getBounceChooserCell());
+
         items.add(getTimeSpanChooserCell());
 
         add(new ListView(GuiColors.BASE_WHITE, items, true).getWrappedInScroll(true), BorderLayout.CENTER);
@@ -110,11 +125,9 @@ public class ChooseNewGraphPanel extends RPanel {
         GraphSpecs graphSpecs = mainController.proposeNewGraph(getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
         if (graphSpecs != null) {
             mainController.pushToGraphView(graphSpecs);
+            return true;
         }
-        else {
-            //TODO show error
-        }
-        return true;
+        return false;
     }
 
     private JPanel getMetricsChooserCell() {
@@ -122,11 +135,8 @@ public class ChooseNewGraphPanel extends RPanel {
         wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.setBorder(BorderFactory.createMatteBorder(0, 8, 0, 8, GuiColors.BASE_WHITE));
 
-        this.descriptionLabel.setText("<html>" + METRICS_DESCRIPTIONS[metricsChooser.getSelectedIndex()] + "</html>");
-
         wrapper.add(new TitleLabel("Metric", TitleLabel.LEFT, 18), BorderLayout.NORTH);
         wrapper.add(this.metricsChooser, BorderLayout.CENTER);
-        wrapper.add(this.descriptionLabel, BorderLayout.SOUTH);
 
         return wrapper;
     }

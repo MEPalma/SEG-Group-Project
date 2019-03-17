@@ -218,10 +218,10 @@ public class QueryComposer {
     }
     private static String getTimeSpanGroup(GraphSpecs.TIME_SPAN timeSpan)
     {
-        if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return " group by strftime('%W', Date)";
+        if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return " group by strftime('%W', d)";
         else if (timeSpan == GraphSpecs.TIME_SPAN.DAY_SPAN)
-            return " group by strftime('%d', Date)";
-        return " group by strftime('%H:%d', Date)";
+            return " group by strftime('%d', d)";
+        return " group by strftime('%H:%d', d)";
 
     }
 
@@ -236,7 +236,7 @@ public class QueryComposer {
     }
 
     private static String getNumberOfClicks(GraphSpecs graphSpecs) {
-        StringBuilder tmp = new StringBuilder("select Date as d,count(ClickCost) as c from click_logs");
+        StringBuilder tmp = new StringBuilder("select click_logs.Date as d,count(ClickCost) as c from click_logs");
         tmp.append(getFilters(graphSpecs));
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
@@ -244,7 +244,7 @@ public class QueryComposer {
         return tmp.toString();
     }
     private static String getNumberOfUniques(GraphSpecs graphSpecs) {
-        StringBuilder tmp = new StringBuilder("select Date as d,count(distinct  userid) as c from click_logs");
+        StringBuilder tmp = new StringBuilder("select click_logs.Date as d,count(distinct  userid) as c from click_logs");
         tmp.append(getFilters(graphSpecs));
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
@@ -255,19 +255,35 @@ public class QueryComposer {
     ADD AN AND FOR THIS ONE !
      */
     private static String getNumberOfBounces(GraphSpecs graphSpecs) {
-        StringBuilder tmp = new StringBuilder("select EntryDate as date,count(strftime('%Y-%m-%d %H:%M:%S', ExitDate) - strftime('%Y-%m-%d %H:%M:%S', EntryDate)) as c from server_logs");
-        tmp.append(getFilters(graphSpecs));
+
+        if(graphSpecs.getBounceDef()==GraphSpecs.BOUNCE_DEF.TIME)
+        {
+
+        StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d,count(strftime('%Y-%m-%d %H:%M:%S', ExitDate) - strftime('%Y-%m-%d %H:%M:%S', EntryDate)) as c from server_logs");
+        tmp.append(getFilters(graphSpecs)+" And strftime('%Y-%m-%d %H:%M:%S', ExitDate) - strftime('%Y-%m-%d %H:%M:%S', EntryDate) <= 20  ");
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
         tmp.append(";");
-        return tmp.toString();
+            return tmp.toString();
+        }
+        else
+        {
+            StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d, count(id) as c from server_logs ");
+            tmp.append(getFilters(graphSpecs)+" And PagesViewed<=1 ");
+            tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+
+            tmp.append(";");
+            return tmp.toString();
+        }
+
     }
     /*
     HERE AS WELL
      */
     private static String getNumberOfConversions(GraphSpecs graphSpecs) {
-        StringBuilder tmp = new StringBuilder("select EntryDate as date, count(Conversion) as c from server_logs where Conversion='Yes'");
-        tmp.append(getFilters(graphSpecs));
+        StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d, count(Conversion) as c from server_logs ");
+
+        tmp.append(getFilters(graphSpecs)+" And Conversion='Yes' ");
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
         tmp.append(";");
@@ -293,38 +309,89 @@ public class QueryComposer {
     {
         StringBuilder tmp=new StringBuilder("");
         List<String> filters =new LinkedList<>();
-        filters.add("date > '" + graphSpecs.getStartDate()+"' ");
-        filters.add("date < '" + graphSpecs.getEndDate()+"' ");
+        filters.add("d > '" + graphSpecs.getStartDate()+"' ");
+        filters.add("d < '" + graphSpecs.getEndDate()+"' ");
         if (graphSpecs.containsFilters()) {
-
-            tmp.append("inner join Users on userid=Users.id ");
-            //WHERE
-            tmp.append("WHERE ");
-
-            //gender
-
-            //You need to add 'AND' +query if any buttons have been pressed
-            tmp.append("");
-            for (int i = 0; i < graphSpecs.getGenders().size(); ++i) {
-                filters.add("Gender = '" + graphSpecs.getGenders().get(i).toString() + "' ");
+            if(graphSpecs.getMetric()==GraphSpecs.METRICS.NumberImpressions ||graphSpecs.getMetric()==GraphSpecs.METRICS.TotalCost)
+            {
+                tmp.append(" inner join Users on userid=Users.id ");
+                //WHERE
+                tmp.append("WHERE ");
             }
+            else
+            {
+                tmp.append(" inner join Users on click_logs.userid=Users.id ");
+                tmp.append(" inner join impression_logs on click_logs.userid=impression_logs.userid  ");
+                //WHERE
+                tmp.append("WHERE ");
+            }
+            //gender
+            tmp.append("");
+
+            List<String> tmpGenders = new LinkedList<>();
+            for (int i = 0; i < graphSpecs.getGenders().size(); ++i)
+                tmpGenders.add("Gender = '" + graphSpecs.getGenders().get(i).toString() + "' ");
+
+            StringBuilder tmpGenderBuilder = new StringBuilder("");
+            for (int i = 0; i < tmpGenders.size(); ++i) {
+                if (i == tmpGenders.size() - 1) {
+                    tmpGenderBuilder.append(tmpGenders.get(i));
+                } else tmpGenderBuilder.append(tmpGenders.get(i) + " or ");
+            }
+            if(tmpGenderBuilder.length()>0)
+                filters.add(tmpGenderBuilder.toString());
+
+            tmpGenders.clear();
+
             //age
 
-            for (int i = 0; i < graphSpecs.getAges().size(); ++i) {
-                filters.add("Age = '" + graphSpecs.getAges().get(i).toString() + "' ");
+            for (int i = 0; i < graphSpecs.getAges().size(); ++i)
+                tmpGenders.add("Age = '" + graphSpecs.getAges().get(i).toString() + "' ");
+
+            StringBuilder tmpAgeBuilder = new StringBuilder("");
+            for (int i = 0; i < tmpGenders.size(); ++i) {
+                if (i == tmpGenders.size() - 1) {
+                    tmpAgeBuilder.append(tmpGenders.get(i));
+                } else tmpAgeBuilder.append(tmpGenders.get(i) + " or ");
             }
+            if(tmpAgeBuilder.length()>0)
+            filters.add(tmpAgeBuilder.toString());
+
+            tmpGenders.clear();
+
 
             //context
             tmp.append("");
-            for (int i = 0; i < graphSpecs.getContexts().size(); ++i) {
-                filters.add("CONTEXT = '" + graphSpecs.getContexts().get(i).toString());
-            }
+            for (int i = 0; i < graphSpecs.getContexts().size(); ++i)
+                tmpGenders.add("Context = '" + graphSpecs.getContexts().get(i).toString() + "' ");
+
+                StringBuilder tmpContextBuilder = new StringBuilder("");
+                for (int i = 0; i < tmpGenders.size(); ++i) {
+                    if (i == tmpGenders.size() - 1) {
+                        tmpContextBuilder.append(tmpGenders.get(i));
+                    } else tmpContextBuilder.append(tmpGenders.get(i) + " or ");
+                }
+            if(tmpContextBuilder.length()>0)
+                filters.add(tmpContextBuilder.toString());
+
+                tmpGenders.clear();
 
             //income
 
-            for (int i = 0; i < graphSpecs.getIncomes().size(); ++i) {
-                filters.add("Income = '" + graphSpecs.getIncomes().get(i).toString() + "' ");
-            }
+            for (int i = 0; i < graphSpecs.getIncomes().size(); ++i)
+                tmpGenders.add("Income = '" + graphSpecs.getIncomes().get(i).toString() + "' ");
+
+                StringBuilder tmpIncomeBuilder = new StringBuilder("");
+                for (int i = 0; i < tmpGenders.size(); ++i){
+                    if (i == tmpGenders.size() - 1) {
+                        tmpIncomeBuilder.append(tmpGenders.get(i));
+                    } else tmpIncomeBuilder.append(tmpGenders.get(i) + " or ");
+                }
+            if(tmpIncomeBuilder.length()>0)
+                filters.add(tmpIncomeBuilder.toString());
+
+                tmpGenders.clear();
+
 
         } else tmp.append(" WHERE ");
 

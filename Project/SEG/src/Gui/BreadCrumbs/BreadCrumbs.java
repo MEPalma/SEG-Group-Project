@@ -1,6 +1,5 @@
 package Gui.BreadCrumbs;
 
-import Gui.GraphView;
 import Gui.GuiColors;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
@@ -18,7 +17,6 @@ public class BreadCrumbs extends JPanel {
     private Color SELECTED = GuiColors.BASE_WHITE;
 
     private JPanel viewPanel;
-    private GraphView graphView;
     private BreadCrumbsHoster breadCrumbsHoster;
 
     private JPanel errorPanel;
@@ -29,13 +27,12 @@ public class BreadCrumbs extends JPanel {
 
     private SwingWorker backgroundTask;
 
-    public BreadCrumbs(BreadCrumbsHoster breadCrumbsHoster, JPanel viewPanel, GraphView graphView) {
+    public BreadCrumbs(BreadCrumbsHoster breadCrumbsHoster, JPanel viewPanel) {
         super();
         setBackground(SELECTED);
         setBorder(BorderFactory.createEmptyBorder());
 
         this.viewPanel = viewPanel;
-        this.graphView = graphView;
         this.breadCrumbsHoster = breadCrumbsHoster;
 
 
@@ -139,7 +136,6 @@ public class BreadCrumbs extends JPanel {
         setPreferredSize(new Dimension((this.crumbsStack.size() * 200), 52));
 
         removeAll();
-        this.graphView.refresh();//todo check needed?
 
         setLayout(new GridLayout(1, this.crumbsStack.size()));
 
@@ -164,9 +160,6 @@ public class BreadCrumbs extends JPanel {
         if (this.backgroundTask != null) this.backgroundTask.cancel(true);
     }
 
-    public GraphView getGraphView() {
-        return graphView;
-    }
 
     public void showErrorMessage(String title, String details) {
         hideErrorMessage();

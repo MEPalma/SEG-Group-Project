@@ -9,27 +9,24 @@ import java.util.List;
 import java.util.Objects;
 
 public class GraphSpecs {
-    public enum TIME_SPAN {WEEK_SPAN, DAY_SPAN, HOUR_SPAN}
+    public enum TIME_SPAN { WEEK_SPAN, DAY_SPAN, HOUR_SPAN };
 
-    ;
+    public enum BOUNCE_DEF {TIME, NPAGES};
 
     public enum METRICS {
-        NumberImpressions,
-        NumberClicks,
-        NumberUniques,
-        NumberBounces,
-        NumberConversions,
-        TotalCost,
-        CTR,
-        CPA,
-        CPC,
-        CPM,
-        BounceRate
-    }
+            NumberImpressions,
+            NumberClicks,
+            NumberUniques,
+            NumberBounces,
+            NumberConversions,
+            TotalCost,
+            CTR,
+            CPA,
+            CPC,
+            CPM,
+            BounceRate};
 
-    ;
-
-    private final String id, title, xAxisName, yAxisName;
+    private String title, xAxisName, yAxisName;
     private Collection<Tuple<String, Number>> data;
 
     private final METRICS metric;
@@ -37,34 +34,31 @@ public class GraphSpecs {
 
     private final FilterSpecs filterSpecs;
 
-    public GraphSpecs(String id, String title, String xAxisName, String yAxisName, METRICS metric, TIME_SPAN timespan, FilterSpecs filterSpecs) {
-        this.id = id;
-        this.title = title;
-        this.xAxisName = xAxisName;
-        this.yAxisName = yAxisName;
+    private final BOUNCE_DEF bounceDef;
+
+    public GraphSpecs(METRICS metric, TIME_SPAN timespan, BOUNCE_DEF bounceDef, FilterSpecs filterSpecs) {
         this.metric = metric;
         this.timespan = timespan;
 
         this.data = new LinkedList<>();
 
         this.filterSpecs = filterSpecs;
+
+        this.bounceDef = bounceDef;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GraphSpecs that = (GraphSpecs) o;
-        return id.equals(that.id);
+        if (o instanceof GraphSpecs) {
+            GraphSpecs other = (GraphSpecs)o;
+            return (this.metric == other.metric && this.timespan == other.timespan && this.bounceDef == bounceDef);
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    public String getId() {
-        return id;
+        return Objects.hash(this.metric) + Objects.hash(this.timespan) + Objects.hash(this.bounceDef);
     }
 
     public String getTitle() {
@@ -129,11 +123,30 @@ public class GraphSpecs {
         this.data = data;
     }
 
-    public boolean containsFilters() {
-        return this.filterSpecs.containsFilters();
-    }
-
     public FilterSpecs getFilterSpecs() {
         return filterSpecs;
+    }
+
+    public BOUNCE_DEF getBounceDef() {
+        return bounceDef;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setxAxisName(String xAxisName) {
+        this.xAxisName = xAxisName;
+    }
+
+    public void setyAxisName(String yAxisName) {
+        this.yAxisName = yAxisName;
+    }
+
+    public boolean containsFilters() {
+        return (getGenders().size() > 0 ||
+                getIncomes().size() > 0 ||
+                getAges().size() > 0 ||
+                getContexts().size() > 0);
     }
 }

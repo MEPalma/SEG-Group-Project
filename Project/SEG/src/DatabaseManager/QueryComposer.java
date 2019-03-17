@@ -194,7 +194,26 @@ public class QueryComposer {
         if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions) {
             return getNumberOfImpressions(graphSpecs);
         }
-
+        else if( graphSpecs.getMetric()==GraphSpecs.METRICS.NumberClicks)
+        {
+            return getNumberOfClicks(graphSpecs);
+        }
+        else if( graphSpecs.getMetric()==GraphSpecs.METRICS.NumberConversions)
+        {
+            return getNumberOfConversions(graphSpecs);
+        }
+        else if( graphSpecs.getMetric()==GraphSpecs.METRICS.NumberUniques)
+        {
+            return getNumberOfUniques(graphSpecs);
+        }
+        else if( graphSpecs.getMetric()==GraphSpecs.METRICS.NumberBounces)
+        {
+            return getNumberOfBounces(graphSpecs);
+        }
+        else if( graphSpecs.getMetric()==GraphSpecs.METRICS.TotalCost)
+        {
+            return getTotalCost(graphSpecs);
+        }
         return null;
     }
     private static String getTimeSpanGroup(GraphSpecs.TIME_SPAN timeSpan)
@@ -207,7 +226,7 @@ public class QueryComposer {
     }
 
     private static String getNumberOfImpressions(GraphSpecs graphSpecs) {
-        StringBuilder tmp = new StringBuilder("select Date as d,count(Users.id) as c from impression_logs ");
+        StringBuilder tmp = new StringBuilder("select Date as d,count(userId) as c from impression_logs ");
         tmp.append(getFilters(graphSpecs));
        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
@@ -236,7 +255,7 @@ public class QueryComposer {
     ADD AN AND FOR THIS ONE !
      */
     private static String getNumberOfBounces(GraphSpecs graphSpecs) {
-        StringBuilder tmp = new StringBuilder("select EntryDate as d,count(strftime('%Y-%m-%d %H:%M:%S', ExitDate) - strftime('%Y-%m-%d %H:%M:%S', EntryDate)) as c from server_logs");
+        StringBuilder tmp = new StringBuilder("select EntryDate as date,count(strftime('%Y-%m-%d %H:%M:%S', ExitDate) - strftime('%Y-%m-%d %H:%M:%S', EntryDate)) as c from server_logs");
         tmp.append(getFilters(graphSpecs));
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
@@ -247,7 +266,7 @@ public class QueryComposer {
     HERE AS WELL
      */
     private static String getNumberOfConversions(GraphSpecs graphSpecs) {
-        StringBuilder tmp = new StringBuilder("select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No'");
+        StringBuilder tmp = new StringBuilder("select EntryDate as date, count(Conversion) as c from server_logs where Conversion='Yes'");
         tmp.append(getFilters(graphSpecs));
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
@@ -269,14 +288,14 @@ public class QueryComposer {
 
 
 
-        private  static String getFilters(GraphSpecs graphSpecs)
-    {   StringBuilder tmp=new StringBuilder("");
+
+    private  static String getFilters(GraphSpecs graphSpecs)
+    {
+        StringBuilder tmp=new StringBuilder("");
         List<String> filters =new LinkedList<>();
-        filters.add("Date > '" + graphSpecs.getStartDate()+"' ");
-        filters.add("Date < '" + graphSpecs.getEndDate()+"' ");
+        filters.add("date > '" + graphSpecs.getStartDate()+"' ");
+        filters.add("date < '" + graphSpecs.getEndDate()+"' ");
         if (graphSpecs.containsFilters()) {
-
-
 
             tmp.append("inner join Users on userid=Users.id ");
             //WHERE
@@ -307,7 +326,7 @@ public class QueryComposer {
                 filters.add("Income = '" + graphSpecs.getIncomes().get(i).toString() + "' ");
             }
 
-        }
+        } else tmp.append(" WHERE ");
 
         for(int i=0;i<filters.size();++i)
         {
@@ -396,5 +415,9 @@ public class QueryComposer {
     public static String getImpressionsInnerJoinWeek = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%W', Date) order by Date;";
     public static String getImpressionsInnerJoinHour = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%H:%d', Date) order by Date;";
     public static String getImpressionsInnerJoinDay = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%d', Date) order by Date;";
+
+    public static String getStartDate="select min(date) as d  from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
+    public static String getEndDate="select Max(date) as d from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
+
 
 }

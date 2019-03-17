@@ -8,9 +8,10 @@ import DatabaseManager.DatabaseManager;
 import Gui.BreadCrumbs.BreadCrumbs;
 import Gui.BreadCrumbs.BreadCrumbsHoster;
 import Gui.GuiComponents.RPanel;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
+import DatabaseManager.Stringifiable;
 
 import javax.swing.*;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class MainController {
         this.graphView = this.breadCrumbsHoster.getBreadCrumbs().getGraphView();
         this.dataLoadingTasks = new LinkedList<>();
         this.filterSpecs = new FilterSpecs();
+        clearFiltersSpecs();
     }
 
     public void setMainBackgroundTask(SwingWorker newTask) {
@@ -95,32 +97,32 @@ public class MainController {
         this.breadCrumbs.push(title, view);
     }
 
-    public boolean doesGraphViewContainGraph(String graphId) {
-        return this.graphView.containsGraph(graphId);
-    }
-
-    public void pushToGraphView(GraphSpecs newGraphSpecs) {
-        newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
-        this.graphView.pushGraphSpecs(newGraphSpecs);
-    }
-
     public List<Tuple<String, Number>> getGraphSpecData(GraphSpecs graphSpecs) {
         return this.dataExchange.getGraphData(graphSpecs);
     }
 
-//    public void pushToGraphView(String id, String title, String xAxisName, String yAxisName, Collection<Tuple<String, Number>> chartData, GraphSpecs.Type type) {
-//        this.pushToGraphView(new GraphSpecs(id, title, xAxisName, yAxisName, chartData, type, new List<>(), new List<>(), new List<>(), new List<>()));
-//    }
-
-    public void popFromGraphView(String graphId) {
-        this.graphView.popGraphSpecs(graphId);
+    public Date getStartDate() {
+        return this.dataExchange.getStartDate();
     }
 
+    public Date getEndDate() {
+        return this.dataExchange.getEndDate();
+    }
+
+    public void pushToGraphView(GraphSpecs newGraphSpecs) {
+        newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
+        String[] titles = getGraphDescription(newGraphSpecs);
+        newGraphSpecs.setTitle(titles[0]);
+        newGraphSpecs.setxAxisName(titles[1]);
+        newGraphSpecs.setyAxisName(titles[2]);
+        this.graphView.pushGraphSpecs(newGraphSpecs);
+    }
 
     /*
         Graphs
      */
 
+    /*
     // Impressions
     public void pushNewNumberOfImpressionsPerWeek(String id) {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
@@ -151,7 +153,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Day]", "Day", "N. Impressions", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
+                tmp = new GraphSpecs(id, "Number of Impressions [Per Day]", "Day", "N. Impressions",  GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
                 return null;
             }
 
@@ -173,7 +175,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Hour]", "Hour", "N. Impressions", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
+                tmp = new GraphSpecs(id, "Number of Impressions [Per Hour]", "Hour", "N. Impressions",  GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.HOUR_SPAN, getFilterSpecs());
                 return null;
             }
 
@@ -196,7 +198,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Impressions [Per Week]", "Week", "N. Clicks", GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
+                tmp = new GraphSpecs(id, "Number of Impressions [Per Week]", "Week", "N. Clicks",  GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.WEEK_SPAN, getFilterSpecs());
                 return null;
             }
 
@@ -218,7 +220,7 @@ public class MainController {
             @Override
             protected Void doInBackground() {
                 startProgressBar();
-                tmp = new GraphSpecs(id, "Number of Click [Per Day]", "Day", "N. Clicks", GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
+                tmp = new GraphSpecs(id, "Number of Click [Per Day]", "Day", "N. Clicks",  GraphSpecs.METRICS.NumberClicks, GraphSpecs.TIME_SPAN.DAY_SPAN, getFilterSpecs());
                 return null;
             }
 
@@ -859,10 +861,7 @@ public class MainController {
         removeDataLoadingTask(backgroundTask);
     }
 
-
-
-
-
+*/
     /*
         FILTERS
      */
@@ -877,8 +876,8 @@ public class MainController {
         synchronized (this.filterSpecs) {
             this.filterSpecs.setAges(newFilterSpecs.getAges());
             this.filterSpecs.setContexts(newFilterSpecs.getContexts());
-//            this.filterSpecs.setEndDate(newFilterSpecs.getEndDate());//todo read this back from db
-//            this.filterSpecs.setStartDate(newFilterSpecs.getStartDate());//todo read this back from db
+            this.filterSpecs.setStartDate(Stringifiable.globalDateFormat.format(getStartDate()));
+            this.filterSpecs.setEndDate(Stringifiable.globalDateFormat.format(getEndDate()));
             this.filterSpecs.setGenders(newFilterSpecs.getGenders());
             this.filterSpecs.setIncomes(newFilterSpecs.getIncomes());
         }
@@ -898,9 +897,22 @@ public class MainController {
 
     private String[] getGraphDescription(GraphSpecs graphSpecs)
     {
-        return new String[] {"TODOTitle", "TODOxAxis", "TODOyAXIS"};
+        String yAxis = graphSpecs.getTimespan().toString();
+        String xAxis = graphSpecs.getMetric().toString();
+        String title = graphSpecs.getMetric().toString() + " [Per " + graphSpecs.getTimespan() + "]";
+
+        if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate)
+            title += " based on " + graphSpecs.getBounceDef().toString();
+
+
+        return new String[] {title, xAxis, yAxis};
     }
 
+    public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
+        GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getFilterSpecs());
 
+        if (this.graphView.containsGraph(graphSpecs)) return null;
+        else return graphSpecs;
+    }
 
 }

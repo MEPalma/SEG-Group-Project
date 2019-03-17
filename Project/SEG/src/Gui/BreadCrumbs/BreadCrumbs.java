@@ -39,6 +39,7 @@ public class BreadCrumbs extends JPanel {
         this.breadCrumbsHoster = breadCrumbsHoster;
 
 
+
         setBackground(BACKGROUND);
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_WHITE));
         setPreferredSize(new Dimension(250, 50));

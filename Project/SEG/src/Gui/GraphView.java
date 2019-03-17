@@ -8,17 +8,13 @@ import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
 import Gui.Menus.ChooseNewGraphPanel;
 import Gui.Menus.FiltersMenu;
+//import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.awt.event.*;
 import java.util.List;
+import java.util.*;
 
 public class GraphView extends RPanel {
 
@@ -151,7 +147,7 @@ public class GraphView extends RPanel {
                         int y = MouseInfo.getPointerInfo().getLocation().y;
 
                         if (x > dialog.getLocation().x + dialog.getWidth() || x < dialog.getLocation().x || y > dialog.getLocation().y + dialog.getHeight() || y < dialog.getLocation().y)
-                            dialog.setVisible(false);
+                                dialog.setVisible(false);
                     }
                 });
                 dialog.getContentPane().add(new TitleLabel("Filters", TitleLabel.CENTER, 18), BorderLayout.NORTH);
@@ -193,7 +189,11 @@ public class GraphView extends RPanel {
                 dialog.addWindowFocusListener(new WindowAdapter() {
                     @Override
                     public void windowLostFocus(WindowEvent e) {
-                        dialog.setVisible(false);
+                        int x = MouseInfo.getPointerInfo().getLocation().x;
+                        int y = MouseInfo.getPointerInfo().getLocation().y;
+
+                        if (x > dialog.getLocation().x + dialog.getWidth() || x < dialog.getLocation().x || y > dialog.getLocation().y + dialog.getHeight() || y < dialog.getLocation().y)
+                            dialog.setVisible(false);
                     }
                 });
                 dialog.getContentPane().add(new TitleLabel("Add new graph", TitleLabel.CENTER, 18), BorderLayout.NORTH);
@@ -243,35 +243,20 @@ public class GraphView extends RPanel {
         refresh();
     }
 
-    public void popGraphSpecs(String id) {
-        GraphSpecs tmp = null;
-
-        for (GraphSpecs gs : this.graphsOnScreen) {
-            if (gs.getId().equals(id)) {
-                tmp = gs;
-                break;
-            }
-        }
-
-        if (tmp != null)
-            this.graphsOnScreen.remove(tmp);
-
+    public void popGraphSpecs(GraphSpecs graphSpecs) {
+        graphsOnScreen.remove(graphSpecs);
         refresh();
     }
 
-    public boolean containsGraph(String id) {
-        Iterator it = this.graphsOnScreen.iterator();
-        while (it.hasNext())
-            if (((GraphSpecs) it.next()).getId().equals(id)) return true;
-
-        return false;
+    public boolean containsGraph(GraphSpecs graphSpecs) {
+        return this.graphsOnScreen.contains(graphSpecs);
     }
 
-    private int getGraphPosition(String id) {
+    private int getGraphPosition(GraphSpecs graphSpecs) {
         int index = 0;
 
         for (GraphSpecs gs : this.graphsOnScreen) {
-            if (gs.getId().equals(id)) {
+            if (gs.equals(graphSpecs)) {
                 break;
             } else ++index;
         }
@@ -279,16 +264,16 @@ public class GraphView extends RPanel {
         return index;
     }
 
-    public void moveGraphUp(String id) {
-        int index = getGraphPosition(id);
+    public void moveGraphUp(GraphSpecs graphSpecs) {
+        int index = getGraphPosition(graphSpecs);
         if (index > 0) {
             Collections.swap(this.graphsOnScreen, index, index - 1);
             refresh();
         }
     }
 
-    public void moveGraphDown(String id) {
-        int index = getGraphPosition(id);
+    public void moveGraphDown(GraphSpecs graphSpecs) {
+        int index = getGraphPosition(graphSpecs);
 
         if (index < this.graphsOnScreen.size() - 1) {
             Collections.swap(this.graphsOnScreen, index, index + 1);
@@ -326,7 +311,7 @@ class GraphCardView extends RPanel {
         moveUpLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                host.moveGraphUp(spec.getId());
+                host.moveGraphUp(spec);
             }
         });
         functionsPanel.add(moveUpLabel);
@@ -337,7 +322,7 @@ class GraphCardView extends RPanel {
             moveDownLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    host.moveGraphDown(spec.getId());
+                    host.moveGraphDown(spec);
                 }
             });
             functionsPanel.add(moveDownLabel);
@@ -348,7 +333,7 @@ class GraphCardView extends RPanel {
         deleteLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                host.popGraphSpecs(spec.getId());
+                host.popGraphSpecs(spec);
             }
         });
         functionsPanel.add(deleteLabel);

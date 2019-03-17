@@ -2,10 +2,7 @@ package Gui.Menus;
 
 import Commons.GraphSpecs;
 import Gui.GuiColors;
-import Gui.GuiComponents.ListView;
-import Gui.GuiComponents.MenuLabel;
-import Gui.GuiComponents.RPanel;
-import Gui.GuiComponents.TitleLabel;
+import Gui.GuiComponents.*;
 import Gui.MainController;
 
 import javax.swing.*;
@@ -14,7 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 public class ChooseNewGraphPanel extends RPanel {
     public static String[] METRICS = {
@@ -44,16 +40,16 @@ public class ChooseNewGraphPanel extends RPanel {
             "The average number of bounces per click."};
 
 
-    public static String[] BOUNCE_DEF = {"DEF 1", "DEF 2"};
+    public static String[] BOUNCE_DEF = {"Time", "Number of Pages"};
     public static String[] TIME_SPANS = {"WEEK", "DAY", "HOUR"};
 
     private final MainController mainController;
 
     private final TitleLabel descriptionLabel;
     private final TitleLabel messageLabel;
-    private final JComboBox metricsChooser;
-    private final JComboBox bounceDefinitionChooser;
-    private final JComboBox timespanChooser;
+    private final DropDown metricsChooser;
+    private final DropDown bounceDefinitionChooser;
+    private final DropDown timespanChooser;
 
     private final JFrame host;
 
@@ -67,18 +63,11 @@ public class ChooseNewGraphPanel extends RPanel {
 
         this.messageLabel = new TitleLabel("", TitleLabel.CENTER, 12);
 
-        this.metricsChooser = new JComboBox(METRICS);
-        this.metricsChooser.setSelectedIndex(0);
-        this.metricsChooser.addActionListener(e -> {
-            descriptionLabel.setText("<html>" + METRICS_DESCRIPTIONS[metricsChooser.getSelectedIndex()] + "</html>");
-            refresh();
-        });
+        this.metricsChooser = new DropDown(METRICS, METRICS_DESCRIPTIONS, 0);
 
-        this.bounceDefinitionChooser = new JComboBox(BOUNCE_DEF);
-        this.bounceDefinitionChooser.setSelectedIndex(0);
+        this.bounceDefinitionChooser = new DropDown(BOUNCE_DEF, null, 0);
 
-        this.timespanChooser = new JComboBox(TIME_SPANS);
-        this.timespanChooser.setSelectedIndex(0);
+        this.timespanChooser = new DropDown(TIME_SPANS, null, 0);
 
         refresh();
     }
@@ -118,7 +107,13 @@ public class ChooseNewGraphPanel extends RPanel {
     }
 
     private boolean handleAdd() {
-        mainController.pushNewNumberOfBouncesPerWeek(Integer.toString(new Random().nextInt()));
+        GraphSpecs graphSpecs = mainController.proposeNewGraph(getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
+        if (graphSpecs != null) {
+            mainController.pushToGraphView(graphSpecs);
+        }
+        else {
+            //TODO show error
+        }
         return true;
     }
 
@@ -155,5 +150,17 @@ public class ChooseNewGraphPanel extends RPanel {
         wrapper.add(this.timespanChooser, BorderLayout.CENTER);
 
         return wrapper;
+    }
+
+    private GraphSpecs.METRICS getChosenMetric() {
+        return GraphSpecs.METRICS.values()[this.metricsChooser.getSelectedIndex()];
+    }
+
+    private GraphSpecs.TIME_SPAN getChosenTimeSpan() {
+        return GraphSpecs.TIME_SPAN.values()[this.timespanChooser.getSelectedIndex()];
+    }
+
+    private GraphSpecs.BOUNCE_DEF getChosenBounceDef() {
+        return GraphSpecs.BOUNCE_DEF.values()[this.bounceDefinitionChooser.getSelectedIndex()];
     }
 }

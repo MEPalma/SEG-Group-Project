@@ -67,11 +67,4 @@ public class FilterSpecs {
     public void setContexts(List<ImpressionEntry.Context> contexts) {
         this.contexts = contexts;
     }
-
-    public boolean containsFilters() {
-        return (getGenders().size() > 0 ||
-                getIncomes().size() > 0 ||
-                getAges().size() > 0 ||
-                getContexts().size() > 0);
-    }
 }

@@ -23,8 +23,6 @@ public class LoadCSVsMenu extends RPanel {
 
     private enum FileType {IMPRESSION_LOGS, CLICK_LOGS, SERVER_LOGS, UNRECOCNISED}
 
-    ;
-
     public static Color BACKGROUND = GuiColors.BASE_WHITE;
     private final MainController mainController;
 
@@ -33,6 +31,7 @@ public class LoadCSVsMenu extends RPanel {
     public LoadCSVsMenu(MainController mainController) {
         super(BACKGROUND, new BorderLayout());
         this.mainController = mainController;
+        setBorder(BorderFactory.createMatteBorder(4, 0, 4, 0, GuiColors.BASE_SMOKE));
 
         this.campaignName = "Today's campaign";
 

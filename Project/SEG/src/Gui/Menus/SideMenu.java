@@ -19,7 +19,7 @@ public class SideMenu extends RPanel {
     private JPanel openMenu;
 
     public SideMenu(MainController mainController) {
-        super(GuiColors.DARK_GRAY, new BorderLayout());
+        super(GuiColors.BASE_PRIME, new BorderLayout());
         this.mainController = mainController;
 
         refresh();

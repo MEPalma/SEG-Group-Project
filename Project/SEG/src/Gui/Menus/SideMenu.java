@@ -70,6 +70,7 @@ public class SideMenu extends RPanel {
                 JOptionPane.showMessageDialog(null, "Features not supported yet", "Unsupported features", JOptionPane.WARNING_MESSAGE);
                 this.mouseExited(e);
             }
+
             @Override
             public void mouseEntered(MouseEvent e) {
                 settingsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/settings_hover.png")));

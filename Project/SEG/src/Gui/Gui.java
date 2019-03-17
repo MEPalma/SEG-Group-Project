@@ -128,7 +128,6 @@ public class Gui extends JFrame {
         } else setupMainView();
 
 
-
         repaint();
         revalidate();
     }

@@ -92,7 +92,7 @@ public class ChooseNewGraphPanel extends RPanel {
         addLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (handleAdd()); //host.setVisible(false);
+                if (handleAdd()) ; //host.setVisible(false);
                 else {
                     messageLabel.setText("You already have this graph!");
                     refresh();

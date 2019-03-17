@@ -193,34 +193,26 @@ public class QueryComposer {
     public static String composeQuery(GraphSpecs graphSpecs) {
         if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions) {
             return getNumberOfImpressions(graphSpecs);
-        }
-        else if( graphSpecs.getMetric()==GraphSpecs.METRICS.NumberClicks)
-        {
+        } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberClicks) {
             return getNumberOfClicks(graphSpecs);
-        }
-        else if( graphSpecs.getMetric()==GraphSpecs.METRICS.NumberConversions)
-        {
+        } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberConversions) {
             return getNumberOfConversions(graphSpecs);
-        }
-        else if( graphSpecs.getMetric()==GraphSpecs.METRICS.NumberUniques)
-        {
+        } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberUniques) {
             return getNumberOfUniques(graphSpecs);
-        } else if(graphSpecs.getMetric()==GraphSpecs.METRICS.NumberBounces)
-        {
+        } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberBounces) {
             return getNumberOfBounces(graphSpecs);
         }
         return null;
-        }
+    }
 
-    public static List<String> composeSum(GraphSpecs graphSpecs)
-    {
-        List<String> tmpList=new LinkedList<>();
+    public static List<String> composeSum(GraphSpecs graphSpecs) {
+        List<String> tmpList = new LinkedList<>();
         tmpList.add(getClickCost(graphSpecs));
         tmpList.add(getImpressionCost(graphSpecs));
         return tmpList;
     }
-    private static String getTimeSpanGroup(GraphSpecs.TIME_SPAN timeSpan)
-    {
+
+    private static String getTimeSpanGroup(GraphSpecs.TIME_SPAN timeSpan) {
         if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return " group by strftime('%W', d)";
         else if (timeSpan == GraphSpecs.TIME_SPAN.DAY_SPAN)
             return " group by strftime('%d', d)";
@@ -231,7 +223,7 @@ public class QueryComposer {
     private static String getNumberOfImpressions(GraphSpecs graphSpecs) {
         StringBuilder tmp = new StringBuilder("select Date as d,count(userId) as c from impression_logs ");
         tmp.append(getFilters(graphSpecs));
-       tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
 
         tmp.append(";");
@@ -246,6 +238,7 @@ public class QueryComposer {
         tmp.append(";");
         return tmp.toString();
     }
+
     private static String getNumberOfUniques(GraphSpecs graphSpecs) {
         StringBuilder tmp = new StringBuilder("select click_logs.Date as d,count(distinct  click_logs.userid) as c from click_logs");
         tmp.append(getFilters(graphSpecs));
@@ -255,41 +248,38 @@ public class QueryComposer {
         return tmp.toString();
     }
 
-    private static String getClickCost(GraphSpecs graphSpecs)
-    {
-        StringBuilder tmp= new StringBuilder("select click_logs.date as d,sum(ClickCost) as c from click_logs ");
+    private static String getClickCost(GraphSpecs graphSpecs) {
+        StringBuilder tmp = new StringBuilder("select click_logs.date as d,sum(ClickCost) as c from click_logs ");
         tmp.append(getFilters((graphSpecs)));
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
         tmp.append(";");
         return tmp.toString();
     }
-    private static String getImpressionCost(GraphSpecs graphSpecs)
-    {
-        StringBuilder tmp= new StringBuilder("select Date as d,sum(impressionCost) as c from impression_logs ");
+
+    private static String getImpressionCost(GraphSpecs graphSpecs) {
+        StringBuilder tmp = new StringBuilder("select Date as d,sum(impressionCost) as c from impression_logs ");
         tmp.append(getFilters((graphSpecs)));
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
         tmp.append(";");
         return tmp.toString();
     }
+
     /*
     ADD AN AND FOR THIS ONE !
      */
     public static String getNumberOfBounces(GraphSpecs graphSpecs) {
 
-        if(graphSpecs.getBounceDef()==GraphSpecs.BOUNCE_DEF.TIME)
-        {
+        if (graphSpecs.getBounceDef() == GraphSpecs.BOUNCE_DEF.TIME) {
 
-        StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d,count(strftime('%Y-%m-%d %H:%M:%S', ExitDate) - strftime('%Y-%m-%d %H:%M:%S', EntryDate)) as c from server_logs");
-        tmp.append(getFilters(graphSpecs)+" And strftime('%Y-%m-%d %H:%M:%S', ExitDate) - strftime('%Y-%m-%d %H:%M:%S', EntryDate) <= 20  ");
-        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+            StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d,count(strftime('%Y-%m-%d %H:%M:%S', ExitDate) - strftime('%Y-%m-%d %H:%M:%S', EntryDate)) as c from server_logs");
+            tmp.append(getFilters(graphSpecs) + " And strftime('%Y-%m-%d %H:%M:%S', ExitDate) - strftime('%Y-%m-%d %H:%M:%S', EntryDate) <= 20  ");
+            tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
-        tmp.append(";");
+            tmp.append(";");
             return tmp.toString();
-        }
-        else
-        {
+        } else {
             StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d, count(id) as c from server_logs ");
-            tmp.append(getFilters(graphSpecs)+" And PagesViewed<=1 ");
+            tmp.append(getFilters(graphSpecs) + " And PagesViewed<=1 ");
             tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
             tmp.append(";");
@@ -297,40 +287,35 @@ public class QueryComposer {
         }
 
     }
+
     /*
     HERE AS WELL
      */
     private static String getNumberOfConversions(GraphSpecs graphSpecs) {
         StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d, count(Conversion) as c from server_logs ");
 
-        tmp.append(getFilters(graphSpecs)+" And Conversion='Yes' ");
+        tmp.append(getFilters(graphSpecs) + " And Conversion='Yes' ");
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
         tmp.append(";");
         return tmp.toString();
     }
 
-    private  static String getFilters(GraphSpecs graphSpecs)
-    {
-        StringBuilder tmp=new StringBuilder("");
-        List<String> filters =new LinkedList<>();
-        filters.add("d > '" + graphSpecs.getStartDate()+"' ");
-        filters.add("d < '" + graphSpecs.getEndDate()+"' ");
+    private static String getFilters(GraphSpecs graphSpecs) {
+        StringBuilder tmp = new StringBuilder("");
+        List<String> filters = new LinkedList<>();
+        filters.add("d > '" + graphSpecs.getStartDate() + "' ");
+        filters.add("d < '" + graphSpecs.getEndDate() + "' ");
         if (graphSpecs.containsFilters()) {
-            if(graphSpecs.getMetric()==GraphSpecs.METRICS.NumberImpressions|| graphSpecs.getMetric()==GraphSpecs.METRICS.ImpressionCost)
-            {
+            if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions || graphSpecs.getMetric() == GraphSpecs.METRICS.ImpressionCost) {
                 tmp.append(" inner join Users on userid=Users.id ");
                 //WHERE
                 tmp.append("WHERE ");
-            }
-            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.BounceRate || graphSpecs.getMetric()==GraphSpecs.METRICS.NumberConversions)
-            {
+            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate || graphSpecs.getMetric() == GraphSpecs.METRICS.NumberConversions) {
                 tmp.append(" inner join Users on server_logs.userid=Users.id");
                 tmp.append(" inner join impression_logs on server_logs.userid=impression_logs.userid");
                 tmp.append(" WHERE ");
-            }
-            else
-            {
+            } else {
                 tmp.append(" inner join Users on click_logs.userid=Users.id ");
                 tmp.append(" inner join impression_logs on click_logs.userid=impression_logs.userid  ");
                 //WHERE
@@ -349,7 +334,7 @@ public class QueryComposer {
                     tmpGenderBuilder.append(tmpGenders.get(i));
                 } else tmpGenderBuilder.append(tmpGenders.get(i) + " or ");
             }
-            if(tmpGenderBuilder.length()>0)
+            if (tmpGenderBuilder.length() > 0)
                 filters.add(tmpGenderBuilder.toString());
 
             tmpGenders.clear();
@@ -365,8 +350,8 @@ public class QueryComposer {
                     tmpAgeBuilder.append(tmpGenders.get(i));
                 } else tmpAgeBuilder.append(tmpGenders.get(i) + " or ");
             }
-            if(tmpAgeBuilder.length()>0)
-            filters.add(tmpAgeBuilder.toString());
+            if (tmpAgeBuilder.length() > 0)
+                filters.add(tmpAgeBuilder.toString());
 
             tmpGenders.clear();
 
@@ -376,41 +361,40 @@ public class QueryComposer {
             for (int i = 0; i < graphSpecs.getContexts().size(); ++i)
                 tmpGenders.add("Context = '" + graphSpecs.getContexts().get(i).toString() + "' ");
 
-                StringBuilder tmpContextBuilder = new StringBuilder("");
-                for (int i = 0; i < tmpGenders.size(); ++i) {
-                    if (i == tmpGenders.size() - 1) {
-                        tmpContextBuilder.append(tmpGenders.get(i));
-                    } else tmpContextBuilder.append(tmpGenders.get(i) + " or ");
-                }
-            if(tmpContextBuilder.length()>0)
+            StringBuilder tmpContextBuilder = new StringBuilder("");
+            for (int i = 0; i < tmpGenders.size(); ++i) {
+                if (i == tmpGenders.size() - 1) {
+                    tmpContextBuilder.append(tmpGenders.get(i));
+                } else tmpContextBuilder.append(tmpGenders.get(i) + " or ");
+            }
+            if (tmpContextBuilder.length() > 0)
                 filters.add(tmpContextBuilder.toString());
 
-                tmpGenders.clear();
+            tmpGenders.clear();
 
             //income
             for (int i = 0; i < graphSpecs.getIncomes().size(); ++i)
                 tmpGenders.add("Income = '" + graphSpecs.getIncomes().get(i).toString() + "' ");
 
-                StringBuilder tmpIncomeBuilder = new StringBuilder("");
-                for (int i = 0; i < tmpGenders.size(); ++i){
-                    if (i == tmpGenders.size() - 1) {
-                        tmpIncomeBuilder.append(tmpGenders.get(i));
-                    } else tmpIncomeBuilder.append(tmpGenders.get(i) + " or ");
-                }
-            if(tmpIncomeBuilder.length()>0)
+            StringBuilder tmpIncomeBuilder = new StringBuilder("");
+            for (int i = 0; i < tmpGenders.size(); ++i) {
+                if (i == tmpGenders.size() - 1) {
+                    tmpIncomeBuilder.append(tmpGenders.get(i));
+                } else tmpIncomeBuilder.append(tmpGenders.get(i) + " or ");
+            }
+            if (tmpIncomeBuilder.length() > 0)
                 filters.add(tmpIncomeBuilder.toString());
 
-                tmpGenders.clear();
+            tmpGenders.clear();
 
 
         } else tmp.append(" WHERE ");
 
-        for(int i=0;i<filters.size();++i)
-        {
+        for (int i = 0; i < filters.size(); ++i) {
 
-            if(i==filters.size()-1)
+            if (i == filters.size() - 1)
                 tmp.append(filters.get(i));
-            else tmp.append(filters.get(i)+ " AND ");
+            else tmp.append(filters.get(i) + " AND ");
         }
         return tmp.toString();
     }
@@ -482,6 +466,6 @@ public class QueryComposer {
     public static String getImpressionsInnerJoinHour = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%H:%d', Date) order by Date;";
     public static String getImpressionsInnerJoinDay = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%d', Date) order by Date;";
 
-    public static String getStartDate="select min(date) as d  from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
-    public static String getEndDate="select Max(date) as d from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
+    public static String getStartDate = "select min(date) as d  from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
+    public static String getEndDate = "select Max(date) as d from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
 }

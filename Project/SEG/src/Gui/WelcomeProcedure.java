@@ -4,7 +4,6 @@ import Commons.GraphSpecs;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.TitleLabel;
 import Gui.Menus.LoadCSVsMenu;
-import org.jfree.chart.title.Title;
 
 import javax.swing.*;
 import java.awt.*;
@@ -113,7 +112,7 @@ public class WelcomeProcedure extends JPanel {
 
         TitleLabel titleLabel = new TitleLabel("All set!", TitleLabel.LEFT);
         titleLabel.setForeground(GuiColors.BASE_PRIME);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8,8 ));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         wrapper.add(titleLabel, BorderLayout.NORTH);
 
         TitleLabel messageLabel = new TitleLabel("<html>Good news: you are all set!<br><br><br>I have prepared two graphs " +

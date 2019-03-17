@@ -11,7 +11,7 @@ public class RadioButton extends JRadioButton {
         setBorder(BorderFactory.createEmptyBorder());
         setForeground(GuiColors.DARK_GRAY);
         setFont(new Font("Verdana", Font.PLAIN, 14));
-        setBackground(new Color(0, 0, 0, 0));
+        setBackground(GuiColors.BASE_PRIME);
     }
 
     public RadioButton(String text, int size) {
@@ -19,6 +19,6 @@ public class RadioButton extends JRadioButton {
         setBorder(BorderFactory.createEmptyBorder());
         setForeground(GuiColors.DARK_GRAY);
         setFont(new Font("Verdana", Font.PLAIN, size));
-        setBackground(new Color(0, 0, 0, 0));
+        setBackground(GuiColors.BASE_PRIME);
     }
 }

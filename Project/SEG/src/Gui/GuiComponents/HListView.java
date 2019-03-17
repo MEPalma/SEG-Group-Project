@@ -1,7 +1,6 @@
 package Gui.GuiComponents;
 
 import Gui.GuiColors;
-import Gui.TakeActionListener;
 
 import javax.swing.*;
 import java.awt.*;

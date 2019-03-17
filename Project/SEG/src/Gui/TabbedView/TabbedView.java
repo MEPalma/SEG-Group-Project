@@ -45,7 +45,8 @@ public class TabbedView {
             tabCells.add(createTab(t.getTitle(), t.getColor(), i));
         }
 
-        this.tabsHost.add(new HListView(GuiColors.BASE_SMOKE, tabCells).getWrappedInScroll(), BorderLayout.CENTER);
+
+        this.tabsHost.add(new HListView(GuiColors.BASE_WHITE, tabCells).getWrappedInScroll(), BorderLayout.CENTER);
         if (this.selectedIndex >= 0)
             this.contentHost.add(this.tabs.get(this.selectedIndex).getContent(), BorderLayout.CENTER);
 

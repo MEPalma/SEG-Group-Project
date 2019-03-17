@@ -19,29 +19,16 @@ public class MainController {
     private final TabbedView tabbedView;
     private final List<SwingWorker> dataLoadingTasks;
     private final StatusDisplay statusDisplay;
-    private SwingWorker criticalBackgroundsTask;
+    private final Gui gui;
 
-    public MainController(StatusDisplay statusDisplay, TabbedView tabbedView) {
+    public MainController(Gui gui, StatusDisplay statusDisplay, TabbedView tabbedView) {
         this.dataExchange = new DataExchange(new DatabaseManager());
+        this.gui = gui;
         this.tabbedView = tabbedView;
         this.statusDisplay = statusDisplay;
         this.dataLoadingTasks = new LinkedList<>();
         this.filterSpecs = new FilterSpecs();
         clearFiltersSpecs();
-    }
-
-    public void resetCriticalBackgroundTask(SwingWorker newTask) {
-        if (this.criticalBackgroundsTask != null)
-            this.criticalBackgroundsTask = newTask;
-        else {
-            this.criticalBackgroundsTask.cancel(true);
-            this.criticalBackgroundsTask = newTask;
-        }
-    }
-
-    public void killCriticalbackgoundTask() {
-        if (this.criticalBackgroundsTask != null)
-            this.criticalBackgroundsTask.cancel(true);
     }
 
     public void addDataLoadingTask(SwingWorker newTask) {
@@ -90,6 +77,7 @@ public class MainController {
 
     public void setCampaignName(String name) {
         this.dataExchange.setCampaignName(name);
+        this.gui.updateCampaignName();
     }
 
     public List<Tuple<String, Number>> getGraphSpecData(GraphSpecs graphSpecs) {

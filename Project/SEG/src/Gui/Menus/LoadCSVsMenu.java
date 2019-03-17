@@ -31,7 +31,7 @@ public class LoadCSVsMenu extends RPanel {
     public LoadCSVsMenu(MainController mainController) {
         super(BACKGROUND, new BorderLayout());
         this.mainController = mainController;
-        setBorder(BorderFactory.createMatteBorder(4, 0, 4, 0, GuiColors.BASE_SMOKE));
+        setBorder(BorderFactory.createMatteBorder(4, 0, 4, 4, GuiColors.BASE_PRIME));
 
         this.campaignName = "Today's campaign";
 
@@ -70,9 +70,6 @@ public class LoadCSVsMenu extends RPanel {
                             else campaignName = campaignName.trim().replace("-", "").replace("'", "").replace("\"", "");
 
                             mainController.setCampaignName(campaignName);
-
-//                            mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new SideMenu(mainController));
-//                            mainController.pushNewViewOnBreadCrumbs("Load CSVs", thisView);
 
                             //new background thread
                             SwingWorker<Void, Void> loadTask = new SwingWorker<Void, Void>() {

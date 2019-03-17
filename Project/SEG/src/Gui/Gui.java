@@ -1,7 +1,6 @@
 package Gui;
 
 import Gui.GuiComponents.MenuLabel;
-import Gui.GuiComponents.RecursiveLostFocus;
 import Gui.GuiComponents.TitleLabel;
 import Gui.Menus.ChooseNewGraphPanel;
 import Gui.Menus.FiltersMenu;
@@ -22,6 +21,7 @@ public class Gui extends JFrame {
 
     private JPanel popupMessageArea;
     private JPanel currentPopup;
+    private TitleLabel campaignName;
 
     public Gui() {
         super("Dashboard App");
@@ -76,7 +76,7 @@ public class Gui extends JFrame {
         /*
             INIT MAIN CONTROLLER
          */
-        this.mainController = new MainController(statusDisplay, new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster));
+        this.mainController = new MainController(this, statusDisplay, new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster));
 
 
         /*
@@ -97,6 +97,11 @@ public class Gui extends JFrame {
         TitleLabel appTitleLabel = new TitleLabel(" Dashboard App", JLabel.LEFT, 26);
         appTitleLabel.setForeground(GuiColors.BASE_WHITE);
         this.northView.add(appTitleLabel, BorderLayout.CENTER);
+
+        this.campaignName = new TitleLabel(mainController.getCampaignName() + " ", TitleLabel.RIGHT, 18, GuiColors.BASE_WHITE);
+        this.campaignName.setFont(new Font("Verdana", Font.ITALIC, 18));
+        this.northView.add(this.campaignName, BorderLayout.EAST);
+
         getContentPane().add(this.northView, BorderLayout.NORTH);
 
 
@@ -266,6 +271,12 @@ public class Gui extends JFrame {
             super.setLocation(x, y);
         }
         super.setVisible(visible);
+    }
+
+    public void updateCampaignName() {
+        this.campaignName.setText(mainController.getCampaignName());
+        this.campaignName.repaint();
+        this.campaignName.revalidate();
     }
 
 }

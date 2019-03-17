@@ -247,7 +247,7 @@ public class QueryComposer {
         return tmp.toString();
     }
     private static String getNumberOfUniques(GraphSpecs graphSpecs) {
-        StringBuilder tmp = new StringBuilder("select click_logs.Date as d,count(distinct  userid) as c from click_logs");
+        StringBuilder tmp = new StringBuilder("select click_logs.Date as d,count(distinct  click_logs.userid) as c from click_logs");
         tmp.append(getFilters(graphSpecs));
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
@@ -323,7 +323,7 @@ public class QueryComposer {
                 //WHERE
                 tmp.append("WHERE ");
             }
-            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.BounceRate)
+            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.BounceRate || graphSpecs.getMetric()==GraphSpecs.METRICS.NumberConversions)
             {
                 tmp.append(" inner join Users on server_logs.userid=Users.id");
                 tmp.append(" inner join impression_logs on server_logs.userid=impression_logs.userid");

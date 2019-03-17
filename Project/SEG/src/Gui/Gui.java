@@ -46,7 +46,7 @@ public class Gui extends JFrame {
 
 
         /*
-            TABBED VIEW INITIALIZATION
+            TABBED VIEW VIEWS INITIALIZATION
          */
         JPanel tabbedViewTabsHoster = new JPanel(new BorderLayout());
         tabbedViewTabsHoster.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
@@ -55,7 +55,6 @@ public class Gui extends JFrame {
         JPanel tabbedViewContentHoster = new JPanel(new BorderLayout());
         tabbedViewContentHoster.setBorder(BorderFactory.createEmptyBorder());
         tabbedViewTabsHoster.setBackground(GuiColors.BASE_SMOKE);
-
 
         /*
             INIT MAIN CONTROLLER
@@ -74,7 +73,7 @@ public class Gui extends JFrame {
         this.northView = new JPanel(new BorderLayout());
         this.northView.setBackground(GuiColors.BASE_PRIME);
         this.northView.setLayout(new BorderLayout());
-        this.northView.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_SMOKE));
+        this.northView.setBorder(BorderFactory.createEmptyBorder());
         this.northView.setPreferredSize(new Dimension(300, 56));
 
 
@@ -89,7 +88,7 @@ public class Gui extends JFrame {
          */
         this.mainView = new JPanel(new BorderLayout());
         this.mainView.setBackground(GuiColors.BASE_SMOKE);
-        this.mainView.add(this.mainController.getBreadCrumbsHoster(), BorderLayout.WEST);
+        this.mainView.add(new SideMenu(mainController), BorderLayout.WEST);
 
         JPanel tabbedViewTopWrapper = new JPanel(new BorderLayout());
         tabbedViewTopWrapper.setBorder(BorderFactory.createEmptyBorder());
@@ -105,8 +104,6 @@ public class Gui extends JFrame {
         this.mainView.add(tabbedViewWrapper, BorderLayout.CENTER);
 
         getContentPane().add(this.mainView, BorderLayout.CENTER);
-
-        this.mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new SideMenu(this.mainController));
 
         repaint();
         revalidate();

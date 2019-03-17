@@ -4,7 +4,6 @@ import Gui.GuiColors;
 import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
-import Gui.GuiComponents.TitleLabel;
 import Gui.MainController;
 
 import javax.swing.*;
@@ -17,78 +16,92 @@ import java.util.List;
 public class SideMenu extends RPanel {
     private final MainController mainController;
 
+    private JPanel openMenu;
+
     public SideMenu(MainController mainController) {
-        super(GuiColors.BASE_WHITE, new BorderLayout());
+        super(GuiColors.DARK_GRAY, new BorderLayout());
         this.mainController = mainController;
 
         refresh();
     }
 
-    @Override
     public void refresh() {
+        removeAll();
 
         List<Component> menus = new LinkedList<>();
 
-
-        //ChooseMetrics menu
-//        MenuLabel chooseMetricsLabel = new MenuLabel("Choose metrics", MenuLabel.LEFT, 14);
-//        chooseMetricsLabel.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                mainController.pushNewViewOnBreadCrumbs("Choose metrics", new Deprecated_MetricsMenu(mainController));
-//                super.mouseExited(e);
-//            }
-//        });
-//        menus.add(getMenuCard(chooseMetricsLabel));
-
-        //FILTERS
-//        MenuLabel filtersLabel = new MenuLabel("Filters", MenuLabel.LEFT, 14);
-//        filtersLabel.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                mainController.pushNewViewOnBreadCrumbs("Filters", new FiltersMenu(mainController));
-//                JOptionPane.showMessageDialog(mainController.getBreadCrumbsHoster(), "Features not supported yet", "Unsupported features", JOptionPane.WARNING_MESSAGE);
-//                super.mouseExited(e);
-//            }
-//        });
-//        menus.add(getMenuCard(filtersLabel));
-
         //Load csvs
-        MenuLabel loadCSVsLabel = new MenuLabel("Load CSVs", MenuLabel.LEFT, 14);
+        MenuLabel loadCSVsLabel = new MenuLabel("", MenuLabel.LEFT, 0);
+        loadCSVsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/upload.png")));
         loadCSVsLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                mainController.pushNewViewOnBreadCrumbs("Load CSVs", new LoadCSVsMenu(mainController));
-                super.mouseExited(e);
+            public void mousePressed(MouseEvent e) {
+                removeAll();
+                if (openMenu != null) {
+                    if (openMenu instanceof LoadCSVsMenu)
+                        openMenu = null;
+                    refresh();
+                    return;
+                } else {
+                    openMenu = new LoadCSVsMenu(mainController);
+                    refresh();
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                loadCSVsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/upload_hover.png")));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                loadCSVsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/upload.png")));
             }
         });
         menus.add(getMenuCard(loadCSVsLabel));
 
         //settings
-        MenuLabel settingsLabel = new MenuLabel("Settings", MenuLabel.LEFT, 14);
+        MenuLabel settingsLabel = new MenuLabel("", MenuLabel.LEFT, 0);
+        settingsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/settings.png")));
         settingsLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                //TODO
-                JOptionPane.showMessageDialog(mainController.getBreadCrumbsHoster(), "Features not supported yet", "Unsupported features", JOptionPane.WARNING_MESSAGE);
+            public void mousePressed(MouseEvent e) {
+                //TODO NEXT INCREMENT
+                JOptionPane.showMessageDialog(null, "Features not supported yet", "Unsupported features", JOptionPane.WARNING_MESSAGE);
                 this.mouseExited(e);
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                settingsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/settings_hover.png")));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                settingsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/settings.png")));
             }
         });
         menus.add(getMenuCard(settingsLabel));
 
-        add(new ListView(GuiColors.BASE_WHITE, menus).getWrappedInScroll(true), BorderLayout.CENTER);
+        JPanel menuList = new ListView(getBackground(), menus);
+        menuList.setPreferredSize(new Dimension(50, 400));
+        if (this.openMenu != null) {
+            this.openMenu.setPreferredSize(new Dimension(400, 250));
+            add(menuList, BorderLayout.WEST);
+            add(this.openMenu, BorderLayout.CENTER);
+        } else {
+            add(menuList, BorderLayout.CENTER);
+        }
 
         repaint();
         revalidate();
     }
 
     private JPanel getMenuCard(Component leftComponent) {
-        JPanel tmp = new JPanel(new BorderLayout());
+        JPanel tmp = new JPanel(new GridLayout(1, 1));
         tmp.setPreferredSize(new Dimension(100, 50));
         tmp.add(leftComponent, BorderLayout.WEST);
         tmp.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         tmp.setBackground(getBackground());
-        tmp.add(new TitleLabel(">", TitleLabel.LEFT, 14), BorderLayout.EAST);
         return tmp;
     }
 }

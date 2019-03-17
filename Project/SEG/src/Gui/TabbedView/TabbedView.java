@@ -96,7 +96,7 @@ public class TabbedView {
         JPanel tab = new JPanel(new BorderLayout());
         tab.setBackground(color);
         tab.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
-        tab.setPreferredSize(new Dimension(100, 50));
+        tab.setPreferredSize(new Dimension(120, 50));
         tab.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -113,16 +113,28 @@ public class TabbedView {
 
         tab.add(titleLabel, BorderLayout.CENTER);
 
-        MenuLabel popLabel = new MenuLabel("", MenuLabel.CENTER, 0);
-        popLabel.setIcon(new ImageIcon("/Icons/x.png"));
+        MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 24);
+        popLabel.setForeground(GuiColors.BASE_WHITE);
+        popLabel.setPreferredSize(new Dimension(20, 20));
         popLabel.dropAllListeners();
         popLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseExited(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 tabs.remove(myIndex);
                 refresh();
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                popLabel.setForeground(GuiColors.BASE_SMOKE);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                popLabel.setForeground(GuiColors.BASE_WHITE);
+            }
         });
+        tab.add(popLabel, BorderLayout.EAST);
 
         return tab;
     }

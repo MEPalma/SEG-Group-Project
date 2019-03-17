@@ -6,8 +6,6 @@ import Commons.Tuple;
 import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
 import DatabaseManager.Stringifiable;
-import Gui.BreadCrumbs.BreadCrumbs;
-import Gui.BreadCrumbs.BreadCrumbsHoster;
 import Gui.GraphManager.GraphManager;
 import Gui.GuiComponents.RPanel;
 import Gui.TabbedView.TabbedView;
@@ -19,30 +17,18 @@ import java.util.List;
 
 public class MainController {
     private final DataExchange dataExchange;
-    private final BreadCrumbsHoster breadCrumbsHoster;
-    private final BreadCrumbs breadCrumbs;
     private final TabbedView tabbedView;
     private final List<SwingWorker> dataLoadingTasks;
 
     public MainController(TabbedView tabbedView) {
         this.dataExchange = new DataExchange(new DatabaseManager());
-        this.breadCrumbsHoster = new BreadCrumbsHoster();
-        this.breadCrumbs = this.breadCrumbsHoster.getBreadCrumbs();
         this.tabbedView = tabbedView;
         this.dataLoadingTasks = new LinkedList<>();
         this.filterSpecs = new FilterSpecs();
         clearFiltersSpecs();
     }
 
-    public void setMainBackgroundTask(SwingWorker newTask) {
-        this.breadCrumbs.updateBackgroundTask(newTask);
-    }
-
-    public void killMainBackgroundTask() {
-        this.breadCrumbs.cancelBackgroundTask();
-    }
-
-    private void addDataLoadingTask(SwingWorker newTask) {
+    public void addDataLoadingTask(SwingWorker newTask) {
         this.dataLoadingTasks.add(newTask);
     }
 
@@ -55,32 +41,27 @@ public class MainController {
         }
     }
 
-    private void removeDataLoadingTask(SwingWorker task) {
+    public void removeDataLoadingTask(SwingWorker task) {
         synchronized (this.dataLoadingTasks) {
             this.dataLoadingTasks.remove(task);
         }
     }
 
     public void startProgressBar() {
-        this.breadCrumbsHoster.startProgressBar();
+//        this.breadCrumbsHoster.startProgressBar();
     }
 
     public void stopProgressBar() {
-        this.breadCrumbsHoster.stopProgressBar();
+//        this.breadCrumbsHoster.stopProgressBar();
     }
 
     public void close() {
-        killMainBackgroundTask();
         killDataLoadingTasks();
         this.dataExchange.close();
     }
 
     public void showErrorMessage(String title, String details) {
-        this.breadCrumbs.showErrorMessage(title, details);
-    }
-
-    public BreadCrumbsHoster getBreadCrumbsHoster() {
-        return breadCrumbsHoster;
+//        this.sideMenuHost.showErrorMessage(title, details);
     }
 
     public DataExchange getDataExchange() {
@@ -93,10 +74,6 @@ public class MainController {
 
     public void setCampaignName(String name) {
         this.dataExchange.setCampaignName(name);
-    }
-
-    public void pushNewViewOnBreadCrumbs(String title, RPanel view) {
-        this.breadCrumbs.push(title, view);
     }
 
     public List<Tuple<String, Number>> getGraphSpecData(GraphSpecs graphSpecs) {

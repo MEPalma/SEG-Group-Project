@@ -64,7 +64,7 @@ public class CSVParser {
         this.dataExchange.setAutoCommit(true);
         this.dataExchange.setForiegnKeyPragma(true);
 
-        JOptionPane.showMessageDialog(this.mainController.getBreadCrumbsHoster(), "Successfully updated the library", "Alert", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Successfully updated the library", "Alert", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void parseImpressionLogFile(Statement sqlStmt) throws SQLException, IOException {

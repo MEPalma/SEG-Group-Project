@@ -72,9 +72,8 @@ public class LoadCSVsMenu extends RPanel {
 
                             mainController.setCampaignName(campaignName);
 
-                            mainController.getBreadCrumbsHoster().getBreadCrumbs().clear();
-                            mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new SideMenu(mainController));
-                            mainController.pushNewViewOnBreadCrumbs("Load CSVs", thisView);
+//                            mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new SideMenu(mainController));
+//                            mainController.pushNewViewOnBreadCrumbs("Load CSVs", thisView);
 
                             //new background thread
                             SwingWorker<Void, Void> loadTask = new SwingWorker<Void, Void>() {
@@ -84,12 +83,13 @@ public class LoadCSVsMenu extends RPanel {
                                     CSVParser parser = new CSVParser(mainController, impressionLog, clickLog, serverLog);
                                     parser.parseAll();
                                     mainController.stopProgressBar();
+                                    mainController.removeDataLoadingTask(this);
 
                                     return null;
                                 }
                             };
 
-                            mainController.setMainBackgroundTask(loadTask);
+                            mainController.addDataLoadingTask(loadTask);
                             loadTask.execute();
 
 
@@ -106,6 +106,8 @@ public class LoadCSVsMenu extends RPanel {
 
                 add(new TitleLabel(" Import data from CSV files", TitleLabel.LEFT), BorderLayout.NORTH);
                 add(listView.getWrappedInScroll(true), BorderLayout.CENTER);
+
+                mainController.removeDataLoadingTask(this);
 
                 revalidate();
                 repaint();
@@ -344,7 +346,7 @@ public class LoadCSVsMenu extends RPanel {
 
 
         };
-        mainController.setMainBackgroundTask(backgroundTask);
+        mainController.addDataLoadingTask(backgroundTask);
         backgroundTask.execute();
     }
 }

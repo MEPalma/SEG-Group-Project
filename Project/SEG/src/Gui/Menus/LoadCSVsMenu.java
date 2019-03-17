@@ -21,7 +21,9 @@ import java.util.List;
 
 public class LoadCSVsMenu extends RPanel {
 
-    private enum FileType {IMPRESSION_LOGS, CLICK_LOGS, SERVER_LOGS, UNRECOCNISED};
+    private enum FileType {IMPRESSION_LOGS, CLICK_LOGS, SERVER_LOGS, UNRECOCNISED}
+
+    ;
 
     public static Color BACKGROUND = GuiColors.BASE_WHITE;
     private final MainController mainController;
@@ -307,13 +309,13 @@ public class LoadCSVsMenu extends RPanel {
             }
 
             private FileType getFileType(File file) {
-                String[] impressionsFileStructure = { "Date", "ID", "Gender", "Age", "Income", "Context", "Impression Cost" };
+                String[] impressionsFileStructure = {"Date", "ID", "Gender", "Age", "Income", "Context", "Impression Cost"};
                 if (checkFirstRow(file, impressionsFileStructure)) return FileType.IMPRESSION_LOGS;
 
-                String[] clicksFileStructure = { "Date", "ID", "Click Cost" };
+                String[] clicksFileStructure = {"Date", "ID", "Click Cost"};
                 if (checkFirstRow(file, clicksFileStructure)) return FileType.CLICK_LOGS;
 
-                String[] serverFileStructure = { "Entry Date", "ID", "Exit Date", "Pages Viewed", "Conversion" };
+                String[] serverFileStructure = {"Entry Date", "ID", "Exit Date", "Pages Viewed", "Conversion"};
                 if (checkFirstRow(file, serverFileStructure)) return FileType.SERVER_LOGS;
 
                 else return FileType.UNRECOCNISED;

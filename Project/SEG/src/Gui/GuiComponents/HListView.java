@@ -1,6 +1,7 @@
 package Gui.GuiComponents;
 
 import Gui.GuiColors;
+import Gui.TakeActionListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,8 +12,7 @@ import java.util.Collection;
 
 public class HListView extends JPanel implements Scrollable {
 
-    public HListView(Color color, Collection<Component> cells)
-    {
+    public HListView(Color color, Collection<Component> cells) {
         super(new GridBagLayout());
         setBackground(color);
         setBorder(BorderFactory.createEmptyBorder());
@@ -23,14 +23,12 @@ public class HListView extends JPanel implements Scrollable {
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        for (Component cell : cells)
-        {
+        for (Component cell : cells) {
             add(cell, gbc);
         }
     }
 
-    public JPanel getWrappedInScroll()
-    {
+    public JPanel getWrappedInScroll() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.setBorder(BorderFactory.createEmptyBorder());
@@ -44,10 +42,9 @@ public class HListView extends JPanel implements Scrollable {
         listScroller.addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() + 16*e.getWheelRotation());
+                listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() + 16 * e.getWheelRotation());
                 listScroller.repaint();
                 listScroller.revalidate();
-                System.out.println("oi" + e.getWheelRotation());
             }
         });
         listScroller.setBackground(this.getBackground());

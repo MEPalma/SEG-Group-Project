@@ -590,30 +590,23 @@ public class DataExchange {
 
             ResultSet resultSet = this.dbM.query(QueryComposer.composeQuery(graphSpecs));
 
-            if(graphSpecs.getMetric()== GraphSpecs.METRICS.CTR) {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+            if (graphSpecs.getMetric() == GraphSpecs.METRICS.CTR) {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
                 getInfoTupleDivision(leftSet, rightSet);
-            }
-            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.CPA)
-            {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberConversions,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPA) {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberConversions, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
                 getInfoTupleDivision(leftSet, rightSet);
-            }
-            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.CPC)
-            {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberClicks,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPC) {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
                 getInfoTupleDivision(leftSet, rightSet);
-            }
-            else if (graphSpecs.getMetric()==GraphSpecs.METRICS.CPM)
-            {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberImpressions,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPM) {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
                 getInfoTupleDivisionCTRHOUR(leftSet, rightSet);
-            }
-            else {
+            } else {
                 List tmp = getInfoTuple(resultSet);
                 close(resultSet);
                 return tmp;
@@ -1159,27 +1152,24 @@ public class DataExchange {
         return tmp;
     }
 
-    public Date getStartDate()
-    {
+    public Date getStartDate() {
         try {
             ResultSet resultStartDate = this.dbM.query(QueryComposer.getStartDate);
             Date tmp = globalDateFormat.parse(resultStartDate.getString("d"));
             close(resultStartDate);
             return tmp;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return new Date();
         }
     }
-    public Date getEndDate()
-    {
+
+    public Date getEndDate() {
         try {
             ResultSet resultStartDate = this.dbM.query(QueryComposer.getEndDate);
             Date tmp = globalDateFormat.parse(resultStartDate.getString("d"));
             close(resultStartDate);
             return tmp;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return new Date();
         }
     }

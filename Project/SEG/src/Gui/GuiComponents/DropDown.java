@@ -1,14 +1,12 @@
 package Gui.GuiComponents;
 
-import Gui.TakeActionListener;
 import Gui.GuiColors;
+import Gui.TakeActionListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,7 +41,7 @@ public class DropDown extends RPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 DropDownPopUp dropDownPopUp = new DropDownPopUp();
-                dropDownPopUp.init( openPopupLabel.getLocationOnScreen().x,
+                dropDownPopUp.init(openPopupLabel.getLocationOnScreen().x,
                         openPopupLabel.getLocationOnScreen().y + openPopupLabel.getHeight(),
                         choices,
                         descriptions,
@@ -88,7 +86,7 @@ class DropDownPopUp extends JDialog {
         getContentPane().setLayout(new BorderLayout());
     }
 
-    public void init(int x, int y, String [] choices, String[] descriptions, TakeActionListener takeActionListener) {
+    public void init(int x, int y, String[] choices, String[] descriptions, TakeActionListener takeActionListener) {
         this.x = x;
         this.y = y;
         this.choices = choices;

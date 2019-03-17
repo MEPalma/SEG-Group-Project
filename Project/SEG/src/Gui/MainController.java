@@ -5,22 +5,14 @@ import Commons.GraphSpecs;
 import Commons.Tuple;
 import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
+import DatabaseManager.Stringifiable;
 import Gui.BreadCrumbs.BreadCrumbs;
 import Gui.BreadCrumbs.BreadCrumbsHoster;
 import Gui.GraphManager.GraphManager;
-import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
-import DatabaseManager.Stringifiable;
-import Gui.GuiComponents.TitleLabel;
 import Gui.TabbedView.TabbedView;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
-import sun.awt.image.ImageWatched;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -119,18 +111,25 @@ public class MainController {
         return this.dataExchange.getEndDate();
     }
 
+
+    /*
+        GRAPHS
+    */
+
+    public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
+        GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getFilterSpecs());
+
+        if (this.tabbedView.containsComparable(graphSpecs)) return null;
+        else return graphSpecs;
+    }
+
     public void pushToGraphView(GraphSpecs newGraphSpecs) {
 
         //TODO do me in backgorund!!!!!!!!!!!
         newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
-        String[] titles = getGraphDescription(newGraphSpecs);
-        newGraphSpecs.setTitle(titles[0]);
-        newGraphSpecs.setxAxisName(titles[1]);
-        newGraphSpecs.setyAxisName(titles[2]);
+        GraphManager.setGraphDescription(newGraphSpecs);
 
-
-
-        this.tabbedView.push(titles[0], newGraphSpecs.getTypeColor(), getGraphCard(newGraphSpecs), newGraphSpecs);
+        this.tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs), newGraphSpecs.getTypeColor(), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs);
     }
 
 
@@ -177,48 +176,6 @@ public class MainController {
 
     public void clearFiltersSpecs() {
         updateFilterSpecs(new FilterSpecs());
-    }
-
-    private String[] getGraphDescription(GraphSpecs graphSpecs)
-    {
-        String yAxis = graphSpecs.getTimespan().toString();
-        String xAxis = graphSpecs.getMetric().toString();
-        String title = graphSpecs.getMetric().toString() + " [Per " + graphSpecs.getTimespan() + "]";
-
-        if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate)
-            title += " based on " + graphSpecs.getBounceDef().toString();
-
-
-        return new String[] {title, xAxis, yAxis};
-    }
-
-    public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
-        GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getFilterSpecs());
-
-        if (this.tabbedView.containsComparable(graphSpecs)) return null;
-        else return graphSpecs;
-    }
-
-    private JPanel getGraphCard(GraphSpecs spec) {
-        JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(spec.getTypeColor());
-        card.setBorder(BorderFactory.createEmptyBorder(10, 10,10, 10));
-
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(spec.getTypeColor());
-        topPanel.setPreferredSize(new Dimension(100, 50));
-
-        TitleLabel titleLabel = new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16);
-        titleLabel.setForeground(GuiColors.BASE_WHITE);
-        topPanel.add(titleLabel, BorderLayout.CENTER);
-
-        JPanel graph = GraphManager.createBarChar(spec.getData(), spec.getxAxisName(), spec.getyAxisName(), spec.getTypeColor());
-
-        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_WHITE));
-        card.add(topPanel, BorderLayout.NORTH);
-        card.add(graph, BorderLayout.CENTER);
-
-        return card;
     }
 
 }

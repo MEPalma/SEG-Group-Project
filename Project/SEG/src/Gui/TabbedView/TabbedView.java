@@ -22,11 +22,14 @@ public class TabbedView {
 
     private int selectedIndex;
 
+    private int latestScrollValue;
+
     public TabbedView(JPanel tabsHost, JPanel contentHost) {
         this.tabsHost = tabsHost;
         this.contentHost = contentHost;
         this.tabs = new LinkedList<>();
         this.selectedIndex = 0;
+        this.latestScrollValue = 0;
 
         this.tabsHost.setLayout(new BorderLayout());
         this.contentHost.setLayout(new BorderLayout());
@@ -40,11 +43,10 @@ public class TabbedView {
             this.selectedIndex = this.tabs.size() - 1;
 
         List<Component> tabCells = new LinkedList<>();
-        for (int i = 0; i < this.tabs.size(); ++i){
+        for (int i = 0; i < this.tabs.size(); ++i) {
             Tab t = this.tabs.get(i);
             tabCells.add(createTab(t.getTitle(), t.getColor(), i));
         }
-
 
         this.tabsHost.add(new HListView(GuiColors.BASE_WHITE, tabCells).getWrappedInScroll(), BorderLayout.CENTER);
         if (this.selectedIndex >= 0)
@@ -74,7 +76,8 @@ public class TabbedView {
     public synchronized boolean containsComparable(Object comparable) {
         for (Tab tab : this.tabs) {
             if (tab.equals(comparable)) return true;
-        }  return false;
+        }
+        return false;
     }
 
     public synchronized List<Object> getAllComparables() {
@@ -93,12 +96,15 @@ public class TabbedView {
         JPanel tab = new JPanel(new BorderLayout());
         tab.setBackground(color);
         tab.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
-        tab.setPreferredSize(new Dimension(200, 50));
+        tab.setPreferredSize(new Dimension(100, 50));
         tab.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 selectedIndex = myIndex;
-                refresh();
+                contentHost.removeAll();
+                contentHost.add(tabs.get(selectedIndex).getContent(), BorderLayout.CENTER);
+                contentHost.repaint();
+                contentHost.revalidate();
             }
         });
 
@@ -138,8 +144,9 @@ class Tab {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Tab) {
-            return this.comparable.equals((Tab)obj);
-        } return false;
+            return this.comparable.equals((Tab) obj);
+        }
+        return false;
     }
 
     @Override

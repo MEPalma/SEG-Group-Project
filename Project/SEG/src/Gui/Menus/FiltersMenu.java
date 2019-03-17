@@ -3,10 +3,10 @@ package Gui.Menus;
 import Commons.ImpressionEntry;
 import Commons.UserEntry;
 import Gui.DateBrowser.DateBrowser;
-import Gui.TakeActionListener;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;
 import Gui.MainController;
+import Gui.TakeActionListener;
 
 import javax.swing.*;
 import java.awt.*;

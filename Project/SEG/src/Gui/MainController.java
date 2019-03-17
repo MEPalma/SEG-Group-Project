@@ -92,6 +92,10 @@ public class MainController {
         return this.dataExchange.getEndDate();
     }
 
+    public boolean isDbEmpty() {
+        return this.dataExchange.isEmpty();
+    }
+
 
     /*
         GRAPHS

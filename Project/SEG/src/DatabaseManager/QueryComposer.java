@@ -388,7 +388,6 @@ public class QueryComposer {
                 tmpGenders.clear();
 
             //income
-
             for (int i = 0; i < graphSpecs.getIncomes().size(); ++i)
                 tmpGenders.add("Income = '" + graphSpecs.getIncomes().get(i).toString() + "' ");
 
@@ -415,16 +414,6 @@ public class QueryComposer {
         }
         return tmp.toString();
     }
-
-    /*
-    Start and end dates
-     */
-//    public static String getStartDateImpression="";
-//    public static String getEndDate="";
-//    public static String getStartDate="";
-//    public static String getStartDate="";
-//    public static String getStartDate="";
-//    public static String getStartDate="";
 
     /*
     Number of impressions by week query.
@@ -476,12 +465,11 @@ public class QueryComposer {
     public static String getTotalCostPerDay = "select d,sum(total) as c from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%d',d) order by d";
     /*
    Gets per hour--24 hours
-   For time granularity!!!
     */
     public static String getTotalNumberOfImpressionsPerHour = "select count(impressionCost) as GroupedValues from impression_logs group by strftime('%H',Date);";
 
     /*
-    CTR per week the closest i've got ok=>>>>wrong result tho
+    CTR
      */
     public static String getCTRPerWeek = "SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%W',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%W',date) order by date;";
     public static String getCTRPerDay = "SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%d',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%d',date) order by date;";
@@ -496,6 +484,4 @@ public class QueryComposer {
 
     public static String getStartDate="select min(date) as d  from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
     public static String getEndDate="select Max(date) as d from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
-
-
 }

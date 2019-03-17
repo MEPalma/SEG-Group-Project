@@ -75,15 +75,6 @@ public class DataExchange {
         }
     }
 
-//    public void writeQuery(String q)
-//    {
-//        this.dbM.writeQuery(q);
-//    }
-//    public void writeQuery(List<String> list)
-//    {
-//        this.dbM.writeQuery(list);
-//    }
-
     /**
      * Executes the batch of a Statement, then closes the Statement.
      *
@@ -160,6 +151,50 @@ public class DataExchange {
         }
         System.exit(8);
         return -1;
+    }
+
+    public boolean isEmpty() {
+        try {
+            ResultSet tmp;
+
+            //impression logs
+            tmp = this.dbM.query(QueryComposer.countAllFrom_IMPRESSION_LOGS);
+            if (tmp.getInt(1) > 0) {
+                close(tmp);
+                return false;
+            }
+            else close(tmp);
+
+
+            //users
+            tmp = this.dbM.query(QueryComposer.countAllFrom_USERS);
+            if (tmp.getInt(1) > 0) {
+                close(tmp);
+                return false;
+            }
+            else close(tmp);
+
+            //clicks
+            tmp = this.dbM.query(QueryComposer.countAllFrom_CLICK_LOGS);
+            if (tmp.getInt(1) > 0) {
+                close(tmp);
+                return false;
+            }
+            else close(tmp);
+
+            //server
+            tmp = this.dbM.query(QueryComposer.countAllFrom_SERVER_LOGS);
+            if (tmp.getInt(1) > 0) {
+                close(tmp);
+                return false;
+            }
+            else close(tmp);
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /*

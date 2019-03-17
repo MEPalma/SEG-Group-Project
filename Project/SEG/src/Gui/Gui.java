@@ -17,6 +17,8 @@ public class Gui extends JFrame {
     private JPanel mainView;
     private JPanel northView;
 
+    private JPanel tabbedViewTabsHoster, tabbedViewContentHoster;
+
     private MainController mainController;
 
     private JPanel popupMessageArea;
@@ -59,11 +61,11 @@ public class Gui extends JFrame {
         /*
             TABBED VIEW VIEWS INITIALIZATION
          */
-        JPanel tabbedViewTabsHoster = new JPanel(new BorderLayout());
+        this.tabbedViewTabsHoster = new JPanel(new BorderLayout());
         tabbedViewTabsHoster.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         tabbedViewTabsHoster.setBackground(GuiColors.BASE_SMOKE);
 
-        JPanel tabbedViewContentHoster = new JPanel(new BorderLayout());
+        this.tabbedViewContentHoster = new JPanel(new BorderLayout());
         tabbedViewContentHoster.setBorder(BorderFactory.createEmptyBorder());
         tabbedViewTabsHoster.setBackground(GuiColors.BASE_SMOKE);
 
@@ -77,7 +79,6 @@ public class Gui extends JFrame {
             INIT MAIN CONTROLLER
          */
         this.mainController = new MainController(this, statusDisplay, new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster));
-
 
         /*
             ORGANIZE LAYOUT
@@ -110,8 +111,31 @@ public class Gui extends JFrame {
          */
         this.mainView = new JPanel(new BorderLayout());
         this.mainView.setBackground(GuiColors.BASE_SMOKE);
-        this.mainView.add(new SideMenu(mainController), BorderLayout.WEST);
         this.mainView.add(statusDisplay, BorderLayout.NORTH);
+        this.getContentPane().add(this.mainView, BorderLayout.CENTER);
+
+        //Wellcome view
+        if (true) { //(mainController.isDbEmpty()) {
+            WelcomeProcedure welcomeProcedure = new WelcomeProcedure(mainController);
+            welcomeProcedure.setOnClose(new TakeActionListener() {
+                @Override
+                public void takeAction() {
+                    mainView.remove(welcomeProcedure);
+                    setupMainView();
+                }
+            });
+            this.mainView.add(welcomeProcedure, BorderLayout.CENTER);
+        } else setupMainView();
+
+
+
+        repaint();
+        revalidate();
+    }
+
+    private void setupMainView() {
+        this.mainView.add(new SideMenu(mainController), BorderLayout.WEST);
+
         this.mainView.add(this.popupMessageArea, BorderLayout.EAST);
 
         JPanel tabbedViewTopWrapper = new JPanel(new BorderLayout());
@@ -127,7 +151,7 @@ public class Gui extends JFrame {
         tabbedViewWrapper.add(tabbedViewContentHoster, BorderLayout.CENTER);
         this.mainView.add(tabbedViewWrapper, BorderLayout.CENTER);
 
-        getContentPane().add(this.mainView, BorderLayout.CENTER);
+        updateCampaignName();
 
         repaint();
         revalidate();

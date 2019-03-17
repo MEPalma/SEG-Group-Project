@@ -22,14 +22,11 @@ public class TabbedView {
 
     private int selectedIndex;
 
-    private int latestScrollValue;
-
     public TabbedView(JPanel tabsHost, JPanel contentHost) {
         this.tabsHost = tabsHost;
         this.contentHost = contentHost;
         this.tabs = new LinkedList<>();
         this.selectedIndex = 0;
-        this.latestScrollValue = 0;
 
         this.tabsHost.setLayout(new BorderLayout());
         this.contentHost.setLayout(new BorderLayout());
@@ -75,7 +72,7 @@ public class TabbedView {
 
     public synchronized boolean containsComparable(Object comparable) {
         for (Tab tab : this.tabs) {
-            if (tab.equals(comparable)) return true;
+            if (tab.getComparable().equals(comparable)) return true;
         }
         return false;
     }
@@ -95,8 +92,8 @@ public class TabbedView {
     private JPanel createTab(String title, Color color, int myIndex) {
         JPanel tab = new JPanel(new BorderLayout());
         tab.setBackground(color);
-        tab.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
-        tab.setPreferredSize(new Dimension(120, 40));
+        tab.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, GuiColors.BASE_WHITE));
+        tab.setPreferredSize(new Dimension(120, 50));
         tab.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

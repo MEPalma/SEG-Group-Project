@@ -601,36 +601,49 @@ public class DataExchange {
             }
             else if(graphSpecs.getMetric()==GraphSpecs.METRICS.CPA)
             {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs( GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
+                ResultSet sumRigth=this.dbM.query(QueryComposer.composeSum(new GraphSpecs( GraphSpecs.METRICS.ImpressionCost,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                List<Tuple<String, Number>> resultSum = getSum(sumLeft,sumRigth);
+
                 ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberConversions,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                List<Tuple<String, Number>> result = getInfoTupleDivision(leftSet, rightSet);
-                close(leftSet);
+                List<Tuple<String, Number>> result = createResultDivision(resultSum, rightSet);
                 close(rightSet);
                 return result;
             }
             else if(graphSpecs.getMetric()==GraphSpecs.METRICS.CPC)
             {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs( GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
+                ResultSet sumRigth=this.dbM.query(QueryComposer.composeSum(new GraphSpecs( GraphSpecs.METRICS.ImpressionCost,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                List<Tuple<String, Number>> resultSum = getSum(sumLeft,sumRigth);
                 ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberClicks,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                List<Tuple<String, Number>> result = getInfoTupleDivision(leftSet, rightSet);
-                close(leftSet);
+                List<Tuple<String, Number>> result = createResultDivision(resultSum, rightSet);
                 close(rightSet);
                 return result;
             }
             else if (graphSpecs.getMetric()==GraphSpecs.METRICS.CPM)
             {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs( GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
+                ResultSet sumRigth=this.dbM.query(QueryComposer.composeSum(new GraphSpecs( GraphSpecs.METRICS.ImpressionCost,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                List<Tuple<String, Number>> resultSum = getSum(sumLeft,sumRigth);
                 ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberImpressions,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                List<Tuple<String, Number>> result = getInfoTupleDivisionCPM(leftSet, rightSet);
-                close(leftSet);
+                List<Tuple<String, Number>> result = createResultDivision(resultSum, rightSet);
                 close(rightSet);
                 return result;
             }
             else if (graphSpecs.getMetric()==GraphSpecs.METRICS.BounceRate)
             {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberBounces, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet leftSet = this.dbM.query(QueryComposer.getNumberOfBounces(graphSpecs));
                 ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberClicks,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
                 List<Tuple<String, Number>> result = getInfoTupleDivision(leftSet, rightSet);
+                close(leftSet);
+                close(rightSet);
+                return result;
+            }
+            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.TotalCost)
+            {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeSum(new GraphSpecs( GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeSum(new GraphSpecs( GraphSpecs.METRICS.ImpressionCost,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                List<Tuple<String, Number>> result = getSum(leftSet, rightSet);
                 close(leftSet);
                 close(rightSet);
                 return result;
@@ -687,7 +700,33 @@ public class DataExchange {
             return null;
         }
     }
+    private List<Tuple<String,Number>> createResultDivision(List<Tuple<String, Number>> list,ResultSet resultSet)
+    {
+        List<Tuple<String, Number>> root1 = new LinkedList<>();
+        List<Tuple<String, Number>> result = new LinkedList<>();
 
+        try {
+            while (resultSet.next()) {
+
+                root1.add(new Tuple<String, Number>(resultSet.getString("d"), (resultSet.getFloat("c"))));
+
+            }
+            //return
+            for (int i = 0; i < root1.size(); i++) {
+
+                result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue()+ list.get(i).getY().floatValue())));
+            }
+
+            return result;
+
+
+            //return <>
+        } catch (SQLException ex) {
+
+        }
+        return new LinkedList<>();
+
+    }
     private List<Tuple<String, Number>> getInfoTuple(ResultSet resultTuple) {
         List<Tuple<String, Number>> root = new LinkedList<>();
 
@@ -710,15 +749,17 @@ public class DataExchange {
 
         try {
             while (resultTuple1.next()) {
+
                 root1.add(new Tuple<String, Number>(resultTuple1.getString("d"), (resultTuple1.getFloat("c"))));
 
             }
             while (resultTuple2.next()) {
+
                 root2.add(new Tuple<>(resultTuple2.getString("d"), (resultTuple2.getFloat("c"))));
             }
 
             //return
-            for (int i = 1; i < root2.size(); i++) {
+            for (int i = 0; i < root2.size(); i++) {
 
                 result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue())));
             }
@@ -734,6 +775,37 @@ public class DataExchange {
         return new LinkedList<>();
 
     }
+    private List<Tuple<String,Number>> getSum(ResultSet resultSet1, ResultSet resultSet2)
+    {
+        List<Tuple<String, Number>> root1 = new LinkedList<>();
+        List<Tuple<String, Number>> root2 = new LinkedList<>();
+        List<Tuple<String, Number>> result = new LinkedList<>();
+
+        try {
+
+            while (resultSet1.next()) {
+                root1.add(new Tuple<String, Number>(resultSet1.getString("d"), (resultSet1.getFloat("c"))));
+
+            }
+            while (resultSet2.next()) {
+                root2.add(new Tuple<>(resultSet2.getString("d"), (resultSet2.getFloat("c"))));
+            }
+
+            //return
+            for (int i = 0; i < root2.size(); i++) {
+
+                result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() + root2.get(i).getY().floatValue())));
+            }
+            return result;
+
+            //return <>
+        } catch (SQLException ex) {
+
+        }
+        return new LinkedList<>();
+
+    }
+
 
     private List<Tuple<String, Number>> getInfoTupleDivisionCTRHOUR(ResultSet resultTuple1, ResultSet resultTuple2) {
         List<Tuple<String, Number>> root1 = new LinkedList<>();
@@ -754,7 +826,7 @@ public class DataExchange {
             }
 
             //return
-            for (int i = 1; i < root2.size() - 1; i++) {
+            for (int i = 0; i < root2.size() - 1; i++) {
 
                 result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue())));
             }
@@ -786,7 +858,7 @@ public class DataExchange {
             while (resultTuple2.next()) {
                 root2.add(new Tuple<>(resultTuple2.getString("d"), (resultTuple2.getFloat("c") / 1000)));
             }
-            for (int i = 1; i < root2.size(); i++) {
+            for (int i = 0; i < root2.size(); i++) {
                 result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue())));
             }
             return result;

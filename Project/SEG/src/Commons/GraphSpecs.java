@@ -26,7 +26,9 @@ public class GraphSpecs {
         CPA,
         CPC,
         CPM,
-        BounceRate
+        BounceRate,
+        ImpressionCost,
+        ClickCost
     }
 
     private String title, xAxisName, yAxisName;

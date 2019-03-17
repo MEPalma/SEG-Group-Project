@@ -205,16 +205,19 @@ public class QueryComposer {
         else if( graphSpecs.getMetric()==GraphSpecs.METRICS.NumberUniques)
         {
             return getNumberOfUniques(graphSpecs);
-        }
-        else if( graphSpecs.getMetric()==GraphSpecs.METRICS.NumberBounces)
+        } else if(graphSpecs.getMetric()==GraphSpecs.METRICS.NumberBounces)
         {
             return getNumberOfBounces(graphSpecs);
         }
-        else if( graphSpecs.getMetric()==GraphSpecs.METRICS.TotalCost)
-        {
-            return getTotalCost(graphSpecs);
-        }
         return null;
+        }
+
+    public static List<String> composeSum(GraphSpecs graphSpecs)
+    {
+        List<String> tmpList=new LinkedList<>();
+        tmpList.add(getClickCost(graphSpecs));
+        tmpList.add(getImpressionCost(graphSpecs));
+        return tmpList;
     }
     private static String getTimeSpanGroup(GraphSpecs.TIME_SPAN timeSpan)
     {
@@ -251,10 +254,27 @@ public class QueryComposer {
         tmp.append(";");
         return tmp.toString();
     }
+
+    private static String getClickCost(GraphSpecs graphSpecs)
+    {
+        StringBuilder tmp= new StringBuilder("select click_logs.date as d,sum(ClickCost) as c from click_logs ");
+        tmp.append(getFilters((graphSpecs)));
+        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+        tmp.append(";");
+        return tmp.toString();
+    }
+    private static String getImpressionCost(GraphSpecs graphSpecs)
+    {
+        StringBuilder tmp= new StringBuilder("select Date as d,sum(impressionCost) as c from impression_logs ");
+        tmp.append(getFilters((graphSpecs)));
+        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
+        tmp.append(";");
+        return tmp.toString();
+    }
     /*
     ADD AN AND FOR THIS ONE !
      */
-    private static String getNumberOfBounces(GraphSpecs graphSpecs) {
+    public static String getNumberOfBounces(GraphSpecs graphSpecs) {
 
         if(graphSpecs.getBounceDef()==GraphSpecs.BOUNCE_DEF.TIME)
         {
@@ -290,21 +310,6 @@ public class QueryComposer {
         return tmp.toString();
     }
 
-    private static String getTotalCost(GraphSpecs graphSpecs) {
-        StringBuilder tmp = new StringBuilder("select d,sum(total) as c  from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u ");
-        tmp.append(getFilters(graphSpecs));
-        tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
-
-        tmp.append(";");
-        return tmp.toString();
-    }
-
-
-
-
-
-
-
     private  static String getFilters(GraphSpecs graphSpecs)
     {
         StringBuilder tmp=new StringBuilder("");
@@ -312,11 +317,17 @@ public class QueryComposer {
         filters.add("d > '" + graphSpecs.getStartDate()+"' ");
         filters.add("d < '" + graphSpecs.getEndDate()+"' ");
         if (graphSpecs.containsFilters()) {
-            if(graphSpecs.getMetric()==GraphSpecs.METRICS.NumberImpressions ||graphSpecs.getMetric()==GraphSpecs.METRICS.TotalCost)
+            if(graphSpecs.getMetric()==GraphSpecs.METRICS.NumberImpressions|| graphSpecs.getMetric()==GraphSpecs.METRICS.ImpressionCost)
             {
                 tmp.append(" inner join Users on userid=Users.id ");
                 //WHERE
                 tmp.append("WHERE ");
+            }
+            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.BounceRate)
+            {
+                tmp.append(" inner join Users on server_logs.userid=Users.id");
+                tmp.append(" inner join impression_logs on server_logs.userid=impression_logs.userid");
+                tmp.append(" WHERE ");
             }
             else
             {

@@ -19,6 +19,7 @@ public class MainController {
     private final TabbedView tabbedView;
     private final List<SwingWorker> dataLoadingTasks;
     private final StatusDisplay statusDisplay;
+    private SwingWorker criticalBackgroundsTask;
 
     public MainController(StatusDisplay statusDisplay, TabbedView tabbedView) {
         this.dataExchange = new DataExchange(new DatabaseManager());
@@ -27,6 +28,20 @@ public class MainController {
         this.dataLoadingTasks = new LinkedList<>();
         this.filterSpecs = new FilterSpecs();
         clearFiltersSpecs();
+    }
+
+    public void resetCriticalBackgroundTask(SwingWorker newTask) {
+        if (this.criticalBackgroundsTask != null)
+            this.criticalBackgroundsTask = newTask;
+        else {
+            this.criticalBackgroundsTask.cancel(true);
+            this.criticalBackgroundsTask = newTask;
+        }
+    }
+
+    public void killCriticalbackgoundTask() {
+        if (this.criticalBackgroundsTask != null)
+            this.criticalBackgroundsTask.cancel(true);
     }
 
     public void addDataLoadingTask(SwingWorker newTask) {
@@ -151,33 +166,18 @@ public class MainController {
     }
 
     public void refreshGraphs() {
-        SwingWorker task = new SwingWorker() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                startProgressBar();
+        killDataLoadingTasks();
 
-                List<Object> graphSpecs = tabbedView.getAllComparables();
+        startProgressBar();
 
-                tabbedView.clear();
+        List<Object> graphSpecs = tabbedView.getAllComparables();
 
-                for (Object g : graphSpecs) {
-                    GraphSpecs tmp = (GraphSpecs) g;
-                    tmp.setData(dataExchange.getGraphData(tmp));
-                    pushToGraphView(tmp);
-                }
-                return null;
-            }
+        tabbedView.clear();
 
-            @Override
-            protected void done() {
-                stopProgressBar();
-                removeDataLoadingTask(this);
-                super.done();
-            }
-        };
+        for (Object g : graphSpecs)
+            pushToGraphView((GraphSpecs) g);
 
-        addDataLoadingTask(task);
-        task.execute();
+        stopProgressBar();
     }
 
     public void clearFiltersSpecs() {

@@ -3,10 +3,8 @@ package Commons;
 import Gui.GuiColors;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 public class GraphSpecs {
     public enum TIME_SPAN {WEEK_SPAN, DAY_SPAN, HOUR_SPAN}
@@ -30,8 +28,6 @@ public class GraphSpecs {
         CPM,
         BounceRate
     }
-
-    ;
 
     private String title, xAxisName, yAxisName;
     private Collection<Tuple<String, Number>> data;

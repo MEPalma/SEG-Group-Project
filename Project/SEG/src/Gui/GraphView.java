@@ -185,7 +185,7 @@ public class GraphView extends RPanel {
                 JPanel dialogView = new JPanel(new BorderLayout());
                 dialogView.setBackground(GuiColors.BASE_SMOKE);
                 dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_SMOKE, 10, true));
-                dialogView.add(new ChooseNewGraphPanel(mainController, dialog), BorderLayout.CENTER);
+                dialogView.add(new ChooseNewGraphPanel(mainController), BorderLayout.CENTER);
 
 
                 /*

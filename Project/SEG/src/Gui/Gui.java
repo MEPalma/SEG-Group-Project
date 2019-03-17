@@ -20,6 +20,9 @@ public class Gui extends JFrame {
 
     private MainController mainController;
 
+    private JPanel popupMessageArea;
+    private JPanel currentPopup;
+
     public Gui() {
         super("Dashboard App");
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Icons/logo.png")));
@@ -43,6 +46,14 @@ public class Gui extends JFrame {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+
+
+        /*
+            POPUPS
+         */
+        this.popupMessageArea = new JPanel(new BorderLayout());
+        this.popupMessageArea.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        this.popupMessageArea.setBackground(GuiColors.BASE_SMOKE);
 
 
         /*
@@ -96,6 +107,7 @@ public class Gui extends JFrame {
         this.mainView.setBackground(GuiColors.BASE_SMOKE);
         this.mainView.add(new SideMenu(mainController), BorderLayout.WEST);
         this.mainView.add(statusDisplay, BorderLayout.NORTH);
+        this.mainView.add(this.popupMessageArea, BorderLayout.EAST);
 
         JPanel tabbedViewTopWrapper = new JPanel(new BorderLayout());
         tabbedViewTopWrapper.setBorder(BorderFactory.createEmptyBorder());
@@ -137,23 +149,39 @@ public class Gui extends JFrame {
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JDialog dialog = new JDialog();
-                dialog.setUndecorated(true);
-                dialog.getContentPane().setLayout(new BorderLayout());
+//                JDialog dialog = new JDialog();
+//                dialog.setUndecorated(true);
+//                dialog.getContentPane().setLayout(new BorderLayout());
+//
+//                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
+//                dialog.getContentPane().add(new TitleLabel("Filters", TitleLabel.CENTER, 18), BorderLayout.NORTH);
+//
+//                int dfWidth = 450;
+//                int dfHeight = 600;
+//                dialog.setSize(new Dimension(dfWidth, dfHeight));
+//
+//                int centerXtmp = menuLabel.getLocationOnScreen().x + 10 - dfWidth;
+//                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
+//                dialog.setLocation(centerXtmp, centerYtmp);
+//
+//                dialog.getContentPane().add(new FiltersMenu(mainController), BorderLayout.CENTER);
+//                dialog.setVisible(true);
+                if (currentPopup != null) {
+                    if (currentPopup instanceof FiltersMenu) {
+                        currentPopup = null;
+                        popupMessageArea.removeAll();
+                        popupMessageArea.repaint();
+                        popupMessageArea.revalidate();
+                        return;
+                    }
+                }
 
-                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
-                dialog.getContentPane().add(new TitleLabel("Filters", TitleLabel.CENTER, 18), BorderLayout.NORTH);
-
-                int dfWidth = 450;
-                int dfHeight = 600;
-                dialog.setSize(new Dimension(dfWidth, dfHeight));
-
-                int centerXtmp = menuLabel.getLocationOnScreen().x + 10 - dfWidth;
-                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
-                dialog.setLocation(centerXtmp, centerYtmp);
-
-                dialog.getContentPane().add(new FiltersMenu(mainController), BorderLayout.CENTER);
-                dialog.setVisible(true);
+                popupMessageArea.removeAll();
+                currentPopup = new FiltersMenu(mainController);
+                currentPopup.setPreferredSize(new Dimension(400, 40));
+                popupMessageArea.add(currentPopup);
+                popupMessageArea.repaint();
+                popupMessageArea.revalidate();
             }
         });
 
@@ -175,34 +203,50 @@ public class Gui extends JFrame {
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JDialog dialog = new JDialog();
-                dialog.setUndecorated(true);
-                dialog.getContentPane().setLayout(new BorderLayout());
-                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
-                dialog.getContentPane().add(new TitleLabel("Add new graph", TitleLabel.CENTER, 18), BorderLayout.NORTH);
+//                JDialog dialog = new JDialog();
+//                dialog.setUndecorated(true);
+//                dialog.getContentPane().setLayout(new BorderLayout());
+//                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
+//                dialog.getContentPane().add(new TitleLabel("Add new graph", TitleLabel.CENTER, 18), BorderLayout.NORTH);
+//
+//                /*
+//                    setup dialog view
+//                 */
+//                JPanel dialogView = new JPanel(new BorderLayout());
+//                dialogView.setBackground(GuiColors.BASE_SMOKE);
+//                dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_SMOKE, 10, true));
+//                dialogView.add(new ChooseNewGraphPanel(mainController, dialog), BorderLayout.CENTER);
+//
+//
+//                /*
+//                    display dialog
+//                 */
+//                int dfWidth = 300;
+//                int dfHeight = 320;
+//                dialog.setSize(new Dimension(dfWidth, dfHeight));
+//
+//                int centerXtmp = menuLabel.getLocationOnScreen().x + 90 - dfWidth;
+//                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
+//                dialog.setLocation(centerXtmp, centerYtmp);
+//
+//                dialog.getContentPane().add(dialogView, BorderLayout.CENTER);
+//                dialog.setVisible(true);
+                if (currentPopup != null) {
+                    if (currentPopup instanceof ChooseNewGraphPanel) {
+                        currentPopup = null;
+                        popupMessageArea.removeAll();
+                        popupMessageArea.repaint();
+                        popupMessageArea.revalidate();
+                        return;
+                    }
+                }
 
-                /*
-                    setup dialog view
-                 */
-                JPanel dialogView = new JPanel(new BorderLayout());
-                dialogView.setBackground(GuiColors.BASE_SMOKE);
-                dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_SMOKE, 10, true));
-                dialogView.add(new ChooseNewGraphPanel(mainController, dialog), BorderLayout.CENTER);
-
-
-                /*
-                    display dialog
-                 */
-                int dfWidth = 300;
-                int dfHeight = 320;
-                dialog.setSize(new Dimension(dfWidth, dfHeight));
-
-                int centerXtmp = menuLabel.getLocationOnScreen().x + 90 - dfWidth;
-                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
-                dialog.setLocation(centerXtmp, centerYtmp);
-
-                dialog.getContentPane().add(dialogView, BorderLayout.CENTER);
-                dialog.setVisible(true);
+                popupMessageArea.removeAll();
+                currentPopup = new ChooseNewGraphPanel(mainController);
+                currentPopup.setPreferredSize(new Dimension(300, 40));
+                popupMessageArea.add(currentPopup);
+                popupMessageArea.repaint();
+                popupMessageArea.revalidate();
             }
         });
 

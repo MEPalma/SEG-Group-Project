@@ -21,7 +21,7 @@ public class DateBrowser extends JPanel {
     private TakeActionListener listener;
 
     public DateBrowser() {
-        this(GuiColors.BASE_PRIME, Stringifiable.globalDateFormat, new Date());//TODO change to simple data format
+        this(GuiColors.BASE_PRIME, Stringifiable.globalDateFormat, new Date());
     }
 
     public DateBrowser(Color background, SimpleDateFormat dateFormat, Date date) {
@@ -160,6 +160,7 @@ class DateBrowserFrame extends JDialog {
 
         MenuLabel goBackOneMonthLabel = new MenuLabel("<", MenuLabel.CENTER, 14);
         goBackOneMonthLabel.setForeground(GuiColors.BASE_WHITE);
+        goBackOneMonthLabel.dropAllListeners();
         goBackOneMonthLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -171,8 +172,19 @@ class DateBrowserFrame extends JDialog {
                 repaint();
                 revalidate();
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                goBackOneMonthLabel.setForeground(GuiColors.BASE_SMOKE);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                goBackOneMonthLabel.setForeground(GuiColors.BASE_WHITE);
+            }
         });
         MenuLabel goForewordOneMonthLabel = new MenuLabel(">", MenuLabel.CENTER, 14);
+        goForewordOneMonthLabel.dropAllListeners();
         goForewordOneMonthLabel.setForeground(GuiColors.BASE_WHITE);
         goForewordOneMonthLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -184,6 +196,16 @@ class DateBrowserFrame extends JDialog {
                 refresh();
                 repaint();
                 revalidate();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                goForewordOneMonthLabel.setForeground(GuiColors.BASE_SMOKE);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                goForewordOneMonthLabel.setForeground(GuiColors.BASE_WHITE);
             }
         });
 

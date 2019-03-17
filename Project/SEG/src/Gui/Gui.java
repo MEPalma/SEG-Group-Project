@@ -57,9 +57,15 @@ public class Gui extends JFrame {
         tabbedViewTabsHoster.setBackground(GuiColors.BASE_SMOKE);
 
         /*
+            STATUS DISPLAY VIEW INITIALIZATION
+         */
+
+        StatusDisplay statusDisplay = new StatusDisplay();
+
+        /*
             INIT MAIN CONTROLLER
          */
-        this.mainController = new MainController(new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster));
+        this.mainController = new MainController(statusDisplay, new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster));
 
 
         /*
@@ -89,6 +95,7 @@ public class Gui extends JFrame {
         this.mainView = new JPanel(new BorderLayout());
         this.mainView.setBackground(GuiColors.BASE_SMOKE);
         this.mainView.add(new SideMenu(mainController), BorderLayout.WEST);
+        this.mainView.add(statusDisplay, BorderLayout.NORTH);
 
         JPanel tabbedViewTopWrapper = new JPanel(new BorderLayout());
         tabbedViewTopWrapper.setBorder(BorderFactory.createEmptyBorder());

@@ -78,7 +78,7 @@ public class GraphManager {
     public static JPanel getGraphCard(GraphSpecs spec) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(spec.getTypeColor());
-        card.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        card.setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, GuiColors.BASE_SMOKE));
 
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(spec.getTypeColor());

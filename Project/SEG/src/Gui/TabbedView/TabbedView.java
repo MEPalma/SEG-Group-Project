@@ -96,7 +96,7 @@ public class TabbedView {
         JPanel tab = new JPanel(new BorderLayout());
         tab.setBackground(color);
         tab.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
-        tab.setPreferredSize(new Dimension(120, 50));
+        tab.setPreferredSize(new Dimension(120, 40));
         tab.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -108,12 +108,12 @@ public class TabbedView {
             }
         });
 
-        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 12);
+        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 16);
         titleLabel.setForeground(GuiColors.BASE_WHITE);
 
         tab.add(titleLabel, BorderLayout.CENTER);
 
-        MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 24);
+        MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 16);
         popLabel.setForeground(GuiColors.BASE_WHITE);
         popLabel.setPreferredSize(new Dimension(20, 20));
         popLabel.dropAllListeners();

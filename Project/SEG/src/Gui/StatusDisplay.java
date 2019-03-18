@@ -24,10 +24,22 @@ public class StatusDisplay extends RPanel {
 
     public void startProgressBar() {
         removeAll();
+
+        JPanel wrapper = new JPanel(new BorderLayout());
+//        wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        wrapper.setBackground(GuiColors.BASE_WHITE);
+
+        TitleLabel titleLabel = new TitleLabel("Loading...", TitleLabel.CENTER, 14);
+        wrapper.add(titleLabel, BorderLayout.NORTH);
+
         JProgressBar progressBar = new JProgressBar(JProgressBar.HORIZONTAL);
         progressBar.setPreferredSize(new Dimension(50, 20));
         progressBar.setIndeterminate(true);
-        add(progressBar, BorderLayout.CENTER);
+        wrapper.add(progressBar, BorderLayout.CENTER);
+
+        add(wrapper, BorderLayout.CENTER);
+
+
         refresh();
     }
 

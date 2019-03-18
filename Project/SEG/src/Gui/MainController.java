@@ -112,7 +112,7 @@ public class MainController {
 
         SwingWorker task = new SwingWorker() {
             @Override
-            protected Object doInBackground() throws Exception {
+            protected Object doInBackground() {
                 startProgressBar();
                 newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
                 GraphManager.setGraphDescription(newGraphSpecs);
@@ -160,16 +160,12 @@ public class MainController {
     public void refreshGraphs() {
         killDataLoadingTasks();
 
-        startProgressBar();
-
         List<Object> graphSpecs = tabbedView.getAllComparables();
 
         tabbedView.clear();
 
         for (Object g : graphSpecs)
             pushToGraphView((GraphSpecs) g);
-
-        stopProgressBar();
     }
 
     public void clearFiltersSpecs() {

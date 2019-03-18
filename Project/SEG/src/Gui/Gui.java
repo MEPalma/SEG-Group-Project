@@ -25,6 +25,8 @@ public class Gui extends JFrame {
     private JPanel currentPopup;
     private TitleLabel campaignName;
 
+    private JPanel filterButtonWrapper, addGraphButtonWrapper;
+
     public Gui() {
         super("Dashboard App");
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Icons/logo.png")));
@@ -54,8 +56,9 @@ public class Gui extends JFrame {
             POPUPS
          */
         this.popupMessageArea = new JPanel(new BorderLayout());
-        this.popupMessageArea.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        this.popupMessageArea.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
         this.popupMessageArea.setBackground(GuiColors.BASE_SMOKE);
+        this.popupMessageArea.setPreferredSize(new Dimension(380, 380));
 
 
         /*
@@ -136,8 +139,6 @@ public class Gui extends JFrame {
     private void setupMainView() {
         this.mainView.add(new SideMenu(mainController), BorderLayout.WEST);
 
-        this.mainView.add(this.popupMessageArea, BorderLayout.EAST);
-
         JPanel tabbedViewTopWrapper = new JPanel(new BorderLayout());
         tabbedViewTopWrapper.setBorder(BorderFactory.createEmptyBorder());
         tabbedViewTopWrapper.setBackground(GuiColors.BASE_SMOKE);
@@ -149,6 +150,8 @@ public class Gui extends JFrame {
         tabbedViewWrapper.setBackground(GuiColors.BASE_SMOKE);
         tabbedViewWrapper.add(tabbedViewTopWrapper, BorderLayout.NORTH);
         tabbedViewWrapper.add(tabbedViewContentHoster, BorderLayout.CENTER);
+        tabbedViewWrapper.add(this.popupMessageArea, BorderLayout.EAST);
+
         this.mainView.add(tabbedViewWrapper, BorderLayout.CENTER);
 
         updateCampaignName();
@@ -163,42 +166,31 @@ public class Gui extends JFrame {
         tabbedViewTopRightFunctions.setBackground(GuiColors.BASE_WHITE);
         tabbedViewTopRightFunctions.add(getShowFiltersMenuLabel());
         tabbedViewTopRightFunctions.add(getAddGraphMenuLabel());
+        tabbedViewTopRightFunctions.setPreferredSize(new Dimension(this.popupMessageArea.getPreferredSize().width, 50));
 
         return tabbedViewTopRightFunctions;
     }
 
     private JPanel getShowFiltersMenuLabel() {
-        JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
-        wrapper.setPreferredSize(new Dimension(120, 60));
+        this.filterButtonWrapper = new JPanel(new BorderLayout());
+        this.filterButtonWrapper.setBackground(GuiColors.BASE_WHITE);
+        this.filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        this.filterButtonWrapper.setPreferredSize(new Dimension(120, 60));
 
         MenuLabel menuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16);
         menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-//                JDialog dialog = new JDialog();
-//                dialog.setUndecorated(true);
-//                dialog.getContentPane().setLayout(new BorderLayout());
-//
-//                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
-//                dialog.getContentPane().add(new TitleLabel("Filters", TitleLabel.CENTER, 18), BorderLayout.NORTH);
-//
-//                int dfWidth = 450;
-//                int dfHeight = 600;
-//                dialog.setSize(new Dimension(dfWidth, dfHeight));
-//
-//                int centerXtmp = menuLabel.getLocationOnScreen().x + 10 - dfWidth;
-//                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
-//                dialog.setLocation(centerXtmp, centerYtmp);
-//
-//                dialog.getContentPane().add(new FiltersMenu(mainController), BorderLayout.CENTER);
-//                dialog.setVisible(true);
+
                 if (currentPopup != null) {
                     if (currentPopup instanceof FiltersMenu) {
                         currentPopup = null;
                         popupMessageArea.removeAll();
+
+                        filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+                        popupMessageArea.setPreferredSize(new Dimension(0, 0));
                         popupMessageArea.repaint();
                         popupMessageArea.revalidate();
                         return;
@@ -207,8 +199,13 @@ public class Gui extends JFrame {
 
                 popupMessageArea.removeAll();
                 currentPopup = new FiltersMenu(mainController);
-                currentPopup.setPreferredSize(new Dimension(400, 40));
+                currentPopup.setBorder(BorderFactory.createEmptyBorder());
                 popupMessageArea.add(currentPopup);
+
+                filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
+                addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+                popupMessageArea.setPreferredSize(new Dimension(380, 380));
                 popupMessageArea.repaint();
                 popupMessageArea.revalidate();
 
@@ -222,17 +219,17 @@ public class Gui extends JFrame {
         });
 
 
-        wrapper.add(menuLabel, BorderLayout.CENTER);
+        this.filterButtonWrapper.add(menuLabel, BorderLayout.CENTER);
 
-        return wrapper;
+        return filterButtonWrapper;
     }
 
     private JPanel getAddGraphMenuLabel() {
 
-        JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
-        wrapper.setPreferredSize(new Dimension(120, 60));
+        this.addGraphButtonWrapper = new JPanel(new BorderLayout());
+        this.addGraphButtonWrapper.setBackground(GuiColors.BASE_WHITE);
+        this.addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        this.addGraphButtonWrapper.setPreferredSize(new Dimension(120, 60));
 
         MenuLabel menuLabel = new MenuLabel("Add Graph", MenuLabel.CENTER, 16);
         menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
@@ -271,6 +268,11 @@ public class Gui extends JFrame {
                 if (currentPopup != null) {
                     if (currentPopup instanceof ChooseNewGraphPanel) {
                         currentPopup = null;
+
+                        menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+                        addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+                        popupMessageArea.setPreferredSize(new Dimension(0, 0));
                         popupMessageArea.removeAll();
                         popupMessageArea.repaint();
                         popupMessageArea.revalidate();
@@ -280,8 +282,13 @@ public class Gui extends JFrame {
 
                 popupMessageArea.removeAll();
                 currentPopup = new ChooseNewGraphPanel(mainController);
-                currentPopup.setPreferredSize(new Dimension(300, 40));
+                currentPopup.setBorder(BorderFactory.createEmptyBorder());
+
+                addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
+                filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
                 popupMessageArea.add(currentPopup);
+                popupMessageArea.setPreferredSize(new Dimension(380, 380));
                 popupMessageArea.repaint();
                 popupMessageArea.revalidate();
 
@@ -295,8 +302,8 @@ public class Gui extends JFrame {
         });
 
 
-        wrapper.add(menuLabel, BorderLayout.CENTER);
-        return wrapper;
+        addGraphButtonWrapper.add(menuLabel, BorderLayout.CENTER);
+        return addGraphButtonWrapper;
     }
 
     @Override

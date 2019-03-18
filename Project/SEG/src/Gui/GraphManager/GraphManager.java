@@ -49,6 +49,9 @@ public class GraphManager {
         barChart.getCategoryPlot().getRangeAxis().setLabelFont(new Font("Verdana", Font.PLAIN, 12));
         barChart.getCategoryPlot().getDomainAxis().setLabelFont(barChart.getCategoryPlot().getRangeAxis().getLabelFont());
 
+        BarRenderer br = (BarRenderer) barChart.getCategoryPlot().getRenderer();
+        br.setMaximumBarWidth(.05);
+
         barChart.getCategoryPlot().getRangeAxis().setTickLabelFont(new Font("Verdana", Font.PLAIN, 8));
         barChart.getCategoryPlot().getDomainAxis().setTickLabelFont(barChart.getCategoryPlot().getRangeAxis().getTickLabelFont());
 

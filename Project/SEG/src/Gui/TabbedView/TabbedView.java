@@ -96,7 +96,7 @@ public class TabbedView {
         tab.setBackground(color);
         tab.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, GuiColors.BASE_WHITE));
         if (myIndex == selectedIndex) {
-            tab.setBorder(BorderFactory.createMatteBorder(4, 2, 4, 2, GuiColors.BASE_WHITE));
+            tab.setBorder(BorderFactory.createMatteBorder(6, 6, 6, 6, color.darker()));
             openTab = tab;
         }
         tab.setPreferredSize(new Dimension(120, 50));
@@ -115,11 +115,12 @@ public class TabbedView {
                     openTab.revalidate();
                 }
                 openTab = tab;
-                tab.setBorder(BorderFactory.createMatteBorder(4, 2, 4, 2, GuiColors.BASE_WHITE));
+
+                tab.setBorder(BorderFactory.createMatteBorder(6, 6, 6, 6, color.darker()));
             }
         });
 
-        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 16);
+        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 14);
         titleLabel.setForeground(GuiColors.BASE_WHITE);
 
         tab.add(titleLabel, BorderLayout.CENTER);

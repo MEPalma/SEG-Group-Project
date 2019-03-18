@@ -42,7 +42,7 @@ public class ChooseNewGraphPanel extends RPanel {
 
 
     public static String[] BOUNCE_DEF = {"Time", "Number of Pages"};
-    public static String[] TIME_SPANS = {"WEEK", "DAY", "HOUR"};
+    public static String[] TIME_SPANS = {"Week", "Day", "Hour"};
 
     private final MainController mainController;
 

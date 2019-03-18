@@ -8,7 +8,6 @@ import Gui.Menus.SideMenu;
 import Gui.TabbedView.TabbedView;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -98,11 +97,12 @@ public class Gui extends JFrame {
 
         TitleLabel appTitleLabel = new TitleLabel(" Dashboard App", JLabel.LEFT, 26);
         appTitleLabel.setForeground(GuiColors.BASE_WHITE);
-        this.northView.add(appTitleLabel, BorderLayout.CENTER);
+        this.northView.add(appTitleLabel, BorderLayout.WEST);
+        this.northView.add(new TitleLabel(" Dashboard App", JLabel.LEFT, 26, this.northView.getBackground()), BorderLayout.EAST);//spacer to center campaign name
 
-        this.campaignName = new TitleLabel(mainController.getCampaignName() + " ", TitleLabel.RIGHT, 18, GuiColors.BASE_WHITE);
+        this.campaignName = new TitleLabel(mainController.getCampaignName() + " ", TitleLabel.CENTER, 18, GuiColors.BASE_WHITE);
         this.campaignName.setFont(new Font("Verdana", Font.ITALIC, 18));
-        this.northView.add(this.campaignName, BorderLayout.EAST);
+        this.northView.add(this.campaignName, BorderLayout.CENTER);
 
         getContentPane().add(this.northView, BorderLayout.NORTH);
 
@@ -115,7 +115,7 @@ public class Gui extends JFrame {
         this.mainView.add(statusDisplay, BorderLayout.NORTH);
         this.getContentPane().add(this.mainView, BorderLayout.CENTER);
 
-        //Wellcome view
+        //Welcome view
         if (mainController.isDbEmpty()) {
             WelcomeProcedure welcomeProcedure = new WelcomeProcedure(mainController);
             welcomeProcedure.setOnClose(new TakeActionListener() {
@@ -234,11 +234,12 @@ public class Gui extends JFrame {
         wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
         wrapper.setPreferredSize(new Dimension(120, 60));
 
-        MenuLabel menuLabel = new MenuLabel("Add", MenuLabel.CENTER, 16);
+        MenuLabel menuLabel = new MenuLabel("Add Graph", MenuLabel.CENTER, 16);
         menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                //DEPRECATED popup
 //                JDialog dialog = new JDialog();
 //                dialog.setUndecorated(true);
 //                dialog.getContentPane().setLayout(new BorderLayout());

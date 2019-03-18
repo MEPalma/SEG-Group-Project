@@ -53,6 +53,8 @@ public class StatusDisplay extends RPanel {
 
 
     public void showErrorMessage(String title, String content) {
+        clear();
+
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
         wrapper.setBackground(GuiColors.RED_ERROR);

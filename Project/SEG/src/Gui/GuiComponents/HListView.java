@@ -1,6 +1,7 @@
 package Gui.GuiComponents;
 
 import Gui.GuiColors;
+import Gui.TakeActionListener;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -13,18 +14,19 @@ import java.util.Collection;
 public class HListView extends JPanel implements Scrollable {
 
     public HListView(Color color, Collection<Component> cells) {
-        super(new GridBagLayout());
+        super(new BorderLayout());
         setBackground(color);
         setBorder(BorderFactory.createEmptyBorder());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.VERTICAL;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        JPanel refAddTo = this;
+        for (Component cellContent : cells) {
+            JPanel card = new JPanel(new BorderLayout());
+            card.setBackground(color);
+            card.setBorder(BorderFactory.createEmptyBorder());
 
-        for (Component cell : cells) {
-            add(cell, gbc);
+            card.add(cellContent, BorderLayout.WEST);
+            refAddTo.add(card, BorderLayout.CENTER);
+            refAddTo = card;
         }
     }
 
@@ -49,25 +51,41 @@ public class HListView extends JPanel implements Scrollable {
 
         MenuLabel goLeftLabel = new MenuLabel("<", MenuLabel.CENTER, 20);
         goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
-        goLeftLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() - 150);
-                listScroller.repaint();
-                listScroller.revalidate();
-
-                goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
-            }
-        });
         wrapper.add(goLeftLabel, BorderLayout.WEST);
 
         MenuLabel goRightLabel = new MenuLabel(">", MenuLabel.CENTER, 20);
         goRightLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+        wrapper.add(goRightLabel, BorderLayout.EAST);
+
+        TakeActionListener showHideScrollArrows = new TakeActionListener() {
+            @Override
+            public void takeAction() {
+                int extent = listScroller.getHorizontalScrollBar().getModel().getExtent();
+                int value = listScroller.getHorizontalScrollBar().getValue() + extent;
+                int max = listScroller.getHorizontalScrollBar().getMaximum();
+                int min = listScroller.getHorizontalScrollBar().getMinimum();
+
+                goLeftLabel.setVisible(true);
+                goRightLabel.setVisible(true);
+
+                if ((value - extent) == min) goLeftLabel.setVisible(false);
+                if (value == max) goRightLabel.setVisible(false);
+
+                wrapper.repaint();
+                wrapper.revalidate();
+            }
+        };
+
+        listScroller.addMouseWheelListener(new MouseAdapter() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() + 16 * e.getWheelRotation());
+                listScroller.repaint();
+                listScroller.revalidate();
+                showHideScrollArrows.takeAction();
+            }
+        });
+
         goRightLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -76,6 +94,8 @@ public class HListView extends JPanel implements Scrollable {
                 listScroller.revalidate();
 
                 goRightLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+                showHideScrollArrows.takeAction();
             }
 
             @Override
@@ -83,25 +103,26 @@ public class HListView extends JPanel implements Scrollable {
                 goRightLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
             }
         });
-        wrapper.add(goRightLabel, BorderLayout.EAST);
 
-
-        listScroller.addMouseWheelListener(new MouseAdapter() {
+        goLeftLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() + 16 * e.getWheelRotation());
+            public void mousePressed(MouseEvent e) {
+                listScroller.getHorizontalScrollBar().setValue(listScroller.getHorizontalScrollBar().getValue() - 150);
                 listScroller.repaint();
                 listScroller.revalidate();
 
-//                goLeftLabel.setVisible(true);
-//                goRightLabel.setVisible(true);
-//
-//                System.out.println(listScroller.getHorizontalScrollBar().getMaximum());
-//
-//                if (listScroller.getHorizontalScrollBar().getValue() == 0) goLeftLabel.setVisible(false);
-//                if (listScroller.getHorizontalScrollBar().isMaximumSizeSet()) goRightLabel.setVisible(false);
+                goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+                showHideScrollArrows.takeAction();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
             }
         });
+
+        showHideScrollArrows.takeAction();
 
         return wrapper;
     }

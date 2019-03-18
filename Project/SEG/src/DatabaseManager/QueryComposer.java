@@ -316,7 +316,7 @@ public class QueryComposer {
                 tmp.append(" inner join Users on userid=Users.id ");
                 //WHERE
                 tmp.append("WHERE ");
-            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate || graphSpecs.getMetric() == GraphSpecs.METRICS.NumberConversions) {
+            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate || graphSpecs.getMetric() == GraphSpecs.METRICS.NumberConversions || graphSpecs.getMetric() == GraphSpecs.METRICS.NumberBounces) {
                 tmp.append(" inner join Users on server_logs.userid=Users.id");
                 tmp.append(" inner join impression_logs on server_logs.userid=impression_logs.userid");
                 tmp.append(" WHERE ");

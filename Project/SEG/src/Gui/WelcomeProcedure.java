@@ -117,7 +117,7 @@ public class WelcomeProcedure extends JPanel {
         wrapper.add(titleLabel, BorderLayout.NORTH);
 
         TitleLabel messageLabel = new TitleLabel("<html>Good news: you are all set!<br><br><br>I have prepared two graphs " +
-                "for you, bot you can add more by clicking on the add button.<br>Last but not least don't forget to visit the " +
+                "for you, but you can add more by clicking on the add button.<br>Last but not least, don't forget to visit the " +
                 "filters section if you wish to filter the data on the graphs.</html>", TitleLabel.CENTER, 16);
         messageLabel.setBorder(BorderFactory.createEmptyBorder(8, 50, 8, 50));
         messageLabel.setForeground(GuiColors.BASE_PRIME);

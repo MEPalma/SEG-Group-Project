@@ -25,7 +25,7 @@ public class StatusDisplay extends RPanel {
         revalidate();
     }
 
-    public void newProgressBar() {
+    public synchronized void newProgressBar() {
         ++this.nLoadingRequests;
 
         removeAll();
@@ -48,7 +48,7 @@ public class StatusDisplay extends RPanel {
         refresh();
     }
 
-    public void killProgressBar() {
+    public synchronized void killProgressBar() {
         if (this.nLoadingRequests > 0) -- this.nLoadingRequests;
         if (this.nLoadingRequests == 0) clear();
     }
@@ -93,10 +93,8 @@ public class StatusDisplay extends RPanel {
     }
 
     private void clear() {
-        if (this.nLoadingRequests == 0) {
-            removeAll();
-            refresh();
-        }
+        removeAll();
+        refresh();
     }
 
 }

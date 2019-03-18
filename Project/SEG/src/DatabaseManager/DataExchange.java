@@ -154,43 +154,21 @@ public class DataExchange {
     }
 
     public boolean isEmpty() {
-        try {
-            ResultSet tmp;
+        int tmp  = 0;
 
-            //impression logs
-            tmp = this.dbM.query(QueryComposer.countAllFrom_IMPRESSION_LOGS);
-            if (tmp.getInt(1) > 0) {
-                close(tmp);
-                return false;
-            } else close(tmp);
+        tmp = countAllFrom_CLICK_LOGS();
+        if (tmp > 0) return false;
 
+        tmp = countAllFrom_IMPRESSION_LOGS();
+        if (tmp > 0) return false;
 
-            //users
-            tmp = this.dbM.query(QueryComposer.countAllFrom_USERS);
-            if (tmp.getInt(1) > 0) {
-                close(tmp);
-                return false;
-            } else close(tmp);
+        tmp = countAllFrom_SERVER_LOGS();
+        if (tmp > 0) return false;
 
-            //clicks
-            tmp = this.dbM.query(QueryComposer.countAllFrom_CLICK_LOGS);
-            if (tmp.getInt(1) > 0) {
-                close(tmp);
-                return false;
-            } else close(tmp);
+        tmp = countAllFrom_USERS();
+        if (tmp > 0) return false;
 
-            //server
-            tmp = this.dbM.query(QueryComposer.countAllFrom_SERVER_LOGS);
-            if (tmp.getInt(1) > 0) {
-                close(tmp);
-                return false;
-            } else close(tmp);
-
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return true;
     }
 
     /*
@@ -672,7 +650,6 @@ public class DataExchange {
                 ResultSet resultSet = this.dbM.query(QueryComposer.composeQuery(graphSpecs));
                 List tmp = getInfoTuple(resultSet);
                 close(resultSet);
-                System.out.println(resultSet);
                 return tmp;
             }
         } catch (Exception ex) {
@@ -784,8 +761,7 @@ public class DataExchange {
 
                 result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue())));
             }
-//            for(int i=1;i<result.size();i++)
-//                System.out.println(result.get(i).getX()+"  "+result.get(i).getY());
+
             return result;
 
 

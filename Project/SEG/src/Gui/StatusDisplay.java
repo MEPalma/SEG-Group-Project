@@ -31,7 +31,6 @@ public class StatusDisplay extends RPanel {
         removeAll();
 
         JPanel wrapper = new JPanel(new BorderLayout());
-//        wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
         wrapper.setBackground(GuiColors.BASE_WHITE);
 
         TitleLabel titleLabel = new TitleLabel("Loading...", TitleLabel.CENTER, 14);
@@ -44,12 +43,11 @@ public class StatusDisplay extends RPanel {
 
         add(wrapper, BorderLayout.CENTER);
 
-
         refresh();
     }
 
     public synchronized void killProgressBar() {
-        if (this.nLoadingRequests > 0) -- this.nLoadingRequests;
+        if (this.nLoadingRequests > 0) this.nLoadingRequests--;
         if (this.nLoadingRequests == 0) clear();
     }
 

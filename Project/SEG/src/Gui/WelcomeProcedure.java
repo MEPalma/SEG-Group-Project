@@ -94,6 +94,8 @@ public class WelcomeProcedure extends JPanel {
 
     private JPanel getShowFinalMessage() {
 
+        mainController.clearFiltersSpecs();
+
         mainController.pushToGraphView(new GraphSpecs(
                 GraphSpecs.METRICS.NumberImpressions,
                 GraphSpecs.TIME_SPAN.WEEK_SPAN,

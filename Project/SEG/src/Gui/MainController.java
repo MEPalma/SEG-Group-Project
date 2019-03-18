@@ -114,7 +114,6 @@ public class MainController {
             @Override
             protected Object doInBackground() {
                 startProgressBar();
-                System.out.println("on");
                 newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
                 GraphManager.setGraphDescription(newGraphSpecs);
 
@@ -125,7 +124,6 @@ public class MainController {
             protected void done() {
                 tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs), newGraphSpecs.getTypeColor(), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs);
                 stopProgressBar();
-                System.out.println("off");
                 removeDataLoadingTask(this);
                 super.done();
             }

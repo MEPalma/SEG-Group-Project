@@ -35,6 +35,27 @@ public class CSVParser {
     }
 
     /**
+     * This method is needed as the format of the csv cannot comply with the
+     * enumeration rules in java.
+     *
+     * @param string
+     * @return
+     */
+    private static UserEntry.Age parseAge(String string) {
+        if (string.equals("<25")) {
+            return UserEntry.Age.Age_less_than_25;
+        } else if (string.equals("25-34")) {
+            return UserEntry.Age.Age_25_34;
+        } else if (string.equals("35-44")) {
+            return UserEntry.Age.Age_35_44;
+        } else if (string.equals("45-54")) {
+            return UserEntry.Age.Age_45_54;
+        } else {
+            return UserEntry.Age.Age_more_than_54;
+        }
+    }
+
+    /**
      * This method clears the database, then parses all the csv files into
      * memory, then flushes the result into the database. During the process
      * pragma on foreign keys is disabled and commitments are set manually
@@ -96,7 +117,7 @@ public class CSVParser {
     }
 
     private void parseClickLogFile(Statement sqlStmt) throws SQLException, IOException {
-        // 0     1      2     
+        // 0     1      2
         //DATE | ID | clickcost
 
         try (BufferedReader br = new BufferedReader(new FileReader(this.clickLogFile), 40000)) {
@@ -126,27 +147,6 @@ public class CSVParser {
                 }
             }
             br.close();
-        }
-    }
-
-    /**
-     * This method is needed as the format of the csv cannot comply with the
-     * enumeration rules in java.
-     *
-     * @param string
-     * @return
-     */
-    private static UserEntry.Age parseAge(String string) {
-        if (string.equals("<25")) {
-            return UserEntry.Age.Age_less_than_25;
-        } else if (string.equals("25-34")) {
-            return UserEntry.Age.Age_25_34;
-        } else if (string.equals("35-44")) {
-            return UserEntry.Age.Age_35_44;
-        } else if (string.equals("45-54")) {
-            return UserEntry.Age.Age_45_54;
-        } else {
-            return UserEntry.Age.Age_more_than_54;
         }
     }
 

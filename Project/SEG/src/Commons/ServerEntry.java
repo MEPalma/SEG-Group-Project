@@ -6,16 +6,12 @@ import java.util.Date;
 
 public class ServerEntry implements Stringifiable {
     public static int AUTO_INDEX = -1;
-
-    public static enum Conversion {Yes, No, Unknown}
-
     private int id;
     private String userId;
     private Date entryDate;
     private Date exitDate;
     private Number pagesViewed;
     private Conversion conversion;
-
     public ServerEntry(int id, String userId, Date entryDate, Date exitDate, Number pagesViewed, Conversion conversion) {
         this.id = id;
         this.userId = userId;
@@ -65,44 +61,46 @@ public class ServerEntry implements Stringifiable {
         return entryDate;
     }
 
-    public Date getExitDate() {
-        return exitDate;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public Number getPagesViewed() {
-        return pagesViewed;
-    }
-
-    public Conversion getConversion() {
-        return conversion;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public void setEntryDate(Date entryDate) {
         this.entryDate = entryDate;
+    }
+
+    public Date getExitDate() {
+        return exitDate;
     }
 
     public void setExitDate(Date exitDate) {
         this.exitDate = exitDate;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Number getPagesViewed() {
+        return pagesViewed;
+    }
+
     public void setPagesViewed(Number pagesViewed) {
         this.pagesViewed = pagesViewed;
+    }
+
+    public Conversion getConversion() {
+        return conversion;
     }
 
     public void setConversion(Conversion conversion) {
         this.conversion = conversion;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public static enum Conversion {Yes, No, Unknown}
 
 }

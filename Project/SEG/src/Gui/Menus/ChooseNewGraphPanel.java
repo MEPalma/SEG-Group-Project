@@ -26,7 +26,8 @@ public class ChooseNewGraphPanel extends RPanel {
             "CPC",
             "CPM",
             "Bounce Rate"};
-
+    public static String[] BOUNCE_DEF = {"Time", "Number of Pages"};
+    public static String[] TIME_SPANS = {"Week", "Day", "Hour"};
     private static String[] METRICS_DESCRIPTIONS = {
             "An impression occurs whenever an ad is shown to a user, regardless of whether they click on it.",
             "A click occurs when a user clicks on an ad that is shown to them.",
@@ -39,11 +40,6 @@ public class ChooseNewGraphPanel extends RPanel {
             "The average amount of money spent on an advertising campaign for each click.",
             "The average amount of money spent on an advertising campaign for every one thousand impressions.",
             "The average number of bounces per click."};
-
-
-    public static String[] BOUNCE_DEF = {"Time", "Number of Pages"};
-    public static String[] TIME_SPANS = {"Week", "Day", "Hour"};
-
     private final MainController mainController;
 
     private final TitleLabel messageLabel;

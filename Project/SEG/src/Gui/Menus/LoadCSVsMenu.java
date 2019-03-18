@@ -22,12 +22,9 @@ import java.util.List;
 
 public class LoadCSVsMenu extends RPanel {
 
-    private enum FileType {IMPRESSION_LOGS, CLICK_LOGS, SERVER_LOGS, UNRECOCNISED}
-
     public static Color BACKGROUND = GuiColors.BASE_WHITE;
     private final MainController mainController;
     private TakeActionListener onLoaded;
-
     private String campaignName;
 
     public LoadCSVsMenu(MainController mainController) {
@@ -97,6 +94,9 @@ public class LoadCSVsMenu extends RPanel {
                                     parseButton.setText("LOAD AGAIN");
                                     parseButton.setEnabled(true);
                                     parseButton.setForeground(GuiColors.BASE_PRIME);
+
+                                    mainController.clearFiltersSpecs();
+                                    mainController.refreshGraphs();
 
                                     return null;
                                 }
@@ -377,4 +377,6 @@ public class LoadCSVsMenu extends RPanel {
         mainController.addDataLoadingTask(backgroundTask);
         backgroundTask.execute();
     }
+
+    private enum FileType {IMPRESSION_LOGS, CLICK_LOGS, SERVER_LOGS, UNRECOCNISED}
 }

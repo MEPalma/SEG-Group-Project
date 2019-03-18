@@ -24,44 +24,44 @@ public class FilterSpecs {
         return startDate;
     }
 
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public List<UserEntry.Gender> getGenders() {
-        return genders;
-    }
-
-    public List<UserEntry.Age> getAges() {
-        return ages;
-    }
-
-    public List<UserEntry.Income> getIncomes() {
-        return incomes;
-    }
-
-    public List<ImpressionEntry.Context> getContexts() {
-        return contexts;
-    }
-
     public void setStartDate(String startDate) {
         this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
     }
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
+    public List<UserEntry.Gender> getGenders() {
+        return genders;
+    }
+
     public void setGenders(List<UserEntry.Gender> genders) {
         this.genders = genders;
+    }
+
+    public List<UserEntry.Age> getAges() {
+        return ages;
     }
 
     public void setAges(List<UserEntry.Age> ages) {
         this.ages = ages;
     }
 
+    public List<UserEntry.Income> getIncomes() {
+        return incomes;
+    }
+
     public void setIncomes(List<UserEntry.Income> incomes) {
         this.incomes = incomes;
+    }
+
+    public List<ImpressionEntry.Context> getContexts() {
+        return contexts;
     }
 
     public void setContexts(List<ImpressionEntry.Context> contexts) {

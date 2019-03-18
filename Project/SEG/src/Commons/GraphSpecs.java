@@ -9,36 +9,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class GraphSpecs {
-    public enum TIME_SPAN {WEEK_SPAN, DAY_SPAN, HOUR_SPAN}
-
-    public enum BOUNCE_DEF {TIME, NPAGES}
-
-    public enum METRICS {
-        NumberImpressions,
-        NumberClicks,
-        NumberUniques,
-        NumberBounces,
-        NumberConversions,
-        TotalCost,
-        CTR,
-        CPA,
-        CPC,
-        CPM,
-        BounceRate,
-        ImpressionCost,
-        ClickCost
-    }
-
-    private String title, xAxisName, yAxisName;
-    private Collection<Tuple<String, Number>> data;
-
     private final METRICS metric;
     private final TIME_SPAN timespan;
-
     private final FilterSpecs filterSpecs;
-
     private final BOUNCE_DEF bounceDef;
-
+    private String title, xAxisName, yAxisName;
+    private Collection<Tuple<String, Number>> data;
     public GraphSpecs(METRICS metric, TIME_SPAN timespan, BOUNCE_DEF bounceDef, FilterSpecs filterSpecs) {
         this.metric = metric;
         this.timespan = timespan;
@@ -68,16 +44,32 @@ public class GraphSpecs {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Collection getData() {
         return data;
+    }
+
+    public void setData(Collection<Tuple<String, Number>> data) {
+        this.data = data;
     }
 
     public String getxAxisName() {
         return xAxisName;
     }
 
+    public void setxAxisName(String xAxisName) {
+        this.xAxisName = xAxisName;
+    }
+
     public String getyAxisName() {
         return yAxisName;
+    }
+
+    public void setyAxisName(String yAxisName) {
+        this.yAxisName = yAxisName;
     }
 
     public TIME_SPAN getType() {
@@ -122,10 +114,6 @@ public class GraphSpecs {
         return this.filterSpecs.getEndDate();
     }
 
-    public void setData(Collection<Tuple<String, Number>> data) {
-        this.data = data;
-    }
-
     public FilterSpecs getFilterSpecs() {
         return filterSpecs;
     }
@@ -134,22 +122,30 @@ public class GraphSpecs {
         return bounceDef;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setxAxisName(String xAxisName) {
-        this.xAxisName = xAxisName;
-    }
-
-    public void setyAxisName(String yAxisName) {
-        this.yAxisName = yAxisName;
-    }
-
     public boolean containsFilters() {
         return (getGenders().size() > 0 ||
                 getIncomes().size() > 0 ||
                 getAges().size() > 0 ||
                 getContexts().size() > 0);
+    }
+
+    public enum TIME_SPAN {WEEK_SPAN, DAY_SPAN, HOUR_SPAN}
+
+    public enum BOUNCE_DEF {TIME, NPAGES}
+
+    public enum METRICS {
+        NumberImpressions,
+        NumberClicks,
+        NumberUniques,
+        NumberBounces,
+        NumberConversions,
+        TotalCost,
+        CTR,
+        CPA,
+        CPC,
+        CPM,
+        BounceRate,
+        ImpressionCost,
+        ClickCost
     }
 }

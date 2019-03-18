@@ -182,31 +182,31 @@ class Tab {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public JPanel getContent() {
         return content;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public Object getComparable() {
-        return comparable;
     }
 
     public void setContent(JPanel content) {
         this.content = content;
     }
 
-    public void setComparable(Object comparable) {
-        this.comparable = comparable;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public Color getColor() {
+        return color;
     }
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public Object getComparable() {
+        return comparable;
+    }
+
+    public void setComparable(Object comparable) {
+        this.comparable = comparable;
     }
 }

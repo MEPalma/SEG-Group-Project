@@ -4,37 +4,23 @@ import DatabaseManager.Stringifiable;
 
 public class UserEntry implements Stringifiable {
 
-    public static enum Gender {
-        Male, Female, Unknown
-    }
-
-    ;
-
-    public static enum Age {
-        Age_less_than_25, Age_25_34, Age_35_44, Age_45_54, Age_more_than_54, Unknown
-    }
-
-    ;
-
-    public static enum Income {
-        Low, Medium, High, Unknown
-    }
-
-    ;
-
     //IN SAME ORDER AS IN DB TABLE
     private String id;
-    private Gender gender;
-    private Age age;
-    private Income income;
 
+    ;
+    private Gender gender;
+
+    ;
+    private Age age;
+
+    ;
+    private Income income;
     public UserEntry(String id, Gender gender, Age age, Income income) {
         this.id = id;
         this.gender = gender;
         this.age = age;
         this.income = income;
     }
-
     public UserEntry() {
         this("", Gender.Unknown, Age.Unknown, Income.Unknown);
     }
@@ -72,31 +58,43 @@ public class UserEntry implements Stringifiable {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Gender getGender() {
         return gender;
-    }
-
-    public Age getAge() {
-        return age;
-    }
-
-    public Income getIncome() {
-        return income;
     }
 
     public void setGender(Gender gender) {
         this.gender = gender;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public Age getAge() {
+        return age;
     }
 
     public void setAge(Age age) {
         this.age = age;
     }
 
+    public Income getIncome() {
+        return income;
+    }
+
     public void setIncome(Income income) {
         this.income = income;
+    }
+
+    public static enum Gender {
+        Male, Female, Unknown
+    }
+
+    public static enum Age {
+        Age_less_than_25, Age_25_34, Age_35_44, Age_45_54, Age_more_than_54, Unknown
+    }
+
+    public static enum Income {
+        Low, Medium, High, Unknown
     }
 }

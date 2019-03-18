@@ -20,6 +20,8 @@ public class MainController {
     private final List<SwingWorker> dataLoadingTasks;
     private final StatusDisplay statusDisplay;
     private final Gui gui;
+    private final GuiColors guiColors;
+    private final FilterSpecs filterSpecs;
 
     public MainController(Gui gui, StatusDisplay statusDisplay, TabbedView tabbedView) {
         this.dataExchange = new DataExchange(new DatabaseManager());
@@ -27,12 +29,17 @@ public class MainController {
         this.tabbedView = tabbedView;
         this.statusDisplay = statusDisplay;
         this.dataLoadingTasks = new LinkedList<>();
+        this.guiColors = new GuiColors();
         this.filterSpecs = new FilterSpecs();
         clearFiltersSpecs();
     }
 
     public void addDataLoadingTask(SwingWorker newTask) {
         this.dataLoadingTasks.add(newTask);
+    }
+
+    public GuiColors getGuiColors() {
+        return guiColors;
     }
 
     private void killDataLoadingTasks() {
@@ -92,14 +99,14 @@ public class MainController {
         return this.dataExchange.getEndDate();
     }
 
-    public boolean isDbEmpty() {
-        return this.dataExchange.isEmpty();
-    }
-
 
     /*
         GRAPHS
     */
+
+    public boolean isDbEmpty() {
+        return this.dataExchange.isEmpty();
+    }
 
     public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
         GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getFilterSpecs());
@@ -107,6 +114,11 @@ public class MainController {
         if (this.tabbedView.containsComparable(graphSpecs)) return null;
         else return graphSpecs;
     }
+
+
+    /*
+        FILTERS
+     */
 
     public void pushToGraphView(GraphSpecs newGraphSpecs) {
 
@@ -132,13 +144,6 @@ public class MainController {
         addDataLoadingTask(task);
         task.execute();
     }
-
-
-    /*
-        FILTERS
-     */
-
-    private final FilterSpecs filterSpecs;
 
     public FilterSpecs getFilterSpecs() {
         return this.filterSpecs;

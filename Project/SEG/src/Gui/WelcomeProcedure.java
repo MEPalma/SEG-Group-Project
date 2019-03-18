@@ -12,8 +12,8 @@ import java.awt.event.MouseEvent;
 
 public class WelcomeProcedure extends JPanel {
     private final MainController mainController;
-    private TakeActionListener onClose;
     private final JPanel this_ = this;
+    private TakeActionListener onClose;
 
     public WelcomeProcedure(MainController mainController) {
         super(new BorderLayout());

@@ -372,7 +372,7 @@ public class FiltersMenu extends RPanel {
     private JPanel getApplyOrClearButtons() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(8, 0, 0,0,  GuiColors.BASE_WHITE));
+        wrapper.setBorder(BorderFactory.createMatteBorder(8, 0, 0, 0, GuiColors.BASE_WHITE));
 
         JPanel choicesSplitter = new JPanel(new GridLayout(1, 2));
         choicesSplitter.setBackground(wrapper.getBackground());

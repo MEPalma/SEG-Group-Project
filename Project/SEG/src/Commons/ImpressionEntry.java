@@ -7,18 +7,12 @@ import java.util.Date;
 public class ImpressionEntry implements Stringifiable {
 
     public static int AUTO_INDEX = -1;
-
-    public static enum Context {
-        News, Shopping, SocialMedia, Travel, Hobbies, Blog, Unknown
-    }
-
     //IN SAME ORDER AS IN DB TABLE
     private int id;
     private String userId;
     private Date date;
     private Context context;
     private Number impressionCost;
-
     public ImpressionEntry(int id, String userId, Date date, Context context, Number impressionCost) {
         this.id = id;
         this.userId = userId;
@@ -72,40 +66,44 @@ public class ImpressionEntry implements Stringifiable {
         return date;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public String getUserId() {
         return userId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public Number getImpressionCost() {
-        return impressionCost;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public void setContext(Context context) {
         this.context = context;
     }
 
+    public Number getImpressionCost() {
+        return impressionCost;
+    }
+
     public void setImpressionCost(Number impressionCost) {
         this.impressionCost = impressionCost;
+    }
+
+    public static enum Context {
+        News, Shopping, SocialMedia, Travel, Hobbies, Blog, Unknown
     }
 
 }

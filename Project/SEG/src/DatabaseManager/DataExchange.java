@@ -54,14 +54,6 @@ public class DataExchange {
     }
 
     /**
-     * closes the connection of the database. Do this only before exiting the
-     * application!
-     */
-    public void close() {
-        this.dbM.close();
-    }
-
-    /**
      * closes the ResultSet of a query. this should be called at the end of
      * every parsing routine.
      *
@@ -73,6 +65,14 @@ public class DataExchange {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * closes the connection of the database. Do this only before exiting the
+     * application!
+     */
+    public void close() {
+        this.dbM.close();
     }
 
     /**
@@ -154,7 +154,7 @@ public class DataExchange {
     }
 
     public boolean isEmpty() {
-        int tmp  = 0;
+        int tmp = 0;
 
         tmp = countAllFrom_CLICK_LOGS();
         if (tmp > 0) return false;
@@ -577,13 +577,6 @@ public class DataExchange {
         }
     }
 
-    /*
-        Settings
-     */
-    public void setCampaignName(String name) {
-        this.dbM.writeQuery(QueryComposer.setCampaignName(name));
-    }
-
     public String getCampaignName() {
         ResultSet resultSet = this.dbM.query(QueryComposer.getCampaignName);
         try {
@@ -592,6 +585,13 @@ public class DataExchange {
             setCampaignName("Campaign name");
             return getCampaignName();
         }
+    }
+
+    /*
+        Settings
+     */
+    public void setCampaignName(String name) {
+        this.dbM.writeQuery(QueryComposer.setCampaignName(name));
     }
 
     public List<Tuple<String, Number>> getGraphData(GraphSpecs graphSpecs) {

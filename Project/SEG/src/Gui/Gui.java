@@ -8,6 +8,7 @@ import Gui.Menus.SideMenu;
 import Gui.TabbedView.TabbedView;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -210,6 +211,13 @@ public class Gui extends JFrame {
                 popupMessageArea.add(currentPopup);
                 popupMessageArea.repaint();
                 popupMessageArea.revalidate();
+
+                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
             }
         });
 
@@ -275,6 +283,13 @@ public class Gui extends JFrame {
                 popupMessageArea.add(currentPopup);
                 popupMessageArea.repaint();
                 popupMessageArea.revalidate();
+
+                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
             }
         });
 

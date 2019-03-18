@@ -20,6 +20,8 @@ public class TabbedView {
 
     private final List<Tab> tabs;
 
+    private JPanel openTab;
+
     private int selectedIndex;
 
     public TabbedView(JPanel tabsHost, JPanel contentHost) {
@@ -93,6 +95,10 @@ public class TabbedView {
         JPanel tab = new JPanel(new BorderLayout());
         tab.setBackground(color);
         tab.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, GuiColors.BASE_WHITE));
+        if (myIndex == selectedIndex) {
+            tab.setBorder(BorderFactory.createMatteBorder(4, 2, 4, 2, GuiColors.BASE_WHITE));
+            openTab = tab;
+        }
         tab.setPreferredSize(new Dimension(120, 50));
         tab.addMouseListener(new MouseAdapter() {
             @Override
@@ -102,6 +108,14 @@ public class TabbedView {
                 contentHost.add(tabs.get(selectedIndex).getContent(), BorderLayout.CENTER);
                 contentHost.repaint();
                 contentHost.revalidate();
+
+                if (openTab != null) {
+                    openTab.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, GuiColors.BASE_WHITE));
+                    openTab.repaint();
+                    openTab.revalidate();
+                }
+                openTab = tab;
+                tab.setBorder(BorderFactory.createMatteBorder(4, 2, 4, 2, GuiColors.BASE_WHITE));
             }
         });
 

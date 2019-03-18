@@ -3,10 +3,10 @@ package Gui.Menus;
 import Commons.ImpressionEntry;
 import Commons.UserEntry;
 import Gui.DateBrowser.DateBrowser;
-import Gui.TakeActionListener;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;
 import Gui.MainController;
+import Gui.TakeActionListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,19 +38,7 @@ public class FiltersMenu extends RPanel {
         menus.add(getDateRange());
         menus.add(getAudienceSegments());
         menus.add(getIncome());
-
-        MenuLabel clearFiltersLabel = new MenuLabel("Clear all filters", MenuLabel.LEFT, 16);
-        clearFiltersLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
-        clearFiltersLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                //TODO Are you sure message
-                mainController.clearFiltersSpecs();
-                mainController.refreshGraphs();
-                refresh();
-            }
-        });
-        menus.add(clearFiltersLabel);
+        menus.add(getApplyOrClearButtons());
 
         add(new ListView(getBackground(), menus).getWrappedInScroll(true), BorderLayout.CENTER);
 
@@ -66,13 +54,11 @@ public class FiltersMenu extends RPanel {
             startDate.setDate(globalDateFormat.parse(mainController.getFilterSpecs().getStartDate()));
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("INIT THIS FROM THE LOADING!!!!!!!!!!!!!");
         }
         startDate.setDateChangedListener(new TakeActionListener() {
             @Override
             public void takeAction() {
                 mainController.getFilterSpecs().setStartDate(globalDateFormat.format(startDate.getDate()));
-                mainController.refreshGraphs();
             }
         });
 
@@ -81,13 +67,11 @@ public class FiltersMenu extends RPanel {
             endDate.setDate(globalDateFormat.parse(mainController.getFilterSpecs().getEndDate()));
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("INIT THIS FROM THE LOADING!!!!!!!!!!!!!");
         }
         endDate.setDateChangedListener(new TakeActionListener() {
             @Override
             public void takeAction() {
                 mainController.getFilterSpecs().setEndDate(globalDateFormat.format(endDate.getDate()));
-                mainController.refreshGraphs();
             }
         });
 
@@ -128,10 +112,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (maleOption.isSelected()) {
                     mainController.getFilterSpecs().getGenders().add(UserEntry.Gender.Male);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getGenders().remove(UserEntry.Gender.Male);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -143,10 +125,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (femaleOption.isSelected()) {
                     mainController.getFilterSpecs().getGenders().add(UserEntry.Gender.Female);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getGenders().remove(UserEntry.Gender.Female);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -161,10 +141,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opAge_less_than_25.isSelected()) {
                     mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_less_than_25);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getAges().remove(UserEntry.Age.Age_less_than_25);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -176,10 +154,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opAge_25_34.isSelected()) {
                     mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_25_34);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getAges().remove(UserEntry.Age.Age_25_34);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -191,10 +167,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opAge_35_44.isSelected()) {
                     mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_35_44);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getAges().remove(UserEntry.Age.Age_35_44);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -206,10 +180,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opAge_45_54.isSelected()) {
                     mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_45_54);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getAges().remove(UserEntry.Age.Age_45_54);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -221,10 +193,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opAge_more_than_54.isSelected()) {
                     mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_more_than_54);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getAges().remove(UserEntry.Age.Age_more_than_54);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -239,10 +209,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opNews.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.News);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.News);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -254,10 +222,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opShopping.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Shopping);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.Shopping);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -269,10 +235,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opSocialMedia.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.SocialMedia);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.SocialMedia);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -284,10 +248,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opTravels.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Travel);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.Travel);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -299,10 +261,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opHobbies.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Hobbies);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.Hobbies);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -314,10 +274,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opBlog.isSelected()) {
                     mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Blog);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.Blog);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -369,10 +327,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opLowIncome.isSelected()) {
                     mainController.getFilterSpecs().getIncomes().add(UserEntry.Income.Low);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getIncomes().remove(UserEntry.Income.Low);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -384,10 +340,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (opMediumIncome.isSelected()) {
                     mainController.getFilterSpecs().getIncomes().add(UserEntry.Income.Medium);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getIncomes().remove(UserEntry.Income.Medium);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -399,10 +353,8 @@ public class FiltersMenu extends RPanel {
             public void actionPerformed(ActionEvent e) {
                 if (highIncome.isSelected()) {
                     mainController.getFilterSpecs().getIncomes().add(UserEntry.Income.High);
-                    mainController.refreshGraphs();
                 } else {
                     mainController.getFilterSpecs().getIncomes().remove(UserEntry.Income.High);
-                    mainController.refreshGraphs();
                 }
             }
         });
@@ -413,6 +365,46 @@ public class FiltersMenu extends RPanel {
         wrapper.setBackground(GuiColors.BASE_WHITE);
         wrapper.add(contextTitle, BorderLayout.NORTH);
         wrapper.add(contexts, BorderLayout.CENTER);
+
+        return wrapper;
+    }
+
+    private JPanel getApplyOrClearButtons() {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBorder(BorderFactory.createMatteBorder(8, 0, 0,0,  GuiColors.BASE_WHITE));
+
+        JPanel choicesSplitter = new JPanel(new GridLayout(1, 2));
+        choicesSplitter.setBackground(wrapper.getBackground());
+        choicesSplitter.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
+
+        MenuLabel applyFiltersLabel = new MenuLabel("Apply", MenuLabel.CENTER, 16);
+        applyFiltersLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
+        applyFiltersLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                mainController.refreshGraphs();
+                refresh();
+            }
+        });
+        choicesSplitter.add(applyFiltersLabel);
+
+        MenuLabel clearFiltersLabel = new MenuLabel("Clear", MenuLabel.CENTER, 14);
+        clearFiltersLabel.dropAllListeners();
+        clearFiltersLabel.setForeground(GuiColors.RED_ERROR);
+        clearFiltersLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
+        clearFiltersLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                //TODO Are you sure message
+                mainController.clearFiltersSpecs();
+                mainController.refreshGraphs();
+                refresh();
+            }
+        });
+        choicesSplitter.add(clearFiltersLabel);
+
+        wrapper.add(choicesSplitter);
 
         return wrapper;
     }

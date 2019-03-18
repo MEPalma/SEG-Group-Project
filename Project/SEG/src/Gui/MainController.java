@@ -5,10 +5,9 @@ import Commons.GraphSpecs;
 import Commons.Tuple;
 import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
-import Gui.BreadCrumbs.BreadCrumbs;
-import Gui.BreadCrumbs.BreadCrumbsHoster;
-import Gui.GuiComponents.RPanel;
 import DatabaseManager.Stringifiable;
+import Gui.GraphManager.GraphManager;
+import Gui.TabbedView.TabbedView;
 
 import javax.swing.*;
 import java.util.Date;
@@ -17,30 +16,22 @@ import java.util.List;
 
 public class MainController {
     private final DataExchange dataExchange;
-    private final BreadCrumbsHoster breadCrumbsHoster;
-    private final BreadCrumbs breadCrumbs;
-    private final GraphView graphView;
+    private final TabbedView tabbedView;
     private final List<SwingWorker> dataLoadingTasks;
+    private final StatusDisplay statusDisplay;
+    private final Gui gui;
 
-    public MainController() {
+    public MainController(Gui gui, StatusDisplay statusDisplay, TabbedView tabbedView) {
         this.dataExchange = new DataExchange(new DatabaseManager());
-        this.breadCrumbsHoster = new BreadCrumbsHoster(new GraphView(this));
-        this.breadCrumbs = this.breadCrumbsHoster.getBreadCrumbs();
-        this.graphView = this.breadCrumbsHoster.getBreadCrumbs().getGraphView();
+        this.gui = gui;
+        this.tabbedView = tabbedView;
+        this.statusDisplay = statusDisplay;
         this.dataLoadingTasks = new LinkedList<>();
         this.filterSpecs = new FilterSpecs();
         clearFiltersSpecs();
     }
 
-    public void setMainBackgroundTask(SwingWorker newTask) {
-        this.breadCrumbs.updateBackgroundTask(newTask);
-    }
-
-    public void killMainBackgroundTask() {
-        this.breadCrumbs.cancelBackgroundTask();
-    }
-
-    private void addDataLoadingTask(SwingWorker newTask) {
+    public void addDataLoadingTask(SwingWorker newTask) {
         this.dataLoadingTasks.add(newTask);
     }
 
@@ -53,32 +44,27 @@ public class MainController {
         }
     }
 
-    private void removeDataLoadingTask(SwingWorker task) {
+    public void removeDataLoadingTask(SwingWorker task) {
         synchronized (this.dataLoadingTasks) {
             this.dataLoadingTasks.remove(task);
         }
     }
 
     public void startProgressBar() {
-        this.breadCrumbsHoster.startProgressBar();
+        this.statusDisplay.newProgressBar();
     }
 
     public void stopProgressBar() {
-        this.breadCrumbsHoster.stopProgressBar();
+        this.statusDisplay.killProgressBar();
     }
 
     public void close() {
-        killMainBackgroundTask();
         killDataLoadingTasks();
         this.dataExchange.close();
     }
 
     public void showErrorMessage(String title, String details) {
-        this.breadCrumbs.showErrorMessage(title, details);
-    }
-
-    public BreadCrumbsHoster getBreadCrumbsHoster() {
-        return breadCrumbsHoster;
+        this.statusDisplay.showErrorMessage(title, details);
     }
 
     public DataExchange getDataExchange() {
@@ -91,10 +77,7 @@ public class MainController {
 
     public void setCampaignName(String name) {
         this.dataExchange.setCampaignName(name);
-    }
-
-    public void pushNewViewOnBreadCrumbs(String title, RPanel view) {
-        this.breadCrumbs.push(title, view);
+        this.gui.updateCampaignName();
     }
 
     public List<Tuple<String, Number>> getGraphSpecData(GraphSpecs graphSpecs) {
@@ -109,13 +92,45 @@ public class MainController {
         return this.dataExchange.getEndDate();
     }
 
+    public boolean isDbEmpty() {
+        return this.dataExchange.isEmpty();
+    }
+
+
+    /*
+        GRAPHS
+    */
+
+    public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
+        GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getFilterSpecs());
+
+        if (this.tabbedView.containsComparable(graphSpecs)) return null;
+        else return graphSpecs;
+    }
+
     public void pushToGraphView(GraphSpecs newGraphSpecs) {
-        newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
-        String[] titles = getGraphDescription(newGraphSpecs);
-        newGraphSpecs.setTitle(titles[0]);
-        newGraphSpecs.setxAxisName(titles[1]);
-        newGraphSpecs.setyAxisName(titles[2]);
-        this.graphView.pushGraphSpecs(newGraphSpecs);
+
+        SwingWorker task = new SwingWorker() {
+            @Override
+            protected Object doInBackground() {
+                startProgressBar();
+                newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
+                GraphManager.setGraphDescription(newGraphSpecs);
+
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs), newGraphSpecs.getTypeColor(), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs);
+                stopProgressBar();
+                removeDataLoadingTask(this);
+                super.done();
+            }
+        };
+
+        addDataLoadingTask(task);
+        task.execute();
     }
 
 
@@ -139,37 +154,22 @@ public class MainController {
             this.filterSpecs.setIncomes(newFilterSpecs.getIncomes());
         }
 
-        this.graphView.updateGraphsData();
+        refreshGraphs();
     }
 
     public void refreshGraphs() {
-        startProgressBar();
-        this.graphView.refresh();//TODO check if filters changed, if not then do not query again
-        stopProgressBar();
+        killDataLoadingTasks();
+
+        List<Object> graphSpecs = tabbedView.getAllComparables();
+
+        tabbedView.clear();
+
+        for (Object g : graphSpecs)
+            pushToGraphView((GraphSpecs) g);
     }
 
     public void clearFiltersSpecs() {
         updateFilterSpecs(new FilterSpecs());
-    }
-
-    private String[] getGraphDescription(GraphSpecs graphSpecs)
-    {
-        String yAxis = graphSpecs.getTimespan().toString();
-        String xAxis = graphSpecs.getMetric().toString();
-        String title = graphSpecs.getMetric().toString() + " [Per " + graphSpecs.getTimespan() + "]";
-
-        if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate)
-            title += " based on " + graphSpecs.getBounceDef().toString();
-
-
-        return new String[] {title, xAxis, yAxis};
-    }
-
-    public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
-        GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getFilterSpecs());
-
-        if (this.graphView.containsGraph(graphSpecs)) return null;
-        else return graphSpecs;
     }
 
 }

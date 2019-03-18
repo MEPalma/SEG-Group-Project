@@ -12,8 +12,6 @@ public class ImpressionEntry implements Stringifiable {
         News, Shopping, SocialMedia, Travel, Hobbies, Blog, Unknown
     }
 
-    ;
-
     //IN SAME ORDER AS IN DB TABLE
     private int id;
     private String userId;

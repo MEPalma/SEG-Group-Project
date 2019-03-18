@@ -5,13 +5,14 @@ import Gui.GraphManager.GraphManager;
 import Gui.GuiComponents.*;
 import Gui.Menus.ChooseNewGraphPanel;
 import Gui.Menus.FiltersMenu;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
 
 public class GraphView extends RPanel {
 
@@ -63,7 +64,7 @@ public class GraphView extends RPanel {
             setNoGraphMode();
         } else if (this.graphsOnScreen.size() == 1) {
             GraphSpecs ref = this.graphsOnScreen.get(0);
-            JPanel tmp = GraphManager.createBarChar(ref.getData(), ref.getxAxisName(), ref.getyAxisName(), ref.getTypeColor());
+            JPanel tmp = GraphManager.createBarChar(ref);
             add(new GraphCardView(this, ref, tmp, true), BorderLayout.CENTER);
         } else if (this.mode == Mode.CARD_MODE) {
             if (this.graphsOnScreen.size() > 0) {
@@ -71,7 +72,7 @@ public class GraphView extends RPanel {
 
                 int i = 0;
                 for (GraphSpecs g : this.graphsOnScreen) {
-                    JPanel tmp = GraphManager.createBarChar(g.getData(), g.getxAxisName(), g.getyAxisName(), g.getTypeColor());
+                    JPanel tmp = GraphManager.createBarChar(g);
                     cards.add(new GraphCardView(this, g, tmp, (i == (this.graphsOnScreen.size() - 1))));
                     i++;
                 }
@@ -88,12 +89,12 @@ public class GraphView extends RPanel {
                     rowWrapper.setBorder(BorderFactory.createEmptyBorder());
 
                     GraphSpecs leftSpec = this.graphsOnScreen.get(i);
-                    JPanel leftGraph = GraphManager.createBarChar(leftSpec.getData(), leftSpec.getxAxisName(), leftSpec.getyAxisName(), leftSpec.getTypeColor());
+                    JPanel leftGraph = GraphManager.createBarChar(leftSpec);
                     rowWrapper.add(new GraphCardView(this, leftSpec, leftGraph, false));
 
                     if (i + 1 <= this.graphsOnScreen.size() - 1) {
                         GraphSpecs rightSpec = this.graphsOnScreen.get(i + 1);
-                        JPanel rightGraph = GraphManager.createBarChar(rightSpec.getData(), rightSpec.getxAxisName(), rightSpec.getyAxisName(), rightSpec.getTypeColor());
+                        JPanel rightGraph = GraphManager.createBarChar(rightSpec);
                         JPanel rightPanel = new GraphCardView(this, rightSpec, rightGraph, false);
                         rightPanel.setBorder(BorderFactory.createMatteBorder(24, 0, 24, 24, GuiColors.BASE_SMOKE));
                         rowWrapper.add(rightPanel);
@@ -184,14 +185,14 @@ public class GraphView extends RPanel {
                 JPanel dialogView = new JPanel(new BorderLayout());
                 dialogView.setBackground(GuiColors.BASE_SMOKE);
                 dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_SMOKE, 10, true));
-                dialogView.add(new ChooseNewGraphPanel(mainController, dialog), BorderLayout.CENTER);
+                dialogView.add(new ChooseNewGraphPanel(mainController), BorderLayout.CENTER);
 
 
                 /*
                     display dialog
                  */
                 int dfWidth = 300;
-                int dfHeight = 400;
+                int dfHeight = 320;
                 dialog.setSize(new Dimension(dfWidth, dfHeight));
 
                 int centerXtmp = menuLabel.getLocationOnScreen().x + 90 - dfWidth;

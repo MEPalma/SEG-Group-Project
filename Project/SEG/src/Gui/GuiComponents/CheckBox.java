@@ -12,7 +12,7 @@ public class CheckBox extends JCheckBox {
         setBorder(BorderFactory.createEmptyBorder());
         setForeground(GuiColors.DARK_GRAY);
         setFont(new Font("Verdana", Font.PLAIN, 14));
-        setBackground(new Color(0, 0, 0, 0));
+        setBackground(GuiColors.BASE_WHITE);
     }
 
 }

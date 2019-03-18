@@ -75,15 +75,6 @@ public class DataExchange {
         }
     }
 
-//    public void writeQuery(String q)
-//    {
-//        this.dbM.writeQuery(q);
-//    }
-//    public void writeQuery(List<String> list)
-//    {
-//        this.dbM.writeQuery(list);
-//    }
-
     /**
      * Executes the batch of a Statement, then closes the Statement.
      *
@@ -160,6 +151,24 @@ public class DataExchange {
         }
         System.exit(8);
         return -1;
+    }
+
+    public boolean isEmpty() {
+        int tmp  = 0;
+
+        tmp = countAllFrom_CLICK_LOGS();
+        if (tmp > 0) return false;
+
+        tmp = countAllFrom_IMPRESSION_LOGS();
+        if (tmp > 0) return false;
+
+        tmp = countAllFrom_SERVER_LOGS();
+        if (tmp > 0) return false;
+
+        tmp = countAllFrom_USERS();
+        if (tmp > 0) return false;
+
+        return true;
     }
 
     /*
@@ -588,32 +597,57 @@ public class DataExchange {
     public List<Tuple<String, Number>> getGraphData(GraphSpecs graphSpecs) {
         try {
 
-            ResultSet resultSet = this.dbM.query(QueryComposer.composeQuery(graphSpecs));
+            if (graphSpecs.getMetric() == GraphSpecs.METRICS.CTR) {
 
-            if(graphSpecs.getMetric()== GraphSpecs.METRICS.CTR) {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                getInfoTupleDivision(leftSet, rightSet);
-            }
-            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.CPA)
-            {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberConversions,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                getInfoTupleDivision(leftSet, rightSet);
-            }
-            else if(graphSpecs.getMetric()==GraphSpecs.METRICS.CPC)
-            {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberClicks,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                getInfoTupleDivision(leftSet, rightSet);
-            }
-            else if (graphSpecs.getMetric()==GraphSpecs.METRICS.CPM)
-            {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.TotalCost, graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs( GraphSpecs.METRICS.NumberImpressions,graphSpecs.getTimespan(),graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                getInfoTupleDivisionCTRHOUR(leftSet, rightSet);
-            }
-            else {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                //getInfoTupleDivision(leftSet, rightSet);
+                List<Tuple<String, Number>> result = getInfoTupleDivision(leftSet, rightSet);
+                close(leftSet);
+                close(rightSet);
+                return result;
+                //getCTRPerHour();
+            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPA) {
+                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
+                ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ImpressionCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                List<Tuple<String, Number>> resultSum = getSum(sumLeft, sumRigth);
+
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberConversions, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                List<Tuple<String, Number>> result = createResultDivision(resultSum, rightSet);
+                close(rightSet);
+                return result;
+            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPC) {
+                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
+                ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ImpressionCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                List<Tuple<String, Number>> resultSum = getSum(sumLeft, sumRigth);
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                List<Tuple<String, Number>> result = createResultDivision(resultSum, rightSet);
+                close(rightSet);
+                return result;
+            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPM) {
+                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
+                ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ImpressionCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                List<Tuple<String, Number>> resultSum = getSum(sumLeft, sumRigth);
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                List<Tuple<String, Number>> result = createResultDivision(resultSum, rightSet);
+                close(rightSet);
+                return result;
+            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate) {
+                ResultSet leftSet = this.dbM.query(QueryComposer.getNumberOfBounces(graphSpecs));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                List<Tuple<String, Number>> result = getInfoTupleDivision(leftSet, rightSet);
+                close(leftSet);
+                close(rightSet);
+                return result;
+            } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.TotalCost) {
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ImpressionCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                List<Tuple<String, Number>> result = getSum(leftSet, rightSet);
+                close(leftSet);
+                close(rightSet);
+                return result;
+            } else {
+                ResultSet resultSet = this.dbM.query(QueryComposer.composeQuery(graphSpecs));
                 List tmp = getInfoTuple(resultSet);
                 close(resultSet);
                 return tmp;
@@ -621,7 +655,7 @@ public class DataExchange {
         } catch (Exception ex) {
             return new LinkedList<>();
         }
-        return new LinkedList<>();
+        //return new LinkedList<>();
     }
 
     /*
@@ -657,11 +691,38 @@ public class DataExchange {
         double unique = 0;
         try {
             unique = resultInts.getInt("GroupedValues");
-            System.out.println(unique);
+
             return unique;
         } catch (SQLException ex) {
             return null;
         }
+    }
+
+    private List<Tuple<String, Number>> createResultDivision(List<Tuple<String, Number>> list, ResultSet resultSet) {
+        List<Tuple<String, Number>> root1 = new LinkedList<>();
+        List<Tuple<String, Number>> result = new LinkedList<>();
+
+        try {
+            while (resultSet.next()) {
+
+                root1.add(new Tuple<String, Number>(resultSet.getString("d"), (resultSet.getFloat("c"))));
+
+            }
+            //return
+            for (int i = 0; i < root1.size(); i++) {
+
+                result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() + list.get(i).getY().floatValue())));
+            }
+
+            return result;
+
+
+            //return <>
+        } catch (SQLException ex) {
+
+        }
+        return new LinkedList<>();
+
     }
 
     private List<Tuple<String, Number>> getInfoTuple(ResultSet resultTuple) {
@@ -684,27 +745,25 @@ public class DataExchange {
         List<Tuple<String, Number>> root2 = new LinkedList<>();
         List<Tuple<String, Number>> result = new LinkedList<>();
 
-        List<Date> hour = new LinkedList<>();
-        //Time hr;
-        List<Number> number = new LinkedList<>();
         try {
-            //hr=resultPerHour.getTime("GroupedValues");
             while (resultTuple1.next()) {
+
                 root1.add(new Tuple<String, Number>(resultTuple1.getString("d"), (resultTuple1.getFloat("c"))));
 
             }
             while (resultTuple2.next()) {
+
                 root2.add(new Tuple<>(resultTuple2.getString("d"), (resultTuple2.getFloat("c"))));
             }
 
             //return
-            for (int i = 1; i < root2.size(); i++) {
+            for (int i = 0; i < root2.size(); i++) {
 
                 result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue())));
             }
+
             return result;
-//            for(int i=1;i<result.size();i++)
-//                System.out.println(result.get(i).getX()+"  "+result.get(i).getY());
+
 
             //return <>
         } catch (SQLException ex) {
@@ -713,6 +772,37 @@ public class DataExchange {
         return new LinkedList<>();
 
     }
+
+    private List<Tuple<String, Number>> getSum(ResultSet resultSet1, ResultSet resultSet2) {
+        List<Tuple<String, Number>> root1 = new LinkedList<>();
+        List<Tuple<String, Number>> root2 = new LinkedList<>();
+        List<Tuple<String, Number>> result = new LinkedList<>();
+
+        try {
+
+            while (resultSet1.next()) {
+                root1.add(new Tuple<String, Number>(resultSet1.getString("d"), (resultSet1.getFloat("c"))));
+
+            }
+            while (resultSet2.next()) {
+                root2.add(new Tuple<>(resultSet2.getString("d"), (resultSet2.getFloat("c"))));
+            }
+
+            //return
+            for (int i = 0; i < root2.size(); i++) {
+
+                result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() + root2.get(i).getY().floatValue())));
+            }
+            return result;
+
+            //return <>
+        } catch (SQLException ex) {
+
+        }
+        return new LinkedList<>();
+
+    }
+
 
     private List<Tuple<String, Number>> getInfoTupleDivisionCTRHOUR(ResultSet resultTuple1, ResultSet resultTuple2) {
         List<Tuple<String, Number>> root1 = new LinkedList<>();
@@ -733,7 +823,7 @@ public class DataExchange {
             }
 
             //return
-            for (int i = 1; i < root2.size() - 1; i++) {
+            for (int i = 0; i < root2.size() - 1; i++) {
 
                 result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue())));
             }
@@ -765,7 +855,7 @@ public class DataExchange {
             while (resultTuple2.next()) {
                 root2.add(new Tuple<>(resultTuple2.getString("d"), (resultTuple2.getFloat("c") / 1000)));
             }
-            for (int i = 1; i < root2.size(); i++) {
+            for (int i = 0; i < root2.size(); i++) {
                 result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() / root2.get(i).getY().floatValue())));
             }
             return result;
@@ -970,6 +1060,8 @@ public class DataExchange {
     /*
     CTR the average number of clicks per impression
      */
+
+
     public List<Tuple<String, Number>> getCTRPerHour() {
 
         //ResultSet resultPerHour=this.dbM.query(QueryComposer.getCTRPerHour);
@@ -1159,27 +1251,24 @@ public class DataExchange {
         return tmp;
     }
 
-    public Date getStartDate()
-    {
+    public Date getStartDate() {
         try {
             ResultSet resultStartDate = this.dbM.query(QueryComposer.getStartDate);
             Date tmp = globalDateFormat.parse(resultStartDate.getString("d"));
             close(resultStartDate);
             return tmp;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return new Date();
         }
     }
-    public Date getEndDate()
-    {
+
+    public Date getEndDate() {
         try {
             ResultSet resultStartDate = this.dbM.query(QueryComposer.getEndDate);
             Date tmp = globalDateFormat.parse(resultStartDate.getString("d"));
             close(resultStartDate);
             return tmp;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return new Date();
         }
     }

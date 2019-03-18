@@ -4,6 +4,7 @@ import DatabaseManager.CSVParser;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;
 import Gui.MainController;
+import Gui.TakeActionListener;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -16,28 +17,31 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class LoadCSVsMenu extends RPanel {
 
-    private enum FileType {IMPRESSION_LOGS, CLICK_LOGS, SERVER_LOGS, UNRECOCNISED};
+    private enum FileType {IMPRESSION_LOGS, CLICK_LOGS, SERVER_LOGS, UNRECOCNISED}
 
     public static Color BACKGROUND = GuiColors.BASE_WHITE;
     private final MainController mainController;
+    private TakeActionListener onLoaded;
 
     private String campaignName;
 
     public LoadCSVsMenu(MainController mainController) {
         super(BACKGROUND, new BorderLayout());
         this.mainController = mainController;
+        setBorder(BorderFactory.createMatteBorder(4, 0, 4, 4, GuiColors.BASE_PRIME));
 
         this.campaignName = "Today's campaign";
 
         refresh();
+    }
+
+    public void setOnLoaded(TakeActionListener onLoaded) {
+        this.onLoaded = onLoaded;
     }
 
     @Override
@@ -61,21 +65,22 @@ public class LoadCSVsMenu extends RPanel {
                 components.add(getClickLogFileFinderPanel());
                 components.add(getServerLogFileFinderPanel());
 
-                MenuLabel parseButton = new MenuLabel("LOAD", MenuLabel.CENTER);
+                MenuLabel parseButton = new MenuLabel("LOAD", MenuLabel.CENTER, 18);
+                parseButton.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                 parseButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         if (impressionLog != null && clickLog != null && serverLog != null) {
+
+                            parseButton.setText("LOADING..");
+                            parseButton.setEnabled(false);
+                            parseButton.setVisible(true);
 
                             if (campaignName.trim().equals("") || campaignName.trim().equals(" "))
                                 campaignName = "Today's campaign";
                             else campaignName = campaignName.trim().replace("-", "").replace("'", "").replace("\"", "");
 
                             mainController.setCampaignName(campaignName);
-
-                            mainController.getBreadCrumbsHoster().getBreadCrumbs().clear();
-                            mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new MainMenu(mainController));
-                            mainController.pushNewViewOnBreadCrumbs("Load CSVs", thisView);
 
                             //new background thread
                             SwingWorker<Void, Void> loadTask = new SwingWorker<Void, Void>() {
@@ -85,12 +90,19 @@ public class LoadCSVsMenu extends RPanel {
                                     CSVParser parser = new CSVParser(mainController, impressionLog, clickLog, serverLog);
                                     parser.parseAll();
                                     mainController.stopProgressBar();
+                                    mainController.removeDataLoadingTask(this);
+
+                                    if (onLoaded != null) onLoaded.takeAction();
+
+                                    parseButton.setText("LOAD AGAIN");
+                                    parseButton.setEnabled(true);
+                                    parseButton.setForeground(GuiColors.BASE_PRIME);
 
                                     return null;
                                 }
                             };
 
-                            mainController.setMainBackgroundTask(loadTask);
+                            mainController.addDataLoadingTask(loadTask);
                             loadTask.execute();
 
 
@@ -105,8 +117,13 @@ public class LoadCSVsMenu extends RPanel {
 
                 ListView listView = new ListView(BACKGROUND, components);
 
-                add(new TitleLabel(" Import data from CSV files", TitleLabel.LEFT), BorderLayout.NORTH);
+                TitleLabel titleLabel = new TitleLabel(" Import data from CSV files", TitleLabel.LEFT);
+                titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 10, 0));
+                add(titleLabel, BorderLayout.NORTH);
+
                 add(listView.getWrappedInScroll(true), BorderLayout.CENTER);
+
+                mainController.removeDataLoadingTask(this);
 
                 revalidate();
                 repaint();
@@ -114,10 +131,10 @@ public class LoadCSVsMenu extends RPanel {
 
             private JPanel getChooseCampaignName() {
                 JPanel wrapper = new JPanel(new BorderLayout());
-                wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+                wrapper.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                 wrapper.setBackground(BACKGROUND);
 
-                wrapper.add(new TitleLabel("Campaign Name", TitleLabel.LEFT, 14), BorderLayout.WEST);
+                wrapper.add(new TitleLabel("Campaign Name", TitleLabel.LEFT, 16), BorderLayout.WEST);
 
                 TextBox campaignChooser = new TextBox(BACKGROUND);
                 campaignChooser.setText(campaignName);
@@ -144,22 +161,21 @@ public class LoadCSVsMenu extends RPanel {
 
             private JPanel getImpressionLogFileFinderPanel() {
                 JPanel panel = new JPanel(new BorderLayout());
-                panel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+                panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                 panel.setBackground(BACKGROUND);
 
-                TitleLabel titleLabel = new TitleLabel("Impression Log", TitleLabel.LEFT, 14);
-                titleLabel.setPreferredSize(new Dimension(160, 20));
+                TitleLabel titleLabel = new TitleLabel("Impression Log", TitleLabel.LEFT, 16);
+                titleLabel.setPreferredSize(new Dimension(140, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
                 JPanel pathFinderPanel = new JPanel(new BorderLayout());
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
-                TextBox pathTextBox = new TextBox(Color.WHITE);
-                pathTextBox.setEditable(false);
-                pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
+                TitleLabel pathTextBox = new TitleLabel("", TitleLabel.LEFT, 14);
+                pathTextBox.setForeground(GuiColors.DARK_GRAY);
 
-                MenuButton findFileButton = new MenuButton("...", 14);
+                MenuLabel findFileButton = new MenuLabel(" choose", MenuLabel.CENTER, 14);
                 findFileButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -173,6 +189,12 @@ public class LoadCSVsMenu extends RPanel {
 
                         int returnValue = jfc.showOpenDialog(thisView);
                         if (returnValue == JFileChooser.APPROVE_OPTION) {
+                            pathFinderPanel.removeAll();
+                            pathFinderPanel.add(findFileButton, BorderLayout.EAST);
+                            pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
+                            pathFinderPanel.repaint();
+                            pathFinderPanel.revalidate();
+
                             impressionLog = jfc.getSelectedFile().getAbsoluteFile();
 
                             FileType thisFileType = getFileType(impressionLog);
@@ -182,15 +204,15 @@ public class LoadCSVsMenu extends RPanel {
                                 impressionLog = null;
                                 mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.IMPRESSION_LOGS, thisFileType));
                             } else {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GREEN));
-                                pathTextBox.setText(impressionLog.getAbsolutePath());
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.OPTION_GREEN));
+                                pathTextBox.setText(impressionLog.getName());
                             }
                         }
                     }
 
                 });
 
-                pathFinderPanel.add(findFileButton, BorderLayout.EAST);
+                pathFinderPanel.add(findFileButton, BorderLayout.CENTER);
                 panel.add(pathFinderPanel, BorderLayout.CENTER);
 
                 return panel;
@@ -198,22 +220,21 @@ public class LoadCSVsMenu extends RPanel {
 
             private JPanel getClickLogFileFinderPanel() {
                 JPanel panel = new JPanel(new BorderLayout());
-                panel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+                panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                 panel.setBackground(BACKGROUND);
 
-                TitleLabel titleLabel = new TitleLabel("Click Log", TitleLabel.LEFT, 14);
-                titleLabel.setPreferredSize(new Dimension(160, 20));
+                TitleLabel titleLabel = new TitleLabel("Click Log", TitleLabel.LEFT, 16);
+                titleLabel.setPreferredSize(new Dimension(140, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
                 JPanel pathFinderPanel = new JPanel(new BorderLayout());
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
-                TextBox pathTextBox = new TextBox(Color.WHITE);
-                pathTextBox.setEditable(false);
-                pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
+                TitleLabel pathTextBox = new TitleLabel("", TitleLabel.LEFT, 14);
+                pathTextBox.setForeground(GuiColors.DARK_GRAY);
 
-                MenuButton findFileButton = new MenuButton("...", 14);
+                MenuLabel findFileButton = new MenuLabel(" choose", MenuLabel.CENTER, 14);
                 findFileButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -227,6 +248,11 @@ public class LoadCSVsMenu extends RPanel {
 
                         int returnValue = jfc.showOpenDialog(thisView);
                         if (returnValue == JFileChooser.APPROVE_OPTION) {
+                            pathFinderPanel.removeAll();
+                            pathFinderPanel.add(findFileButton, BorderLayout.EAST);
+                            pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
+                            pathFinderPanel.repaint();
+                            pathFinderPanel.revalidate();
                             clickLog = jfc.getSelectedFile().getAbsoluteFile();
 
                             FileType thisFileType = getFileType(clickLog);
@@ -236,8 +262,8 @@ public class LoadCSVsMenu extends RPanel {
                                 clickLog = null;
                                 mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.CLICK_LOGS, thisFileType));
                             } else {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GREEN));
-                                pathTextBox.setText(clickLog.getAbsolutePath());
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.OPTION_GREEN));
+                                pathTextBox.setText(clickLog.getName());
                             }
                         }
 
@@ -245,7 +271,7 @@ public class LoadCSVsMenu extends RPanel {
 
                 });
 
-                pathFinderPanel.add(findFileButton, BorderLayout.EAST);
+                pathFinderPanel.add(findFileButton, BorderLayout.CENTER);
                 panel.add(pathFinderPanel, BorderLayout.CENTER);
 
                 return panel;
@@ -253,22 +279,21 @@ public class LoadCSVsMenu extends RPanel {
 
             private JPanel getServerLogFileFinderPanel() {
                 JPanel panel = new JPanel(new BorderLayout());
-                panel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+                panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                 panel.setBackground(BACKGROUND);
 
-                TitleLabel titleLabel = new TitleLabel("Server Log", TitleLabel.LEFT, 14);
-                titleLabel.setPreferredSize(new Dimension(160, 20));
+                TitleLabel titleLabel = new TitleLabel("Server Log", TitleLabel.LEFT, 16);
+                titleLabel.setPreferredSize(new Dimension(140, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
                 JPanel pathFinderPanel = new JPanel(new BorderLayout());
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
-                TextBox pathTextBox = new TextBox(Color.WHITE);
-                pathTextBox.setEditable(false);
-                pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
+                TitleLabel pathTextBox = new TitleLabel("", TitleLabel.LEFT, 14);
+                pathTextBox.setForeground(GuiColors.DARK_GRAY);
 
-                MenuButton findFileButton = new MenuButton("...", 14);
+                MenuLabel findFileButton = new MenuLabel(" choose", MenuLabel.CENTER, 14);
                 findFileButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -282,6 +307,11 @@ public class LoadCSVsMenu extends RPanel {
 
                         int returnValue = jfc.showOpenDialog(thisView);
                         if (returnValue == JFileChooser.APPROVE_OPTION) {
+                            pathFinderPanel.removeAll();
+                            pathFinderPanel.add(findFileButton, BorderLayout.EAST);
+                            pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
+                            pathFinderPanel.repaint();
+                            pathFinderPanel.revalidate();
                             serverLog = jfc.getSelectedFile().getAbsoluteFile();
 
                             FileType thisFileType = getFileType(serverLog);
@@ -291,32 +321,32 @@ public class LoadCSVsMenu extends RPanel {
                                 serverLog = null;
                                 mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.SERVER_LOGS, thisFileType));
                             } else {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GREEN));
-                                pathTextBox.setText(serverLog.getAbsolutePath());
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.OPTION_GREEN));
+                                pathTextBox.setText(serverLog.getName());
                             }
                         }
                     }
 
                 });
 
-                pathFinderPanel.add(findFileButton, BorderLayout.EAST);
+                pathFinderPanel.add(findFileButton, BorderLayout.CENTER);
                 panel.add(pathFinderPanel, BorderLayout.CENTER);
 
                 return panel;
             }
 
             private String getErrorMessage(FileType expected, FileType given) {
-                return "Expected file " + expected.toString() + " but given file " + given.toString();
+                return "Expected file '" + expected.toString().toLowerCase().replace("_", " ") + "' but the file given was '" + given.toString().toLowerCase().replace("_", " ") + "'";
             }
 
             private FileType getFileType(File file) {
-                String[] impressionsFileStructure = { "Date", "ID", "Gender", "Age", "Income", "Context", "Impression Cost" };
+                String[] impressionsFileStructure = {"Date", "ID", "Gender", "Age", "Income", "Context", "Impression Cost"};
                 if (checkFirstRow(file, impressionsFileStructure)) return FileType.IMPRESSION_LOGS;
 
-                String[] clicksFileStructure = { "Date", "ID", "Click Cost" };
+                String[] clicksFileStructure = {"Date", "ID", "Click Cost"};
                 if (checkFirstRow(file, clicksFileStructure)) return FileType.CLICK_LOGS;
 
-                String[] serverFileStructure = { "Entry Date", "ID", "Exit Date", "Pages Viewed", "Conversion" };
+                String[] serverFileStructure = {"Entry Date", "ID", "Exit Date", "Pages Viewed", "Conversion"};
                 if (checkFirstRow(file, serverFileStructure)) return FileType.SERVER_LOGS;
 
                 else return FileType.UNRECOCNISED;
@@ -343,9 +373,8 @@ public class LoadCSVsMenu extends RPanel {
                 return false;
             }
 
-
         };
-        mainController.setMainBackgroundTask(backgroundTask);
+        mainController.addDataLoadingTask(backgroundTask);
         backgroundTask.execute();
     }
 }

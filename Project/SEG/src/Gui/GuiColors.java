@@ -3,8 +3,8 @@ package Gui;
 import java.awt.*;
 
 public class GuiColors {
-    public static Color LIGHT_GRAY = Color.LIGHT_GRAY;
-    public static Color DARK_GRAY = new Color(75, 75, 75);
+    public static Color DARK_GRAY = new Color(43, 43, 43);
+    public static Color LIGHT_GRAY = new Color(75, 75, 75);
 
     public static Color TEXT_SELECTED = Color.BLACK;
     public static Color TEXT_UNSELECTED = new Color(237, 239, 241);

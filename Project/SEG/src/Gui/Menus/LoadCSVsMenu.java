@@ -72,7 +72,9 @@ public class LoadCSVsMenu extends RPanel {
                     public void mousePressed(MouseEvent e) {
                         if (impressionLog != null && clickLog != null && serverLog != null) {
 
-                            parseButton.setVisible(false);
+                            parseButton.setText("LOADING..");
+                            parseButton.setEnabled(false);
+                            parseButton.setVisible(true);
 
                             if (campaignName.trim().equals("") || campaignName.trim().equals(" "))
                                 campaignName = "Today's campaign";
@@ -92,7 +94,9 @@ public class LoadCSVsMenu extends RPanel {
 
                                     if (onLoaded != null) onLoaded.takeAction();
 
-                                    parseButton.setVisible(true);
+                                    parseButton.setText("LOAD AGAIN");
+                                    parseButton.setEnabled(true);
+                                    parseButton.setForeground(GuiColors.BASE_PRIME);
 
                                     return null;
                                 }

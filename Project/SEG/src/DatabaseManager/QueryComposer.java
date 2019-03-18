@@ -69,7 +69,10 @@ public class QueryComposer {
     public static String[] CREATE_INDEXES =
             {
                     "CREATE INDEX IF NOT EXISTS IMPRESSION_LOGS_DATE_INDEX ON IMPRESSION_LOGS (date);",
+                    "CREATE INDEX IF NOT EXISTS IMPRESSION_LOGS_USERID_INDEX ON IMPRESSION_LOGS (userId);",
                     "CREATE INDEX IF NOT EXISTS CLICK_LOGS_DATE_INDEX ON CLICK_LOGS (date);",
+                    "CREATE INDEX IF NOT EXISTS CLICK_LOGS_USERID_INDEX ON CLICK_LOGS (userId);",
+                    "CREATE INDEX IF NOT EXISTS SERVER_LOGS_USERID_INDEX ON SERVER_LOGS (userId);",
                     "CREATE INDEX IF NOT EXISTS SERVER_LOGS_ENTRY_DATE_INDEX ON SERVER_LOGS (entryDate);",
                     "CREATE INDEX IF NOT EXISTS SERVER_LOGS_EXIT_DATE_INDEX ON SERVER_LOGS (exitDate);"
             };
@@ -95,7 +98,7 @@ public class QueryComposer {
         return "INSERT INTO SERVER_LOGS VALUES (" + se.stringify() + ");";
     }
 
-    public static String insertSettingStmt(String name, String value)//TODO check... looks shitty!
+    public static String insertSettingStmt(String name, String value)
     {
         return "INSERT INTO SETTINGS VALUES ('" + name + "', '" + value + "');";
     }

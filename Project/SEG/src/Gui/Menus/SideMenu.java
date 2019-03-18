@@ -15,7 +15,6 @@ import java.util.List;
 
 public class SideMenu extends RPanel {
     private final MainController mainController;
-
     private JPanel openMenu;
 
     public SideMenu(MainController mainController) {

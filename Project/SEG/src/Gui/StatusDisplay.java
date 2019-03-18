@@ -11,8 +11,11 @@ import java.awt.event.MouseEvent;
 
 public class StatusDisplay extends RPanel {
 
+    private int nLoadingRequests;
+
     public StatusDisplay() {
         super(GuiColors.BASE_WHITE, new BorderLayout());
+        this.nLoadingRequests = 0;
         refresh();
     }
 
@@ -22,7 +25,9 @@ public class StatusDisplay extends RPanel {
         revalidate();
     }
 
-    public void startProgressBar() {
+    public void newProgressBar() {
+        ++this.nLoadingRequests;
+
         removeAll();
 
         JPanel wrapper = new JPanel(new BorderLayout());
@@ -42,6 +47,12 @@ public class StatusDisplay extends RPanel {
 
         refresh();
     }
+
+    public void killProgressBar() {
+        if (this.nLoadingRequests > 0) -- this.nLoadingRequests;
+        if (this.nLoadingRequests == 0) clear();
+    }
+
 
     public void showErrorMessage(String title, String content) {
         JPanel wrapper = new JPanel(new BorderLayout());
@@ -81,9 +92,11 @@ public class StatusDisplay extends RPanel {
         refresh();
     }
 
-    public void clear() {
-        removeAll();
-        refresh();
+    private void clear() {
+        if (this.nLoadingRequests == 0) {
+            removeAll();
+            refresh();
+        }
     }
 
 }

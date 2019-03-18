@@ -1,14 +1,12 @@
 package Gui.GuiComponents;
 
-import Gui.TakeActionListener;
 import Gui.GuiColors;
+import Gui.TakeActionListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class DropDown extends RPanel {
 
     public DropDown(String[] choices, String[] descriptions, int selectedIndex) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
-        setBorder(BorderFactory.createLineBorder(GuiColors.DARK_GRAY, 1, false));
+        setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_SMOKE));
 
         this.choices = choices;
         this.descriptions = descriptions;
@@ -38,12 +36,11 @@ public class DropDown extends RPanel {
     public void refresh() {
         removeAll();
 
-        openPopupLabel.setText(this.choices[this.selectedIndex]);
-        openPopupLabel.addMouseListener(new MouseAdapter() {
+        MouseAdapter openListener = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 DropDownPopUp dropDownPopUp = new DropDownPopUp();
-                dropDownPopUp.init( openPopupLabel.getLocationOnScreen().x,
+                dropDownPopUp.init(openPopupLabel.getLocationOnScreen().x,
                         openPopupLabel.getLocationOnScreen().y + openPopupLabel.getHeight(),
                         choices,
                         descriptions,
@@ -58,8 +55,16 @@ public class DropDown extends RPanel {
                 );
                 dropDownPopUp.setVisible(true);
             }
-        });
+        };
+
+        openPopupLabel.setText(this.choices[this.selectedIndex]);
+        openPopupLabel.addMouseListener(openListener);
         add(openPopupLabel, BorderLayout.CENTER);
+
+        MenuLabel arrow = new MenuLabel("");
+        arrow.setIcon(new ImageIcon(getClass().getResource("/Icons/down.png")));
+        arrow.addMouseListener(openListener);
+        add(arrow, BorderLayout.EAST);
 
         repaint();
         revalidate();
@@ -88,7 +93,7 @@ class DropDownPopUp extends JDialog {
         getContentPane().setLayout(new BorderLayout());
     }
 
-    public void init(int x, int y, String [] choices, String[] descriptions, TakeActionListener takeActionListener) {
+    public void init(int x, int y, String[] choices, String[] descriptions, TakeActionListener takeActionListener) {
         this.x = x;
         this.y = y;
         this.choices = choices;

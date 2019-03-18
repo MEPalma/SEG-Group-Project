@@ -8,6 +8,7 @@ import Gui.GuiComponents.TitleLabel;
 import Gui.TakeActionListener;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
@@ -21,7 +22,7 @@ public class DateBrowser extends JPanel {
     private TakeActionListener listener;
 
     public DateBrowser() {
-        this(GuiColors.BASE_PRIME, Stringifiable.globalDateFormat, new Date());//TODO change to simple data format
+        this(GuiColors.BASE_PRIME, Stringifiable.globalDateFormat, new Date());
     }
 
     public DateBrowser(Color background, SimpleDateFormat dateFormat, Date date) {
@@ -139,7 +140,12 @@ class DateBrowserFrame extends JDialog {
 
     private void refresh() {
         getContentPane().removeAll();
-        getContentPane().setLayout(new BorderLayout());
+        getContentPane().setLayout(new GridLayout(1, 1));
+
+        JPanel mainWrapper = new JPanel(new BorderLayout());
+        mainWrapper.setBackground(getBackground());
+        mainWrapper.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, getBackground(), Color.LIGHT_GRAY, GuiColors.BASE_SMOKE));
+        getContentPane().add(mainWrapper);
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateBrowser.getDate());
@@ -160,6 +166,7 @@ class DateBrowserFrame extends JDialog {
 
         MenuLabel goBackOneMonthLabel = new MenuLabel("<", MenuLabel.CENTER, 14);
         goBackOneMonthLabel.setForeground(GuiColors.BASE_WHITE);
+        goBackOneMonthLabel.dropAllListeners();
         goBackOneMonthLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -171,8 +178,19 @@ class DateBrowserFrame extends JDialog {
                 repaint();
                 revalidate();
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                goBackOneMonthLabel.setForeground(GuiColors.DARK_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                goBackOneMonthLabel.setForeground(GuiColors.BASE_WHITE);
+            }
         });
         MenuLabel goForewordOneMonthLabel = new MenuLabel(">", MenuLabel.CENTER, 14);
+        goForewordOneMonthLabel.dropAllListeners();
         goForewordOneMonthLabel.setForeground(GuiColors.BASE_WHITE);
         goForewordOneMonthLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -185,13 +203,23 @@ class DateBrowserFrame extends JDialog {
                 repaint();
                 revalidate();
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                goForewordOneMonthLabel.setForeground(GuiColors.DARK_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                goForewordOneMonthLabel.setForeground(GuiColors.BASE_WHITE);
+            }
         });
 
         cvpNorthPanel.add(goBackOneMonthLabel, BorderLayout.WEST);
         cvpNorthPanel.add(lspYearAndMonthAndDayLabel, BorderLayout.CENTER);
         cvpNorthPanel.add(goForewordOneMonthLabel, BorderLayout.EAST);
 
-        getContentPane().add(cvpNorthPanel, BorderLayout.NORTH);
+        mainWrapper.add(cvpNorthPanel, BorderLayout.NORTH);
 
         ////CENTER VIEW --> day of the months choosers
         JPanel cvpDaysViewPanel = new JPanel(new GridLayout(7, 7, 0, 0));
@@ -461,6 +489,6 @@ class DateBrowserFrame extends JDialog {
 
         centerViewPanel.add(timeEditorPanel, BorderLayout.NORTH);
 
-        getContentPane().add(centerViewPanel, BorderLayout.CENTER);
+        mainWrapper.add(centerViewPanel, BorderLayout.CENTER);
     }
 }

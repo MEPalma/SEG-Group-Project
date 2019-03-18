@@ -1,7 +1,6 @@
 package Gui;
 
 import Gui.GuiComponents.MenuLabel;
-import Gui.GuiComponents.RecursiveLostFocus;
 import Gui.GuiComponents.TitleLabel;
 import Gui.Menus.ChooseNewGraphPanel;
 import Gui.Menus.FiltersMenu;
@@ -9,6 +8,7 @@ import Gui.Menus.SideMenu;
 import Gui.TabbedView.TabbedView;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,7 +18,13 @@ public class Gui extends JFrame {
     private JPanel mainView;
     private JPanel northView;
 
+    private JPanel tabbedViewTabsHoster, tabbedViewContentHoster;
+
     private MainController mainController;
+
+    private JPanel popupMessageArea;
+    private JPanel currentPopup;
+    private TitleLabel campaignName;
 
     public Gui() {
         super("Dashboard App");
@@ -46,22 +52,34 @@ public class Gui extends JFrame {
 
 
         /*
-            TABBED VIEW INITIALIZATION
+            POPUPS
          */
-        JPanel tabbedViewTabsHoster = new JPanel(new BorderLayout());
+        this.popupMessageArea = new JPanel(new BorderLayout());
+        this.popupMessageArea.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        this.popupMessageArea.setBackground(GuiColors.BASE_SMOKE);
+
+
+        /*
+            TABBED VIEW VIEWS INITIALIZATION
+         */
+        this.tabbedViewTabsHoster = new JPanel(new BorderLayout());
         tabbedViewTabsHoster.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         tabbedViewTabsHoster.setBackground(GuiColors.BASE_SMOKE);
 
-        JPanel tabbedViewContentHoster = new JPanel(new BorderLayout());
+        this.tabbedViewContentHoster = new JPanel(new BorderLayout());
         tabbedViewContentHoster.setBorder(BorderFactory.createEmptyBorder());
         tabbedViewTabsHoster.setBackground(GuiColors.BASE_SMOKE);
 
+        /*
+            STATUS DISPLAY VIEW INITIALIZATION
+         */
+
+        StatusDisplay statusDisplay = new StatusDisplay();
 
         /*
             INIT MAIN CONTROLLER
          */
-        this.mainController = new MainController(new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster));
-
+        this.mainController = new MainController(this, statusDisplay, new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster));
 
         /*
             ORGANIZE LAYOUT
@@ -74,13 +92,18 @@ public class Gui extends JFrame {
         this.northView = new JPanel(new BorderLayout());
         this.northView.setBackground(GuiColors.BASE_PRIME);
         this.northView.setLayout(new BorderLayout());
-        this.northView.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_SMOKE));
+        this.northView.setBorder(BorderFactory.createEmptyBorder());
         this.northView.setPreferredSize(new Dimension(300, 56));
 
 
         TitleLabel appTitleLabel = new TitleLabel(" Dashboard App", JLabel.LEFT, 26);
         appTitleLabel.setForeground(GuiColors.BASE_WHITE);
         this.northView.add(appTitleLabel, BorderLayout.CENTER);
+
+        this.campaignName = new TitleLabel(mainController.getCampaignName() + " ", TitleLabel.RIGHT, 18, GuiColors.BASE_WHITE);
+        this.campaignName.setFont(new Font("Verdana", Font.ITALIC, 18));
+        this.northView.add(this.campaignName, BorderLayout.EAST);
+
         getContentPane().add(this.northView, BorderLayout.NORTH);
 
 
@@ -89,7 +112,31 @@ public class Gui extends JFrame {
          */
         this.mainView = new JPanel(new BorderLayout());
         this.mainView.setBackground(GuiColors.BASE_SMOKE);
-        this.mainView.add(this.mainController.getBreadCrumbsHoster(), BorderLayout.WEST);
+        this.mainView.add(statusDisplay, BorderLayout.NORTH);
+        this.getContentPane().add(this.mainView, BorderLayout.CENTER);
+
+        //Wellcome view
+        if (mainController.isDbEmpty()) {
+            WelcomeProcedure welcomeProcedure = new WelcomeProcedure(mainController);
+            welcomeProcedure.setOnClose(new TakeActionListener() {
+                @Override
+                public void takeAction() {
+                    mainView.remove(welcomeProcedure);
+                    setupMainView();
+                }
+            });
+            this.mainView.add(welcomeProcedure, BorderLayout.CENTER);
+        } else setupMainView();
+
+
+        repaint();
+        revalidate();
+    }
+
+    private void setupMainView() {
+        this.mainView.add(new SideMenu(mainController), BorderLayout.WEST);
+
+        this.mainView.add(this.popupMessageArea, BorderLayout.EAST);
 
         JPanel tabbedViewTopWrapper = new JPanel(new BorderLayout());
         tabbedViewTopWrapper.setBorder(BorderFactory.createEmptyBorder());
@@ -104,9 +151,7 @@ public class Gui extends JFrame {
         tabbedViewWrapper.add(tabbedViewContentHoster, BorderLayout.CENTER);
         this.mainView.add(tabbedViewWrapper, BorderLayout.CENTER);
 
-        getContentPane().add(this.mainView, BorderLayout.CENTER);
-
-        this.mainController.pushNewViewOnBreadCrumbs(mainController.getCampaignName(), new SideMenu(this.mainController));
+        updateCampaignName();
 
         repaint();
         revalidate();
@@ -133,23 +178,46 @@ public class Gui extends JFrame {
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JDialog dialog = new JDialog();
-                dialog.setUndecorated(true);
-                dialog.getContentPane().setLayout(new BorderLayout());
+//                JDialog dialog = new JDialog();
+//                dialog.setUndecorated(true);
+//                dialog.getContentPane().setLayout(new BorderLayout());
+//
+//                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
+//                dialog.getContentPane().add(new TitleLabel("Filters", TitleLabel.CENTER, 18), BorderLayout.NORTH);
+//
+//                int dfWidth = 450;
+//                int dfHeight = 600;
+//                dialog.setSize(new Dimension(dfWidth, dfHeight));
+//
+//                int centerXtmp = menuLabel.getLocationOnScreen().x + 10 - dfWidth;
+//                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
+//                dialog.setLocation(centerXtmp, centerYtmp);
+//
+//                dialog.getContentPane().add(new FiltersMenu(mainController), BorderLayout.CENTER);
+//                dialog.setVisible(true);
+                if (currentPopup != null) {
+                    if (currentPopup instanceof FiltersMenu) {
+                        currentPopup = null;
+                        popupMessageArea.removeAll();
+                        popupMessageArea.repaint();
+                        popupMessageArea.revalidate();
+                        return;
+                    }
+                }
 
-                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
-                dialog.getContentPane().add(new TitleLabel("Filters", TitleLabel.CENTER, 18), BorderLayout.NORTH);
+                popupMessageArea.removeAll();
+                currentPopup = new FiltersMenu(mainController);
+                currentPopup.setPreferredSize(new Dimension(400, 40));
+                popupMessageArea.add(currentPopup);
+                popupMessageArea.repaint();
+                popupMessageArea.revalidate();
 
-                int dfWidth = 450;
-                int dfHeight = 600;
-                dialog.setSize(new Dimension(dfWidth, dfHeight));
+                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+            }
 
-                int centerXtmp = menuLabel.getLocationOnScreen().x + 10 - dfWidth;
-                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
-                dialog.setLocation(centerXtmp, centerYtmp);
-
-                dialog.getContentPane().add(new FiltersMenu(mainController), BorderLayout.CENTER);
-                dialog.setVisible(true);
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
             }
         });
 
@@ -171,34 +239,57 @@ public class Gui extends JFrame {
         menuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JDialog dialog = new JDialog();
-                dialog.setUndecorated(true);
-                dialog.getContentPane().setLayout(new BorderLayout());
-                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
-                dialog.getContentPane().add(new TitleLabel("Add new graph", TitleLabel.CENTER, 18), BorderLayout.NORTH);
+//                JDialog dialog = new JDialog();
+//                dialog.setUndecorated(true);
+//                dialog.getContentPane().setLayout(new BorderLayout());
+//                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
+//                dialog.getContentPane().add(new TitleLabel("Add new graph", TitleLabel.CENTER, 18), BorderLayout.NORTH);
+//
+//                /*
+//                    setup dialog view
+//                 */
+//                JPanel dialogView = new JPanel(new BorderLayout());
+//                dialogView.setBackground(GuiColors.BASE_SMOKE);
+//                dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_SMOKE, 10, true));
+//                dialogView.add(new ChooseNewGraphPanel(mainController, dialog), BorderLayout.CENTER);
+//
+//
+//                /*
+//                    display dialog
+//                 */
+//                int dfWidth = 300;
+//                int dfHeight = 320;
+//                dialog.setSize(new Dimension(dfWidth, dfHeight));
+//
+//                int centerXtmp = menuLabel.getLocationOnScreen().x + 90 - dfWidth;
+//                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
+//                dialog.setLocation(centerXtmp, centerYtmp);
+//
+//                dialog.getContentPane().add(dialogView, BorderLayout.CENTER);
+//                dialog.setVisible(true);
+                if (currentPopup != null) {
+                    if (currentPopup instanceof ChooseNewGraphPanel) {
+                        currentPopup = null;
+                        popupMessageArea.removeAll();
+                        popupMessageArea.repaint();
+                        popupMessageArea.revalidate();
+                        return;
+                    }
+                }
 
-                /*
-                    setup dialog view
-                 */
-                JPanel dialogView = new JPanel(new BorderLayout());
-                dialogView.setBackground(GuiColors.BASE_SMOKE);
-                dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_SMOKE, 10, true));
-                dialogView.add(new ChooseNewGraphPanel(mainController, dialog), BorderLayout.CENTER);
+                popupMessageArea.removeAll();
+                currentPopup = new ChooseNewGraphPanel(mainController);
+                currentPopup.setPreferredSize(new Dimension(300, 40));
+                popupMessageArea.add(currentPopup);
+                popupMessageArea.repaint();
+                popupMessageArea.revalidate();
 
+                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+            }
 
-                /*
-                    display dialog
-                 */
-                int dfWidth = 300;
-                int dfHeight = 320;
-                dialog.setSize(new Dimension(dfWidth, dfHeight));
-
-                int centerXtmp = menuLabel.getLocationOnScreen().x + 90 - dfWidth;
-                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
-                dialog.setLocation(centerXtmp, centerYtmp);
-
-                dialog.getContentPane().add(dialogView, BorderLayout.CENTER);
-                dialog.setVisible(true);
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
             }
         });
 
@@ -218,6 +309,12 @@ public class Gui extends JFrame {
             super.setLocation(x, y);
         }
         super.setVisible(visible);
+    }
+
+    public void updateCampaignName() {
+        this.campaignName.setText(mainController.getCampaignName());
+        this.campaignName.repaint();
+        this.campaignName.revalidate();
     }
 
 }

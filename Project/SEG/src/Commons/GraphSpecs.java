@@ -9,22 +9,25 @@ import java.util.List;
 import java.util.Objects;
 
 public class GraphSpecs {
-    public enum TIME_SPAN { WEEK_SPAN, DAY_SPAN, HOUR_SPAN };
+    public enum TIME_SPAN {WEEK_SPAN, DAY_SPAN, HOUR_SPAN}
 
-    public enum BOUNCE_DEF {TIME, NPAGES};
+    public enum BOUNCE_DEF {TIME, NPAGES}
 
     public enum METRICS {
-            NumberImpressions,
-            NumberClicks,
-            NumberUniques,
-            NumberBounces,
-            NumberConversions,
-            TotalCost,
-            CTR,
-            CPA,
-            CPC,
-            CPM,
-            BounceRate};
+        NumberImpressions,
+        NumberClicks,
+        NumberUniques,
+        NumberBounces,
+        NumberConversions,
+        TotalCost,
+        CTR,
+        CPA,
+        CPC,
+        CPM,
+        BounceRate,
+        ImpressionCost,
+        ClickCost
+    }
 
     private String title, xAxisName, yAxisName;
     private Collection<Tuple<String, Number>> data;
@@ -50,8 +53,8 @@ public class GraphSpecs {
     @Override
     public boolean equals(Object o) {
         if (o instanceof GraphSpecs) {
-            GraphSpecs other = (GraphSpecs)o;
-            return (this.metric == other.metric && this.timespan == other.timespan && this.bounceDef == bounceDef);
+            GraphSpecs other = (GraphSpecs) o;
+            return (this.metric.equals(other.metric) && this.timespan.equals(other.timespan) && this.bounceDef.equals(bounceDef));
         }
         return false;
     }

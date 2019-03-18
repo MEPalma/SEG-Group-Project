@@ -51,13 +51,13 @@ public class ChooseNewGraphPanel extends RPanel {
     private final DropDown bounceDefinitionChooser;
     private final DropDown timespanChooser;
 
-    private final JDialog host;
+//    private final JDialog host;
 
-    public ChooseNewGraphPanel(MainController mainController, JDialog host) {
+    public ChooseNewGraphPanel(MainController mainController) {
         super(GuiColors.BASE_SMOKE, new BorderLayout());
 
         this.mainController = mainController;
-        this.host = host;
+//        this.host = host;
 
         this.messageLabel = new TitleLabel("", TitleLabel.CENTER, 12);
         messageLabel.setForeground(GuiColors.RED_ERROR);
@@ -92,7 +92,7 @@ public class ChooseNewGraphPanel extends RPanel {
         addLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (handleAdd()) host.setVisible(false);
+                if (handleAdd()) ; //host.setVisible(false);
                 else {
                     messageLabel.setText("You already have this graph!");
                     refresh();
@@ -102,7 +102,7 @@ public class ChooseNewGraphPanel extends RPanel {
 
         JPanel addLabelWrapper = new JPanel(new GridLayout(1, 1));
         addLabelWrapper.setBackground(GuiColors.BASE_WHITE);
-        addLabelWrapper.setBorder(BorderFactory.createMatteBorder(8, 0, 0, 0, GuiColors.BASE_SMOKE));
+        addLabelWrapper.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, GuiColors.BASE_SMOKE));
         addLabelWrapper.add(addLabel);
 
         add(addLabelWrapper, BorderLayout.SOUTH);

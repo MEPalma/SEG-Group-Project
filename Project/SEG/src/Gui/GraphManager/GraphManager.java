@@ -110,11 +110,11 @@ public class GraphManager {
 
     public static String getGraphShortTitle(GraphSpecs graphSpecs) {
         GraphSpecs.METRICS m = graphSpecs.getMetric();
-        if (m == GraphSpecs.METRICS.NumberImpressions) return "Impressions";
-        else if (m == GraphSpecs.METRICS.NumberClicks) return "Clicks";
-        else if (m == GraphSpecs.METRICS.NumberUniques) return "Uniques";
-        else if (m == GraphSpecs.METRICS.NumberBounces) return "Bounces";
-        else if (m == GraphSpecs.METRICS.NumberConversions) return "Conversions";
+        if (m == GraphSpecs.METRICS.NumberImpressions) return "Impression";
+        else if (m == GraphSpecs.METRICS.NumberClicks) return "Click";
+        else if (m == GraphSpecs.METRICS.NumberUniques) return "Unique";
+        else if (m == GraphSpecs.METRICS.NumberBounces) return "Bounce";
+        else if (m == GraphSpecs.METRICS.NumberConversions) return "Conversion";
         else if (m == GraphSpecs.METRICS.TotalCost) return "Total Cost";
         else if (m == GraphSpecs.METRICS.BounceRate) return "Bounce Rate";
         else return m.toString();

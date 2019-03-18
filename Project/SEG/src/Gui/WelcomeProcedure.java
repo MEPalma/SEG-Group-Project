@@ -72,7 +72,6 @@ public class WelcomeProcedure extends JPanel {
                 this_.revalidate();
             }
         });
-//        wrapper.add(segue, BorderLayout.SOUTH);
 
         TakeActionListener onLoaded = new TakeActionListener() {
             @Override
@@ -84,7 +83,7 @@ public class WelcomeProcedure extends JPanel {
         };
 
         LoadCSVsMenu loadCSVsMenu = new LoadCSVsMenu(mainController);
-        loadCSVsMenu.setBorder(BorderFactory.createEmptyBorder());
+        loadCSVsMenu.setBorder(BorderFactory.createEmptyBorder(80, 80, 80, 80));
         loadCSVsMenu.setOnLoaded(onLoaded);
 
         wrapper.add(loadCSVsMenu, BorderLayout.CENTER);
@@ -109,7 +108,7 @@ public class WelcomeProcedure extends JPanel {
                 mainController.getFilterSpecs()));
 
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createEmptyBorder(80, 80, 80, 80));
         wrapper.setBackground(GuiColors.BASE_WHITE);
 
         TitleLabel titleLabel = new TitleLabel("All set!", TitleLabel.LEFT);

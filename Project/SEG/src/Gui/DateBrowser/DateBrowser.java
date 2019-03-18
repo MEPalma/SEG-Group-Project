@@ -181,7 +181,7 @@ class DateBrowserFrame extends JDialog {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                goBackOneMonthLabel.setForeground(GuiColors.BASE_SMOKE);
+                goBackOneMonthLabel.setForeground(GuiColors.DARK_GRAY);
             }
 
             @Override
@@ -206,7 +206,7 @@ class DateBrowserFrame extends JDialog {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                goForewordOneMonthLabel.setForeground(GuiColors.BASE_SMOKE);
+                goForewordOneMonthLabel.setForeground(GuiColors.DARK_GRAY);
             }
 
             @Override

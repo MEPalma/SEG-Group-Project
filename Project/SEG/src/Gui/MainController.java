@@ -20,7 +20,6 @@ public class MainController {
     private final List<SwingWorker> dataLoadingTasks;
     private final StatusDisplay statusDisplay;
     private final Gui gui;
-    private final GuiColors guiColors;
     private final FilterSpecs filterSpecs;
 
     public MainController(Gui gui, StatusDisplay statusDisplay, TabbedView tabbedView) {
@@ -29,17 +28,13 @@ public class MainController {
         this.tabbedView = tabbedView;
         this.statusDisplay = statusDisplay;
         this.dataLoadingTasks = new LinkedList<>();
-        this.guiColors = new GuiColors();
         this.filterSpecs = new FilterSpecs();
+
         clearFiltersSpecs();
     }
 
     public void addDataLoadingTask(SwingWorker newTask) {
         this.dataLoadingTasks.add(newTask);
-    }
-
-    public GuiColors getGuiColors() {
-        return guiColors;
     }
 
     private void killDataLoadingTasks() {

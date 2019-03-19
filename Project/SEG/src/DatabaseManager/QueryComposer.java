@@ -62,7 +62,11 @@ public class QueryComposer {
     public static String selectAllFrom_CLICK_LOGS = "SELECT * FROM CLICK_LOGS;";
     public static String selectAllFrom_SERVER_LOGS = "SELECT * FROM SERVER_LOGS;";
     public static String selectAllFrom_SETTINGS = "SELECT * FROM SETTINGS;";
-    public static String getCampaignName = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='campaignName';";
+
+
+    /*
+        Impressions
+     */
     public static String getNumberOfImpressionsPerWeek = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%W', Date) order by Date;";
     public static String getNumberOfImpressionsPerHour = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%H:%d', Date) order by Date;";
     public static String getNumberOfImpressionsPerDay = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%d', Date) order by Date;";
@@ -234,12 +238,23 @@ public class QueryComposer {
     }
 
     /*
-        Settigns
+        Settings
      */
     public static String setCampaignName(String name) {
         return "INSERT OR REPLACE INTO SETTINGS VALUES('campaignName', '" + name + "');";
     }
+    public static String getCampaignName = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='campaignName';";
 
+
+    public static String setColorSeries(int id) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('colorSeries', '" + id + "');";
+    }
+    public static String getColorSeries = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='colorSeries';";
+
+
+    /*
+        Graphs
+    */
     public static String composeQuery(GraphSpecs graphSpecs) {
         if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions) {
             return getNumberOfImpressions(graphSpecs);
@@ -328,7 +343,7 @@ public class QueryComposer {
             tmp.append(";");
             return tmp.toString();
         } else {
-            StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d, count(id) as c from server_logs ");
+            StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d, count(server_logs.id) as c from server_logs ");
             tmp.append(getFilters(graphSpecs) + " And PagesViewed<=1 ");
             tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 

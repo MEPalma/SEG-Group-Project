@@ -1,6 +1,7 @@
 package DatabaseManager;
 
 import Commons.*;
+import Gui.GuiColors;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -577,6 +578,15 @@ public class DataExchange {
         }
     }
 
+
+
+    /*
+        Settings
+     */
+    public void setCampaignName(String name) {
+        this.dbM.writeQuery(QueryComposer.setCampaignName(name));
+    }
+
     public String getCampaignName() {
         ResultSet resultSet = this.dbM.query(QueryComposer.getCampaignName);
         try {
@@ -587,11 +597,18 @@ public class DataExchange {
         }
     }
 
-    /*
-        Settings
-     */
-    public void setCampaignName(String name) {
-        this.dbM.writeQuery(QueryComposer.setCampaignName(name));
+    public void setColorSeries(int id) {
+        this.dbM.writeQuery(QueryComposer.setColorSeries(id));
+    }
+
+    public int getColorSeries() {
+        ResultSet resultSet = this.dbM.query(QueryComposer.getColorSeries);
+        try {
+            return resultSet.getInt("v");
+        } catch (SQLException ex) {
+            setColorSeries(1);
+            return getColorSeries();
+        }
     }
 
     public List<Tuple<String, Number>> getGraphData(GraphSpecs graphSpecs) {

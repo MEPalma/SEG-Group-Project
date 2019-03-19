@@ -41,9 +41,8 @@ public class MainController {
         synchronized (this.dataLoadingTasks) {
             for (SwingWorker task : this.dataLoadingTasks)
                 task.cancel(true);
-
-            this.dataLoadingTasks.clear();
         }
+        this.dataLoadingTasks.clear();
     }
 
     public void removeDataLoadingTask(SwingWorker task) {

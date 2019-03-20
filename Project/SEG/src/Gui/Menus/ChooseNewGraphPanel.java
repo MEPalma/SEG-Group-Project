@@ -27,7 +27,7 @@ public class ChooseNewGraphPanel extends RPanel {
             "CPM",
             "Bounce Rate"};
     public static String[] BOUNCE_DEF = {"Time", "Number of Pages"};
-    public static String[] TIME_SPANS = {"Week", "Day", "Hour"};
+    public static String[] TIME_SPANS = {"Month", "Week", "Day", "Hour"};
     private static String[] METRICS_DESCRIPTIONS = {
             "An impression occurs whenever an ad is shown to a user, regardless of whether they click on it.",
             "A click occurs when a user clicks on an ad that is shown to them.",

@@ -121,6 +121,7 @@ public class GraphManager {
     }
 
     private static String parseTimeSpan(GraphSpecs.TIME_SPAN timeSpan) {
+        if (timeSpan == GraphSpecs.TIME_SPAN.MONTH_SPAN) return "Month";
         if (timeSpan == GraphSpecs.TIME_SPAN.DAY_SPAN) return "Day";
         else if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return "Week";
         else return "Hour";

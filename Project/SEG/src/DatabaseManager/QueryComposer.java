@@ -281,7 +281,9 @@ public class QueryComposer {
         if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return " group by strftime('%W', d)";
         else if (timeSpan == GraphSpecs.TIME_SPAN.DAY_SPAN)
             return " group by strftime('%d', d)";
+        else if (timeSpan == GraphSpecs.TIME_SPAN.HOUR_SPAN)
         return " group by strftime('%H:%d', d)";
+        return " group by strftime('%m', d)";
 
     }
 

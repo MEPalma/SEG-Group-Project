@@ -1,7 +1,6 @@
 package DatabaseManager;
 
 import Commons.*;
-import Gui.GuiColors;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -577,7 +576,6 @@ public class DataExchange {
             return null;
         }
     }
-
 
 
     /*

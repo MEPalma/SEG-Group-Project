@@ -19,6 +19,7 @@ public class GraphView extends RPanel {
     private final MainController mainController;
     private final List<GraphSpecs> graphsOnScreen;
     private Mode mode;
+
     public GraphView(MainController mainController) {
         super(GuiColors.BASE_SMOKE, new BorderLayout());
         this.mainController = mainController;

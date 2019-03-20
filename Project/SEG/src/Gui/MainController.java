@@ -8,10 +8,8 @@ import DatabaseManager.DatabaseManager;
 import DatabaseManager.Stringifiable;
 import Gui.GraphManager.GraphManager;
 import Gui.TabbedView.TabbedView;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 import javax.swing.*;
-import java.security.AllPermission;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;

@@ -12,6 +12,7 @@ public class ServerEntry implements Stringifiable {
     private Date exitDate;
     private Number pagesViewed;
     private Conversion conversion;
+
     public ServerEntry(int id, String userId, Date entryDate, Date exitDate, Number pagesViewed, Conversion conversion) {
         this.id = id;
         this.userId = userId;

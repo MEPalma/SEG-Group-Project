@@ -13,6 +13,7 @@ public class ImpressionEntry implements Stringifiable {
     private Date date;
     private Context context;
     private Number impressionCost;
+
     public ImpressionEntry(int id, String userId, Date date, Context context, Number impressionCost) {
         this.id = id;
         this.userId = userId;

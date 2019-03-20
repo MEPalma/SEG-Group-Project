@@ -15,12 +15,14 @@ public class UserEntry implements Stringifiable {
 
     ;
     private Income income;
+
     public UserEntry(String id, Gender gender, Age age, Income income) {
         this.id = id;
         this.gender = gender;
         this.age = age;
         this.income = income;
     }
+
     public UserEntry() {
         this("", Gender.Unknown, Age.Unknown, Income.Unknown);
     }

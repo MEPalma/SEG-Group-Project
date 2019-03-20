@@ -243,12 +243,14 @@ public class QueryComposer {
     public static String setCampaignName(String name) {
         return "INSERT OR REPLACE INTO SETTINGS VALUES('campaignName', '" + name + "');";
     }
+
     public static String getCampaignName = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='campaignName';";
 
 
     public static String setColorSeries(int id) {
         return "INSERT OR REPLACE INTO SETTINGS VALUES('colorSeries', '" + id + "');";
     }
+
     public static String getColorSeries = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='colorSeries';";
 
 
@@ -282,7 +284,7 @@ public class QueryComposer {
         else if (timeSpan == GraphSpecs.TIME_SPAN.DAY_SPAN)
             return " group by strftime('%d', d)";
         else if (timeSpan == GraphSpecs.TIME_SPAN.HOUR_SPAN)
-        return " group by strftime('%H:%d', d)";
+            return " group by strftime('%H:%d', d)";
         return " group by strftime('%m', d)";
 
     }

@@ -186,16 +186,16 @@ public class Gui extends JFrame {
             public void mousePressed(MouseEvent e) {
                 if (currentPopup != null) {
                     if (currentPopup instanceof FiltersMenu) {
-                    currentPopup = null;
-                    popupMessageArea.removeAll();
+                        currentPopup = null;
+                        popupMessageArea.removeAll();
 
-                    filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+                        filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
 
-                    popupMessageArea.setPreferredSize(new Dimension(0, 0));
-                    popupMessageArea.repaint();
-                    popupMessageArea.revalidate();
+                        popupMessageArea.setPreferredSize(new Dimension(0, 0));
+                        popupMessageArea.repaint();
+                        popupMessageArea.revalidate();
 
-                    return;
+                        return;
                     }
                 }
                 openFilters();

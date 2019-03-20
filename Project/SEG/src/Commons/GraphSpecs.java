@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class GraphSpecs {
-    public enum TIME_SPAN {MONTH_SPAN,WEEK_SPAN, DAY_SPAN, HOUR_SPAN}
+    public enum TIME_SPAN {MONTH_SPAN, WEEK_SPAN, DAY_SPAN, HOUR_SPAN}
 
     public enum BOUNCE_DEF {TIME, NPAGES}
 

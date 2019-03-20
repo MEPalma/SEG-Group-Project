@@ -2,7 +2,6 @@ package Commons;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Filter;
 
 public class FilterSpecs {
     private String startDate;

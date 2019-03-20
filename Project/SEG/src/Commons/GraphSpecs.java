@@ -54,7 +54,7 @@ public class GraphSpecs {
     public boolean equals(Object o) {
         if (o instanceof GraphSpecs) {
             GraphSpecs other = (GraphSpecs) o;
-            return (this.metric.equals(other.metric) && this.timespan.equals(other.timespan) && this.bounceDef.equals(other.bounceDef));
+            return (this.metric.equals(other.metric) && this.timespan.equals(other.timespan) && this.bounceDef.equals(other.bounceDef)) && filterSpecs.equals(((GraphSpecs) o).filterSpecs);
         }
         return false;
     }

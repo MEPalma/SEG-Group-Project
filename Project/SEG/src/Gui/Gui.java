@@ -60,7 +60,7 @@ public class Gui extends JFrame {
         this.popupMessageArea = new JPanel(new BorderLayout());
         this.popupMessageArea.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
         this.popupMessageArea.setBackground(GuiColors.BASE_SMOKE);
-        this.popupMessageArea.setPreferredSize(new Dimension(380, 380));
+        this.popupMessageArea.setPreferredSize(new Dimension(0, 0));
 
 
         /*
@@ -168,7 +168,7 @@ public class Gui extends JFrame {
         tabbedViewTopRightFunctions.setBackground(GuiColors.BASE_WHITE);
         tabbedViewTopRightFunctions.add(getShowFiltersMenuLabel());
         tabbedViewTopRightFunctions.add(getAddGraphMenuLabel());
-        tabbedViewTopRightFunctions.setPreferredSize(new Dimension(this.popupMessageArea.getPreferredSize().width, 50));
+        tabbedViewTopRightFunctions.setPreferredSize(new Dimension(380, 50));
 
         return tabbedViewTopRightFunctions;
     }

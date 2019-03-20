@@ -90,6 +90,22 @@ public class StatusDisplay extends RPanel {
 
         add(wrapper, BorderLayout.CENTER);
         refresh();
+
+        Thread timeout = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(8000);
+                    remove(wrapper);
+                    repaint();
+                    revalidate();
+                } catch (InterruptedException e) {
+
+                }
+
+            }
+        });
+        timeout.start();
     }
 
     private void clear() {

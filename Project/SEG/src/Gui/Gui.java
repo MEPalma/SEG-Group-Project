@@ -27,6 +27,8 @@ public class Gui extends JFrame {
 
     private JPanel filterButtonWrapper, addGraphButtonWrapper;
 
+    private MenuLabel filtersMenuLabel, addGraphMenuLabel;
+
     public Gui() {
         super("Dashboard App");
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Icons/logo.png")));
@@ -177,49 +179,36 @@ public class Gui extends JFrame {
         this.filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
         this.filterButtonWrapper.setPreferredSize(new Dimension(120, 60));
 
-        MenuLabel menuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16);
-        menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
-        menuLabel.addMouseListener(new MouseAdapter() {
+        this.filtersMenuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16);
+        this.filtersMenuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+        this.filtersMenuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-
                 if (currentPopup != null) {
                     if (currentPopup instanceof FiltersMenu) {
-                        currentPopup = null;
-                        popupMessageArea.removeAll();
+                    currentPopup = null;
+                    popupMessageArea.removeAll();
 
-                        filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+                    filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
 
-                        popupMessageArea.setPreferredSize(new Dimension(0, 0));
-                        popupMessageArea.repaint();
-                        popupMessageArea.revalidate();
-                        return;
+                    popupMessageArea.setPreferredSize(new Dimension(0, 0));
+                    popupMessageArea.repaint();
+                    popupMessageArea.revalidate();
+
+                    return;
                     }
                 }
-
-                popupMessageArea.removeAll();
-                currentPopup = new FiltersMenu(mainController);
-                currentPopup.setBorder(BorderFactory.createEmptyBorder());
-                popupMessageArea.add(currentPopup);
-
-                filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
-                addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
-
-                popupMessageArea.setPreferredSize(new Dimension(380, 380));
-                popupMessageArea.repaint();
-                popupMessageArea.revalidate();
-
-                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+                openFilters();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+                filtersMenuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
             }
         });
 
 
-        this.filterButtonWrapper.add(menuLabel, BorderLayout.CENTER);
+        this.filterButtonWrapper.add(this.filtersMenuLabel, BorderLayout.CENTER);
 
         return filterButtonWrapper;
     }
@@ -231,78 +220,37 @@ public class Gui extends JFrame {
         this.addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
         this.addGraphButtonWrapper.setPreferredSize(new Dimension(120, 60));
 
-        MenuLabel menuLabel = new MenuLabel("Add Graph", MenuLabel.CENTER, 16);
-        menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
-        menuLabel.addMouseListener(new MouseAdapter() {
+        this.addGraphMenuLabel = new MenuLabel("Add Graph", MenuLabel.CENTER, 16);
+        this.addGraphMenuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+        this.addGraphMenuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                //DEPRECATED popup
-//                JDialog dialog = new JDialog();
-//                dialog.setUndecorated(true);
-//                dialog.getContentPane().setLayout(new BorderLayout());
-//                dialog.addWindowFocusListener(new RecursiveLostFocus(dialog));
-//                dialog.getContentPane().add(new TitleLabel("Add new graph", TitleLabel.CENTER, 18), BorderLayout.NORTH);
-//
-//                /*
-//                    setup dialog view
-//                 */
-//                JPanel dialogView = new JPanel(new BorderLayout());
-//                dialogView.setBackground(GuiColors.BASE_SMOKE);
-//                dialogView.setBorder(BorderFactory.createLineBorder(GuiColors.BASE_SMOKE, 10, true));
-//                dialogView.add(new ChooseNewGraphPanel(mainController, dialog), BorderLayout.CENTER);
-//
-//
-//                /*
-//                    display dialog
-//                 */
-//                int dfWidth = 300;
-//                int dfHeight = 320;
-//                dialog.setSize(new Dimension(dfWidth, dfHeight));
-//
-//                int centerXtmp = menuLabel.getLocationOnScreen().x + 90 - dfWidth;
-//                int centerYtmp = menuLabel.getLocationOnScreen().y + 10;
-//                dialog.setLocation(centerXtmp, centerYtmp);
-//
-//                dialog.getContentPane().add(dialogView, BorderLayout.CENTER);
-//                dialog.setVisible(true);
                 if (currentPopup != null) {
                     if (currentPopup instanceof ChooseNewGraphPanel) {
                         currentPopup = null;
 
-                        menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
                         addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
 
                         popupMessageArea.setPreferredSize(new Dimension(0, 0));
                         popupMessageArea.removeAll();
                         popupMessageArea.repaint();
                         popupMessageArea.revalidate();
+
                         return;
                     }
                 }
 
-                popupMessageArea.removeAll();
-                currentPopup = new ChooseNewGraphPanel(mainController);
-                currentPopup.setBorder(BorderFactory.createEmptyBorder());
-
-                addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
-                filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
-
-                popupMessageArea.add(currentPopup);
-                popupMessageArea.setPreferredSize(new Dimension(380, 380));
-                popupMessageArea.repaint();
-                popupMessageArea.revalidate();
-
-                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+                openAddGraph();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                menuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+                addGraphMenuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
             }
         });
 
 
-        addGraphButtonWrapper.add(menuLabel, BorderLayout.CENTER);
+        addGraphButtonWrapper.add(addGraphMenuLabel, BorderLayout.CENTER);
         return addGraphButtonWrapper;
     }
 
@@ -325,4 +273,43 @@ public class Gui extends JFrame {
         this.campaignName.revalidate();
     }
 
+    public void openAddGraph() {
+        popupMessageArea.removeAll();
+        currentPopup = new ChooseNewGraphPanel(mainController);
+        currentPopup.setBorder(BorderFactory.createEmptyBorder());
+
+        addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
+        filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+        popupMessageArea.add(currentPopup);
+        popupMessageArea.setPreferredSize(new Dimension(380, 380));
+        popupMessageArea.repaint();
+        popupMessageArea.revalidate();
+    }
+
+    public void openFilters() {
+        if (mainController.getSelectedGraphSpec() == null) {
+            openAddGraph();
+            return;
+        }
+
+        popupMessageArea.removeAll();
+        currentPopup = new FiltersMenu(mainController);
+        currentPopup.setBorder(BorderFactory.createEmptyBorder());
+        popupMessageArea.add(currentPopup);
+
+        filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
+        addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+        popupMessageArea.setPreferredSize(new Dimension(380, 380));
+        popupMessageArea.repaint();
+        popupMessageArea.revalidate();
+    }
+
+
+    public boolean isFiltersShowing() {
+        if (this.currentPopup != null) {
+            return (currentPopup instanceof FiltersMenu);
+        } else return false;
+    }
 }

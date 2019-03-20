@@ -71,19 +71,17 @@ public class WelcomeProcedure extends JPanel {
 
     private JPanel getShowFinalMessage() {
 
-        mainController.clearFiltersSpecs();
-
         mainController.pushToGraphView(new GraphSpecs(
                 GraphSpecs.METRICS.NumberImpressions,
                 GraphSpecs.TIME_SPAN.WEEK_SPAN,
                 GraphSpecs.BOUNCE_DEF.NPAGES,
-                mainController.getFilterSpecs()));
+                mainController.getInitFilters()));
 
         mainController.pushToGraphView(new GraphSpecs(
                 GraphSpecs.METRICS.NumberImpressions,
                 GraphSpecs.TIME_SPAN.DAY_SPAN,
                 GraphSpecs.BOUNCE_DEF.NPAGES,
-                mainController.getFilterSpecs()));
+                mainController.getInitFilters()));
 
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBorder(BorderFactory.createEmptyBorder(80, 80, 80, 80));

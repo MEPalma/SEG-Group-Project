@@ -95,7 +95,6 @@ public class LoadCSVsMenu extends RPanel {
                                     parseButton.setEnabled(true);
                                     parseButton.setForeground(GuiColors.BASE_PRIME);
 
-                                    mainController.clearFiltersSpecs();
                                     mainController.refreshGraphs();
 
                                     return null;

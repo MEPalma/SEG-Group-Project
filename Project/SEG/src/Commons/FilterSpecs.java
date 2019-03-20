@@ -2,6 +2,7 @@ package Commons;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Filter;
 
 public class FilterSpecs {
     private String startDate;
@@ -66,5 +67,33 @@ public class FilterSpecs {
 
     public void setContexts(List<ImpressionEntry.Context> contexts) {
         this.contexts = contexts;
+    }
+
+    public FilterSpecs clone() {
+        FilterSpecs clone = new FilterSpecs();
+        clone.getGenders().addAll(this.genders);
+        clone.getContexts().addAll(this.contexts);
+        clone.getAges().addAll(this.ages);
+        clone.getIncomes().addAll(this.incomes);
+        clone.setStartDate(this.getStartDate());
+        clone.setEndDate(this.getEndDate());
+        return clone;
+    }
+
+    private void clearAll() {
+        this.genders.clear();
+        this.contexts.clear();
+        this.ages.clear();
+        this.incomes.clear();
+    }
+
+    public void updateFrom(FilterSpecs filterSpecs) {
+        clearAll();
+        this.genders.addAll(filterSpecs.getGenders());
+        this.contexts.addAll(filterSpecs.getContexts());
+        this.ages.addAll(filterSpecs.getAges());
+        this.incomes.addAll(filterSpecs.getIncomes());
+        this.startDate = filterSpecs.getStartDate();
+        this.endDate = filterSpecs.getEndDate();
     }
 }

@@ -16,11 +16,9 @@ import java.util.List;
 
 public class GraphView extends RPanel {
 
-    public enum Mode {CARD_MODE, GRID_MODE}
-
-    private Mode mode;
     private final MainController mainController;
     private final List<GraphSpecs> graphsOnScreen;
+    private Mode mode;
 
     public GraphView(MainController mainController) {
         super(GuiColors.BASE_SMOKE, new BorderLayout());
@@ -266,6 +264,8 @@ public class GraphView extends RPanel {
         for (GraphSpecs gs : this.graphsOnScreen)
             gs.setData(mainController.getGraphSpecData(gs));
     }
+
+    public enum Mode {CARD_MODE, GRID_MODE}
 }
 
 class GraphCardView extends RPanel {

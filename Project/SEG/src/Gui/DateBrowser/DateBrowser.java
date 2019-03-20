@@ -84,8 +84,18 @@ public class DateBrowser extends JPanel {
         return this.date;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+        refresh();
+        notifyListener();
+    }
+
     public SimpleDateFormat getDateFormat() {
         return dateFormat;
+    }
+
+    public void setDateFormat(SimpleDateFormat dateFormat) {
+        this.dateFormat = dateFormat;
     }
 
     public String getText() {
@@ -94,16 +104,6 @@ public class DateBrowser extends JPanel {
 
     public TakeActionListener getDateChangedListener() {
         return listener;
-    }
-
-    public void setDateFormat(SimpleDateFormat dateFormat) {
-        this.dateFormat = dateFormat;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-        refresh();
-        notifyListener();
     }
 
     public void setDateChangedListener(TakeActionListener listener) {

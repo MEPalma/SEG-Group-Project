@@ -27,8 +27,6 @@ public class MainController {
         this.tabbedView = tabbedView;
         this.statusDisplay = statusDisplay;
         this.dataLoadingTasks = new LinkedList<>();
-        this.filterSpecs = new FilterSpecs();
-        clearFiltersSpecs();
     }
 
     public void addDataLoadingTask(SwingWorker newTask) {
@@ -39,9 +37,8 @@ public class MainController {
         synchronized (this.dataLoadingTasks) {
             for (SwingWorker task : this.dataLoadingTasks)
                 task.cancel(true);
-
-            this.dataLoadingTasks.clear();
         }
+        this.dataLoadingTasks.clear();
     }
 
     public void removeDataLoadingTask(SwingWorker task) {
@@ -92,21 +89,26 @@ public class MainController {
         return this.dataExchange.getEndDate();
     }
 
-    public boolean isDbEmpty() {
-        return this.dataExchange.isEmpty();
-    }
-
 
     /*
         GRAPHS
     */
 
+    public boolean isDbEmpty() {
+        return this.dataExchange.isEmpty();
+    }
+
     public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
-        GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getFilterSpecs());
+        GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getInitFilters());
 
         if (this.tabbedView.containsComparable(graphSpecs)) return null;
         else return graphSpecs;
     }
+
+
+    /*
+        FILTERS
+     */
 
     public void pushToGraphView(GraphSpecs newGraphSpecs) {
 
@@ -114,6 +116,7 @@ public class MainController {
             @Override
             protected Object doInBackground() {
                 startProgressBar();
+                newGraphSpecs.getFilterSpecs().updateFrom(getInitFilters());
                 newGraphSpecs.setData(getGraphSpecData(newGraphSpecs));
                 GraphManager.setGraphDescription(newGraphSpecs);
 
@@ -122,7 +125,16 @@ public class MainController {
 
             @Override
             protected void done() {
-                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs), newGraphSpecs.getTypeColor(), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs);
+                TakeActionListener updateOnClick = new TakeActionListener() {
+                    @Override
+                    public void takeAction() {
+                        if (isFiltersShowing()) {
+                            openFiltersMenu();
+                        }
+                    }
+                };
+
+                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs), newGraphSpecs.getTypeColor(), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs, updateOnClick);
                 stopProgressBar();
                 removeDataLoadingTask(this);
                 super.done();
@@ -133,34 +145,58 @@ public class MainController {
         task.execute();
     }
 
-
-    /*
-        FILTERS
-     */
-
-    private final FilterSpecs filterSpecs;
-
-    public FilterSpecs getFilterSpecs() {
-        return this.filterSpecs;
+    public FilterSpecs getInitFilters() {
+        FilterSpecs newFilters = new FilterSpecs();
+        newFilters.setStartDate(Stringifiable.globalDateFormat.format(getStartDate()));
+        newFilters.setEndDate(Stringifiable.globalDateFormat.format(getEndDate()));
+        return newFilters;
     }
 
-    public void updateFilterSpecs(FilterSpecs newFilterSpecs) {
-        synchronized (this.filterSpecs) {
-            this.filterSpecs.setAges(newFilterSpecs.getAges());
-            this.filterSpecs.setContexts(newFilterSpecs.getContexts());
-            this.filterSpecs.setStartDate(Stringifiable.globalDateFormat.format(getStartDate()));
-            this.filterSpecs.setEndDate(Stringifiable.globalDateFormat.format(getEndDate()));
-            this.filterSpecs.setGenders(newFilterSpecs.getGenders());
-            this.filterSpecs.setIncomes(newFilterSpecs.getIncomes());
-        }
+    public void clearFilter(GraphSpecs graphSpecs) {
 
-        refreshGraphs();
+        graphSpecs.getFilterSpecs().getAges().clear();
+        graphSpecs.getFilterSpecs().getContexts().clear();
+        graphSpecs.getFilterSpecs().getGenders().clear();
+        graphSpecs.getIncomes().clear();
+        graphSpecs.getFilterSpecs().setStartDate(Stringifiable.globalDateFormat.format(getStartDate()));
+        graphSpecs.getFilterSpecs().setEndDate(Stringifiable.globalDateFormat.format(getEndDate()));
+
+        refreshGraph(graphSpecs);
+    }
+
+    public void refreshGraph(GraphSpecs graphSpecs) {
+        killDataLoadingTasks();
+
+        SwingWorker task = new SwingWorker() {
+            @Override
+            protected Object doInBackground() {
+                startProgressBar();
+                graphSpecs.setData(getGraphSpecData(graphSpecs));
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                tabbedView.replaceOnComparable(
+                        GraphManager.getGraphShortTitle(graphSpecs),
+                        graphSpecs.getTypeColor(),
+                        GraphManager.getGraphCard(graphSpecs),
+                        graphSpecs);
+
+                stopProgressBar();
+
+                super.done();
+            }
+        };
+
+        addDataLoadingTask(task);
+        task.execute();
     }
 
     public void refreshGraphs() {
         killDataLoadingTasks();
 
-        List<Object> graphSpecs = tabbedView.getAllComparables();
+        List<Object> graphSpecs = this.tabbedView.getAllComparables();
 
         tabbedView.clear();
 
@@ -168,8 +204,20 @@ public class MainController {
             pushToGraphView((GraphSpecs) g);
     }
 
-    public void clearFiltersSpecs() {
-        updateFilterSpecs(new FilterSpecs());
+    public GraphSpecs getSelectedGraphSpec() {
+        return (GraphSpecs) this.tabbedView.getSelectedComparable();
+    }
+
+    public void openFiltersMenu() {
+        this.gui.openFilters();
+    }
+
+    public void openAddGraphMenu() {
+        this.gui.openAddGraph();
+    }
+
+    public boolean isFiltersShowing() {
+        return this.gui.isFiltersShowing();
     }
 
 }

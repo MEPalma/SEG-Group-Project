@@ -31,6 +31,7 @@ public class SideMenu extends RPanel {
 
         //Load csvs
         MenuLabel loadCSVsLabel = new MenuLabel("", MenuLabel.LEFT, 0);
+        loadCSVsLabel.setToolTipText("Load from CSVs for a new campaign");
         loadCSVsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/upload.png")));
         loadCSVsLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -61,6 +62,7 @@ public class SideMenu extends RPanel {
 
         //settings
         MenuLabel settingsLabel = new MenuLabel("", MenuLabel.LEFT, 0);
+        settingsLabel.setToolTipText("Settings");
         settingsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/settings.png")));
         settingsLabel.addMouseListener(new MouseAdapter() {
             @Override

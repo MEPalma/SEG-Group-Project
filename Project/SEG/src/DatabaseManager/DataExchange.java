@@ -54,14 +54,6 @@ public class DataExchange {
     }
 
     /**
-     * closes the connection of the database. Do this only before exiting the
-     * application!
-     */
-    public void close() {
-        this.dbM.close();
-    }
-
-    /**
      * closes the ResultSet of a query. this should be called at the end of
      * every parsing routine.
      *
@@ -73,6 +65,14 @@ public class DataExchange {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * closes the connection of the database. Do this only before exiting the
+     * application!
+     */
+    public void close() {
+        this.dbM.close();
     }
 
     /**
@@ -154,7 +154,7 @@ public class DataExchange {
     }
 
     public boolean isEmpty() {
-        int tmp  = 0;
+        int tmp = 0;
 
         tmp = countAllFrom_CLICK_LOGS();
         if (tmp > 0) return false;
@@ -577,6 +577,7 @@ public class DataExchange {
         }
     }
 
+
     /*
         Settings
      */
@@ -591,6 +592,20 @@ public class DataExchange {
         } catch (SQLException ex) {
             setCampaignName("Campaign name");
             return getCampaignName();
+        }
+    }
+
+    public void setColorSeries(int id) {
+        this.dbM.writeQuery(QueryComposer.setColorSeries(id));
+    }
+
+    public int getColorSeries() {
+        ResultSet resultSet = this.dbM.query(QueryComposer.getColorSeries);
+        try {
+            return resultSet.getInt("v");
+        } catch (SQLException ex) {
+            setColorSeries(1);
+            return getColorSeries();
         }
     }
 

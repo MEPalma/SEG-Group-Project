@@ -53,6 +53,8 @@ public class StatusDisplay extends RPanel {
 
 
     public void showErrorMessage(String title, String content) {
+        clear();
+
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
         wrapper.setBackground(GuiColors.RED_ERROR);
@@ -88,6 +90,22 @@ public class StatusDisplay extends RPanel {
 
         add(wrapper, BorderLayout.CENTER);
         refresh();
+
+        Thread timeout = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(8000);
+                    remove(wrapper);
+                    repaint();
+                    revalidate();
+                } catch (InterruptedException e) {
+
+                }
+
+            }
+        });
+        timeout.start();
     }
 
     private void clear() {

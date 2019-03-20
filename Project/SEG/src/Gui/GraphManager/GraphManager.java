@@ -49,6 +49,9 @@ public class GraphManager {
         barChart.getCategoryPlot().getRangeAxis().setLabelFont(new Font("Verdana", Font.PLAIN, 12));
         barChart.getCategoryPlot().getDomainAxis().setLabelFont(barChart.getCategoryPlot().getRangeAxis().getLabelFont());
 
+        BarRenderer br = (BarRenderer) barChart.getCategoryPlot().getRenderer();
+        br.setMaximumBarWidth(.05);
+
         barChart.getCategoryPlot().getRangeAxis().setTickLabelFont(new Font("Verdana", Font.PLAIN, 8));
         barChart.getCategoryPlot().getDomainAxis().setTickLabelFont(barChart.getCategoryPlot().getRangeAxis().getTickLabelFont());
 
@@ -107,17 +110,18 @@ public class GraphManager {
 
     public static String getGraphShortTitle(GraphSpecs graphSpecs) {
         GraphSpecs.METRICS m = graphSpecs.getMetric();
-        if (m == GraphSpecs.METRICS.NumberImpressions) return "Impressions";
-        else if (m == GraphSpecs.METRICS.NumberClicks) return "Clicks";
-        else if (m == GraphSpecs.METRICS.NumberUniques) return "Uniques";
-        else if (m == GraphSpecs.METRICS.NumberBounces) return "Bounces";
-        else if (m == GraphSpecs.METRICS.NumberConversions) return "Conversions";
+        if (m == GraphSpecs.METRICS.NumberImpressions) return "Impression";
+        else if (m == GraphSpecs.METRICS.NumberClicks) return "Click";
+        else if (m == GraphSpecs.METRICS.NumberUniques) return "Unique";
+        else if (m == GraphSpecs.METRICS.NumberBounces) return "Bounce";
+        else if (m == GraphSpecs.METRICS.NumberConversions) return "Conversion";
         else if (m == GraphSpecs.METRICS.TotalCost) return "Total Cost";
         else if (m == GraphSpecs.METRICS.BounceRate) return "Bounce Rate";
         else return m.toString();
     }
 
     private static String parseTimeSpan(GraphSpecs.TIME_SPAN timeSpan) {
+        if (timeSpan == GraphSpecs.TIME_SPAN.MONTH_SPAN) return "Month";
         if (timeSpan == GraphSpecs.TIME_SPAN.DAY_SPAN) return "Day";
         else if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return "Week";
         else return "Hour";

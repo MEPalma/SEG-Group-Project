@@ -10,62 +10,6 @@ import java.util.List;
  */
 public class QueryComposer {
 
-    private static String CREATE_TABLE_USERS
-            = "CREATE TABLE IF NOT EXISTS USERS(\n"
-            + "id VARCHAR(255) PRIMARY KEY NOT NULL,\n"
-            + "gender VARCHAR(55),\n"
-            + "age VARCHAR(55),\n"
-            + "income VARCHAR(55)\n"
-            + ");";
-
-
-    private static String CREATE_TABLE_IMPRESSION_LOGS
-            = "CREATE TABLE IF NOT EXISTS IMPRESSION_LOGS(\n"
-            + "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n"
-            + "userId VARCHAR(255),\n"
-            + "date DATE,\n"
-            + "context VARCHAR(255),\n"
-            + "impressionCost NUMERIC,\n"
-            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
-            + ");";
-
-    private static String CREATE_TABLE_CLICK_LOGS
-            = "CREATE TABLE IF NOT EXISTS CLICK_LOGS(\n"
-            + "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-            + "userId VARCHAR(255),\n"
-            + "date DATE,\n"
-            + "clickCost NUMERIC,\n"
-            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
-            + ");";
-
-    private static String CREATE_TABLE_SERVER_LOGS
-            = "CREATE TABLE IF NOT EXISTS SERVER_LOGS(\n"
-            + "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n"
-            + "userId VARCHAR(255),\n"
-            + "entryDate DATE,\n"
-            + "exitDate DATE,\n"
-            + "pagesViewed INTEGER,\n"
-            + "conversion VARCHAR(55),\n"
-            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
-            + ");";
-
-    private static String CREATE_TABLE_SETTINGS
-            = "CREATE TABLE IF NOT EXISTS SETTINGS (\n"
-            + "name VARCHAR(255) NOT NULL,\n"
-            + "value TEXT,\n"
-            + "PRIMARY KEY (name)\n"
-            + ");";
-
-    public static String[] CREATE_TABLES =
-            {
-                    "PRAGMA foreign_keys = ON;",
-                    CREATE_TABLE_USERS,
-                    CREATE_TABLE_IMPRESSION_LOGS,
-                    CREATE_TABLE_CLICK_LOGS,
-                    CREATE_TABLE_SERVER_LOGS,
-                    CREATE_TABLE_SETTINGS
-            };
-
     public static String[] CREATE_INDEXES =
             {
                     "CREATE INDEX IF NOT EXISTS IMPRESSION_LOGS_DATE_INDEX ON IMPRESSION_LOGS (date);",
@@ -78,33 +22,7 @@ public class QueryComposer {
                     "CREATE INDEX IF NOT EXISTS SERVER_LOGS_ENTRY_DATE_INDEX ON SERVER_LOGS (entryDate);",
                     "CREATE INDEX IF NOT EXISTS SERVER_LOGS_EXIT_DATE_INDEX ON SERVER_LOGS (exitDate);"
             };
-
     public static String GETLASTID = "SELECT last_insert_rowid() as id";
-
-    /*
-        INSERT STATEMENTS
-     */
-    public static String insertUserStmt(UserEntry user) {
-        return "INSERT INTO USERS VALUES (" + user.stringify() + ");";
-    }
-
-    public static String insertImpressionStmt(ImpressionEntry ie) {
-        return "INSERT INTO IMPRESSION_LOGS VALUES (" + ie.stringify() + ");";
-    }
-
-    public static String insertClickStmt(ClickEntry ce) {
-        return "INSERT INTO CLICK_LOGS VALUES (" + ce.stringify() + ");";
-    }
-
-    public static String insertServerStmt(ServerEntry se) {
-        return "INSERT INTO SERVER_LOGS VALUES (" + se.stringify() + ");";
-    }
-
-    public static String insertSettingStmt(String name, String value)
-    {
-        return "INSERT INTO SETTINGS VALUES ('" + name + "', '" + value + "');";
-    }
-
     /*
         UPDATE STATEMENTS
      */
@@ -128,7 +46,6 @@ public class QueryComposer {
                     dropAllFrom_CLICK_LOGS,
                     dropAllFrom_SERVER_LOGS
             };
-
     /*
         COUNT STATEMENTS
     */
@@ -137,7 +54,6 @@ public class QueryComposer {
     public static String countAllFrom_CLICK_LOGS = "SELECT COUNT(*) as c FROM CLICK_LOGS;";
     public static String countAllFrom_SERVER_LOGS = "SELECT COUNT(*) as c FROM SERVER_LOGS;";
     public static String countAllFrom_SETTINGS = "SELECT COUNT(*) as c FROM SETTINGS;";
-
     /*
         SELECT ALL STATEMENTS
      */
@@ -146,6 +62,142 @@ public class QueryComposer {
     public static String selectAllFrom_CLICK_LOGS = "SELECT * FROM CLICK_LOGS;";
     public static String selectAllFrom_SERVER_LOGS = "SELECT * FROM SERVER_LOGS;";
     public static String selectAllFrom_SETTINGS = "SELECT * FROM SETTINGS;";
+
+
+    /*
+        Impressions
+     */
+    public static String getNumberOfImpressionsPerWeek = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%W', Date) order by Date;";
+    public static String getNumberOfImpressionsPerHour = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%H:%d', Date) order by Date;";
+    public static String getNumberOfImpressionsPerDay = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%d', Date) order by Date;";
+    /*
+    Number of clicks
+     */
+    public static String getNumberOfClicksPerWeek = "select Date as d,count(ClickCost) as c from click_logs group by strftime('%W', Date) order by Date;";
+    public static String getNumberOfClicksPerHour = "select Date as d,count(ClickCost) as c from click_logs group by strftime('%H:%d', Date) order by Date;";
+    public static String getNumberOfClicksPerDay = "select Date as d,count(ClickCost) as c from click_logs group by strftime('%d', Date) order by Date;";
+    /*
+     *Number of uniques
+     */
+    public static String getNumberOfUniques = "select count (distinct ID) as GroupedValues from click_logs;";
+    public static String getGetNumberOfUniquesPerDay = "select Date as d,count(distinct userid) as c from click_logs group by strftime('%d', Date) order by Date;";
+    public static String getGetNumberOfUniquesPerWeek = "select Date as d,count(distinct id) as c from click_logs group by strftime('%W', Date) order by Date;";
+    public static String getGetNumberOfUniquesPerHours = "select Date as d,count(distinct id) as c from click_logs group by strftime('%H:%d', Date) order by Date;";
+    /*
+    Number of Bounces
+     */
+    public static String getNumberOfBounces = "select count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as GroupedValues from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1;";
+    public static String getNumberOfBouncesPerDay = "select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfBouncesPerHour = "select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%H:%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfBouncesPerWeek = "select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%W',EntryDate);";
+    /*
+    Number of Conversions
+     */
+    public static String getNumberOfConversions = "select count(Conversion) as GroupedValues from server_logs where Conversion='No';";
+    public static String getNumberOfConversionsPerHour = "select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%H:%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfConversionsPerDay = "select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%d',EntryDate) order by EntryDate;";
+    public static String getNumberOfConversionsPerWeek = "select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%W',EntryDate) order by EntryDate;";
+    /*
+    Total Cost
+     */
+    public static String getTotalCost = "select (select sum(impressionCost) from impression_logs) +(select sum(ClickCost) from click_logs) as GroupedValues;";
+    public static String getTotalCostPerHour = "select d,sum(total) as c  from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%H:%d',d) order by d;";
+    public static String getTotalCostPerWeek = "select d,sum(total) as c from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%W',d) order by d;";
+    public static String getTotalCostPerDay = "select d,sum(total) as c from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%d',d) order by d";
+    /*
+   Gets per hour--24 hours
+    */
+    public static String getTotalNumberOfImpressionsPerHour = "select count(impressionCost) as GroupedValues from impression_logs group by strftime('%H',Date);";
+    /*
+    CTR
+     */
+    public static String getCTRPerWeek = "SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%W',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%W',date) order by date;";
+    public static String getCTRPerDay = "SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%d',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%d',date) order by date;";
+    public static String getCTRPerHour = "SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%H:%d',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%H:%d',date) order by date;";
+    /*
+    Inner Join Number of Impressions
+     */
+    public static String getImpressionsInnerJoinWeek = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%W', Date) order by Date;";
+    public static String getImpressionsInnerJoinHour = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%H:%d', Date) order by Date;";
+    public static String getImpressionsInnerJoinDay = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%d', Date) order by Date;";
+    public static String getStartDate = "select min(date) as d  from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
+    public static String getEndDate = "select Max(date) as d from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
+
+    /*
+    Number of impressions by week query.
+     */
+    private static String CREATE_TABLE_USERS
+            = "CREATE TABLE IF NOT EXISTS USERS(\n"
+            + "id VARCHAR(255) PRIMARY KEY NOT NULL,\n"
+            + "gender VARCHAR(55),\n"
+            + "age VARCHAR(55),\n"
+            + "income VARCHAR(55)\n"
+            + ");";
+    private static String CREATE_TABLE_IMPRESSION_LOGS
+            = "CREATE TABLE IF NOT EXISTS IMPRESSION_LOGS(\n"
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n"
+            + "userId VARCHAR(255),\n"
+            + "date DATE,\n"
+            + "context VARCHAR(255),\n"
+            + "impressionCost NUMERIC,\n"
+            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
+            + ");";
+    private static String CREATE_TABLE_CLICK_LOGS
+            = "CREATE TABLE IF NOT EXISTS CLICK_LOGS(\n"
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+            + "userId VARCHAR(255),\n"
+            + "date DATE,\n"
+            + "clickCost NUMERIC,\n"
+            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
+            + ");";
+    private static String CREATE_TABLE_SERVER_LOGS
+            = "CREATE TABLE IF NOT EXISTS SERVER_LOGS(\n"
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n"
+            + "userId VARCHAR(255),\n"
+            + "entryDate DATE,\n"
+            + "exitDate DATE,\n"
+            + "pagesViewed INTEGER,\n"
+            + "conversion VARCHAR(55),\n"
+            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
+            + ");";
+    private static String CREATE_TABLE_SETTINGS
+            = "CREATE TABLE IF NOT EXISTS SETTINGS (\n"
+            + "name VARCHAR(255) NOT NULL,\n"
+            + "value TEXT,\n"
+            + "PRIMARY KEY (name)\n"
+            + ");";
+    public static String[] CREATE_TABLES =
+            {
+                    "PRAGMA foreign_keys = ON;",
+                    CREATE_TABLE_USERS,
+                    CREATE_TABLE_IMPRESSION_LOGS,
+                    CREATE_TABLE_CLICK_LOGS,
+                    CREATE_TABLE_SERVER_LOGS,
+                    CREATE_TABLE_SETTINGS
+            };
+
+    /*
+        INSERT STATEMENTS
+     */
+    public static String insertUserStmt(UserEntry user) {
+        return "INSERT INTO USERS VALUES (" + user.stringify() + ");";
+    }
+
+    public static String insertImpressionStmt(ImpressionEntry ie) {
+        return "INSERT INTO IMPRESSION_LOGS VALUES (" + ie.stringify() + ");";
+    }
+
+    public static String insertClickStmt(ClickEntry ce) {
+        return "INSERT INTO CLICK_LOGS VALUES (" + ce.stringify() + ");";
+    }
+
+    public static String insertServerStmt(ServerEntry se) {
+        return "INSERT INTO SERVER_LOGS VALUES (" + se.stringify() + ");";
+    }
+
+    public static String insertSettingStmt(String name, String value) {
+        return "INSERT INTO SETTINGS VALUES ('" + name + "', '" + value + "');";
+    }
 
     /*
         SELECT BY ID
@@ -186,7 +238,7 @@ public class QueryComposer {
     }
 
     /*
-        Settigns
+        Settings
      */
     public static String setCampaignName(String name) {
         return "INSERT OR REPLACE INTO SETTINGS VALUES('campaignName', '" + name + "');";
@@ -195,6 +247,16 @@ public class QueryComposer {
     public static String getCampaignName = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='campaignName';";
 
 
+    public static String setColorSeries(int id) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('colorSeries', '" + id + "');";
+    }
+
+    public static String getColorSeries = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='colorSeries';";
+
+
+    /*
+        Graphs
+    */
     public static String composeQuery(GraphSpecs graphSpecs) {
         if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions) {
             return getNumberOfImpressions(graphSpecs);
@@ -204,11 +266,11 @@ public class QueryComposer {
             return getNumberOfConversions(graphSpecs);
         } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberUniques) {
             return getNumberOfUniques(graphSpecs);
-        } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberBounces) {
+        } else //if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberBounces) {
             return getNumberOfBounces(graphSpecs);
-        }
-        return null;
     }
+        //return null;
+
 
     public static List<String> composeSum(GraphSpecs graphSpecs) {
         List<String> tmpList = new LinkedList<>();
@@ -221,11 +283,13 @@ public class QueryComposer {
         if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return " group by strftime('%W', d)";
         else if (timeSpan == GraphSpecs.TIME_SPAN.DAY_SPAN)
             return " group by strftime('%d', d)";
-        return " group by strftime('%H:%d', d)";
+        else if (timeSpan == GraphSpecs.TIME_SPAN.HOUR_SPAN)
+            return " group by strftime('%H:%d', d)";
+        return " group by strftime('%m', d)";
 
     }
 
-    private static String getNumberOfImpressions(GraphSpecs graphSpecs) {
+    public static String getNumberOfImpressions(GraphSpecs graphSpecs) {
         StringBuilder tmp = new StringBuilder("select Date as d,count(userId) as c from impression_logs ");
         tmp.append(getFilters(graphSpecs));
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
@@ -235,7 +299,7 @@ public class QueryComposer {
         return tmp.toString();
     }
 
-    private static String getNumberOfClicks(GraphSpecs graphSpecs) {
+    public static String getNumberOfClicks(GraphSpecs graphSpecs) {
         StringBuilder tmp = new StringBuilder("select click_logs.Date as d,count(ClickCost) as c from click_logs");
         tmp.append(getFilters(graphSpecs));
         tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
@@ -283,7 +347,7 @@ public class QueryComposer {
             tmp.append(";");
             return tmp.toString();
         } else {
-            StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d, count(id) as c from server_logs ");
+            StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d, count(server_logs.id) as c from server_logs ");
             tmp.append(getFilters(graphSpecs) + " And PagesViewed<=1 ");
             tmp.append(getTimeSpanGroup(graphSpecs.getTimespan()));
 
@@ -296,7 +360,7 @@ public class QueryComposer {
     /*
     HERE AS WELL
      */
-    private static String getNumberOfConversions(GraphSpecs graphSpecs) {
+    public static String getNumberOfConversions(GraphSpecs graphSpecs) {
         StringBuilder tmp = new StringBuilder("select server_logs.EntryDate as d, count(Conversion) as c from server_logs ");
 
         tmp.append(getFilters(graphSpecs) + " And Conversion='Yes' ");
@@ -403,74 +467,4 @@ public class QueryComposer {
         }
         return tmp.toString();
     }
-
-    /*
-    Number of impressions by week query.
-     */
-
-    public static String getNumberOfImpressionsPerWeek = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%W', Date) order by Date;";
-    public static String getNumberOfImpressionsPerHour = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%H:%d', Date) order by Date;";
-    public static String getNumberOfImpressionsPerDay = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%d', Date) order by Date;";
-
-    /*
-    Number of clicks
-     */
-    public static String getNumberOfClicksPerWeek = "select Date as d,count(ClickCost) as c from click_logs group by strftime('%W', Date) order by Date;";
-    public static String getNumberOfClicksPerHour = "select Date as d,count(ClickCost) as c from click_logs group by strftime('%H:%d', Date) order by Date;";
-    public static String getNumberOfClicksPerDay = "select Date as d,count(ClickCost) as c from click_logs group by strftime('%d', Date) order by Date;";
-
-    /*
-     *Number of uniques
-     */
-    public static String getNumberOfUniques = "select count (distinct ID) as GroupedValues from click_logs;";
-    public static String getGetNumberOfUniquesPerDay = "select Date as d,count(distinct userid) as c from click_logs group by strftime('%d', Date) order by Date;";
-    public static String getGetNumberOfUniquesPerWeek = "select Date as d,count(distinct id) as c from click_logs group by strftime('%W', Date) order by Date;";
-    public static String getGetNumberOfUniquesPerHours = "select Date as d,count(distinct id) as c from click_logs group by strftime('%H:%d', Date) order by Date;";
-
-
-    /*
-    Number of Bounces
-     */
-    public static String getNumberOfBounces = "select count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as GroupedValues from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1;";
-    public static String getNumberOfBouncesPerDay = "select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%d',EntryDate) order by EntryDate;";
-    public static String getNumberOfBouncesPerHour = "select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%H:%d',EntryDate) order by EntryDate;";
-    public static String getNumberOfBouncesPerWeek = "select EntryDate as d,count(strftime('%M', ExitDate)-strftime('%M', EntryDate)) as c from server_logs where  strftime('%M', ExitDate)-strftime('%M', EntryDate)=0 AND PagesViewed=1 group by strftime('%W',EntryDate);";
-
-
-    /*
-    Number of Conversions
-     */
-    public static String getNumberOfConversions = "select count(Conversion) as GroupedValues from server_logs where Conversion='No';";
-    public static String getNumberOfConversionsPerHour = "select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%H:%d',EntryDate) order by EntryDate;";
-    public static String getNumberOfConversionsPerDay = "select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%d',EntryDate) order by EntryDate;";
-    public static String getNumberOfConversionsPerWeek = "select EntryDate as d, count(Conversion) as c from server_logs where Conversion='No' group by strftime('%W',EntryDate) order by EntryDate;";
-
-    /*
-    Total Cost
-     */
-    public static String getTotalCost = "select (select sum(impressionCost) from impression_logs) +(select sum(ClickCost) from click_logs) as GroupedValues;";
-    public static String getTotalCostPerHour = "select d,sum(total) as c  from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%H:%d',d) order by d;";
-    public static String getTotalCostPerWeek = "select d,sum(total) as c from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%W',d) order by d;";
-    public static String getTotalCostPerDay = "select d,sum(total) as c from (select date as d,ClickCost as total from click_logs union all select date as d,impressionCost as total from impression_logs) as u group by  strftime('%d',d) order by d";
-    /*
-   Gets per hour--24 hours
-    */
-    public static String getTotalNumberOfImpressionsPerHour = "select count(impressionCost) as GroupedValues from impression_logs group by strftime('%H',Date);";
-
-    /*
-    CTR
-     */
-    public static String getCTRPerWeek = "SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%W',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%W',date) order by date;";
-    public static String getCTRPerDay = "SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%d',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%d',date) order by date;";
-    public static String getCTRPerHour = "SELECT date as d ,cast(count(date) AS FLOAT)/cast((SELECT count(date) FROM impression_logs group by  strftime('%H:%d',date) order by date) AS FLOAT) as c FROM click_logs group by  strftime('%H:%d',date) order by date;";
-
-    /*
-    Inner Join Number of Impressions
-     */
-    public static String getImpressionsInnerJoinWeek = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%W', Date) order by Date;";
-    public static String getImpressionsInnerJoinHour = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%H:%d', Date) order by Date;";
-    public static String getImpressionsInnerJoinDay = "select Date as d,count(impressionCost) as c from impression_logs group by strftime('%d', Date) order by Date;";
-
-    public static String getStartDate = "select min(date) as d  from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
-    public static String getEndDate = "select Max(date) as d from (select id, date from click_logs union all select id , date from impression_logs union all select id ,EntryDate from server_logs  ) as u ;";
 }

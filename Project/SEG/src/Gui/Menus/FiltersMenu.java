@@ -1,5 +1,7 @@
 package Gui.Menus;
 
+import Commons.FilterSpecs;
+import Commons.GraphSpecs;
 import Commons.ImpressionEntry;
 import Commons.UserEntry;
 import Gui.DateBrowser.DateBrowser;
@@ -22,10 +24,15 @@ import static DatabaseManager.Stringifiable.globalDateFormat;
 
 public class FiltersMenu extends RPanel {
     private final MainController mainController;
+    private FilterSpecs cloneOfActiveFilters;
+    private GraphSpecs activeGraphSpec;
 
     public FiltersMenu(MainController mainController) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
         this.mainController = mainController;
+
+        this.activeGraphSpec = this.mainController.getSelectedGraphSpec();
+        this.cloneOfActiveFilters = activeGraphSpec.getFilterSpecs().clone();
         refresh();
     }
 
@@ -51,27 +58,27 @@ public class FiltersMenu extends RPanel {
 
         DateBrowser startDate = new DateBrowser(getBackground(), globalDateFormat, new Date());
         try {
-            startDate.setDate(globalDateFormat.parse(mainController.getFilterSpecs().getStartDate()));
+            startDate.setDate(globalDateFormat.parse(cloneOfActiveFilters.getStartDate()));
         } catch (Exception e) {
             e.printStackTrace();
         }
         startDate.setDateChangedListener(new TakeActionListener() {
             @Override
             public void takeAction() {
-                mainController.getFilterSpecs().setStartDate(globalDateFormat.format(startDate.getDate()));
+                cloneOfActiveFilters.setStartDate(globalDateFormat.format(startDate.getDate()));
             }
         });
 
         DateBrowser endDate = new DateBrowser(getBackground(), globalDateFormat, new Date());
         try {
-            endDate.setDate(globalDateFormat.parse(mainController.getFilterSpecs().getEndDate()));
+            endDate.setDate(globalDateFormat.parse(cloneOfActiveFilters.getEndDate()));
         } catch (Exception e) {
             e.printStackTrace();
         }
         endDate.setDateChangedListener(new TakeActionListener() {
             @Override
             public void takeAction() {
-                mainController.getFilterSpecs().setEndDate(globalDateFormat.format(endDate.getDate()));
+                cloneOfActiveFilters.setEndDate(globalDateFormat.format(endDate.getDate()));
             }
         });
 
@@ -106,27 +113,27 @@ public class FiltersMenu extends RPanel {
 
         // GENDER
         CheckBox maleOption = new CheckBox("Male");
-        maleOption.setSelected(mainController.getFilterSpecs().getGenders().contains(UserEntry.Gender.Male));
+        maleOption.setSelected(cloneOfActiveFilters.getGenders().contains(UserEntry.Gender.Male));
         maleOption.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (maleOption.isSelected()) {
-                    mainController.getFilterSpecs().getGenders().add(UserEntry.Gender.Male);
+                    cloneOfActiveFilters.getGenders().add(UserEntry.Gender.Male);
                 } else {
-                    mainController.getFilterSpecs().getGenders().remove(UserEntry.Gender.Male);
+                    cloneOfActiveFilters.getGenders().remove(UserEntry.Gender.Male);
                 }
             }
         });
 
         CheckBox femaleOption = new CheckBox("Female");
-        femaleOption.setSelected(mainController.getFilterSpecs().getGenders().contains(UserEntry.Gender.Female));
+        femaleOption.setSelected(cloneOfActiveFilters.getGenders().contains(UserEntry.Gender.Female));
         femaleOption.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (femaleOption.isSelected()) {
-                    mainController.getFilterSpecs().getGenders().add(UserEntry.Gender.Female);
+                    cloneOfActiveFilters.getGenders().add(UserEntry.Gender.Female);
                 } else {
-                    mainController.getFilterSpecs().getGenders().remove(UserEntry.Gender.Female);
+                    cloneOfActiveFilters.getGenders().remove(UserEntry.Gender.Female);
                 }
             }
         });
@@ -135,66 +142,66 @@ public class FiltersMenu extends RPanel {
 
         //AGE
         CheckBox opAge_less_than_25 = new CheckBox("<25");
-        opAge_less_than_25.setSelected(mainController.getFilterSpecs().getAges().contains(UserEntry.Age.Age_less_than_25));
+        opAge_less_than_25.setSelected(cloneOfActiveFilters.getAges().contains(UserEntry.Age.Age_less_than_25));
         opAge_less_than_25.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opAge_less_than_25.isSelected()) {
-                    mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_less_than_25);
+                    cloneOfActiveFilters.getAges().add(UserEntry.Age.Age_less_than_25);
                 } else {
-                    mainController.getFilterSpecs().getAges().remove(UserEntry.Age.Age_less_than_25);
+                    cloneOfActiveFilters.getAges().remove(UserEntry.Age.Age_less_than_25);
                 }
             }
         });
 
         CheckBox opAge_25_34 = new CheckBox("25-34");
-        opAge_25_34.setSelected(mainController.getFilterSpecs().getAges().contains(UserEntry.Age.Age_25_34));
+        opAge_25_34.setSelected(cloneOfActiveFilters.getAges().contains(UserEntry.Age.Age_25_34));
         opAge_25_34.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opAge_25_34.isSelected()) {
-                    mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_25_34);
+                    cloneOfActiveFilters.getAges().add(UserEntry.Age.Age_25_34);
                 } else {
-                    mainController.getFilterSpecs().getAges().remove(UserEntry.Age.Age_25_34);
+                    cloneOfActiveFilters.getAges().remove(UserEntry.Age.Age_25_34);
                 }
             }
         });
 
         CheckBox opAge_35_44 = new CheckBox("35-44");
-        opAge_35_44.setSelected(mainController.getFilterSpecs().getAges().contains(UserEntry.Age.Age_35_44));
+        opAge_35_44.setSelected(cloneOfActiveFilters.getAges().contains(UserEntry.Age.Age_35_44));
         opAge_35_44.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opAge_35_44.isSelected()) {
-                    mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_35_44);
+                    cloneOfActiveFilters.getAges().add(UserEntry.Age.Age_35_44);
                 } else {
-                    mainController.getFilterSpecs().getAges().remove(UserEntry.Age.Age_35_44);
+                    cloneOfActiveFilters.getAges().remove(UserEntry.Age.Age_35_44);
                 }
             }
         });
 
         CheckBox opAge_45_54 = new CheckBox("45-54");
-        opAge_45_54.setSelected(mainController.getFilterSpecs().getAges().contains(UserEntry.Age.Age_45_54));
+        opAge_45_54.setSelected(cloneOfActiveFilters.getAges().contains(UserEntry.Age.Age_45_54));
         opAge_45_54.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opAge_45_54.isSelected()) {
-                    mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_45_54);
+                    cloneOfActiveFilters.getAges().add(UserEntry.Age.Age_45_54);
                 } else {
-                    mainController.getFilterSpecs().getAges().remove(UserEntry.Age.Age_45_54);
+                    cloneOfActiveFilters.getAges().remove(UserEntry.Age.Age_45_54);
                 }
             }
         });
 
         CheckBox opAge_more_than_54 = new CheckBox(">54");
-        opAge_more_than_54.setSelected(mainController.getFilterSpecs().getAges().contains(UserEntry.Age.Age_more_than_54));
+        opAge_more_than_54.setSelected(cloneOfActiveFilters.getAges().contains(UserEntry.Age.Age_more_than_54));
         opAge_more_than_54.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opAge_more_than_54.isSelected()) {
-                    mainController.getFilterSpecs().getAges().add(UserEntry.Age.Age_more_than_54);
+                    cloneOfActiveFilters.getAges().add(UserEntry.Age.Age_more_than_54);
                 } else {
-                    mainController.getFilterSpecs().getAges().remove(UserEntry.Age.Age_more_than_54);
+                    cloneOfActiveFilters.getAges().remove(UserEntry.Age.Age_more_than_54);
                 }
             }
         });
@@ -203,79 +210,79 @@ public class FiltersMenu extends RPanel {
 
         //INCOME
         CheckBox opNews = new CheckBox("News");
-        opNews.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.News));
+        opNews.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.News));
         opNews.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opNews.isSelected()) {
-                    mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.News);
+                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.News);
                 } else {
-                    mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.News);
+                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.News);
                 }
             }
         });
 
         CheckBox opShopping = new CheckBox("Shopping");
-        opShopping.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.Shopping));
+        opShopping.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.Shopping));
         opShopping.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opShopping.isSelected()) {
-                    mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Shopping);
+                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.Shopping);
                 } else {
-                    mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.Shopping);
+                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.Shopping);
                 }
             }
         });
 
         CheckBox opSocialMedia = new CheckBox("Social Media");
-        opSocialMedia.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.SocialMedia));
+        opSocialMedia.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.SocialMedia));
         opSocialMedia.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opSocialMedia.isSelected()) {
-                    mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.SocialMedia);
+                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.SocialMedia);
                 } else {
-                    mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.SocialMedia);
+                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.SocialMedia);
                 }
             }
         });
 
         CheckBox opTravels = new CheckBox("Travels");
-        opTravels.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.Travel));
+        opTravels.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.Travel));
         opTravels.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opTravels.isSelected()) {
-                    mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Travel);
+                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.Travel);
                 } else {
-                    mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.Travel);
+                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.Travel);
                 }
             }
         });
 
         CheckBox opHobbies = new CheckBox("Hobbies");
-        opHobbies.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.Hobbies));
+        opHobbies.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.Hobbies));
         opHobbies.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opHobbies.isSelected()) {
-                    mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Hobbies);
+                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.Hobbies);
                 } else {
-                    mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.Hobbies);
+                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.Hobbies);
                 }
             }
         });
 
         CheckBox opBlog = new CheckBox("Blog");
-        opBlog.setSelected(mainController.getFilterSpecs().getContexts().contains(ImpressionEntry.Context.Blog));
+        opBlog.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.Blog));
         opBlog.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opBlog.isSelected()) {
-                    mainController.getFilterSpecs().getContexts().add(ImpressionEntry.Context.Blog);
+                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.Blog);
                 } else {
-                    mainController.getFilterSpecs().getContexts().remove(ImpressionEntry.Context.Blog);
+                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.Blog);
                 }
             }
         });
@@ -321,40 +328,40 @@ public class FiltersMenu extends RPanel {
 
         // Low, Medium, High,
         CheckBox opLowIncome = new CheckBox("Low");
-        opLowIncome.setSelected(mainController.getFilterSpecs().getIncomes().contains(UserEntry.Income.Low));
+        opLowIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(UserEntry.Income.Low));
         opLowIncome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opLowIncome.isSelected()) {
-                    mainController.getFilterSpecs().getIncomes().add(UserEntry.Income.Low);
+                    cloneOfActiveFilters.getIncomes().add(UserEntry.Income.Low);
                 } else {
-                    mainController.getFilterSpecs().getIncomes().remove(UserEntry.Income.Low);
+                    cloneOfActiveFilters.getIncomes().remove(UserEntry.Income.Low);
                 }
             }
         });
 
         CheckBox opMediumIncome = new CheckBox("Medium");
-        opMediumIncome.setSelected(mainController.getFilterSpecs().getIncomes().contains(UserEntry.Income.Medium));
+        opMediumIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(UserEntry.Income.Medium));
         opMediumIncome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opMediumIncome.isSelected()) {
-                    mainController.getFilterSpecs().getIncomes().add(UserEntry.Income.Medium);
+                    cloneOfActiveFilters.getIncomes().add(UserEntry.Income.Medium);
                 } else {
-                    mainController.getFilterSpecs().getIncomes().remove(UserEntry.Income.Medium);
+                    cloneOfActiveFilters.getIncomes().remove(UserEntry.Income.Medium);
                 }
             }
         });
 
         CheckBox highIncome = new CheckBox("High");
-        highIncome.setSelected(mainController.getFilterSpecs().getIncomes().contains(UserEntry.Income.High));
+        highIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(UserEntry.Income.High));
         highIncome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (highIncome.isSelected()) {
-                    mainController.getFilterSpecs().getIncomes().add(UserEntry.Income.High);
+                    cloneOfActiveFilters.getIncomes().add(UserEntry.Income.High);
                 } else {
-                    mainController.getFilterSpecs().getIncomes().remove(UserEntry.Income.High);
+                    cloneOfActiveFilters.getIncomes().remove(UserEntry.Income.High);
                 }
             }
         });
@@ -372,7 +379,7 @@ public class FiltersMenu extends RPanel {
     private JPanel getApplyOrClearButtons() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(8, 0, 0,0,  GuiColors.BASE_WHITE));
+        wrapper.setBorder(BorderFactory.createMatteBorder(8, 0, 0, 0, GuiColors.BASE_WHITE));
 
         JPanel choicesSplitter = new JPanel(new GridLayout(1, 2));
         choicesSplitter.setBackground(wrapper.getBackground());
@@ -383,7 +390,8 @@ public class FiltersMenu extends RPanel {
         applyFiltersLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                mainController.refreshGraphs();
+                activeGraphSpec.getFilterSpecs().updateFrom(cloneOfActiveFilters);
+                mainController.refreshGraph(activeGraphSpec);
                 refresh();
             }
         });
@@ -397,8 +405,9 @@ public class FiltersMenu extends RPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 //TODO Are you sure message
-                mainController.clearFiltersSpecs();
-                mainController.refreshGraphs();
+                mainController.clearFilter(activeGraphSpec);
+                cloneOfActiveFilters = activeGraphSpec.getFilterSpecs().clone();
+                mainController.refreshGraph(activeGraphSpec);
                 refresh();
             }
         });

@@ -12,8 +12,8 @@ import java.awt.event.MouseEvent;
 
 public class WelcomeProcedure extends JPanel {
     private final MainController mainController;
-    private TakeActionListener onClose;
     private final JPanel this_ = this;
+    private TakeActionListener onClose;
 
     public WelcomeProcedure(MainController mainController) {
         super(new BorderLayout());
@@ -22,44 +22,22 @@ public class WelcomeProcedure extends JPanel {
         setBorder(BorderFactory.createMatteBorder(40, 40, 40, 40, GuiColors.BASE_SMOKE));
         setBackground(GuiColors.BASE_WHITE);
 
-        add(getWelcomeView(), BorderLayout.CENTER);
+        add(getLoadFilesView(), BorderLayout.CENTER);
     }
 
     public void setOnClose(TakeActionListener onClose) {
         this.onClose = onClose;
     }
 
-    private JPanel getWelcomeView() {
+    private JPanel getLoadFilesView() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBorder(BorderFactory.createEmptyBorder());
         wrapper.setBackground(GuiColors.BASE_WHITE);
 
         TitleLabel logo = new TitleLabel("", TitleLabel.CENTER);
         logo.setIcon(new ImageIcon(getClass().getResource("/Icons/logo.png")));
-        logo.setPreferredSize(new Dimension(150, 150));
-        logo.setBorder(BorderFactory.createEmptyBorder(0, 0, 50, 0));
-        wrapper.add(logo, BorderLayout.CENTER);
-
-        MenuLabel segue = new MenuLabel("Start", MenuLabel.CENTER, 16);
-        segue.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-        segue.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                this_.removeAll();
-                this_.add(getLoadFilesView(), BorderLayout.CENTER);
-                this_.repaint();
-                this_.revalidate();
-            }
-        });
-        wrapper.add(segue, BorderLayout.SOUTH);
-
-        return wrapper;
-    }
-
-    private JPanel getLoadFilesView() {
-        JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
+        logo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        wrapper.add(logo, BorderLayout.NORTH);
 
         MenuLabel segue = new MenuLabel("Next", MenuLabel.CENTER, 16);
         segue.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
@@ -83,7 +61,7 @@ public class WelcomeProcedure extends JPanel {
         };
 
         LoadCSVsMenu loadCSVsMenu = new LoadCSVsMenu(mainController);
-        loadCSVsMenu.setBorder(BorderFactory.createEmptyBorder(80, 80, 80, 80));
+        loadCSVsMenu.setBorder(BorderFactory.createEmptyBorder(40, 80, 80, 80));
         loadCSVsMenu.setOnLoaded(onLoaded);
 
         wrapper.add(loadCSVsMenu, BorderLayout.CENTER);
@@ -93,19 +71,17 @@ public class WelcomeProcedure extends JPanel {
 
     private JPanel getShowFinalMessage() {
 
-        mainController.clearFiltersSpecs();
-
         mainController.pushToGraphView(new GraphSpecs(
                 GraphSpecs.METRICS.NumberImpressions,
                 GraphSpecs.TIME_SPAN.WEEK_SPAN,
                 GraphSpecs.BOUNCE_DEF.NPAGES,
-                mainController.getFilterSpecs()));
+                mainController.getInitFilters()));
 
         mainController.pushToGraphView(new GraphSpecs(
                 GraphSpecs.METRICS.NumberImpressions,
                 GraphSpecs.TIME_SPAN.DAY_SPAN,
                 GraphSpecs.BOUNCE_DEF.NPAGES,
-                mainController.getFilterSpecs()));
+                mainController.getInitFilters()));
 
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBorder(BorderFactory.createEmptyBorder(80, 80, 80, 80));

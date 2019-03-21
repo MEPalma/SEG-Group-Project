@@ -64,28 +64,28 @@ public class ClickEntry implements Stringifiable {
         return date;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public String getUserId() {
         return userId;
-    }
-
-    public Number getClickCost() {
-        return clickCost;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public Number getClickCost() {
+        return clickCost;
     }
 
     public void setClickCost(Number clickCost) {
         this.clickCost = clickCost;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

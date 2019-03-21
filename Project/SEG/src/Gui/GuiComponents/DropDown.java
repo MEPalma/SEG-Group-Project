@@ -142,6 +142,7 @@ class DropDownPopUp extends JDialog {
                             helperRef.setText(descriptions[indexChoice]);
                             helperRef.setVisible(true);
                             helperRef.refresh();
+                            helperRef.setFocusable(false);
                         }
                     } else helperRef.setVisible(false);
                 }

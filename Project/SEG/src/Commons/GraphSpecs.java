@@ -33,15 +33,17 @@ public class GraphSpecs {
     private Collection<Tuple<String, Number>> data;
 
     private final METRICS metric;
+    private final int campaignId;
     private final TIME_SPAN timespan;
 
     private final FilterSpecs filterSpecs;
 
     private final BOUNCE_DEF bounceDef;
 
-    public GraphSpecs(METRICS metric, TIME_SPAN timespan, BOUNCE_DEF bounceDef, FilterSpecs filterSpecs) {
+    public GraphSpecs(METRICS metric, TIME_SPAN timespan, BOUNCE_DEF bounceDef, FilterSpecs filterSpecs) { // todo parameter for campaignId
         this.metric = metric;
         this.timespan = timespan;
+        this.campaignId = 1;
 
         this.data = new LinkedList<>();
 
@@ -95,23 +97,27 @@ public class GraphSpecs {
         return metric;
     }
 
+    public int getCampaignId() {
+        return this.campaignId;
+    }
+
     public TIME_SPAN getTimespan() {
         return timespan;
     }
 
-    public List<UserEntry.Gender> getGenders() {
+    public List<Enums.Gender> getGenders() {
         return this.filterSpecs.getGenders();
     }
 
-    public List<UserEntry.Age> getAges() {
+    public List<Enums.Age> getAges() {
         return this.filterSpecs.getAges();
     }
 
-    public List<UserEntry.Income> getIncomes() {
+    public List<Enums.Income> getIncomes() {
         return this.filterSpecs.getIncomes();
     }
 
-    public List<ImpressionEntry.Context> getContexts() {
+    public List<Enums.Context> getContexts() {
         return this.filterSpecs.getContexts();
     }
 

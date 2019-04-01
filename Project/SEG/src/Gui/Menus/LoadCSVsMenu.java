@@ -77,15 +77,13 @@ public class LoadCSVsMenu extends RPanel {
                                 campaignName = "Today's campaign";
                             else campaignName = campaignName.trim().replace("-", "").replace("'", "").replace("\"", "");
 
-                            mainController.setCampaignName(campaignName);
-
                             //new background thread
                             SwingWorker<Void, Void> loadTask = new SwingWorker<Void, Void>() {
                                 @Override
                                 protected Void doInBackground() throws Exception {
                                     mainController.startProgressBar();
                                     CSVParser parser = new CSVParser(mainController, impressionLog, clickLog, serverLog);
-                                    parser.parseAll();
+                                    parser.parseAll(campaignName);
                                     mainController.stopProgressBar();
                                     mainController.removeDataLoadingTask(this);
 
@@ -120,7 +118,9 @@ public class LoadCSVsMenu extends RPanel {
                 titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 10, 0));
                 add(titleLabel, BorderLayout.NORTH);
 
-                add(listView.getWrappedInScroll(true), BorderLayout.CENTER);
+                JScrollPane tmp = listView.getWrappedInScroll(false);
+                tmp.setPreferredSize(new Dimension(300, 400));
+                add(tmp, BorderLayout.SOUTH);
 
                 mainController.removeDataLoadingTask(this);
 

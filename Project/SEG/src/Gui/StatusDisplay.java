@@ -95,7 +95,7 @@ public class StatusDisplay extends RPanel {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(8000);
+                    Thread.sleep(30 * 1000);
                     remove(wrapper);
                     repaint();
                     revalidate();

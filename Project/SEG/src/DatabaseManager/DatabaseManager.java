@@ -52,6 +52,7 @@ public class DatabaseManager {
      * @return
      */
     public synchronized ResultSet query(String query) {
+        System.out.println(query);
         try {
             Statement stmt = this.dbCon.createStatement();
             return stmt.executeQuery(query);

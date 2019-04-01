@@ -68,13 +68,13 @@ public class MainController {
         return this.dataExchange;
     }
 
-    public String getCampaignName() {
-        return this.dataExchange.getCampaignName();
+    public String getCampaignName(int id) {
+        return this.dataExchange.getCampaignName(id);
     }
 
-    public void setCampaignName(String name) {
-        this.dataExchange.setCampaignName(name);
-        this.gui.updateCampaignName();
+    public void setCampaignName(int id, String name) {
+        this.dataExchange.setCampaignName(id, name);
+//        this.gui.updateCampaignName();
     }
 
     public List<Tuple<String, Number>> getGraphSpecData(GraphSpecs graphSpecs) {

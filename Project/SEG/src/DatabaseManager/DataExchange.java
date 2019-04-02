@@ -578,8 +578,24 @@ public class DataExchange {
 
 
     /*
-        Settings
+        CAMPAIGNS
      */
+    public List<Tuple<Integer, String>> selectAllCampaigns() {
+        ResultSet rset = this.dbM.query(QueryComposer.selectAllCampaigns);
+
+        List<Tuple<Integer, String>> names = new LinkedList();
+
+        try {
+            while (rset.next())
+                names.add(new Tuple(rset.getInt(1), rset.getString(2)));
+
+        } catch (SQLException e) {
+
+        }
+
+        return names;
+    }
+
     public int insertNewCampaign(String name) {
         this.dbM.writeQuery(QueryComposer.insertNewCampaign(name));
         return getLastID();

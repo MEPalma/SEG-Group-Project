@@ -27,9 +27,9 @@ public class Gui extends JFrame {
     private JPanel currentPopup;
     private TitleLabel campaignName;
 
-    private JPanel filterButtonWrapper, addGraphButtonWrapper;
+    private JPanel filterButtonWrapper, addGraphButtonWrapper, compareButtonWrapper;
 
-    private MenuLabel filtersMenuLabel, addGraphMenuLabel;
+    private MenuLabel filtersMenuLabel, addGraphMenuLabel, compareMenuLabel;
 
     public Gui() {
         super("Dashboard App");
@@ -165,11 +165,12 @@ public class Gui extends JFrame {
     }
 
     private JPanel getTopRightFunctions() {
-        JPanel tabbedViewTopRightFunctions = new JPanel(new GridLayout(1, 2));
+        JPanel tabbedViewTopRightFunctions = new JPanel(new GridLayout(1, 3));
         tabbedViewTopRightFunctions.setBorder(BorderFactory.createEmptyBorder());
         tabbedViewTopRightFunctions.setBackground(GuiColors.BASE_WHITE);
         tabbedViewTopRightFunctions.add(getShowFiltersMenuLabel());
         tabbedViewTopRightFunctions.add(getAddGraphMenuLabel());
+        tabbedViewTopRightFunctions.add(getCompareMenuLabel());
         tabbedViewTopRightFunctions.setPreferredSize(new Dimension(380, 50));
 
         return tabbedViewTopRightFunctions;
@@ -254,6 +255,30 @@ public class Gui extends JFrame {
 
         addGraphButtonWrapper.add(addGraphMenuLabel, BorderLayout.CENTER);
         return addGraphButtonWrapper;
+    }
+
+    private JPanel getCompareMenuLabel() {
+        this.compareButtonWrapper = new JPanel(new BorderLayout());
+        this.compareButtonWrapper.setBackground(GuiColors.BASE_WHITE);
+        this.compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        this.compareButtonWrapper.setPreferredSize(new Dimension(120, 60));
+
+        this.compareMenuLabel = new MenuLabel("Compare", MenuLabel.CENTER, 16);
+        this.compareMenuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+        this.compareMenuLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+
+            }
+        });
+
+        this.compareButtonWrapper.add(this.compareMenuLabel, BorderLayout.CENTER);
+        return this.compareButtonWrapper;
     }
 
     @Override

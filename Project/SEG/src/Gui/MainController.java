@@ -219,5 +219,4 @@ public class MainController {
     public boolean isFiltersShowing() {
         return this.gui.isFiltersShowing();
     }
-
 }

@@ -10,6 +10,7 @@ import Gui.GraphManager.GraphManager;
 import Gui.TabbedView.TabbedView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -98,8 +99,8 @@ public class MainController {
         return this.dataExchange.isEmpty();
     }
 
-    public GraphSpecs proposeNewGraph(GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
-        GraphSpecs graphSpecs = new GraphSpecs(metrics, time_span, bounce_def, getInitFilters());
+    public GraphSpecs proposeNewGraph(int campaignId, GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
+        GraphSpecs graphSpecs = new GraphSpecs(campaignId, metrics, time_span, bounce_def, getInitFilters());
 
         if (this.tabbedView.containsComparable(graphSpecs)) return null;
         else return graphSpecs;
@@ -135,6 +136,47 @@ public class MainController {
                 };
 
                 tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs), newGraphSpecs.getTypeColor(), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs, updateOnClick);
+                stopProgressBar();
+                removeDataLoadingTask(this);
+                super.done();
+            }
+        };
+
+        addDataLoadingTask(task);
+        task.execute();
+    }
+
+    public void pushToGraphView(String xAxis, String yAxis, List<GraphSpecs> graphSpecs) {
+        SwingWorker task = new SwingWorker() {
+            @Override
+            protected Object doInBackground() {
+                startProgressBar();
+
+                for (GraphSpecs g : graphSpecs) {
+                    g.getFilterSpecs().updateFrom(getInitFilters());
+                    g.setData(getGraphSpecData(g));
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                TakeActionListener updateOnClick = new TakeActionListener() {
+                    @Override
+                    public void takeAction() {
+                        if (isFiltersShowing()) {
+                            openFiltersMenu();
+                        }
+                    }
+                };
+
+                tabbedView.push(
+                        "TODO title",
+                        Color.BLACK,
+                        GraphManager.getGraphCard("TODO title", xAxis, yAxis, graphSpecs),
+                        graphSpecs,//TODO check
+                        updateOnClick);
                 stopProgressBar();
                 removeDataLoadingTask(this);
                 super.done();

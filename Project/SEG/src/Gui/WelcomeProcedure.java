@@ -48,12 +48,13 @@ public class WelcomeProcedure extends JPanel {
                 this_.repaint();
                 this_.revalidate();
                 
-                mainController.pushToGraphView(new GraphSpecs(
-                        GraphSpecs.METRICS.NumberImpressions,
-                        GraphSpecs.TIME_SPAN.HOUR_SPAN,
-                        GraphSpecs.BOUNCE_DEF.NPAGES,
-                        mainController.getInitFilters())
-                );
+//                mainController.pushToGraphView(new GraphSpecs(
+//
+//                        GraphSpecs.METRICS.NumberImpressions,
+//                        GraphSpecs.TIME_SPAN.HOUR_SPAN,
+//                        GraphSpecs.BOUNCE_DEF.NPAGES,
+//                        mainController.getInitFilters())
+//                );
                 
                 onClose.takeAction();
             }

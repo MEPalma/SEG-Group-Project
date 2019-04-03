@@ -634,8 +634,18 @@ public class DataExchange {
 
             if (graphSpecs.getMetric() == GraphSpecs.METRICS.CTR) {
 
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs (
+                                                                                    graphSpecs.getCampaignId(),
+                                                                                    GraphSpecs.METRICS.NumberClicks,
+                                                                                    graphSpecs.getTimespan(),
+                                                                                    graphSpecs.getBounceDef(),
+                                                                                    graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(
+                                                                                    graphSpecs.getCampaignId(),
+                                                                                    GraphSpecs.METRICS.NumberImpressions,
+                                                                                    graphSpecs.getTimespan(),
+                                                                                    graphSpecs.getBounceDef(),
+                                                                                    graphSpecs.getFilterSpecs())));
                 //getInfoTupleDivision(leftSet, rightSet);
                 List<Tuple<String, Number>> result = getInfoTupleDivision(leftSet, rightSet);
                 close(leftSet);
@@ -643,40 +653,101 @@ public class DataExchange {
                 return result;
                 //getCTRPerHour();
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPA) {
-                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
-                ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ImpressionCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
+                                                                                    graphSpecs.getCampaignId(),
+                                                                                    GraphSpecs.METRICS.ClickCost,
+                                                                                    graphSpecs.getTimespan(),
+                                                                                    graphSpecs.getBounceDef(),
+                                                                                    graphSpecs.getFilterSpecs())).get(0));
+                ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
+                                                                                    graphSpecs.getCampaignId(),
+                                                                                    GraphSpecs.METRICS.ImpressionCost,
+                                                                                    graphSpecs.getTimespan(),
+                                                                                    graphSpecs.getBounceDef(),
+                                                                                    graphSpecs.getFilterSpecs())).get(1));
                 List<Tuple<String, Number>> resultSum = getSum(sumLeft, sumRigth);
 
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberConversions, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(
+                                                                                    graphSpecs.getCampaignId(),
+                                                                                    GraphSpecs.METRICS.NumberConversions,
+                                                                                    graphSpecs.getTimespan(),
+                                                                                    graphSpecs.getBounceDef(),
+                                                                                    graphSpecs.getFilterSpecs())));
+
                 List<Tuple<String, Number>> result = createResultDivision(resultSum, rightSet);
                 close(rightSet);
                 return result;
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPC) {
-                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
-                ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ImpressionCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
+                                                                                graphSpecs.getCampaignId(),
+                                                                                GraphSpecs.METRICS.ClickCost,
+                                                                                graphSpecs.getTimespan(),
+                                                                                graphSpecs.getBounceDef(),
+                                                                                graphSpecs.getFilterSpecs())).get(0));
+                ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
+                                                                                graphSpecs.getCampaignId(),
+                                                                                GraphSpecs.METRICS.ImpressionCost,
+                                                                                graphSpecs.getTimespan(),
+                                                                                graphSpecs.getBounceDef(),
+                                                                                graphSpecs.getFilterSpecs())).get(1));
                 List<Tuple<String, Number>> resultSum = getSum(sumLeft, sumRigth);
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(
+                                                                                graphSpecs.getCampaignId(),
+                                                                                GraphSpecs.METRICS.NumberClicks,
+                                                                                graphSpecs.getTimespan(),
+                                                                                graphSpecs.getBounceDef(),
+                                                                                graphSpecs.getFilterSpecs())));
                 List<Tuple<String, Number>> result = createResultDivision(resultSum, rightSet);
                 close(rightSet);
                 return result;
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPM) {
-                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
-                ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ImpressionCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
+                                                                                graphSpecs.getCampaignId(),
+                                                                                GraphSpecs.METRICS.ClickCost,
+                                                                                graphSpecs.getTimespan(),
+                                                                                graphSpecs.getBounceDef(),
+                                                                                graphSpecs.getFilterSpecs())).get(0));
+                ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
+                                                                                graphSpecs.getCampaignId(),
+                                                                                GraphSpecs.METRICS.ImpressionCost,
+                                                                                graphSpecs.getTimespan(),
+                                                                                graphSpecs.getBounceDef(),
+                                                                                graphSpecs.getFilterSpecs())).get(1));
                 List<Tuple<String, Number>> resultSum = getSum(sumLeft, sumRigth);
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberImpressions, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(
+                                                                                graphSpecs.getCampaignId(),
+                                                                                GraphSpecs.METRICS.NumberImpressions,
+                                                                                graphSpecs.getTimespan(),
+                                                                                graphSpecs.getBounceDef(),
+                                                                                graphSpecs.getFilterSpecs())));
                 List<Tuple<String, Number>> result = createResultDivision(resultSum, rightSet);
                 close(rightSet);
                 return result;
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate) {
                 ResultSet leftSet = this.dbM.query(QueryComposer.getNumberOfBounces(graphSpecs));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(GraphSpecs.METRICS.NumberClicks, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(
+                                                                                graphSpecs.getCampaignId(),
+                                                                                GraphSpecs.METRICS.NumberClicks,
+                                                                                graphSpecs.getTimespan(),
+                                                                                graphSpecs.getBounceDef(),
+                                                                                graphSpecs.getFilterSpecs())));
                 List<Tuple<String, Number>> result = getInfoTupleDivision(leftSet, rightSet);
                 close(leftSet);
                 close(rightSet);
                 return result;
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.TotalCost) {
-                ResultSet leftSet = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ClickCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(0));
-                ResultSet rightSet = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(GraphSpecs.METRICS.ImpressionCost, graphSpecs.getTimespan(), graphSpecs.getBounceDef(), graphSpecs.getFilterSpecs())).get(1));
+                ResultSet leftSet = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
+                        graphSpecs.getCampaignId(),
+                        GraphSpecs.METRICS.ClickCost,
+                        graphSpecs.getTimespan(),
+                        graphSpecs.getBounceDef(),
+                        graphSpecs.getFilterSpecs())).get(0));
+                ResultSet rightSet = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
+                                                                                graphSpecs.getCampaignId(),
+                                                                                GraphSpecs.METRICS.ImpressionCost,
+                                                                                graphSpecs.getTimespan(),
+                                                                                graphSpecs.getBounceDef(),
+                                                                                graphSpecs.getFilterSpecs())).get(1));
                 List<Tuple<String, Number>> result = getSum(leftSet, rightSet);
                 close(leftSet);
                 close(rightSet);

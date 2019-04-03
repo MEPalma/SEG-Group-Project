@@ -40,10 +40,10 @@ public class GraphSpecs {
 
     private final BOUNCE_DEF bounceDef;
 
-    public GraphSpecs(METRICS metric, TIME_SPAN timespan, BOUNCE_DEF bounceDef, FilterSpecs filterSpecs) { // todo parameter for campaignId
+    public GraphSpecs(int campaignId, METRICS metric, TIME_SPAN timespan, BOUNCE_DEF bounceDef, FilterSpecs filterSpecs) { // todo parameter for campaignId
         this.metric = metric;
         this.timespan = timespan;
-        this.campaignId = 1;
+        this.campaignId = campaignId;
 
         this.data = new LinkedList<>();
 
@@ -70,7 +70,7 @@ public class GraphSpecs {
         return title;
     }
 
-    public Collection getData() {
+    public Collection<Tuple<String, Number>> getData() {
         return data;
     }
 

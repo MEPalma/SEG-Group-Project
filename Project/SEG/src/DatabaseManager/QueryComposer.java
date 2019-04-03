@@ -62,7 +62,7 @@ public class QueryComposer {
     public static String selectAllFrom_CLICK_LOGS = "SELECT * FROM CLICK_LOGS;";
     public static String selectAllFrom_SERVER_LOGS = "SELECT * FROM SERVER_LOGS;";
     public static String selectAllFrom_SETTINGS = "SELECT * FROM SETTINGS;";
-    public static String selectAllCampaigns = "SELECT * from CAMPAIGNS";
+    public static String selectAllCampaigns = "SELECT * from CAMPAIGNS;";
 
     public static String insertNewCampaign(String name) {
         return "INSERT INTO CAMPAIGNS VALUES (NULL, '" + name + "');";

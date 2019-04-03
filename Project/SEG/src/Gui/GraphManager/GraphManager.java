@@ -2,8 +2,10 @@ package Gui.GraphManager;
 
 import Commons.GraphSpecs;
 import Commons.Tuple;
+import DatabaseManager.Stringifiable;
 import Gui.GuiColors;
 import Gui.GuiComponents.TitleLabel;
+import Gui.MainController;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -18,16 +20,64 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collection;
+import java.util.*;
+import java.util.List;
 
 public class GraphManager {
+
+    public static JPanel createBarChar(String xAxis, String yAxis, List<Tuple<String, Tuple<String, Number>>> data) {
+
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        for (Tuple<String, Tuple<String, Number>> t : data)
+                dataset.addValue(t.getY().getY(), t.getX(), t.getY().getX());
+
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "",
+                xAxis,
+                yAxis,
+                dataset,
+                PlotOrientation.VERTICAL,
+                true, true, false);
+        barChart.setBorderVisible(false);
+        barChart.setAntiAlias(true);
+        barChart.removeLegend();
+        barChart.setBackgroundPaint(Color.WHITE);
+
+        CategoryPlot cplot = (CategoryPlot) barChart.getPlot();
+        cplot.setBackgroundPaint(SystemColor.inactiveCaption);
+
+        ((BarRenderer) cplot.getRenderer()).setBarPainter(new StandardBarPainter());
+
+        BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
+        r.setSeriesPaint(0, Color.BLACK);
+
+        Plot plot = barChart.getPlot();
+        plot.setBackgroundPaint(Color.WHITE);
+
+        barChart.getCategoryPlot().getRangeAxis().setLabelFont(new Font("Verdana", Font.PLAIN, 12));
+        barChart.getCategoryPlot().getDomainAxis().setLabelFont(barChart.getCategoryPlot().getRangeAxis().getLabelFont());
+
+        BarRenderer br = (BarRenderer) barChart.getCategoryPlot().getRenderer();
+        br.setMaximumBarWidth(.05);
+
+        barChart.getCategoryPlot().getRangeAxis().setTickLabelFont(new Font("Verdana", Font.PLAIN, 8));
+        barChart.getCategoryPlot().getDomainAxis().setTickLabelFont(barChart.getCategoryPlot().getRangeAxis().getTickLabelFont());
+
+        if (data.size() > 24) barChart.getCategoryPlot().getDomainAxis().setTickLabelsVisible(false);
+
+        CategoryAxis axis = barChart.getCategoryPlot().getDomainAxis();
+        axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+
+        return new ChartPanel(barChart);
+    }
 
     public static JPanel createBarChar(GraphSpecs graphSpecs) {
         JFreeChart barChart = ChartFactory.createBarChart(
                 "",
                 graphSpecs.getxAxisName(),
                 graphSpecs.getyAxisName(),
-                getBarChartDataset(graphSpecs.getData()),
+                getBarChartDataset("", graphSpecs.getData()),
                 PlotOrientation.VERTICAL,
                 true, true, false);
         barChart.setBorderVisible(false);
@@ -63,11 +113,11 @@ public class GraphManager {
         return new ChartPanel(barChart);
     }
 
-    private static DefaultCategoryDataset getBarChartDataset(Collection<Tuple<String, Number>> data) {
+    private static DefaultCategoryDataset getBarChartDataset(String rowKey, Collection<Tuple<String, Number>> data) {
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         for (Tuple<String, Number> i : data) {
-            dataset.addValue(i.getY(), "", i.getX());
+            dataset.addValue(i.getY(), rowKey, i.getX());
         }
 
         return dataset;
@@ -87,6 +137,52 @@ public class GraphManager {
         topPanel.add(titleLabel, BorderLayout.CENTER);
 
         JPanel graph = GraphManager.createBarChar(spec);
+
+        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_WHITE));
+        card.add(topPanel, BorderLayout.NORTH);
+        card.add(graph, BorderLayout.CENTER);
+
+        return card;
+    }
+
+    public static JPanel getGraphCard(String title, String xAxis, String yAxis, List<GraphSpecs> data) {
+        JPanel card = new JPanel(new BorderLayout());
+        card.setBackground(Color.BLACK);
+        card.setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(Color.BLACK);
+        topPanel.setPreferredSize(new Dimension(100, 50));
+
+        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.CENTER, 16);
+        titleLabel.setForeground(GuiColors.BASE_WHITE);
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+
+        //organize by date
+        List<Tuple<String, Tuple<String, Number>>> sortedData = new LinkedList<>();
+
+        for (GraphSpecs i : data) {
+            for (Tuple<String, Number> j : i.getData())
+                sortedData.add(new Tuple<String, Tuple<String, Number>>(Integer.toString(i.getCampaignId()), j));
+        }
+
+        Collections.sort(sortedData, new Comparator<Tuple<String, Tuple<String, Number>>>() {
+            @Override
+            public int compare(Tuple<String, Tuple<String, Number>> t0, Tuple<String, Tuple<String, Number>> t1) {
+                try {
+                    Date d0 = Stringifiable.globalDateFormat.parse(t0.getY().getX());
+                    Date d1 = Stringifiable.globalDateFormat.parse(t1.getY().getX());
+
+                    if (d0.before(d1)) return -1;
+                    else if (d0.after(d1)) return 1;
+
+                } catch (Exception ex) {
+                }
+                return 0;
+            }
+        });
+
+        JPanel graph = GraphManager.createBarChar(xAxis, yAxis, sortedData);
 
         graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_WHITE));
         card.add(topPanel, BorderLayout.NORTH);

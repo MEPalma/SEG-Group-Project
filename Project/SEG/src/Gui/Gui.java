@@ -3,6 +3,7 @@ package Gui;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.TitleLabel;
 import Gui.Menus.ChooseNewGraphPanel;
+import Gui.Menus.CompareMenu;
 import Gui.Menus.FiltersMenu;
 import Gui.Menus.SideMenu;
 import Gui.TabbedView.TabbedView;
@@ -268,7 +269,22 @@ public class Gui extends JFrame {
         this.compareMenuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
+                if (currentPopup != null) {
+                    if (currentPopup instanceof CompareMenu) {
+                        currentPopup = null;
 
+                        compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+                        popupMessageArea.setPreferredSize(new Dimension(0, 0));
+                        popupMessageArea.removeAll();
+                        popupMessageArea.repaint();
+                        popupMessageArea.revalidate();
+
+                        return;
+                    }
+                }
+
+                openCompareMenu();
             }
 
             @Override
@@ -308,6 +324,7 @@ public class Gui extends JFrame {
 
         addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
         filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
 
         popupMessageArea.add(currentPopup);
         popupMessageArea.setPreferredSize(new Dimension(380, 380));
@@ -328,12 +345,27 @@ public class Gui extends JFrame {
 
         filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
         addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
 
         popupMessageArea.setPreferredSize(new Dimension(380, 380));
         popupMessageArea.repaint();
         popupMessageArea.revalidate();
     }
 
+    public void openCompareMenu() {
+        popupMessageArea.removeAll();
+        currentPopup = new CompareMenu(mainController);
+        currentPopup.setBorder(BorderFactory.createEmptyBorder());
+        popupMessageArea.add(currentPopup);
+
+        compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
+        addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+        popupMessageArea.setPreferredSize(new Dimension(380, 380));
+        popupMessageArea.repaint();
+        popupMessageArea.revalidate();
+    }
 
     public boolean isFiltersShowing() {
         if (this.currentPopup != null) {

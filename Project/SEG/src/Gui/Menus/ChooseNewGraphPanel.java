@@ -1,6 +1,7 @@
 package Gui.Menus;
 
 import Commons.GraphSpecs;
+import Commons.Tuple;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;
 import Gui.MainController;
@@ -43,6 +44,7 @@ public class ChooseNewGraphPanel extends RPanel {
     private final MainController mainController;
 
     private final TitleLabel messageLabel;
+    private final DropDown campaignChooser;
     private final DropDown metricsChooser;
     private final DropDown bounceDefinitionChooser;
     private final DropDown timespanChooser;
@@ -62,6 +64,15 @@ public class ChooseNewGraphPanel extends RPanel {
                 refresh();
             }
         };
+
+        List<Tuple<Integer, String>> allCampaigns = mainController.getDataExchange().selectAllCampaigns();
+
+        String campaignsOptions[] = new String[allCampaigns.size()];
+
+        for (int i = 0; i < allCampaigns.size(); ++i)
+            campaignsOptions[i] = allCampaigns.get(i).getY();
+
+        this.campaignChooser = new DropDown(campaignsOptions, null, 0);
 
         this.metricsChooser = new DropDown(METRICS, METRICS_DESCRIPTIONS, 0);
         this.metricsChooser.addTakeActionListener(takeActionListener);
@@ -98,6 +109,7 @@ public class ChooseNewGraphPanel extends RPanel {
         addLabelWrapper.add(addLabel);
 
         List<Component> items = new LinkedList<Component>();
+        items.add(getCampaignChooserCell());
         items.add(getMetricsChooserCell());
 
         if (this.metricsChooser.getSelectedIndex() == 3)//Bounce
@@ -113,12 +125,23 @@ public class ChooseNewGraphPanel extends RPanel {
     }
 
     private boolean handleAdd() {
-        GraphSpecs graphSpecs = mainController.proposeNewGraph(getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
+        GraphSpecs graphSpecs = mainController.proposeNewGraph(getCampaignId(), getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
         if (graphSpecs != null) {
             mainController.pushToGraphView(graphSpecs);
             return true;
         }
         return false;
+    }
+
+    private JPanel getCampaignChooserCell() {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+
+        wrapper.add(new TitleLabel("Campaign", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(this.campaignChooser, BorderLayout.CENTER);
+
+        return wrapper;
     }
 
     private JPanel getMetricsChooserCell() {
@@ -151,6 +174,10 @@ public class ChooseNewGraphPanel extends RPanel {
         wrapper.add(this.timespanChooser, BorderLayout.CENTER);
 
         return wrapper;
+    }
+
+    private int getCampaignId() {
+        return this.campaignChooser.getSelectedIndex() + 1;
     }
 
     private GraphSpecs.METRICS getChosenMetric() {

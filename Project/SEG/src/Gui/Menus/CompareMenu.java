@@ -1,6 +1,8 @@
 package Gui.Menus;
 
+import Commons.GraphSpecs;
 import Commons.Tuple;
+import Gui.GraphManager.GraphManager;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;
 import Gui.MainController;
@@ -13,17 +15,39 @@ import java.util.LinkedList;
 import java.util.List;
 import java.awt.*;
 
+import static Gui.Menus.ChooseNewGraphPanel.BOUNCE_DEF;
+
 public class CompareMenu extends RPanel {
     private final MainController mainController;
     private final List<Tuple<Integer,String>> selections;
 
     private final String[] campaignsOptions;
 
+    private final DropDown metricsChooser;
+    private final DropDown bounceDefinitionChooser;
+    private final DropDown timespanChooser;
+
     public CompareMenu(MainController mainController) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
 
         this.mainController = mainController;
         this.selections = new LinkedList<>();
+
+        TakeActionListener takeActionListener = new TakeActionListener() {
+            @Override
+            public void takeAction() {
+                refresh();
+            }
+        };
+
+        this.metricsChooser = new DropDown(ChooseNewGraphPanel.METRICS, ChooseNewGraphPanel.METRICS_DESCRIPTIONS, 0);
+        this.metricsChooser.addTakeActionListener(takeActionListener);
+
+        this.bounceDefinitionChooser = new DropDown(BOUNCE_DEF, null, 0);
+        this.bounceDefinitionChooser.addTakeActionListener(takeActionListener);
+
+        this.timespanChooser = new DropDown(ChooseNewGraphPanel.TIME_SPANS, null, 0);
+        this.timespanChooser.addTakeActionListener(takeActionListener);
 
         List<Tuple<Integer, String>> allCampaigns = mainController.getDataExchange().selectAllCampaigns();
 
@@ -43,15 +67,17 @@ public class CompareMenu extends RPanel {
         wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         wrapper.setBackground(getBackground());
 
-        wrapper.add(new TitleLabel("Date range", TitleLabel.LEFT, 20), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Compare", TitleLabel.LEFT, 20), BorderLayout.NORTH);
 
         List<Component> cells = new LinkedList<>();
 
-        for (int i = 0; i < this.selections.size(); ++i)
-            cells.add(getDropDownSelection(i, this.selections.get(i).getX(), this.campaignsOptions));
+        cells.add(getMetricsChooserCell());
 
-        cells.add(getAddCampaignCell());
-        cells.add(getAddButton());
+        if (this.metricsChooser.getSelectedIndex() == 3)//Bounce
+            cells.add(getBounceChooserCell());
+
+        cells.add(getTimeSpanChooserCell());
+        cells.add(getCampaignsChooserCell());
 
         wrapper.add(new ListView(getBackground(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
 
@@ -63,7 +89,7 @@ public class CompareMenu extends RPanel {
     private JPanel getDropDownSelection(int indexInPool, int selectedIndex, String[] options) {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(getBackground());
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         DropDown dropDown = new DropDown(options, null, selectedIndex);
         dropDown.addTakeActionListener(new TakeActionListener() {
@@ -108,6 +134,57 @@ public class CompareMenu extends RPanel {
         return wrapper;
     }
 
+    private JPanel getCampaignsChooserCell() {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+
+        wrapper.add(new TitleLabel("Campaigns", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+
+        List<Component> cells = new LinkedList<>();
+        for (int i = 0; i < this.selections.size(); ++i)
+            cells.add(getDropDownSelection(i, this.selections.get(i).getX(), this.campaignsOptions));
+
+        cells.add(getAddCampaignCell());
+        cells.add(getAddButton());
+
+        wrapper.add(new ListView(getBackground(), cells), BorderLayout.CENTER);
+
+        return wrapper;
+    }
+
+    private JPanel getMetricsChooserCell() {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+
+        wrapper.add(new TitleLabel("Metric", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(this.metricsChooser, BorderLayout.CENTER);
+
+        return wrapper;
+    }
+
+    private JPanel getBounceChooserCell() {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+
+        wrapper.add(new TitleLabel("Bounce Definition", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(this.bounceDefinitionChooser, BorderLayout.CENTER);
+        return wrapper;
+    }
+
+    private JPanel getTimeSpanChooserCell() {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+
+        wrapper.add(new TitleLabel("Time Grouping", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(this.timespanChooser, BorderLayout.CENTER);
+
+        return wrapper;
+    }
+
     private JPanel getAddButton() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(getBackground());
@@ -117,15 +194,39 @@ public class CompareMenu extends RPanel {
         addMenuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                System.out.println(campaignsOptions);
-                System.out.println(selections);
+                List<GraphSpecs> graphSpecs = new LinkedList<>();
 
-                //TODO TOMORROW!
-//                mainController.pushToGraphView("", "");
+                for (Tuple<Integer, String> s : selections) {
+                    GraphSpecs tmp = new GraphSpecs(
+                            s.getX() + 1,
+                            s.getY(),
+                            getChosenMetric(),
+                            getChosenTimeSpan(),
+                            getChosenBounceDef(),
+                            mainController.getInitFilters()
+                    );
+                    graphSpecs.add(tmp);
+                }
+
+                String cardTitle = "Compare " + GraphManager.getGraphShortTitle(getChosenMetric());
+                String graphTitle = "Compare " + GraphManager.getGraphTitle(getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
+                mainController.pushToGraphView(cardTitle, graphTitle, GraphManager.getGraphShortTitle(getChosenMetric()), GraphManager.getFormattedTimeSpan(getChosenTimeSpan()), graphSpecs);
             }
         });
         wrapper.add(addMenuLabel, BorderLayout.CENTER);
 
         return wrapper;
+    }
+
+    private GraphSpecs.METRICS getChosenMetric() {
+        return GraphSpecs.METRICS.values()[this.metricsChooser.getSelectedIndex()];
+    }
+
+    private GraphSpecs.TIME_SPAN getChosenTimeSpan() {
+        return GraphSpecs.TIME_SPAN.values()[this.timespanChooser.getSelectedIndex()];
+    }
+
+    private GraphSpecs.BOUNCE_DEF getChosenBounceDef() {
+        return GraphSpecs.BOUNCE_DEF.values()[this.bounceDefinitionChooser.getSelectedIndex()];
     }
 }

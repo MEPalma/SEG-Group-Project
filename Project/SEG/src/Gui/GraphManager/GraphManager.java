@@ -5,7 +5,6 @@ import Commons.Tuple;
 import DatabaseManager.Stringifiable;
 import Gui.GuiColors;
 import Gui.GuiComponents.TitleLabel;
-import Gui.MainController;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -41,7 +40,7 @@ public class GraphManager {
                 true, true, false);
         barChart.setBorderVisible(false);
         barChart.setAntiAlias(true);
-        barChart.removeLegend();
+//        barChart.removeLegend();
         barChart.setBackgroundPaint(Color.WHITE);
 
         CategoryPlot cplot = (CategoryPlot) barChart.getPlot();
@@ -163,7 +162,7 @@ public class GraphManager {
 
         for (GraphSpecs i : data) {
             for (Tuple<String, Number> j : i.getData())
-                sortedData.add(new Tuple<String, Tuple<String, Number>>(Integer.toString(i.getCampaignId()), j));
+                sortedData.add(new Tuple<String, Tuple<String, Number>>(i.getCampaignName(), j));
         }
 
         Collections.sort(sortedData, new Comparator<Tuple<String, Tuple<String, Number>>>() {
@@ -192,20 +191,29 @@ public class GraphManager {
     }
 
     public static void setGraphDescription(GraphSpecs graphSpecs) {
-        String yAxis = getGraphShortTitle(graphSpecs);
-        String xAxis = parseTimeSpan(graphSpecs.getTimespan());
-        String title = getGraphShortTitle(graphSpecs) + " / " + xAxis;
+        String yAxis = getGraphShortTitle(graphSpecs.getMetric());
+        String xAxis = getFormattedTimeSpan(graphSpecs.getTimespan());
+        String title = yAxis + " / " + xAxis;
 
-        if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate)
-            title += " [" + parseBounceDef(graphSpecs.getBounceDef()) + "]";
+        if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberBounces)
+            title += " [" + getFormattedBounceDef(graphSpecs.getBounceDef()) + "]";
 
         graphSpecs.setTitle(title);
         graphSpecs.setxAxisName(xAxis);
         graphSpecs.setyAxisName(yAxis);
     }
 
-    public static String getGraphShortTitle(GraphSpecs graphSpecs) {
-        GraphSpecs.METRICS m = graphSpecs.getMetric();
+    public static String getGraphTitle(GraphSpecs.METRICS m, GraphSpecs.TIME_SPAN t, GraphSpecs.BOUNCE_DEF b) {
+        String xAxis = getFormattedTimeSpan(t);
+        String title = getGraphShortTitle(m) + " / " + xAxis;
+
+        if (m == GraphSpecs.METRICS.NumberBounces)
+            title += " [" + getFormattedBounceDef(b) + "]";
+
+        return title;
+    }
+
+    public static String getGraphShortTitle(GraphSpecs.METRICS m) {
         if (m == GraphSpecs.METRICS.NumberImpressions) return "Impression";
         else if (m == GraphSpecs.METRICS.NumberClicks) return "Click";
         else if (m == GraphSpecs.METRICS.NumberUniques) return "Unique";
@@ -216,14 +224,14 @@ public class GraphManager {
         else return m.toString();
     }
 
-    private static String parseTimeSpan(GraphSpecs.TIME_SPAN timeSpan) {
+    public static String getFormattedTimeSpan(GraphSpecs.TIME_SPAN timeSpan) {
         if (timeSpan == GraphSpecs.TIME_SPAN.MONTH_SPAN) return "Month";
         if (timeSpan == GraphSpecs.TIME_SPAN.DAY_SPAN) return "Day";
         else if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return "Week";
         else return "Hour";
     }
 
-    private static String parseBounceDef(GraphSpecs.BOUNCE_DEF bounceDef) {
+    public static String getFormattedBounceDef(GraphSpecs.BOUNCE_DEF bounceDef) {
         if (bounceDef == GraphSpecs.BOUNCE_DEF.NPAGES) return "Pages";
         else return "Time";
     }

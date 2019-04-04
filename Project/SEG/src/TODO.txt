@@ -2,8 +2,8 @@
 [    ] hide filter button when no graphs
 [    ] hide compare button when less than two campaigns
 
-[  ~ ] add compare menu
-[    ] multiple columns in compare chart
+[ OK ] add compare menu
+[ OK ] multiple columns in compare chart
 
 [    ] change color in settings
 [    ] remove space between tab bar and pane
@@ -18,6 +18,8 @@
 
 [ OK ] add choose campaign in add graph
 
-[    ] edit popup content of charts
+[ OK ] edit popup content of charts
 
 [    ] filters on compare graphs
+
+[    ] control for compare insertion (no select same campaign more than once)

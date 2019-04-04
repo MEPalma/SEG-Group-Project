@@ -99,13 +99,6 @@ public class MainController {
         return this.dataExchange.isEmpty();
     }
 
-    public GraphSpecs proposeNewGraph(int campaignId, GraphSpecs.METRICS metrics, GraphSpecs.TIME_SPAN time_span, GraphSpecs.BOUNCE_DEF bounce_def) {
-        GraphSpecs graphSpecs = new GraphSpecs(campaignId, metrics, time_span, bounce_def, getInitFilters());
-
-        if (this.tabbedView.containsComparable(graphSpecs)) return null;
-        else return graphSpecs;
-    }
-
 
     /*
         FILTERS
@@ -135,7 +128,7 @@ public class MainController {
                     }
                 };
 
-                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs), newGraphSpecs.getTypeColor(), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs, updateOnClick);
+                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs.getMetric()), newGraphSpecs.getTypeColor(), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs, updateOnClick);
                 stopProgressBar();
                 removeDataLoadingTask(this);
                 super.done();
@@ -146,7 +139,7 @@ public class MainController {
         task.execute();
     }
 
-    public void pushToGraphView(String xAxis, String yAxis, List<GraphSpecs> graphSpecs) {
+    public void pushToGraphView(String cardTitle, String graphTitle, String xAxis, String yAxis, List<GraphSpecs> graphSpecs) {
         SwingWorker task = new SwingWorker() {
             @Override
             protected Object doInBackground() {
@@ -172,9 +165,9 @@ public class MainController {
                 };
 
                 tabbedView.push(
-                        "TODO title",
+                        cardTitle,
                         Color.BLACK,
-                        GraphManager.getGraphCard("TODO title", xAxis, yAxis, graphSpecs),
+                        GraphManager.getGraphCard(graphTitle, xAxis, yAxis, graphSpecs),
                         graphSpecs,//TODO check
                         updateOnClick);
                 stopProgressBar();
@@ -220,7 +213,7 @@ public class MainController {
             @Override
             protected void done() {
                 tabbedView.replaceOnComparable(
-                        GraphManager.getGraphShortTitle(graphSpecs),
+                        GraphManager.getGraphShortTitle(graphSpecs.getMetric()),
                         graphSpecs.getTypeColor(),
                         GraphManager.getGraphCard(graphSpecs),
                         graphSpecs);

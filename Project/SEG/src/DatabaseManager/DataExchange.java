@@ -636,12 +636,14 @@ public class DataExchange {
 
                 ResultSet leftSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs (
                                                                                     graphSpecs.getCampaignId(),
+                                                                                    graphSpecs.getCampaignName(),
                                                                                     GraphSpecs.METRICS.NumberClicks,
                                                                                     graphSpecs.getTimespan(),
                                                                                     graphSpecs.getBounceDef(),
                                                                                     graphSpecs.getFilterSpecs())));
                 ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(
                                                                                     graphSpecs.getCampaignId(),
+                                                                                    graphSpecs.getCampaignName(),
                                                                                     GraphSpecs.METRICS.NumberImpressions,
                                                                                     graphSpecs.getTimespan(),
                                                                                     graphSpecs.getBounceDef(),
@@ -655,12 +657,14 @@ public class DataExchange {
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPA) {
                 ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
                                                                                     graphSpecs.getCampaignId(),
+                                                                                    graphSpecs.getCampaignName(),
                                                                                     GraphSpecs.METRICS.ClickCost,
                                                                                     graphSpecs.getTimespan(),
                                                                                     graphSpecs.getBounceDef(),
                                                                                     graphSpecs.getFilterSpecs())).get(0));
                 ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
                                                                                     graphSpecs.getCampaignId(),
+                                                                                    graphSpecs.getCampaignName(),
                                                                                     GraphSpecs.METRICS.ImpressionCost,
                                                                                     graphSpecs.getTimespan(),
                                                                                     graphSpecs.getBounceDef(),
@@ -669,6 +673,7 @@ public class DataExchange {
 
                 ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(
                                                                                     graphSpecs.getCampaignId(),
+                                                                                    graphSpecs.getCampaignName(),
                                                                                     GraphSpecs.METRICS.NumberConversions,
                                                                                     graphSpecs.getTimespan(),
                                                                                     graphSpecs.getBounceDef(),
@@ -680,12 +685,14 @@ public class DataExchange {
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPC) {
                 ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
                                                                                 graphSpecs.getCampaignId(),
+                        graphSpecs.getCampaignName(),
                                                                                 GraphSpecs.METRICS.ClickCost,
                                                                                 graphSpecs.getTimespan(),
                                                                                 graphSpecs.getBounceDef(),
                                                                                 graphSpecs.getFilterSpecs())).get(0));
                 ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
                                                                                 graphSpecs.getCampaignId(),
+                                                                                graphSpecs.getCampaignName(),
                                                                                 GraphSpecs.METRICS.ImpressionCost,
                                                                                 graphSpecs.getTimespan(),
                                                                                 graphSpecs.getBounceDef(),
@@ -693,6 +700,7 @@ public class DataExchange {
                 List<Tuple<String, Number>> resultSum = getSum(sumLeft, sumRigth);
                 ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(
                                                                                 graphSpecs.getCampaignId(),
+                                                                                graphSpecs.getCampaignName(),
                                                                                 GraphSpecs.METRICS.NumberClicks,
                                                                                 graphSpecs.getTimespan(),
                                                                                 graphSpecs.getBounceDef(),
@@ -703,12 +711,14 @@ public class DataExchange {
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.CPM) {
                 ResultSet sumLeft = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
                                                                                 graphSpecs.getCampaignId(),
+                                                                                graphSpecs.getCampaignName(),
                                                                                 GraphSpecs.METRICS.ClickCost,
                                                                                 graphSpecs.getTimespan(),
                                                                                 graphSpecs.getBounceDef(),
                                                                                 graphSpecs.getFilterSpecs())).get(0));
                 ResultSet sumRigth = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
                                                                                 graphSpecs.getCampaignId(),
+                                                                                graphSpecs.getCampaignName(),
                                                                                 GraphSpecs.METRICS.ImpressionCost,
                                                                                 graphSpecs.getTimespan(),
                                                                                 graphSpecs.getBounceDef(),
@@ -716,6 +726,7 @@ public class DataExchange {
                 List<Tuple<String, Number>> resultSum = getSum(sumLeft, sumRigth);
                 ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(
                                                                                 graphSpecs.getCampaignId(),
+                                                                                graphSpecs.getCampaignName(),
                                                                                 GraphSpecs.METRICS.NumberImpressions,
                                                                                 graphSpecs.getTimespan(),
                                                                                 graphSpecs.getBounceDef(),
@@ -727,6 +738,7 @@ public class DataExchange {
                 ResultSet leftSet = this.dbM.query(QueryComposer.getNumberOfBounces(graphSpecs));
                 ResultSet rightSet = this.dbM.query(QueryComposer.composeQuery(new GraphSpecs(
                                                                                 graphSpecs.getCampaignId(),
+                                                                                graphSpecs.getCampaignName(),
                                                                                 GraphSpecs.METRICS.NumberClicks,
                                                                                 graphSpecs.getTimespan(),
                                                                                 graphSpecs.getBounceDef(),
@@ -737,13 +749,15 @@ public class DataExchange {
                 return result;
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.TotalCost) {
                 ResultSet leftSet = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
-                        graphSpecs.getCampaignId(),
-                        GraphSpecs.METRICS.ClickCost,
-                        graphSpecs.getTimespan(),
-                        graphSpecs.getBounceDef(),
-                        graphSpecs.getFilterSpecs())).get(0));
+                                                                                graphSpecs.getCampaignId(),
+                                                                                graphSpecs.getCampaignName(),
+                                                                                GraphSpecs.METRICS.ClickCost,
+                                                                                graphSpecs.getTimespan(),
+                                                                                graphSpecs.getBounceDef(),
+                                                                                graphSpecs.getFilterSpecs())).get(0));
                 ResultSet rightSet = this.dbM.query(QueryComposer.composeSum(new GraphSpecs(
                                                                                 graphSpecs.getCampaignId(),
+                                                                                graphSpecs.getCampaignName(),
                                                                                 GraphSpecs.METRICS.ImpressionCost,
                                                                                 graphSpecs.getTimespan(),
                                                                                 graphSpecs.getBounceDef(),

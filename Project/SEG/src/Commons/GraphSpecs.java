@@ -34,16 +34,18 @@ public class GraphSpecs {
 
     private final METRICS metric;
     private final int campaignId;
+    private final String campaignName;
     private final TIME_SPAN timespan;
 
     private final FilterSpecs filterSpecs;
 
     private final BOUNCE_DEF bounceDef;
 
-    public GraphSpecs(int campaignId, METRICS metric, TIME_SPAN timespan, BOUNCE_DEF bounceDef, FilterSpecs filterSpecs) { // todo parameter for campaignId
+    public GraphSpecs(int campaignId, String campaignName, METRICS metric, TIME_SPAN timespan, BOUNCE_DEF bounceDef, FilterSpecs filterSpecs) { // todo parameter for campaignId
         this.metric = metric;
         this.timespan = timespan;
         this.campaignId = campaignId;
+        this.campaignName = campaignName;
 
         this.data = new LinkedList<>();
 
@@ -99,6 +101,10 @@ public class GraphSpecs {
 
     public int getCampaignId() {
         return this.campaignId;
+    }
+
+    public String getCampaignName() {
+        return campaignName;
     }
 
     public TIME_SPAN getTimespan() {

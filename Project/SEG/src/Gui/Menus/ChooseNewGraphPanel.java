@@ -29,7 +29,7 @@ public class ChooseNewGraphPanel extends RPanel {
             "Bounce Rate"};
     public static String[] BOUNCE_DEF = {"Time", "Number of Pages"};
     public static String[] TIME_SPANS = {"Month", "Week", "Day", "Hour"};
-    private static String[] METRICS_DESCRIPTIONS = {
+    public static String[] METRICS_DESCRIPTIONS = {
             "An impression occurs whenever an ad is shown to a user, regardless of whether they click on it.",
             "A click occurs when a user clicks on an ad that is shown to them.",
             "The number of unique users that click on an ad during the course of a campaign.",
@@ -60,7 +60,6 @@ public class ChooseNewGraphPanel extends RPanel {
         TakeActionListener takeActionListener = new TakeActionListener() {
             @Override
             public void takeAction() {
-                messageLabel.setText("");
                 refresh();
             }
         };
@@ -96,10 +95,7 @@ public class ChooseNewGraphPanel extends RPanel {
         addLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (!handleAdd()) {
-                    messageLabel.setText("You already have this graph!");
-                    refresh();
-                }
+                handleAdd();
             }
         });
 
@@ -124,13 +120,9 @@ public class ChooseNewGraphPanel extends RPanel {
         revalidate();
     }
 
-    private boolean handleAdd() {
-        GraphSpecs graphSpecs = mainController.proposeNewGraph(getCampaignId(), getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
-        if (graphSpecs != null) {
-            mainController.pushToGraphView(graphSpecs);
-            return true;
-        }
-        return false;
+    private void handleAdd() {
+        GraphSpecs graphSpecs = new GraphSpecs(getCampaignId(), getCampaignName(), getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef(), mainController.getInitFilters());
+        mainController.pushToGraphView(graphSpecs);
     }
 
     private JPanel getCampaignChooserCell() {
@@ -178,6 +170,10 @@ public class ChooseNewGraphPanel extends RPanel {
 
     private int getCampaignId() {
         return this.campaignChooser.getSelectedIndex() + 1;
+    }
+
+    private String getCampaignName() {
+        return this.campaignChooser.getSelectedContent();
     }
 
     private GraphSpecs.METRICS getChosenMetric() {

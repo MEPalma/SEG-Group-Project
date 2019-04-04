@@ -30,4 +30,8 @@ public class Tuple<L, R> {
         return y;
     }
 
+    @Override
+    public String toString() {
+        return "(" + this.x.toString() + ", " + this.y.toString() + ")";
+    }
 }

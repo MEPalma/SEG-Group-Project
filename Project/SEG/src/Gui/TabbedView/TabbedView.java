@@ -58,9 +58,9 @@ public class TabbedView {
         this.contentHost.revalidate();
     }
 
-    public void push(String title, Color tabColor, JPanel content, Object comparable, TakeActionListener updateOnSelection) {
+    public void push(String title, JPanel content, Object comparable, TakeActionListener updateOnSelection) {
         synchronized (this) {
-            this.tabs.add(new Tab(title, tabColor, content, comparable, updateOnSelection));
+            this.tabs.add(new Tab(title, GuiColors.BASE_PRIME, content, comparable, updateOnSelection));
             this.selectedIndex = this.tabs.size() - 1;
         }
         refresh();
@@ -159,11 +159,11 @@ public class TabbedView {
         return this.tabs.get(this.selectedIndex).getComparable();
     }
 
-    public void replaceOnComparable(String title, Color tabColor, JPanel content, Object comparable) {
+    public void replaceOnComparable(String title, JPanel content, Object comparable) {
         for (Tab t : this.tabs) {
-            if (t.getComparable().equals(comparable)) {
+            if (t.getComparable() == (comparable)) {
                 t.setTitle(title);
-                t.setColor(tabColor);
+                t.setColor(GuiColors.BASE_PRIME);
                 t.setContent(content);
                 t.setComparable(comparable);
             }

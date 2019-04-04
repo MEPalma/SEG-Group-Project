@@ -6,10 +6,10 @@ import java.util.List;
 public class FilterSpecs {
     private String startDate;
     private String endDate;
-    private List<UserEntry.Gender> genders;
-    private List<UserEntry.Age> ages;
-    private List<UserEntry.Income> incomes;
-    private List<ImpressionEntry.Context> contexts;
+    private List<Enums.Gender> genders;
+    private List<Enums.Age> ages;
+    private List<Enums.Income> incomes;
+    private List<Enums.Context> contexts;
 
     public FilterSpecs() {
         this.startDate = "";
@@ -36,35 +36,35 @@ public class FilterSpecs {
         this.endDate = endDate;
     }
 
-    public List<UserEntry.Gender> getGenders() {
+    public List<Enums.Gender> getGenders() {
         return genders;
     }
 
-    public void setGenders(List<UserEntry.Gender> genders) {
+    public void setGenders(List<Enums.Gender> genders) {
         this.genders = genders;
     }
 
-    public List<UserEntry.Age> getAges() {
+    public List<Enums.Age> getAges() {
         return ages;
     }
 
-    public void setAges(List<UserEntry.Age> ages) {
+    public void setAges(List<Enums.Age> ages) {
         this.ages = ages;
     }
 
-    public List<UserEntry.Income> getIncomes() {
+    public List<Enums.Income> getIncomes() {
         return incomes;
     }
 
-    public void setIncomes(List<UserEntry.Income> incomes) {
+    public void setIncomes(List<Enums.Income> incomes) {
         this.incomes = incomes;
     }
 
-    public List<ImpressionEntry.Context> getContexts() {
+    public List<Enums.Context> getContexts() {
         return contexts;
     }
 
-    public void setContexts(List<ImpressionEntry.Context> contexts) {
+    public void setContexts(List<Enums.Context> contexts) {
         this.contexts = contexts;
     }
 

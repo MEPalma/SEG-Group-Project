@@ -3,6 +3,7 @@ package Gui;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.TitleLabel;
 import Gui.Menus.ChooseNewGraphPanel;
+import Gui.Menus.CompareMenu;
 import Gui.Menus.FiltersMenu;
 import Gui.Menus.SideMenu;
 import Gui.TabbedView.TabbedView;
@@ -13,7 +14,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Gui extends JFrame {
-
+    
+    private StatusDisplay statusDisplay;
+    
     private JPanel mainView;
     private JPanel northView;
 
@@ -25,9 +28,9 @@ public class Gui extends JFrame {
     private JPanel currentPopup;
     private TitleLabel campaignName;
 
-    private JPanel filterButtonWrapper, addGraphButtonWrapper;
+    private JPanel filterButtonWrapper, addGraphButtonWrapper, compareButtonWrapper;
 
-    private MenuLabel filtersMenuLabel, addGraphMenuLabel;
+    private MenuLabel filtersMenuLabel, addGraphMenuLabel, compareMenuLabel;
 
     public Gui() {
         super("Dashboard App");
@@ -78,12 +81,12 @@ public class Gui extends JFrame {
             STATUS DISPLAY VIEW INITIALIZATION
          */
 
-        StatusDisplay statusDisplay = new StatusDisplay();
+        this.statusDisplay = new StatusDisplay();
 
         /*
             INIT MAIN CONTROLLER
          */
-        this.mainController = new MainController(this, statusDisplay, new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster));
+        this.mainController = new MainController(this, this.statusDisplay, new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster));
 
         /*
             ORGANIZE LAYOUT
@@ -105,7 +108,7 @@ public class Gui extends JFrame {
         this.northView.add(appTitleLabel, BorderLayout.WEST);
         this.northView.add(new TitleLabel(" Dashboard App", JLabel.LEFT, 26, this.northView.getBackground()), BorderLayout.EAST);//spacer to center campaign name
 
-        this.campaignName = new TitleLabel(mainController.getCampaignName() + " ", TitleLabel.CENTER, 18, GuiColors.BASE_WHITE);
+        this.campaignName = new TitleLabel("FIX ME" + " ", TitleLabel.CENTER, 18, GuiColors.BASE_WHITE);
         this.campaignName.setFont(new Font("Verdana", Font.ITALIC, 18));
         this.northView.add(this.campaignName, BorderLayout.CENTER);
 
@@ -156,18 +159,19 @@ public class Gui extends JFrame {
 
         this.mainView.add(tabbedViewWrapper, BorderLayout.CENTER);
 
-        updateCampaignName();
+//        updateCampaignName();
 
         repaint();
         revalidate();
     }
 
     private JPanel getTopRightFunctions() {
-        JPanel tabbedViewTopRightFunctions = new JPanel(new GridLayout(1, 2));
+        JPanel tabbedViewTopRightFunctions = new JPanel(new GridLayout(1, 3));
         tabbedViewTopRightFunctions.setBorder(BorderFactory.createEmptyBorder());
         tabbedViewTopRightFunctions.setBackground(GuiColors.BASE_WHITE);
         tabbedViewTopRightFunctions.add(getShowFiltersMenuLabel());
         tabbedViewTopRightFunctions.add(getAddGraphMenuLabel());
+        tabbedViewTopRightFunctions.add(getCompareMenuLabel());
         tabbedViewTopRightFunctions.setPreferredSize(new Dimension(380, 50));
 
         return tabbedViewTopRightFunctions;
@@ -254,6 +258,45 @@ public class Gui extends JFrame {
         return addGraphButtonWrapper;
     }
 
+    private JPanel getCompareMenuLabel() {
+        this.compareButtonWrapper = new JPanel(new BorderLayout());
+        this.compareButtonWrapper.setBackground(GuiColors.BASE_WHITE);
+        this.compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        this.compareButtonWrapper.setPreferredSize(new Dimension(120, 60));
+
+        this.compareMenuLabel = new MenuLabel("Compare", MenuLabel.CENTER, 16);
+        this.compareMenuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+        this.compareMenuLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                if (currentPopup != null) {
+                    if (currentPopup instanceof CompareMenu) {
+                        currentPopup = null;
+
+                        compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+                        popupMessageArea.setPreferredSize(new Dimension(0, 0));
+                        popupMessageArea.removeAll();
+                        popupMessageArea.repaint();
+                        popupMessageArea.revalidate();
+
+                        return;
+                    }
+                }
+
+                openCompareMenu();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+
+            }
+        });
+
+        this.compareButtonWrapper.add(this.compareMenuLabel, BorderLayout.CENTER);
+        return this.compareButtonWrapper;
+    }
+
     @Override
     public void setVisible(boolean visible) {
         if (visible) {
@@ -267,8 +310,9 @@ public class Gui extends JFrame {
         super.setVisible(visible);
     }
 
-    public void updateCampaignName() {
-        this.campaignName.setText(mainController.getCampaignName());
+    //TODO FUCK
+    public void updateCampaignName(int id) {
+        this.campaignName.setText(mainController.getCampaignName(id));
         this.campaignName.repaint();
         this.campaignName.revalidate();
     }
@@ -280,6 +324,7 @@ public class Gui extends JFrame {
 
         addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
         filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
 
         popupMessageArea.add(currentPopup);
         popupMessageArea.setPreferredSize(new Dimension(380, 380));
@@ -288,8 +333,8 @@ public class Gui extends JFrame {
     }
 
     public void openFilters() {
-        if (mainController.getSelectedGraphSpec() == null) {
-            openAddGraph();
+        if (mainController.getSelectedGraph() == null) {
+            this.statusDisplay.showErrorMessage("No graph to filter", "Add a graph first, then click on \"Filters\" to apply some filters to it.");
             return;
         }
 
@@ -300,12 +345,27 @@ public class Gui extends JFrame {
 
         filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
         addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
 
         popupMessageArea.setPreferredSize(new Dimension(380, 380));
         popupMessageArea.repaint();
         popupMessageArea.revalidate();
     }
 
+    public void openCompareMenu() {
+        popupMessageArea.removeAll();
+        currentPopup = new CompareMenu(mainController);
+        currentPopup.setBorder(BorderFactory.createEmptyBorder());
+        popupMessageArea.add(currentPopup);
+
+        compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
+        addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+        filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+
+        popupMessageArea.setPreferredSize(new Dimension(380, 380));
+        popupMessageArea.repaint();
+        popupMessageArea.revalidate();
+    }
 
     public boolean isFiltersShowing() {
         if (this.currentPopup != null) {

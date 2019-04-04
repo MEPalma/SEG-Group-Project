@@ -1,9 +1,6 @@
 package Gui.Menus;
 
-import Commons.FilterSpecs;
-import Commons.GraphSpecs;
-import Commons.ImpressionEntry;
-import Commons.UserEntry;
+import Commons.*;
 import Gui.DateBrowser.DateBrowser;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;
@@ -24,15 +21,18 @@ import static DatabaseManager.Stringifiable.globalDateFormat;
 
 public class FiltersMenu extends RPanel {
     private final MainController mainController;
-    private FilterSpecs cloneOfActiveFilters;
-    private GraphSpecs activeGraphSpec;
+    private FilterSpecs originalActiveFilters, cloneOfActiveFilters;
 
     public FiltersMenu(MainController mainController) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
         this.mainController = mainController;
 
-        this.activeGraphSpec = this.mainController.getSelectedGraphSpec();
-        this.cloneOfActiveFilters = activeGraphSpec.getFilterSpecs().clone();
+        Object selectedGraph = this.mainController.getSelectedGraph();
+        if (selectedGraph instanceof GraphSpecs) this.originalActiveFilters = ((GraphSpecs) selectedGraph).getFilterSpecs();
+        else if (selectedGraph instanceof CompareGraphSpec)
+            this.originalActiveFilters = ((CompareGraphSpec) selectedGraph).getFilterSpecs();
+
+        this.cloneOfActiveFilters = this.originalActiveFilters.clone();
         refresh();
     }
 
@@ -113,27 +113,27 @@ public class FiltersMenu extends RPanel {
 
         // GENDER
         CheckBox maleOption = new CheckBox("Male");
-        maleOption.setSelected(cloneOfActiveFilters.getGenders().contains(UserEntry.Gender.Male));
+        maleOption.setSelected(cloneOfActiveFilters.getGenders().contains(Enums.Gender.Male));
         maleOption.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (maleOption.isSelected()) {
-                    cloneOfActiveFilters.getGenders().add(UserEntry.Gender.Male);
+                    cloneOfActiveFilters.getGenders().add(Enums.Gender.Male);
                 } else {
-                    cloneOfActiveFilters.getGenders().remove(UserEntry.Gender.Male);
+                    cloneOfActiveFilters.getGenders().remove(Enums.Gender.Male);
                 }
             }
         });
 
         CheckBox femaleOption = new CheckBox("Female");
-        femaleOption.setSelected(cloneOfActiveFilters.getGenders().contains(UserEntry.Gender.Female));
+        femaleOption.setSelected(cloneOfActiveFilters.getGenders().contains(Enums.Gender.Female));
         femaleOption.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (femaleOption.isSelected()) {
-                    cloneOfActiveFilters.getGenders().add(UserEntry.Gender.Female);
+                    cloneOfActiveFilters.getGenders().add(Enums.Gender.Female);
                 } else {
-                    cloneOfActiveFilters.getGenders().remove(UserEntry.Gender.Female);
+                    cloneOfActiveFilters.getGenders().remove(Enums.Gender.Female);
                 }
             }
         });
@@ -142,66 +142,66 @@ public class FiltersMenu extends RPanel {
 
         //AGE
         CheckBox opAge_less_than_25 = new CheckBox("<25");
-        opAge_less_than_25.setSelected(cloneOfActiveFilters.getAges().contains(UserEntry.Age.Age_less_than_25));
+        opAge_less_than_25.setSelected(cloneOfActiveFilters.getAges().contains(Enums.Age.Age_less_than_25));
         opAge_less_than_25.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opAge_less_than_25.isSelected()) {
-                    cloneOfActiveFilters.getAges().add(UserEntry.Age.Age_less_than_25);
+                    cloneOfActiveFilters.getAges().add(Enums.Age.Age_less_than_25);
                 } else {
-                    cloneOfActiveFilters.getAges().remove(UserEntry.Age.Age_less_than_25);
+                    cloneOfActiveFilters.getAges().remove(Enums.Age.Age_less_than_25);
                 }
             }
         });
 
         CheckBox opAge_25_34 = new CheckBox("25-34");
-        opAge_25_34.setSelected(cloneOfActiveFilters.getAges().contains(UserEntry.Age.Age_25_34));
+        opAge_25_34.setSelected(cloneOfActiveFilters.getAges().contains(Enums.Age.Age_25_34));
         opAge_25_34.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opAge_25_34.isSelected()) {
-                    cloneOfActiveFilters.getAges().add(UserEntry.Age.Age_25_34);
+                    cloneOfActiveFilters.getAges().add(Enums.Age.Age_25_34);
                 } else {
-                    cloneOfActiveFilters.getAges().remove(UserEntry.Age.Age_25_34);
+                    cloneOfActiveFilters.getAges().remove(Enums.Age.Age_25_34);
                 }
             }
         });
 
         CheckBox opAge_35_44 = new CheckBox("35-44");
-        opAge_35_44.setSelected(cloneOfActiveFilters.getAges().contains(UserEntry.Age.Age_35_44));
+        opAge_35_44.setSelected(cloneOfActiveFilters.getAges().contains(Enums.Age.Age_35_44));
         opAge_35_44.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opAge_35_44.isSelected()) {
-                    cloneOfActiveFilters.getAges().add(UserEntry.Age.Age_35_44);
+                    cloneOfActiveFilters.getAges().add(Enums.Age.Age_35_44);
                 } else {
-                    cloneOfActiveFilters.getAges().remove(UserEntry.Age.Age_35_44);
+                    cloneOfActiveFilters.getAges().remove(Enums.Age.Age_35_44);
                 }
             }
         });
 
         CheckBox opAge_45_54 = new CheckBox("45-54");
-        opAge_45_54.setSelected(cloneOfActiveFilters.getAges().contains(UserEntry.Age.Age_45_54));
+        opAge_45_54.setSelected(cloneOfActiveFilters.getAges().contains(Enums.Age.Age_45_54));
         opAge_45_54.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opAge_45_54.isSelected()) {
-                    cloneOfActiveFilters.getAges().add(UserEntry.Age.Age_45_54);
+                    cloneOfActiveFilters.getAges().add(Enums.Age.Age_45_54);
                 } else {
-                    cloneOfActiveFilters.getAges().remove(UserEntry.Age.Age_45_54);
+                    cloneOfActiveFilters.getAges().remove(Enums.Age.Age_45_54);
                 }
             }
         });
 
         CheckBox opAge_more_than_54 = new CheckBox(">54");
-        opAge_more_than_54.setSelected(cloneOfActiveFilters.getAges().contains(UserEntry.Age.Age_more_than_54));
+        opAge_more_than_54.setSelected(cloneOfActiveFilters.getAges().contains(Enums.Age.Age_more_than_54));
         opAge_more_than_54.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opAge_more_than_54.isSelected()) {
-                    cloneOfActiveFilters.getAges().add(UserEntry.Age.Age_more_than_54);
+                    cloneOfActiveFilters.getAges().add(Enums.Age.Age_more_than_54);
                 } else {
-                    cloneOfActiveFilters.getAges().remove(UserEntry.Age.Age_more_than_54);
+                    cloneOfActiveFilters.getAges().remove(Enums.Age.Age_more_than_54);
                 }
             }
         });
@@ -210,79 +210,79 @@ public class FiltersMenu extends RPanel {
 
         //INCOME
         CheckBox opNews = new CheckBox("News");
-        opNews.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.News));
+        opNews.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.News));
         opNews.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opNews.isSelected()) {
-                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.News);
+                    cloneOfActiveFilters.getContexts().add(Enums.Context.News);
                 } else {
-                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.News);
+                    cloneOfActiveFilters.getContexts().remove(Enums.Context.News);
                 }
             }
         });
 
         CheckBox opShopping = new CheckBox("Shopping");
-        opShopping.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.Shopping));
+        opShopping.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.Shopping));
         opShopping.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opShopping.isSelected()) {
-                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.Shopping);
+                    cloneOfActiveFilters.getContexts().add(Enums.Context.Shopping);
                 } else {
-                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.Shopping);
+                    cloneOfActiveFilters.getContexts().remove(Enums.Context.Shopping);
                 }
             }
         });
 
         CheckBox opSocialMedia = new CheckBox("Social Media");
-        opSocialMedia.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.SocialMedia));
+        opSocialMedia.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.SocialMedia));
         opSocialMedia.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opSocialMedia.isSelected()) {
-                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.SocialMedia);
+                    cloneOfActiveFilters.getContexts().add(Enums.Context.SocialMedia);
                 } else {
-                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.SocialMedia);
+                    cloneOfActiveFilters.getContexts().remove(Enums.Context.SocialMedia);
                 }
             }
         });
 
         CheckBox opTravels = new CheckBox("Travels");
-        opTravels.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.Travel));
+        opTravels.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.Travel));
         opTravels.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opTravels.isSelected()) {
-                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.Travel);
+                    cloneOfActiveFilters.getContexts().add(Enums.Context.Travel);
                 } else {
-                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.Travel);
+                    cloneOfActiveFilters.getContexts().remove(Enums.Context.Travel);
                 }
             }
         });
 
         CheckBox opHobbies = new CheckBox("Hobbies");
-        opHobbies.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.Hobbies));
+        opHobbies.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.Hobbies));
         opHobbies.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opHobbies.isSelected()) {
-                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.Hobbies);
+                    cloneOfActiveFilters.getContexts().add(Enums.Context.Hobbies);
                 } else {
-                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.Hobbies);
+                    cloneOfActiveFilters.getContexts().remove(Enums.Context.Hobbies);
                 }
             }
         });
 
         CheckBox opBlog = new CheckBox("Blog");
-        opBlog.setSelected(cloneOfActiveFilters.getContexts().contains(ImpressionEntry.Context.Blog));
+        opBlog.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.Blog));
         opBlog.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opBlog.isSelected()) {
-                    cloneOfActiveFilters.getContexts().add(ImpressionEntry.Context.Blog);
+                    cloneOfActiveFilters.getContexts().add(Enums.Context.Blog);
                 } else {
-                    cloneOfActiveFilters.getContexts().remove(ImpressionEntry.Context.Blog);
+                    cloneOfActiveFilters.getContexts().remove(Enums.Context.Blog);
                 }
             }
         });
@@ -328,40 +328,40 @@ public class FiltersMenu extends RPanel {
 
         // Low, Medium, High,
         CheckBox opLowIncome = new CheckBox("Low");
-        opLowIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(UserEntry.Income.Low));
+        opLowIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(Enums.Income.Low));
         opLowIncome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opLowIncome.isSelected()) {
-                    cloneOfActiveFilters.getIncomes().add(UserEntry.Income.Low);
+                    cloneOfActiveFilters.getIncomes().add(Enums.Income.Low);
                 } else {
-                    cloneOfActiveFilters.getIncomes().remove(UserEntry.Income.Low);
+                    cloneOfActiveFilters.getIncomes().remove(Enums.Income.Low);
                 }
             }
         });
 
         CheckBox opMediumIncome = new CheckBox("Medium");
-        opMediumIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(UserEntry.Income.Medium));
+        opMediumIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(Enums.Income.Medium));
         opMediumIncome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (opMediumIncome.isSelected()) {
-                    cloneOfActiveFilters.getIncomes().add(UserEntry.Income.Medium);
+                    cloneOfActiveFilters.getIncomes().add(Enums.Income.Medium);
                 } else {
-                    cloneOfActiveFilters.getIncomes().remove(UserEntry.Income.Medium);
+                    cloneOfActiveFilters.getIncomes().remove(Enums.Income.Medium);
                 }
             }
         });
 
         CheckBox highIncome = new CheckBox("High");
-        highIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(UserEntry.Income.High));
+        highIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(Enums.Income.High));
         highIncome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (highIncome.isSelected()) {
-                    cloneOfActiveFilters.getIncomes().add(UserEntry.Income.High);
+                    cloneOfActiveFilters.getIncomes().add(Enums.Income.High);
                 } else {
-                    cloneOfActiveFilters.getIncomes().remove(UserEntry.Income.High);
+                    cloneOfActiveFilters.getIncomes().remove(Enums.Income.High);
                 }
             }
         });
@@ -390,8 +390,8 @@ public class FiltersMenu extends RPanel {
         applyFiltersLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                activeGraphSpec.getFilterSpecs().updateFrom(cloneOfActiveFilters);
-                mainController.refreshGraph(activeGraphSpec);
+                originalActiveFilters.updateFrom(cloneOfActiveFilters);
+                refreshGraphOnController();
                 refresh();
             }
         });
@@ -405,9 +405,9 @@ public class FiltersMenu extends RPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 //TODO Are you sure message
-                mainController.clearFilter(activeGraphSpec);
-                cloneOfActiveFilters = activeGraphSpec.getFilterSpecs().clone();
-                mainController.refreshGraph(activeGraphSpec);
+                mainController.clearFilter(originalActiveFilters);
+                cloneOfActiveFilters = originalActiveFilters.clone();
+                refreshGraphOnController();
                 refresh();
             }
         });
@@ -416,6 +416,13 @@ public class FiltersMenu extends RPanel {
         wrapper.add(choicesSplitter);
 
         return wrapper;
+    }
+
+    private void refreshGraphOnController() {
+        Object selectedGraph = mainController.getSelectedGraph();
+        if (selectedGraph instanceof GraphSpecs)
+            mainController.refreshGraph((GraphSpecs) selectedGraph);
+        else mainController.refreshGraph((CompareGraphSpec) selectedGraph);
     }
 
     private JPanel wrapInRow(Component[] components) {

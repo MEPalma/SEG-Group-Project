@@ -77,15 +77,13 @@ public class LoadCSVsMenu extends RPanel {
                                 campaignName = "Today's campaign";
                             else campaignName = campaignName.trim().replace("-", "").replace("'", "").replace("\"", "");
 
-                            mainController.setCampaignName(campaignName);
-
                             //new background thread
                             SwingWorker<Void, Void> loadTask = new SwingWorker<Void, Void>() {
                                 @Override
                                 protected Void doInBackground() throws Exception {
                                     mainController.startProgressBar();
                                     CSVParser parser = new CSVParser(mainController, impressionLog, clickLog, serverLog);
-                                    parser.parseAll();
+                                    parser.parseAll(campaignName);
                                     mainController.stopProgressBar();
                                     mainController.removeDataLoadingTask(this);
 
@@ -120,7 +118,9 @@ public class LoadCSVsMenu extends RPanel {
                 titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 10, 0));
                 add(titleLabel, BorderLayout.NORTH);
 
-                add(listView.getWrappedInScroll(true), BorderLayout.CENTER);
+                JScrollPane tmp = listView.getWrappedInScroll(false);
+                tmp.setPreferredSize(new Dimension(300, 400));
+                add(tmp, BorderLayout.SOUTH);
 
                 mainController.removeDataLoadingTask(this);
 
@@ -203,7 +203,7 @@ public class LoadCSVsMenu extends RPanel {
                                 impressionLog = null;
                                 mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.IMPRESSION_LOGS, thisFileType));
                             } else {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.OPTION_GREEN));
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.BASE_PRIME));
                                 pathTextBox.setText(impressionLog.getName());
                             }
                         }
@@ -261,7 +261,7 @@ public class LoadCSVsMenu extends RPanel {
                                 clickLog = null;
                                 mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.CLICK_LOGS, thisFileType));
                             } else {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.OPTION_GREEN));
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.BASE_PRIME));
                                 pathTextBox.setText(clickLog.getName());
                             }
                         }
@@ -320,7 +320,7 @@ public class LoadCSVsMenu extends RPanel {
                                 serverLog = null;
                                 mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.SERVER_LOGS, thisFileType));
                             } else {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.OPTION_GREEN));
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.BASE_PRIME));
                                 pathTextBox.setText(serverLog.getName());
                             }
                         }

@@ -9,13 +9,15 @@ public class ImpressionEntry implements Stringifiable {
     public static int AUTO_INDEX = -1;
     //IN SAME ORDER AS IN DB TABLE
     private int id;
-    private String userId;
+    private int campaignId;
+    private long userId;
     private Date date;
-    private Context context;
+    private Enums.Context context;
     private Number impressionCost;
 
-    public ImpressionEntry(int id, String userId, Date date, Context context, Number impressionCost) {
+    public ImpressionEntry(int id, long userId, int campaignId, Date date, Enums.Context context, Number impressionCost) {
         this.id = id;
+        this.campaignId = campaignId;
         this.userId = userId;
         this.date = date;
         this.context = context;
@@ -23,11 +25,12 @@ public class ImpressionEntry implements Stringifiable {
     }
 
     public ImpressionEntry() {
-        this(AUTO_INDEX, "", new Date(), Context.Unknown, 0);
+        this(AUTO_INDEX, AUTO_INDEX, AUTO_INDEX, new Date(), Enums.Context.Unknown, 0);
     }
 
     @Override
     public String stringify() {
+        if (this.campaignId == AUTO_INDEX) return null;
         String is = "', '";
         String tmp;
         if (this.id == AUTO_INDEX) {
@@ -37,7 +40,8 @@ public class ImpressionEntry implements Stringifiable {
         }
         return (tmp
                 + this.userId + is
-                + globalDateFormat.format(this.date) + is
+                + this.campaignId + is
+                + Stringifiable.dateToSeconds(this.date) + is
                 + this.context + is
                 + this.impressionCost.doubleValue()
                 + "'");
@@ -71,11 +75,11 @@ public class ImpressionEntry implements Stringifiable {
         this.date = date;
     }
 
-    public String getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -87,11 +91,11 @@ public class ImpressionEntry implements Stringifiable {
         this.id = id;
     }
 
-    public Context getContext() {
+    public Enums.Context getContext() {
         return context;
     }
 
-    public void setContext(Context context) {
+    public void setContext(Enums.Context context) {
         this.context = context;
     }
 
@@ -101,10 +105,6 @@ public class ImpressionEntry implements Stringifiable {
 
     public void setImpressionCost(Number impressionCost) {
         this.impressionCost = impressionCost;
-    }
-
-    public static enum Context {
-        News, Shopping, SocialMedia, Travel, Hobbies, Blog, Unknown
     }
 
 }

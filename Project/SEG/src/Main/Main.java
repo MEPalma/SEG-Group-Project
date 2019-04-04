@@ -1,7 +1,6 @@
 package Main;
 
 import Gui.Gui;
-
 import java.util.Locale;
 
 /**

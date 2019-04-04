@@ -9,19 +9,21 @@ public class ClickEntry implements Stringifiable {
 
     //IN THE SAME ORDER AS DECLARATION IN DB TABLE
     private int id;
+    private int campaignId;
     private String userId;
     private Date date;
     private Number clickCost;
 
-    public ClickEntry(int id, String userId, Date date, Number clickCost) {
+    public ClickEntry(int id, String userId, int campaignId, Date date, Number clickCost) {
         this.id = id;
+        this.campaignId = campaignId;
         this.userId = userId;
         this.date = date;
         this.clickCost = clickCost;
     }
 
     public ClickEntry() {
-        this(AUTO_INDEX, "", new Date(), 0);
+        this(AUTO_INDEX, "", AUTO_INDEX, new Date(), 0);
     }
 
     @Override
@@ -35,7 +37,8 @@ public class ClickEntry implements Stringifiable {
         }
         return (tmp
                 + this.userId + is
-                + globalDateFormat.format(this.date) + is
+                + this.campaignId + is
+                + Stringifiable.dateToSeconds(this.date) + is
                 + this.clickCost.doubleValue()
                 + "'");
     }

@@ -7,15 +7,17 @@ import java.util.Date;
 public class ServerEntry implements Stringifiable {
     public static int AUTO_INDEX = -1;
     private int id;
-    private String userId;
+    private int campaignId;
+    private long userId;
     private Date entryDate;
     private Date exitDate;
     private Number pagesViewed;
-    private Conversion conversion;
+    private Enums.Conversion conversion;
 
-    public ServerEntry(int id, String userId, Date entryDate, Date exitDate, Number pagesViewed, Conversion conversion) {
+    public ServerEntry(int id, long userId, int campaignId, Date entryDate, Date exitDate, Number pagesViewed, Enums.Conversion conversion) {
         this.id = id;
         this.userId = userId;
+        this.campaignId = campaignId;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
         this.pagesViewed = pagesViewed;
@@ -23,19 +25,21 @@ public class ServerEntry implements Stringifiable {
     }
 
     public ServerEntry() {
-        this(AUTO_INDEX, "", new Date(), new Date(), 0, Conversion.Unknown);
+        this(AUTO_INDEX, AUTO_INDEX, AUTO_INDEX, new Date(), new Date(), 0, Enums.Conversion.Unknown);
     }
 
     @Override
     public String stringify() {
+        if (this.userId == AUTO_INDEX) return null;
         String is = "', '";
         String tmp;
         if (this.id == AUTO_INDEX) tmp = "NULL, '";
         else tmp = this.id + is;
         return (tmp +
                 this.userId + is +
-                globalDateFormat.format(this.entryDate) + is +
-                globalDateFormat.format(this.exitDate) + is +
+                this.campaignId + is +
+                Stringifiable.dateToSeconds(this.entryDate) + is +
+                Stringifiable.dateToSeconds(this.exitDate) + is +
                 this.pagesViewed.intValue() + is +
                 this.conversion +
                 "'");
@@ -74,11 +78,11 @@ public class ServerEntry implements Stringifiable {
         this.exitDate = exitDate;
     }
 
-    public String getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -90,18 +94,16 @@ public class ServerEntry implements Stringifiable {
         this.pagesViewed = pagesViewed;
     }
 
-    public Conversion getConversion() {
+    public Enums.Conversion getConversion() {
         return conversion;
     }
 
-    public void setConversion(Conversion conversion) {
+    public void setConversion(Enums.Conversion conversion) {
         this.conversion = conversion;
     }
 
     public void setId(int id) {
         this.id = id;
     }
-
-    public static enum Conversion {Yes, No, Unknown}
 
 }

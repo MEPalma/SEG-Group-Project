@@ -1,0 +1,26 @@
+[ OK ] add compare button
+[    ] hide filter button when no graphs
+[    ] hide compare button when less than two campaigns
+
+[ OK ] add compare menu
+[ OK ] multiple columns in compare chart
+
+[ OK ] go back to unique color.. because supervisors are **....
+[    ] change color in settings
+[    ] remove space between tab bar and pane
+
+[    ] buttons for apply and clear filters
+
+[    ] home page
+
+[    ] reorganise add campaign view
+
+[    ] group dates
+
+[ OK ] add choose campaign in add graph
+
+[ OK ] edit popup content of charts
+
+[ OK ] filters on compare graphs
+
+[    ] control for compare insertion (no select same campaign more than once)

@@ -73,6 +73,10 @@ public class DropDown extends RPanel {
     public int getSelectedIndex() {
         return selectedIndex;
     }
+
+    public String getSelectedContent() {
+        return this.choices[this.selectedIndex];
+    }
 }
 
 class DropDownPopUp extends JDialog {

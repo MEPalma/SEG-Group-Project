@@ -27,12 +27,15 @@ public class TabbedView {
 
     public TabbedView(JPanel tabsHost, JPanel contentHost) {
         this.tabsHost = tabsHost;
+        this.tabsHost.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
+
         this.contentHost = contentHost;
         this.tabs = new LinkedList<>();
         this.selectedIndex = 0;
 
         this.tabsHost.setLayout(new BorderLayout());
         this.contentHost.setLayout(new BorderLayout());
+        this.contentHost.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, GuiColors.BASE_SMOKE));
     }
 
     public synchronized void refresh() {
@@ -95,9 +98,9 @@ public class TabbedView {
     private JPanel createTab(String title, Color color, int myIndex, TakeActionListener updateOnSelection) {
         JPanel tab = new JPanel(new BorderLayout());
         tab.setBackground(color);
-        tab.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, GuiColors.BASE_WHITE));
+        tab.setBorder(BorderFactory.createMatteBorder(0, 2, 4, 0, GuiColors.BASE_WHITE));
         if (myIndex == selectedIndex) {
-            tab.setBorder(BorderFactory.createMatteBorder(6, 6, 6, 6, color.darker()));
+            tab.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, GuiColors.BASE_WHITE));
             openTab = tab;
         }
         tab.setPreferredSize(new Dimension(120, 50));
@@ -111,13 +114,13 @@ public class TabbedView {
                 contentHost.revalidate();
 
                 if (openTab != null) {
-                    openTab.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, GuiColors.BASE_WHITE));
+                    openTab.setBorder(BorderFactory.createMatteBorder(0, 2, 4, 0, GuiColors.BASE_WHITE));
                     openTab.repaint();
                     openTab.revalidate();
                 }
                 openTab = tab;
 
-                tab.setBorder(BorderFactory.createMatteBorder(6, 6, 6, 6, color.darker()));
+                tab.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, GuiColors.BASE_WHITE));
                 if (updateOnSelection != null) updateOnSelection.takeAction();
             }
         });

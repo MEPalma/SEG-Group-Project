@@ -7,7 +7,7 @@
 
 [ OK ] go back to unique color.. because supervisors are **....
 [    ] change color in settings
-[    ] remove space between tab bar and pane
+[ OK ] remove space between tab bar and pane
 
 [    ] buttons for apply and clear filters
 

@@ -1,5 +1,6 @@
 package Gui;
 
+import Commons.CompareGraphSpec;
 import Commons.FilterSpecs;
 import Commons.GraphSpecs;
 import Commons.Tuple;
@@ -128,7 +129,7 @@ public class MainController {
                     }
                 };
 
-                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs.getMetric()), newGraphSpecs.getTypeColor(), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs, updateOnClick);
+                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs.getMetric()), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs, updateOnClick);
                 stopProgressBar();
                 removeDataLoadingTask(this);
                 super.done();
@@ -139,13 +140,13 @@ public class MainController {
         task.execute();
     }
 
-    public void pushToGraphView(String cardTitle, String graphTitle, String xAxis, String yAxis, List<GraphSpecs> graphSpecs) {
+    public void pushToGraphView(CompareGraphSpec cmpGraphSpec) {
         SwingWorker task = new SwingWorker() {
             @Override
             protected Object doInBackground() {
                 startProgressBar();
 
-                for (GraphSpecs g : graphSpecs) {
+                for (GraphSpecs g : cmpGraphSpec.getGraphSpecs()) {
                     g.getFilterSpecs().updateFrom(getInitFilters());
                     g.setData(getGraphSpecData(g));
                 }
@@ -165,10 +166,9 @@ public class MainController {
                 };
 
                 tabbedView.push(
-                        cardTitle,
-                        Color.BLACK,
-                        GraphManager.getGraphCard(graphTitle, xAxis, yAxis, graphSpecs),
-                        graphSpecs,//TODO check
+                        cmpGraphSpec.getCardTitle(),
+                        GraphManager.getGraphCard(cmpGraphSpec),
+                        cmpGraphSpec,//TODO check
                         updateOnClick);
                 stopProgressBar();
                 removeDataLoadingTask(this);
@@ -187,16 +187,13 @@ public class MainController {
         return newFilters;
     }
 
-    public void clearFilter(GraphSpecs graphSpecs) {
-
-        graphSpecs.getFilterSpecs().getAges().clear();
-        graphSpecs.getFilterSpecs().getContexts().clear();
-        graphSpecs.getFilterSpecs().getGenders().clear();
-        graphSpecs.getIncomes().clear();
-        graphSpecs.getFilterSpecs().setStartDate(Stringifiable.globalDateFormat.format(getStartDate()));
-        graphSpecs.getFilterSpecs().setEndDate(Stringifiable.globalDateFormat.format(getEndDate()));
-
-        refreshGraph(graphSpecs);
+    public void clearFilter(FilterSpecs filterSpecs) {
+        filterSpecs.getAges().clear();
+        filterSpecs.getContexts().clear();
+        filterSpecs.getGenders().clear();
+        filterSpecs.getIncomes().clear();
+        filterSpecs.setStartDate(Stringifiable.globalDateFormat.format(getStartDate()));
+        filterSpecs.setEndDate(Stringifiable.globalDateFormat.format(getEndDate()));
     }
 
     public void refreshGraph(GraphSpecs graphSpecs) {
@@ -214,9 +211,41 @@ public class MainController {
             protected void done() {
                 tabbedView.replaceOnComparable(
                         GraphManager.getGraphShortTitle(graphSpecs.getMetric()),
-                        graphSpecs.getTypeColor(),
                         GraphManager.getGraphCard(graphSpecs),
                         graphSpecs);
+
+                stopProgressBar();
+
+                super.done();
+            }
+        };
+
+        addDataLoadingTask(task);
+        task.execute();
+    }
+
+    public void refreshGraph(CompareGraphSpec cmpGraphSpec) {
+        killDataLoadingTasks();
+
+        SwingWorker task = new SwingWorker() {
+            @Override
+            protected Object doInBackground() {
+                startProgressBar();
+
+                for (GraphSpecs g : cmpGraphSpec.getGraphSpecs()) {
+//                    g.getFilterSpecs().updateFrom(cmpGraphSpec.getFilterSpecs());
+                    g.setData(getGraphSpecData(g));
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                tabbedView.replaceOnComparable(
+                        cmpGraphSpec.getGraphTitle(),
+                        GraphManager.getGraphCard(cmpGraphSpec),
+                        cmpGraphSpec);
 
                 stopProgressBar();
 
@@ -239,8 +268,8 @@ public class MainController {
             pushToGraphView((GraphSpecs) g);
     }
 
-    public GraphSpecs getSelectedGraphSpec() {
-        return (GraphSpecs) this.tabbedView.getSelectedComparable();
+    public Object getSelectedGraph() {
+        return this.tabbedView.getSelectedComparable();
     }
 
     public void openFiltersMenu() {

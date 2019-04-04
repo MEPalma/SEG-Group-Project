@@ -280,12 +280,12 @@ class GraphCardView extends RPanel {
         else setBorder(BorderFactory.createMatteBorder(24, 24, 24, 24, GuiColors.BASE_SMOKE));
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(spec.getTypeColor());
+        topPanel.setBackground(GuiColors.BASE_PRIME);
         topPanel.setPreferredSize(new Dimension(100, 50));
 
         JPanel functionsPanel = new JPanel(new GridLayout(1, 3, 4, 4));
-        functionsPanel.setBackground(spec.getTypeColor());
-        functionsPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 0, spec.getTypeColor()));
+        functionsPanel.setBackground(GuiColors.BASE_PRIME);
+        functionsPanel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 0, GuiColors.BASE_PRIME));
 
         MenuLabel moveUpLabel = new MenuLabel("up", MenuLabel.CENTER, 10);
 //        moveUpLabel.setIcon(new ImageIcon(getClass().getResource("Icons/up.png")));

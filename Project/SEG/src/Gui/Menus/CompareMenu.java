@@ -1,5 +1,7 @@
 package Gui.Menus;
 
+import Commons.CompareGraphSpec;
+import Commons.FilterSpecs;
 import Commons.GraphSpecs;
 import Commons.Tuple;
 import Gui.GraphManager.GraphManager;
@@ -196,6 +198,8 @@ public class CompareMenu extends RPanel {
             public void mousePressed(MouseEvent mouseEvent) {
                 List<GraphSpecs> graphSpecs = new LinkedList<>();
 
+                FilterSpecs commonFilters = mainController.getInitFilters();
+
                 for (Tuple<Integer, String> s : selections) {
                     GraphSpecs tmp = new GraphSpecs(
                             s.getX() + 1,
@@ -203,14 +207,16 @@ public class CompareMenu extends RPanel {
                             getChosenMetric(),
                             getChosenTimeSpan(),
                             getChosenBounceDef(),
-                            mainController.getInitFilters()
+                            commonFilters
                     );
                     graphSpecs.add(tmp);
                 }
 
                 String cardTitle = "Compare " + GraphManager.getGraphShortTitle(getChosenMetric());
                 String graphTitle = "Compare " + GraphManager.getGraphTitle(getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
-                mainController.pushToGraphView(cardTitle, graphTitle, GraphManager.getGraphShortTitle(getChosenMetric()), GraphManager.getFormattedTimeSpan(getChosenTimeSpan()), graphSpecs);
+
+                mainController.pushToGraphView(new CompareGraphSpec(commonFilters, graphSpecs, cardTitle, graphTitle, GraphManager.getGraphShortTitle(getChosenMetric()), GraphManager.getFormattedTimeSpan(getChosenTimeSpan())));
+
             }
         });
         wrapper.add(addMenuLabel, BorderLayout.CENTER);

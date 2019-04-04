@@ -21,15 +21,18 @@ import static DatabaseManager.Stringifiable.globalDateFormat;
 
 public class FiltersMenu extends RPanel {
     private final MainController mainController;
-    private FilterSpecs cloneOfActiveFilters;
-    private GraphSpecs activeGraphSpec;
+    private FilterSpecs originalActiveFilters, cloneOfActiveFilters;
 
     public FiltersMenu(MainController mainController) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
         this.mainController = mainController;
 
-        this.activeGraphSpec = this.mainController.getSelectedGraphSpec();
-        this.cloneOfActiveFilters = activeGraphSpec.getFilterSpecs().clone();
+        Object selectedGraph = this.mainController.getSelectedGraph();
+        if (selectedGraph instanceof GraphSpecs) this.originalActiveFilters = ((GraphSpecs) selectedGraph).getFilterSpecs();
+        else if (selectedGraph instanceof CompareGraphSpec)
+            this.originalActiveFilters = ((CompareGraphSpec) selectedGraph).getFilterSpecs();
+
+        this.cloneOfActiveFilters = this.originalActiveFilters.clone();
         refresh();
     }
 
@@ -387,8 +390,8 @@ public class FiltersMenu extends RPanel {
         applyFiltersLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                activeGraphSpec.getFilterSpecs().updateFrom(cloneOfActiveFilters);
-                mainController.refreshGraph(activeGraphSpec);
+                originalActiveFilters.updateFrom(cloneOfActiveFilters);
+                refreshGraphOnController();
                 refresh();
             }
         });
@@ -402,9 +405,9 @@ public class FiltersMenu extends RPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 //TODO Are you sure message
-                mainController.clearFilter(activeGraphSpec);
-                cloneOfActiveFilters = activeGraphSpec.getFilterSpecs().clone();
-                mainController.refreshGraph(activeGraphSpec);
+                mainController.clearFilter(originalActiveFilters);
+                cloneOfActiveFilters = originalActiveFilters.clone();
+                refreshGraphOnController();
                 refresh();
             }
         });
@@ -413,6 +416,13 @@ public class FiltersMenu extends RPanel {
         wrapper.add(choicesSplitter);
 
         return wrapper;
+    }
+
+    private void refreshGraphOnController() {
+        Object selectedGraph = mainController.getSelectedGraph();
+        if (selectedGraph instanceof GraphSpecs)
+            mainController.refreshGraph((GraphSpecs) selectedGraph);
+        else mainController.refreshGraph((CompareGraphSpec) selectedGraph);
     }
 
     private JPanel wrapInRow(Component[] components) {

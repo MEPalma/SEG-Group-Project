@@ -58,7 +58,7 @@ public class GraphSpecs {
     public boolean equals(Object o) {
         if (o instanceof GraphSpecs) {
             GraphSpecs other = (GraphSpecs) o;
-            return (this.metric.equals(other.metric) && this.timespan.equals(other.timespan) && this.bounceDef.equals(other.bounceDef)) && filterSpecs.equals(((GraphSpecs) o).filterSpecs);
+            return (this.metric == (other.metric) && this.timespan == (other.timespan) && this.bounceDef == (other.bounceDef)) && filterSpecs == (((GraphSpecs) o).filterSpecs);
         }
         return false;
     }
@@ -82,17 +82,6 @@ public class GraphSpecs {
 
     public String getyAxisName() {
         return yAxisName;
-    }
-
-    public TIME_SPAN getType() {
-        return timespan;
-    }
-
-    public Color getTypeColor() {
-        if (getType() == TIME_SPAN.MONTH_SPAN) return GuiColors.OPTION_PURPLE;
-        if (getType() == GraphSpecs.TIME_SPAN.WEEK_SPAN) return GuiColors.OPTION_GREENBLUE;
-        else if (getType() == GraphSpecs.TIME_SPAN.DAY_SPAN) return GuiColors.OPTION_ORANGE;
-        else return GuiColors.OPTION_GREEN;
     }
 
     public METRICS getMetric() {

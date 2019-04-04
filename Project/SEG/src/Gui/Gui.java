@@ -333,7 +333,7 @@ public class Gui extends JFrame {
     }
 
     public void openFilters() {
-        if (mainController.getSelectedGraphSpec() == null) {
+        if (mainController.getSelectedGraph() == null) {
             this.statusDisplay.showErrorMessage("No graph to filter", "Add a graph first, then click on \"Filters\" to apply some filters to it.");
             return;
         }

@@ -5,6 +5,7 @@
 [ OK ] add compare menu
 [ OK ] multiple columns in compare chart
 
+[ OK ] go back to unique color.. because supervisors are **....
 [    ] change color in settings
 [    ] remove space between tab bar and pane
 
@@ -20,6 +21,6 @@
 
 [ OK ] edit popup content of charts
 
-[    ] filters on compare graphs
+[ OK ] filters on compare graphs
 
 [    ] control for compare insertion (no select same campaign more than once)

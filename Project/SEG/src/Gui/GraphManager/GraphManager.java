@@ -1,5 +1,6 @@
 package Gui.GraphManager;
 
+import Commons.CompareGraphSpec;
 import Commons.GraphSpecs;
 import Commons.Tuple;
 import DatabaseManager.Stringifiable;
@@ -49,7 +50,11 @@ public class GraphManager {
         ((BarRenderer) cplot.getRenderer()).setBarPainter(new StandardBarPainter());
 
         BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
-        r.setSeriesPaint(0, Color.BLACK);
+        r.setSeriesPaint(0, GuiColors.BASE_PRIME);
+        r.setSeriesPaint(1, GuiColors.OPTION_GREEN);
+        r.setSeriesPaint(2, GuiColors.OPTION_PURPLE);
+        r.setSeriesPaint(3, GuiColors.OPTION_ORANGE);
+        r.setSeriesPaint(4, GuiColors.OPTION_GREENBLUE);
 
         Plot plot = barChart.getPlot();
         plot.setBackgroundPaint(Color.WHITE);
@@ -90,7 +95,7 @@ public class GraphManager {
         ((BarRenderer) cplot.getRenderer()).setBarPainter(new StandardBarPainter());
 
         BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
-        r.setSeriesPaint(0, graphSpecs.getTypeColor());
+        r.setSeriesPaint(0, GuiColors.BASE_PRIME);
 
         Plot plot = barChart.getPlot();
         plot.setBackgroundPaint(Color.WHITE);
@@ -124,11 +129,11 @@ public class GraphManager {
 
     public static JPanel getGraphCard(GraphSpecs spec) {
         JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(spec.getTypeColor());
+        card.setBackground(GuiColors.BASE_PRIME);
         card.setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, GuiColors.BASE_SMOKE));
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(spec.getTypeColor());
+        topPanel.setBackground(GuiColors.BASE_PRIME);
         topPanel.setPreferredSize(new Dimension(100, 50));
 
         TitleLabel titleLabel = new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16);
@@ -144,23 +149,23 @@ public class GraphManager {
         return card;
     }
 
-    public static JPanel getGraphCard(String title, String xAxis, String yAxis, List<GraphSpecs> data) {
+    public static JPanel getGraphCard(CompareGraphSpec cmpGraphSpec) {
         JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(Color.BLACK);
+        card.setBackground(GuiColors.BASE_PRIME);
         card.setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, GuiColors.BASE_SMOKE));
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(Color.BLACK);
+        topPanel.setBackground(GuiColors.BASE_PRIME);
         topPanel.setPreferredSize(new Dimension(100, 50));
 
-        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.CENTER, 16);
+        TitleLabel titleLabel = new TitleLabel(cmpGraphSpec.getGraphTitle(), TitleLabel.CENTER, 16);
         titleLabel.setForeground(GuiColors.BASE_WHITE);
         topPanel.add(titleLabel, BorderLayout.CENTER);
 
         //organize by date
         List<Tuple<String, Tuple<String, Number>>> sortedData = new LinkedList<>();
 
-        for (GraphSpecs i : data) {
+        for (GraphSpecs i : cmpGraphSpec.getGraphSpecs()) {
             for (Tuple<String, Number> j : i.getData())
                 sortedData.add(new Tuple<String, Tuple<String, Number>>(i.getCampaignName(), j));
         }
@@ -181,7 +186,7 @@ public class GraphManager {
             }
         });
 
-        JPanel graph = GraphManager.createBarChar(xAxis, yAxis, sortedData);
+        JPanel graph = GraphManager.createBarChar(cmpGraphSpec.getxAxis(), cmpGraphSpec.getyAxis(), sortedData);
 
         graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_WHITE));
         card.add(topPanel, BorderLayout.NORTH);

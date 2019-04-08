@@ -1,5 +1,6 @@
 package Gui.Menus;
 
+import Commons.Tuple;
 import DatabaseManager.CSVParser;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;
@@ -48,15 +49,14 @@ public class LoadCSVsMenu extends RPanel {
         SwingWorker<Void, Void> backgroundTask = new SwingWorker<Void, Void>() {
             File impressionLog, clickLog, serverLog;
 
-            @Override
-            protected Void doInBackground() {
-                return null;
-            }
+            Component centerComponent;
 
             @Override
-            protected void done() {
+            protected Void doInBackground() {
                 removeAll();
                 List<Component> components = new LinkedList<Component>();
+
+                components.addAll(getManageCampaignsPanels());
 
                 components.add(getImpressionLogFileFinderPanel());
                 components.add(getClickLogFileFinderPanel());
@@ -97,6 +97,11 @@ public class LoadCSVsMenu extends RPanel {
 
                                     return null;
                                 }
+
+                                @Override
+                                public void done() {
+                                    refresh();
+                                }
                             };
 
                             mainController.addDataLoadingTask(loadTask);
@@ -112,20 +117,20 @@ public class LoadCSVsMenu extends RPanel {
                 components.add(getChooseCampaignName());
                 components.add(parseButton);
 
-                ListView listView = new ListView(BACKGROUND, components);
+                centerComponent = new ListView(BACKGROUND, components).getWrappedInScroll(true);
 
+                return null;
+            }
+
+            @Override
+            protected void done() {
                 TitleLabel titleLabel = new TitleLabel(" Import data from CSV files", TitleLabel.LEFT);
                 titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 10, 0));
                 add(titleLabel, BorderLayout.NORTH);
-
-                JScrollPane tmp = listView.getWrappedInScroll(false);
-                tmp.setPreferredSize(new Dimension(300, 400));
-                add(tmp, BorderLayout.SOUTH);
-
-                mainController.removeDataLoadingTask(this);
-
+                add(centerComponent, BorderLayout.CENTER);
                 revalidate();
                 repaint();
+                mainController.removeDataLoadingTask(this);
             }
 
             private JPanel getChooseCampaignName() {
@@ -370,6 +375,79 @@ public class LoadCSVsMenu extends RPanel {
                     return false;
                 }
                 return false;
+            }
+
+            private List<Component> getManageCampaignsPanels() {
+                List<Component> panels = new LinkedList<>();
+
+                List<Tuple<Integer, String>> camps = mainController.getDataExchange().selectAllCampaigns();
+
+                if (camps.size() > 0) {
+                    TitleLabel titleLabel = new TitleLabel("Campaigns in the system", TitleLabel.LEFT, 16);
+                    titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+                    panels.add(titleLabel);
+
+                    for (Tuple<Integer, String> tuple : camps) {
+                        JPanel wrapper = new JPanel(new BorderLayout());
+                        wrapper.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+                        wrapper.setBackground(BACKGROUND);
+
+                        wrapper.add(new TitleLabel(tuple.getY(), TitleLabel.LEFT, 16), BorderLayout.WEST);
+
+                        JPanel rightWrapper = new JPanel(new GridLayout(1, 2, 2, 2));
+                        rightWrapper.setBackground(wrapper.getBackground());
+                        rightWrapper.setBorder(BorderFactory.createEmptyBorder());
+
+                        MenuLabel changeNameLabel = new MenuLabel("nameEdit", MenuLabel.CENTER, 8);
+                        changeNameLabel.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mousePressed(MouseEvent mouseEvent) {
+                                //todo ask new name
+                                refresh();
+                            }
+                        });
+                        rightWrapper.add(changeNameLabel);
+
+                        TitleLabel deleteLabel = new TitleLabel("x", MenuLabel.CENTER, 16);
+                        deleteLabel.setForeground(GuiColors.RED_ERROR);
+                        deleteLabel.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mousePressed(MouseEvent mouseEvent) {
+                                changeNameLabel.setEnabled(false);
+                                deleteLabel.setEnabled(false);
+
+                                // THIS PROCESS CANNOT BE KILLED BY THE CONTROLLER! -> DO NOT ADD TO mainController's pool!
+                                new SwingWorker<Void, Void>() {
+                                    @Override
+                                    public Void doInBackground() {
+                                        mainController.startProgressBar();
+                                        mainController.getDataExchange().deleteCampaign(tuple.getX());
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public void done() {
+                                        mainController.stopProgressBar();
+                                        refresh();
+                                    }
+                                }.execute();
+                            }
+                        });
+                        rightWrapper.add(deleteLabel);
+
+                        wrapper.add(rightWrapper, BorderLayout.EAST);
+
+                        panels.add(wrapper);
+                    }
+
+                    JPanel spacer = new JPanel(new BorderLayout());
+                    spacer.setBorder(BorderFactory.createEmptyBorder());
+                    spacer.setPreferredSize(new Dimension(50, 24));
+                    spacer.setBackground(BACKGROUND);
+                    panels.add(spacer);
+                }
+
+                return panels;
             }
 
         };

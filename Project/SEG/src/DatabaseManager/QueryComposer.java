@@ -68,8 +68,8 @@ public class QueryComposer {
         return "INSERT INTO CAMPAIGNS VALUES (NULL, '" + name + "');";
     }
 
-    public static String updateCampaignName(int id, String name) {
-        return "UPDATE CAMPAIGNS SET campaignName='" + name + "' WHERE id='" + id + "';";
+    public static String updateCampaignName(int id, String newName) {
+        return "UPDATE CAMPAIGNS SET campaignName='" + newName + "' WHERE id='" + id + "';";
     }
 
     public static String getCampaignName(int id) {
@@ -130,8 +130,8 @@ public class QueryComposer {
             + "gender INTEGER,\n"
             + "age INTEGER,\n"
             + "income INTEGER,\n"
-            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id),\n"
-            + "PRIMARY KEY (id, campaignID)"
+            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id) ON DELETE CASCADE,\n"
+            + "PRIMARY KEY (id, campaignId)"
             + ");";
     private static String CREATE_TABLE_IMPRESSION_LOGS
             = "CREATE TABLE IF NOT EXISTS IMPRESSION_LOGS(\n"
@@ -141,8 +141,8 @@ public class QueryComposer {
             + "date INTEGER,\n"
             + "context INTEGER,\n"
             + "impressionCost NUMERIC,\n"
-            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id),\n"
-            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
+            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id) ON DELETE CASCADE,\n"
+            + "FOREIGN KEY (userId, campaignId) REFERENCES USERS(id, campaignId) ON DELETE CASCADE\n"
             + ");";
     private static String CREATE_TABLE_CLICK_LOGS
             = "CREATE TABLE IF NOT EXISTS CLICK_LOGS(\n"
@@ -151,8 +151,8 @@ public class QueryComposer {
             + "campaignId INTEGER NOT NULL,\n"
             + "date INTEGER,\n"
             + "clickCost NUMERIC,\n"
-            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id),\n"
-            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
+            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id) ON DELETE CASCADE,\n"
+            + "FOREIGN KEY (userId, campaignId) REFERENCES USERS(id, campaignId) ON DELETE CASCADE\n"
             + ");";
     private static String CREATE_TABLE_SERVER_LOGS
             = "CREATE TABLE IF NOT EXISTS SERVER_LOGS(\n"
@@ -163,8 +163,8 @@ public class QueryComposer {
             + "exitDate INTEGER,\n"
             + "pagesViewed INTEGER,\n"
             + "conversion INTEGER,\n"
-            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id),\n"
-            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
+            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id) ON DELETE CASCADE,\n"
+            + "FOREIGN KEY (userId, campaignId) REFERENCES USERS(id, campaignId) ON DELETE CASCADE\n"
             + ");";
     private static String CREATE_TABLE_SETTINGS
             = "CREATE TABLE IF NOT EXISTS SETTINGS (\n"
@@ -174,7 +174,8 @@ public class QueryComposer {
             + ");";
     public static String[] CREATE_TABLES =
             {
-                "PRAGMA foreign_keys = ON;",
+                "PRAGMA foreign_keys=ON;",
+                "PRAGMA secure_delete=OFF",
                 CAMPAIGNS,
                 CREATE_TABLE_USERS,
                 CREATE_TABLE_IMPRESSION_LOGS,
@@ -182,6 +183,17 @@ public class QueryComposer {
                 CREATE_TABLE_SERVER_LOGS,
                 CREATE_TABLE_SETTINGS
             };
+
+    public static String rebuildDatabase() {
+        return "VACUUM;";
+    }
+
+    public static String[] deleteCampaign(int id) {
+        return new String[] {
+            "DELETE FROM CAMPAIGNS WHERE id = " + id + ";",
+            rebuildDatabase()
+        };
+    }
 
     /*
         INSERT STATEMENTS

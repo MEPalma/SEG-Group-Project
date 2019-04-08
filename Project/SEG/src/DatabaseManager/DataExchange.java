@@ -101,7 +101,7 @@ public class DataExchange {
      *
      * @param b
      */
-    public void setForiegnKeyPragma(boolean b) {
+    public void setForeignKeyPragma(boolean b) {
         if (b) {
             this.dbM.writeQuery("PRAGMA foreign_keys = ON;");
         } else {
@@ -148,6 +148,13 @@ public class DataExchange {
         }
         System.exit(8);
         return -1;
+    }
+
+    /**
+     * Run after delete query to rebuild database and compress empty pages: reduces file size;
+     */
+    public void rebuildDatabase() {
+        this.dbM.writeQuery(QueryComposer.rebuildDatabase());
     }
 
     public boolean isEmpty() {
@@ -601,8 +608,8 @@ public class DataExchange {
         return getLastID();
     }
 
-    public void setCampaignName(int id, String name) {
-        this.dbM.writeQuery(QueryComposer.updateCampaignName(id, name));
+    public void setCampaignName(int id, String newName) {
+        this.dbM.writeQuery(QueryComposer.updateCampaignName(id, newName));
     }
 
     public String getCampaignName(int id) {
@@ -613,6 +620,10 @@ public class DataExchange {
             setCampaignName(id, "Unknown");
             return getCampaignName(id);
         }
+    }
+
+    public void deleteCampaign(int id) {
+        this.dbM.writeQuery(QueryComposer.deleteCampaign(id));
     }
 
     public void setColorSeries(int id) {

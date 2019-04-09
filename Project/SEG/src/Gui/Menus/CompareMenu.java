@@ -21,7 +21,8 @@ import static Gui.Menus.ChooseNewGraphPanel.BOUNCE_DEF;
 
 public class CompareMenu extends RPanel {
     private final MainController mainController;
-    private final List<Tuple<Integer,String>> selections;
+    private final List<Tuple<Integer, String>> selections;
+    private final List<Tuple<Integer, String>> allCampaigns;
 
     private final String[] campaignsOptions;
 
@@ -51,7 +52,7 @@ public class CompareMenu extends RPanel {
         this.timespanChooser = new DropDown(ChooseNewGraphPanel.TIME_SPANS, null, 0);
         this.timespanChooser.addTakeActionListener(takeActionListener);
 
-        List<Tuple<Integer, String>> allCampaigns = mainController.getDataExchange().selectAllCampaigns();
+        this.allCampaigns = mainController.getDataExchange().selectAllCampaigns();
 
         this.campaignsOptions = new String[allCampaigns.size()];
 
@@ -97,7 +98,7 @@ public class CompareMenu extends RPanel {
         dropDown.addTakeActionListener(new TakeActionListener() {
             @Override
             public void takeAction() {
-                selections.set(indexInPool, new Tuple(dropDown.getSelectedIndex(), options[dropDown.getSelectedIndex()]));
+                selections.set(indexInPool, new Tuple(allCampaigns.get(dropDown.getSelectedIndex()).getX(), allCampaigns.get(dropDown.getSelectedIndex()).getY()));
             }
         });
         wrapper.add(dropDown, BorderLayout.CENTER);
@@ -127,7 +128,7 @@ public class CompareMenu extends RPanel {
         addMenuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                selections.add(new Tuple<>(0, campaignsOptions[0]));
+                selections.add(new Tuple<>(allCampaigns.get(0).getX(), allCampaigns.get(0).getY()));
                 refresh();
             }
         });
@@ -145,7 +146,7 @@ public class CompareMenu extends RPanel {
 
         List<Component> cells = new LinkedList<>();
         for (int i = 0; i < this.selections.size(); ++i)
-            cells.add(getDropDownSelection(i, this.selections.get(i).getX(), this.campaignsOptions));
+            cells.add(getDropDownSelection(i, getOptionPositionIndex(this.selections.get(i)), this.campaignsOptions));
 
         cells.add(getAddCampaignCell());
         cells.add(getAddButton());
@@ -153,6 +154,15 @@ public class CompareMenu extends RPanel {
         wrapper.add(new ListView(getBackground(), cells), BorderLayout.CENTER);
 
         return wrapper;
+    }
+
+    private int getOptionPositionIndex(Tuple<Integer, String> camp) {
+        int i = 0;
+        for (Tuple<Integer, String> t : allCampaigns){
+            if (t.getX().equals(camp.getX()) && t.getY().equals(camp.getY())) return i;
+            ++i;
+        }
+        return i;
     }
 
     private JPanel getMetricsChooserCell() {
@@ -202,7 +212,7 @@ public class CompareMenu extends RPanel {
 
                 for (Tuple<Integer, String> s : selections) {
                     GraphSpecs tmp = new GraphSpecs(
-                            s.getX() + 1,
+                            s.getX(),
                             s.getY(),
                             getChosenMetric(),
                             getChosenTimeSpan(),

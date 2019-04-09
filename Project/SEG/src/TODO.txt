@@ -13,7 +13,7 @@
 
 [    ] home page
 
-[ OK ] reorganise add campaign view // TODO swap text with icons + format! + delete should happen right away and leave delete process in the background
+[ OK ] reorganise add campaign view // TODO swap text with icons + delete should happen right away and leave delete process in the background
 [ OK ] ON DELETE CASCADE on database -> on campaignId
 [ OK ] Fix space not freeing up after delete
 

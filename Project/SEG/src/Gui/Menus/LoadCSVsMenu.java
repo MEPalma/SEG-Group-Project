@@ -58,6 +58,7 @@ public class LoadCSVsMenu extends RPanel {
 
                 components.addAll(getManageCampaignsPanels());
 
+                components.add(getTitleAddNewCampaign());
                 components.add(getImpressionLogFileFinderPanel());
                 components.add(getClickLogFileFinderPanel());
                 components.add(getServerLogFileFinderPanel());
@@ -124,13 +125,23 @@ public class LoadCSVsMenu extends RPanel {
 
             @Override
             protected void done() {
-                TitleLabel titleLabel = new TitleLabel(" Import data from CSV files", TitleLabel.LEFT);
+                TitleLabel titleLabel = new TitleLabel(" Campaigns", TitleLabel.LEFT, 18);
                 titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 10, 0));
                 add(titleLabel, BorderLayout.NORTH);
                 add(centerComponent, BorderLayout.CENTER);
                 revalidate();
                 repaint();
                 mainController.removeDataLoadingTask(this);
+            }
+
+            private JPanel getTitleAddNewCampaign() {
+                JPanel wrapper = new JPanel(new BorderLayout());
+                wrapper.setBorder(BorderFactory.createEmptyBorder(12, 8, 8, 8));
+                wrapper.setBackground(BACKGROUND);
+
+                wrapper.add(new TitleLabel("Add New Campaign", TitleLabel.LEFT, 18), BorderLayout.WEST);
+
+                return wrapper;
             }
 
             private JPanel getChooseCampaignName() {
@@ -402,8 +413,30 @@ public class LoadCSVsMenu extends RPanel {
                         changeNameLabel.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mousePressed(MouseEvent mouseEvent) {
-                                //todo ask new name
-                                refresh();
+
+                                String newName = JOptionPane.showInputDialog("Type a new campaign name", tuple.getY());
+
+                                if (newName != null) {
+                                    if (!newName.trim().equals(tuple.getY())) {
+
+                                        new SwingWorker<Void, Void>() {
+                                            @Override
+                                            public Void doInBackground() {
+
+                                                mainController.startProgressBar();
+                                                mainController.getDataExchange().setCampaignName(tuple.getX(), newName.trim().replace("'", "''").replace("-", "--"));
+
+                                                return null;
+                                            }
+
+                                            @Override
+                                            public void done() {
+                                                mainController.stopProgressBar();
+                                                refresh();
+                                            }
+                                        }.execute();
+                                    }
+                                }
                             }
                         });
                         rightWrapper.add(changeNameLabel);
@@ -413,24 +446,30 @@ public class LoadCSVsMenu extends RPanel {
                         deleteLabel.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mousePressed(MouseEvent mouseEvent) {
-                                changeNameLabel.setEnabled(false);
-                                deleteLabel.setEnabled(false);
 
-                                // THIS PROCESS CANNOT BE KILLED BY THE CONTROLLER! -> DO NOT ADD TO mainController's pool!
-                                new SwingWorker<Void, Void>() {
-                                    @Override
-                                    public Void doInBackground() {
-                                        mainController.startProgressBar();
-                                        mainController.getDataExchange().deleteCampaign(tuple.getX());
-                                        return null;
-                                    }
+                                int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to permanently delete this campaign?","Delete",JOptionPane.WARNING_MESSAGE);
+                                if(dialogResult == JOptionPane.YES_OPTION) {
+                                    changeNameLabel.setEnabled(false);
+                                    deleteLabel.setEnabled(false);
 
-                                    @Override
-                                    public void done() {
-                                        mainController.stopProgressBar();
-                                        refresh();
-                                    }
-                                }.execute();
+                                    // THIS PROCESS CANNOT BE KILLED BY THE CONTROLLER! -> DO NOT ADD TO mainController's pool!
+                                    new SwingWorker<Void, Void>() {
+                                        @Override
+                                        public Void doInBackground() {
+
+                                            mainController.startProgressBar();
+                                            mainController.getDataExchange().deleteCampaign(tuple.getX());
+
+                                            return null;
+                                        }
+
+                                        @Override
+                                        public void done() {
+                                            mainController.stopProgressBar();
+                                            refresh();
+                                        }
+                                    }.execute();
+                                }
                             }
                         });
                         rightWrapper.add(deleteLabel);

@@ -49,10 +49,14 @@ public class ChooseNewGraphPanel extends RPanel {
     private final DropDown bounceDefinitionChooser;
     private final DropDown timespanChooser;
 
+    private final List<Tuple<Integer, String>> allCampaigns;
+
     public ChooseNewGraphPanel(MainController mainController) {
         super(GuiColors.BASE_WHITE, new BorderLayout());
 
         this.mainController = mainController;
+
+        this.allCampaigns = mainController.getDataExchange().selectAllCampaigns();
 
         this.messageLabel = new TitleLabel("", TitleLabel.CENTER, 12);
         messageLabel.setForeground(GuiColors.RED_ERROR);
@@ -169,11 +173,11 @@ public class ChooseNewGraphPanel extends RPanel {
     }
 
     private int getCampaignId() {
-        return this.campaignChooser.getSelectedIndex() + 1;
+        return this.allCampaigns.get(this.campaignChooser.getSelectedIndex()).getX();
     }
 
     private String getCampaignName() {
-        return this.campaignChooser.getSelectedContent();
+        return this.allCampaigns.get(this.campaignChooser.getSelectedIndex()).getY();
     }
 
     private GraphSpecs.METRICS getChosenMetric() {

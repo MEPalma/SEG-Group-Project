@@ -4,6 +4,7 @@ package Gui.TabbedView;
 import Gui.GuiColors;
 import Gui.GuiComponents.HListView;
 import Gui.GuiComponents.MenuLabel;
+import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
 import Gui.TakeActionListener;
 
@@ -19,7 +20,9 @@ public class TabbedView {
     private final JPanel tabsHost;
     private final JPanel contentHost;
 
-    private final List<Tab> tabs;
+    private JPanel homeView;
+
+    private final LinkedList<Tab> tabs;
 
     private JPanel openTab;
 
@@ -28,6 +31,8 @@ public class TabbedView {
     public TabbedView(JPanel tabsHost, JPanel contentHost) {
         this.tabsHost = tabsHost;
         this.tabsHost.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
+
+        this.homeView = null;
 
         this.contentHost = contentHost;
         this.tabs = new LinkedList<>();
@@ -42,13 +47,17 @@ public class TabbedView {
         this.tabsHost.removeAll();
         this.contentHost.removeAll();
 
+        if(this.homeView != null) {
+            this.tabsHost.add(createTab("Home", GuiColors.RED_ERROR, 0, null, false), BorderLayout.WEST);
+        }
+
         if (this.selectedIndex > this.tabs.size() - 1)
             this.selectedIndex = this.tabs.size() - 1;
 
         List<Component> tabCells = new LinkedList<>();
-        for (int i = 0; i < this.tabs.size(); ++i) {
+        for (int i = ((this.homeView == null) ? 0 : 1); i < this.tabs.size(); ++i) {
             Tab t = this.tabs.get(i);
-            tabCells.add(createTab(t.getTitle(), t.getColor(), i, t.getUpdateOnSelection()));
+            tabCells.add(createTab(t.getTitle(), t.getColor(), i, t.getUpdateOnSelection(), true));
         }
 
         this.tabsHost.add(new HListView(GuiColors.BASE_WHITE, tabCells).getWrappedInScroll(), BorderLayout.CENTER);
@@ -66,6 +75,14 @@ public class TabbedView {
             this.tabs.add(new Tab(title, GuiColors.BASE_PRIME, content, comparable, updateOnSelection));
             this.selectedIndex = this.tabs.size() - 1;
         }
+        refresh();
+    }
+
+    public void pushNewHomeTab(String title, RPanel content) {
+        Tab homeTab = new Tab(title, GuiColors.RED_ERROR, content, null, null);
+        this.homeView = content;
+        this.tabs.addFirst(homeTab);
+
         refresh();
     }
 
@@ -95,7 +112,7 @@ public class TabbedView {
         return dump;
     }
 
-    private JPanel createTab(String title, Color color, int myIndex, TakeActionListener updateOnSelection) {
+    private JPanel createTab(String title, Color color, int myIndex, TakeActionListener updateOnSelection, boolean closable) {
         JPanel tab = new JPanel(new BorderLayout());
         tab.setBackground(color);
         tab.setBorder(BorderFactory.createMatteBorder(0, 2, 4, 0, GuiColors.BASE_WHITE));
@@ -103,7 +120,7 @@ public class TabbedView {
             tab.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, GuiColors.BASE_WHITE));
             openTab = tab;
         }
-        tab.setPreferredSize(new Dimension(120, 50));
+        tab.setPreferredSize(new Dimension((closable ? 120 : 80), 50));
         tab.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -130,29 +147,31 @@ public class TabbedView {
 
         tab.add(titleLabel, BorderLayout.CENTER);
 
-        MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 16);
-        popLabel.setForeground(GuiColors.BASE_WHITE);
-        popLabel.setPreferredSize(new Dimension(20, 20));
-        popLabel.dropAllListeners();
-        popLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                tabs.remove(myIndex);
-                refresh();
-                updateOnSelection.takeAction();
-            }
+        if (closable) {
+            MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 16);
+            popLabel.setForeground(GuiColors.BASE_WHITE);
+            popLabel.setPreferredSize(new Dimension(20, 20));
+            popLabel.dropAllListeners();
+            popLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    tabs.remove(myIndex);
+                    refresh();
+                    updateOnSelection.takeAction();
+                }
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                popLabel.setForeground(GuiColors.BASE_SMOKE);
-            }
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    popLabel.setForeground(GuiColors.BASE_SMOKE);
+                }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                popLabel.setForeground(GuiColors.BASE_WHITE);
-            }
-        });
-        tab.add(popLabel, BorderLayout.EAST);
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    popLabel.setForeground(GuiColors.BASE_WHITE);
+                }
+            });
+            tab.add(popLabel, BorderLayout.EAST);
+        }
 
         return tab;
     }

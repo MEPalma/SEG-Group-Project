@@ -90,7 +90,7 @@ public class Gui extends JFrame {
         TabbedView tabbedView = new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster);
         this.mainController = new MainController(this, this.statusDisplay, tabbedView);
 
-        tabbedView.push("HOME", new HomeView(mainController), new Object(), null);
+        tabbedView.pushNewHomeTab("HOME", new HomeView(mainController));
 
         /*
             ORGANIZE LAYOUT

@@ -36,7 +36,7 @@ public class StatusDisplay extends RPanel {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(guiColors.getGuiTextColor());
 
-        TitleLabel titleLabel = new TitleLabel("Loading...", TitleLabel.CENTER, 14);
+        TitleLabel titleLabel = new TitleLabel("Loading...", TitleLabel.CENTER, 14, guiColors);
         wrapper.add(titleLabel, BorderLayout.NORTH);
 
         JProgressBar progressBar = new JProgressBar(JProgressBar.HORIZONTAL);
@@ -62,15 +62,15 @@ public class StatusDisplay extends RPanel {
         wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, guiColors.getGuiBackgroundColor()));
         wrapper.setBackground(GuiColors.RED_ERROR);
 
-        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.CENTER, 16);
+        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.CENTER, 16, guiColors);
         titleLabel.setForeground(guiColors.getGuiTextColor());
         wrapper.add(titleLabel, BorderLayout.NORTH);
 
-        TitleLabel contentLabel = new TitleLabel(content, TitleLabel.CENTER, 14);
+        TitleLabel contentLabel = new TitleLabel(content, TitleLabel.CENTER, 14, guiColors);
         contentLabel.setForeground(guiColors.getGuiTextColor());
         wrapper.add(contentLabel, BorderLayout.CENTER);
 
-        MenuLabel closeLabel = new MenuLabel("CLOSE", MenuLabel.CENTER, 14);
+        MenuLabel closeLabel = new MenuLabel("CLOSE", MenuLabel.CENTER, 14, guiColors);
         closeLabel.dropAllListeners();
         closeLabel.setForeground(guiColors.getGuiTextColor());
         closeLabel.addMouseListener(new MouseAdapter() {

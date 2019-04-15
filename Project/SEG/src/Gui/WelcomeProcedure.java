@@ -34,12 +34,12 @@ public class WelcomeProcedure extends JPanel {
         wrapper.setBorder(BorderFactory.createEmptyBorder());
         wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
 
-        TitleLabel logo = new TitleLabel("", TitleLabel.CENTER);
+        TitleLabel logo = new TitleLabel("", TitleLabel.CENTER, mainController.getGuiColors());
         logo.setIcon(new ImageIcon(getClass().getResource("/Icons/logo.png")));
         logo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         wrapper.add(logo, BorderLayout.NORTH);
 
-        MenuLabel segue = new MenuLabel("Next", MenuLabel.CENTER, 16);
+        MenuLabel segue = new MenuLabel("Next", MenuLabel.CENTER, 16, mainController.getGuiColors());
         segue.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         segue.addMouseListener(new MouseAdapter() {
             @Override

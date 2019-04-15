@@ -70,7 +70,7 @@ public class TabbedView {
             tabCells.add(createTab(t.getTitle(), t.getColor(), i, t.getUpdateOnSelection(), true));
         }
 
-        this.tabsHost.add(new HListView(mainController.getGuiColors().getGuiTextColor(), tabCells).getWrappedInScroll(), BorderLayout.CENTER);
+        this.tabsHost.add(new HListView(mainController.getGuiColors(), tabCells).getWrappedInScroll(), BorderLayout.CENTER);
         if (this.selectedIndex >= 0)
             this.contentHost.add(this.tabs.get(this.selectedIndex).getContent(), BorderLayout.CENTER);
 
@@ -152,13 +152,13 @@ public class TabbedView {
             }
         });
 
-        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 14);
+        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
         titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
 
         tab.add(titleLabel, BorderLayout.CENTER);
 
         if (closable) {
-            MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 16);
+            MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 16, mainController.getGuiColors());
             popLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
             popLabel.setPreferredSize(new Dimension(20, 20));
             popLabel.dropAllListeners();

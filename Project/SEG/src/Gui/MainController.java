@@ -144,7 +144,7 @@ public class MainController {
                     }
                 };
 
-                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs.getMetric()), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs, updateOnClick);
+                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs.getMetric()), GraphManager.getGraphCard(newGraphSpecs, guiColors), newGraphSpecs, updateOnClick);
                 stopProgressBar();
                 removeDataLoadingTask(this);
                 super.done();
@@ -182,7 +182,7 @@ public class MainController {
 
                 tabbedView.push(
                         cmpGraphSpec.getCardTitle(),
-                        GraphManager.getGraphCard(cmpGraphSpec),
+                        GraphManager.getGraphCard(cmpGraphSpec, guiColors),
                         cmpGraphSpec,//TODO check
                         updateOnClick);
                 stopProgressBar();
@@ -226,7 +226,7 @@ public class MainController {
             protected void done() {
                 tabbedView.replaceOnComparable(
                         GraphManager.getGraphShortTitle(graphSpecs.getMetric()),
-                        GraphManager.getGraphCard(graphSpecs),
+                        GraphManager.getGraphCard(graphSpecs, guiColors),
                         graphSpecs);
 
                 stopProgressBar();
@@ -259,7 +259,7 @@ public class MainController {
             protected void done() {
                 tabbedView.replaceOnComparable(
                         cmpGraphSpec.getGraphTitle(),
-                        GraphManager.getGraphCard(cmpGraphSpec),
+                        GraphManager.getGraphCard(cmpGraphSpec, guiColors),
                         cmpGraphSpec);
 
                 stopProgressBar();

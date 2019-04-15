@@ -18,7 +18,7 @@ public class SideMenu extends RPanel {
     private JPanel openMenu;
 
     public SideMenu(MainController mainController) {
-        super(GuiColors.BASE_PRIME, new BorderLayout());
+        super(mainController.getGuiColors().getGuiPrimeColor(), new BorderLayout());
         this.mainController = mainController;
 
         refresh();
@@ -30,7 +30,7 @@ public class SideMenu extends RPanel {
         List<Component> menus = new LinkedList<>();
 
         //Load csvs
-        MenuLabel loadCSVsLabel = new MenuLabel("Load", MenuLabel.CENTER, 0);
+        MenuLabel loadCSVsLabel = new MenuLabel("Load", MenuLabel.CENTER, 0, mainController.getGuiColors());
         loadCSVsLabel.setToolTipText("Load from CSVs for a new campaign");
         loadCSVsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/upload.png")));
         loadCSVsLabel.addMouseListener(new MouseAdapter() {
@@ -61,7 +61,7 @@ public class SideMenu extends RPanel {
         menus.add(getMenuCard(loadCSVsLabel));
 
         //settings
-        MenuLabel settingsLabel = new MenuLabel("Settings", MenuLabel.CENTER, 0);
+        MenuLabel settingsLabel = new MenuLabel("Settings", MenuLabel.CENTER, 0, mainController.getGuiColors());
         settingsLabel.setToolTipText("Settings");
         settingsLabel.setIcon(new ImageIcon(getClass().getResource("/Icons/settings.png")));
         settingsLabel.addMouseListener(new MouseAdapter() {
@@ -84,7 +84,7 @@ public class SideMenu extends RPanel {
         });
         menus.add(getMenuCard(settingsLabel));
 
-        JPanel menuList = new ListView(getBackground(), menus);
+        JPanel menuList = new ListView(mainController.getGuiColors(), menus);
         if (this.openMenu != null) {
             this.openMenu.setPreferredSize(new Dimension(400, 250));
             add(menuList, BorderLayout.WEST);

@@ -42,7 +42,7 @@ public class DateBrowser extends JPanel {
 
         DateBrowser thisBrowser = this;
 
-        TextBox dateBox = new TextBox(getBackground());
+        TextBox dateBox = new TextBox(guiColors);
         dateBox.setEditable(false);
         dateBox.setPreferredSize(new Dimension(150, 26));
         dateBox.setHorizontalAlignment(TextBox.CENTER);
@@ -170,7 +170,7 @@ class DateBrowserFrame extends JDialog {
         cvpNorthPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         cvpNorthPanel.setBackground(getBackground());
 
-        MenuLabel goBackOneMonthLabel = new MenuLabel("<", MenuLabel.CENTER, 14);
+        MenuLabel goBackOneMonthLabel = new MenuLabel("<", MenuLabel.CENTER, 14, dateBrowser.getGuiColors());
         goBackOneMonthLabel.setForeground(dateBrowser.getGuiColors().getGuiTextColor());
         goBackOneMonthLabel.dropAllListeners();
         goBackOneMonthLabel.addMouseListener(new MouseAdapter() {
@@ -195,7 +195,7 @@ class DateBrowserFrame extends JDialog {
                 goBackOneMonthLabel.setForeground(dateBrowser.getGuiColors().getGuiTextColor());
             }
         });
-        MenuLabel goForewordOneMonthLabel = new MenuLabel(">", MenuLabel.CENTER, 14);
+        MenuLabel goForewordOneMonthLabel = new MenuLabel(">", MenuLabel.CENTER, 14, dateBrowser.getGuiColors());
         goForewordOneMonthLabel.dropAllListeners();
         goForewordOneMonthLabel.setForeground(dateBrowser.getGuiColors().getGuiTextColor());
         goForewordOneMonthLabel.addMouseListener(new MouseAdapter() {
@@ -259,12 +259,12 @@ class DateBrowserFrame extends JDialog {
             int dayNumTMP = ctmp.get(Calendar.DAY_OF_WEEK);
 
             for (int i = lastDayNumber; i < dayNumTMP - 1; i++) {
-                cvpDaysViewPanel.add(new TitleLabel("", TitleLabel.CENTER, 12));
+                cvpDaysViewPanel.add(new TitleLabel("", TitleLabel.CENTER, 12, dateBrowser.getGuiColors()));
                 added++;
             }
             lastDayNumber = dayNumTMP;
 
-            MenuLabel dayChooser = new MenuLabel(Integer.toString(ctmp.get(Calendar.DAY_OF_MONTH)), TitleLabel.CENTER, 12);
+            MenuLabel dayChooser = new MenuLabel(Integer.toString(ctmp.get(Calendar.DAY_OF_MONTH)), TitleLabel.CENTER, 12, dateBrowser.getGuiColors());
             dayChooser.setForeground(dateBrowser.getGuiColors().getGuiTextColor());
             dayChooser.dropAllListeners();
             dayChooser.addMouseListener(new MouseAdapter() {
@@ -297,7 +297,7 @@ class DateBrowserFrame extends JDialog {
         }
 
         for (int i = added; i < 42; i++) {
-            cvpDaysViewPanel.add(new TitleLabel("", TitleLabel.CENTER, 8));
+            cvpDaysViewPanel.add(new TitleLabel("", TitleLabel.CENTER, 8, dateBrowser.getGuiColors()));
         }
 
         centerViewPanel.add(cvpDaysViewPanel, BorderLayout.CENTER);
@@ -323,7 +323,7 @@ class DateBrowserFrame extends JDialog {
         leftButtonsTimeEditor.setBackground(getBackground());
         timeEditorPanel.add(leftButtonsTimeEditor, BorderLayout.WEST);
 
-        MenuLabel addHourMB = new MenuLabel("+h", MenuLabel.CENTER, 12);
+        MenuLabel addHourMB = new MenuLabel("+h", MenuLabel.CENTER, 12, dateBrowser.getGuiColors());
         addHourMB.setForeground(dateBrowser.getGuiColors().getGuiTextColor());
         addHourMB.dropAllListeners();
         addHourMB.addMouseListener(new MouseAdapter() {
@@ -350,7 +350,7 @@ class DateBrowserFrame extends JDialog {
         });
         leftButtonsTimeEditor.add(addHourMB);
 
-        MenuLabel addMinuteMB = new MenuLabel("+m", MenuLabel.CENTER, 12);
+        MenuLabel addMinuteMB = new MenuLabel("+m", MenuLabel.CENTER, 12, dateBrowser.getGuiColors());
         addMinuteMB.setForeground(dateBrowser.getGuiColors().getGuiTextColor());
         addMinuteMB.dropAllListeners();
         addMinuteMB.addMouseListener(new MouseAdapter() {
@@ -377,7 +377,7 @@ class DateBrowserFrame extends JDialog {
         });
         leftButtonsTimeEditor.add(addMinuteMB);
 
-        MenuLabel addSecondMB = new MenuLabel("+s", MenuLabel.CENTER, 12);
+        MenuLabel addSecondMB = new MenuLabel("+s", MenuLabel.CENTER, 12, dateBrowser.getGuiColors());
         addSecondMB.setForeground(dateBrowser.getGuiColors().getGuiTextColor());
         addSecondMB.dropAllListeners();
         addSecondMB.addMouseListener(new MouseAdapter() {
@@ -411,7 +411,7 @@ class DateBrowserFrame extends JDialog {
         timeEditorPanel.add(rightButtonsTimeEditor, BorderLayout.EAST);
 
 
-        MenuLabel rmHourMB = new MenuLabel("-h", MenuLabel.CENTER, 12);
+        MenuLabel rmHourMB = new MenuLabel("-h", MenuLabel.CENTER, 12, dateBrowser.getGuiColors());
         rmHourMB.setForeground(dateBrowser.getGuiColors().getGuiTextColor());
         rmHourMB.dropAllListeners();
         rmHourMB.addMouseListener(new MouseAdapter() {
@@ -438,7 +438,7 @@ class DateBrowserFrame extends JDialog {
         });
         rightButtonsTimeEditor.add(rmHourMB);
 
-        MenuLabel rmMinuteMB = new MenuLabel("-m", MenuLabel.CENTER, 12);
+        MenuLabel rmMinuteMB = new MenuLabel("-m", MenuLabel.CENTER, 12, dateBrowser.getGuiColors());
         rmMinuteMB.setForeground(dateBrowser.getGuiColors().getGuiTextColor());
         rmMinuteMB.dropAllListeners();
         rmMinuteMB.addMouseListener(new MouseAdapter() {
@@ -465,7 +465,7 @@ class DateBrowserFrame extends JDialog {
         });
         rightButtonsTimeEditor.add(rmMinuteMB);
 
-        MenuLabel rmSecondMB = new MenuLabel("-s", MenuLabel.CENTER, 12);
+        MenuLabel rmSecondMB = new MenuLabel("-s", MenuLabel.CENTER, 12, dateBrowser.getGuiColors());
         rmSecondMB.setForeground(dateBrowser.getGuiColors().getGuiTextColor());
         rmSecondMB.dropAllListeners();
         rmSecondMB.addMouseListener(new MouseAdapter() {

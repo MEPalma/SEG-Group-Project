@@ -95,8 +95,7 @@ public class HomeView extends RPanel {
         return wrapInCell(
                   "Number of Impressions",
                         new BarChart(
-                                mainController.getGuiColors().getGuiTextColor(),
-                                GuiColors.RED_ERROR,
+                                mainController.getGuiColors(),
                                 data,
                                 false
                         )

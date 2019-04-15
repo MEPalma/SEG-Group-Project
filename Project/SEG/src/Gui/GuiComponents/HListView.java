@@ -52,11 +52,11 @@ public class HListView extends JPanel implements Scrollable {
         listScroller.getVerticalScrollBar().setBorder(this.getBorder());
         wrapper.add(listScroller);
 
-        MenuLabel goLeftLabel = new MenuLabel("<", MenuLabel.CENTER, 20);
+        MenuLabel goLeftLabel = new MenuLabel("<", MenuLabel.CENTER, 20, guiColors);
         goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, getBackground()));
         wrapper.add(goLeftLabel, BorderLayout.WEST);
 
-        MenuLabel goRightLabel = new MenuLabel(">", MenuLabel.CENTER, 20);
+        MenuLabel goRightLabel = new MenuLabel(">", MenuLabel.CENTER, 20, guiColors);
         goRightLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, getBackground()));
         wrapper.add(goRightLabel, BorderLayout.EAST);
 

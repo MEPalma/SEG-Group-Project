@@ -109,7 +109,7 @@ public class Gui extends JFrame {
         this.northView.setPreferredSize(new Dimension(300, 56));
 
 
-        TitleLabel appTitleLabel = new TitleLabel(" Dashboard App", JLabel.LEFT, 26);
+        TitleLabel appTitleLabel = new TitleLabel(" Dashboard App", JLabel.LEFT, 26, mainController.getGuiColors());
         appTitleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
         this.northView.add(appTitleLabel, BorderLayout.WEST);
         this.northView.add(new TitleLabel(" Dashboard App", JLabel.LEFT, 26, this.northView.getBackground()), BorderLayout.EAST);//spacer to center campaign name
@@ -189,7 +189,7 @@ public class Gui extends JFrame {
         this.filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
         this.filterButtonWrapper.setPreferredSize(new Dimension(120, 60));
 
-        this.filtersMenuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16);
+        this.filtersMenuLabel = new MenuLabel("Filters", MenuLabel.CENTER, 16, mainController.getGuiColors());
         this.filtersMenuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, mainController.getGuiColors().getGuiTextColor()));
         this.filtersMenuLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -230,7 +230,7 @@ public class Gui extends JFrame {
         this.addGraphButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
         this.addGraphButtonWrapper.setPreferredSize(new Dimension(120, 60));
 
-        this.addGraphMenuLabel = new MenuLabel("Add Graph", MenuLabel.CENTER, 16);
+        this.addGraphMenuLabel = new MenuLabel("Add Graph", MenuLabel.CENTER, 16, mainController.getGuiColors());
         this.addGraphMenuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, mainController.getGuiColors().getGuiTextColor()));
         this.addGraphMenuLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -270,7 +270,7 @@ public class Gui extends JFrame {
         this.compareButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
         this.compareButtonWrapper.setPreferredSize(new Dimension(120, 60));
 
-        this.compareMenuLabel = new MenuLabel("Compare", MenuLabel.CENTER, 16);
+        this.compareMenuLabel = new MenuLabel("Compare", MenuLabel.CENTER, 16, mainController.getGuiColors());
         this.compareMenuLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, mainController.getGuiColors().getGuiTextColor()));
         this.compareMenuLabel.addMouseListener(new MouseAdapter() {
             @Override

@@ -13,6 +13,6 @@ public class Main {
 
     public static void main(String[] args) {
         Locale.setDefault(Locale.ENGLISH);
-//        new Gui().setVisible(true);
+        new Gui().setVisible(true);
     }
 }

@@ -501,9 +501,9 @@ public class QueryComposer {
         return "INSERT OR REPLACE INTO SETTINGS VALUES('GuiBackgroundColor', '" + GuiColors.formatColor(color) + "');";
     }
 
-    public static String getGuiPrimeColor = "SELECT * FROM SETTINGS WHERE name='GuiPrimeColor';";
-    public static String getGuiOptionColor = "SELECT * FROM SETTINGS WHERE name='GuiOptionColor';";
-    public static String getGuiTextColor = "SELECT * FROM SETTINGS WHERE name='GuiTextColor';";
-    public static String getGuiBackgroundColor = "SELECT * FROM SETTINGS WHERE name='GuiBackgroundColor';";
+    public static String getGuiPrimeColor = "SELECT value FROM SETTINGS WHERE name='GuiPrimeColor';";
+    public static String getGuiOptionColor = "SELECT value FROM SETTINGS WHERE name='GuiOptionColor';";
+    public static String getGuiTextColor = "SELECT value FROM SETTINGS WHERE name='GuiTextColor';";
+    public static String getGuiBackgroundColor = "SELECT value FROM SETTINGS WHERE name='GuiBackgroundColor';";
 
 }

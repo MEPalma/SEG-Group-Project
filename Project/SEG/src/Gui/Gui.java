@@ -57,6 +57,18 @@ public class Gui extends JFrame {
             e.printStackTrace();
         }
 
+        this.tabbedViewTabsHoster = new JPanel(new BorderLayout());
+        this.tabbedViewContentHoster = new JPanel(new BorderLayout());
+
+        /*
+            INIT MAIN CONTROLLER
+         */
+        TabbedView tabbedView = new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster);
+        this.mainController = new MainController(this, this.statusDisplay, tabbedView);
+
+        tabbedView.init(this.mainController);
+
+        tabbedView.pushNewHomeTab("HOME", new HomeView(mainController));
 
         /*
             POPUPS
@@ -70,11 +82,9 @@ public class Gui extends JFrame {
         /*
             TABBED VIEW VIEWS INITIALIZATION
          */
-        this.tabbedViewTabsHoster = new JPanel(new BorderLayout());
         tabbedViewTabsHoster.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         tabbedViewTabsHoster.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
 
-        this.tabbedViewContentHoster = new JPanel(new BorderLayout());
         tabbedViewContentHoster.setBorder(BorderFactory.createEmptyBorder());
         tabbedViewTabsHoster.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
 
@@ -84,15 +94,6 @@ public class Gui extends JFrame {
 
         this.statusDisplay = new StatusDisplay(this.mainController.getGuiColors());
 
-        /*
-            INIT MAIN CONTROLLER
-         */
-        TabbedView tabbedView = new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster);
-        this.mainController = new MainController(this, this.statusDisplay, tabbedView);
-
-        tabbedView.init(this.mainController);
-
-        tabbedView.pushNewHomeTab("HOME", new HomeView(mainController));
 
         /*
             ORGANIZE LAYOUT

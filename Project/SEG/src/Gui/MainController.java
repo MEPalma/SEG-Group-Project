@@ -24,14 +24,14 @@ public class MainController {
     private final StatusDisplay statusDisplay;
     private final Gui gui;
 
-    public MainController(Gui gui, StatusDisplay statusDisplay, TabbedView tabbedView) {
+    public MainController(Gui gui, StatusDisplay statusDisplay, TabbedView tabbedView, GuiColors guiColors) {
         this.dataExchange = new DataExchange(new DatabaseManager());
         this.gui = gui;
         this.tabbedView = tabbedView;
         this.statusDisplay = statusDisplay;
         this.dataLoadingTasks = new LinkedList<>();
 
-        this.guiColors = new GuiColors();
+        this.guiColors = guiColors;
         updateGuiColors();
     }
 

@@ -63,8 +63,11 @@ public class Gui extends JFrame {
         /*
             INIT MAIN CONTROLLER
          */
+        GuiColors guiColors = new GuiColors();
+        this.statusDisplay = new StatusDisplay(guiColors);
+
         TabbedView tabbedView = new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster);
-        this.mainController = new MainController(this, this.statusDisplay, tabbedView);
+        this.mainController = new MainController(this, this.statusDisplay, tabbedView, guiColors);
 
         tabbedView.init(this.mainController);
 
@@ -88,11 +91,7 @@ public class Gui extends JFrame {
         tabbedViewContentHoster.setBorder(BorderFactory.createEmptyBorder());
         tabbedViewTabsHoster.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
 
-        /*
-            STATUS DISPLAY VIEW INITIALIZATION
-         */
 
-        this.statusDisplay = new StatusDisplay(this.mainController.getGuiColors());
 
 
         /*

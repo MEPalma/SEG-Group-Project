@@ -112,7 +112,7 @@ public class FiltersMenu extends RPanel {
 
 
         // GENDER
-        CheckBox maleOption = new CheckBox("Male", Color.DARK_GRAY);
+        CheckBox maleOption = new CheckBox("Male", mainController.getGuiColors().getGuiTextColor());
         maleOption.setSelected(cloneOfActiveFilters.getGenders().contains(Enums.Gender.Male));
         maleOption.addActionListener(new ActionListener() {
             @Override
@@ -125,7 +125,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox femaleOption = new CheckBox("Female", Color.DARK_GRAY);
+        CheckBox femaleOption = new CheckBox("Female", mainController.getGuiColors().getGuiTextColor());
         femaleOption.setSelected(cloneOfActiveFilters.getGenders().contains(Enums.Gender.Female));
         femaleOption.addActionListener(new ActionListener() {
             @Override
@@ -141,7 +141,7 @@ public class FiltersMenu extends RPanel {
         JPanel genders = wrapInRow(new Component[]{maleOption, femaleOption});
 
         //AGE
-        CheckBox opAge_less_than_25 = new CheckBox("<25", Color.DARK_GRAY);
+        CheckBox opAge_less_than_25 = new CheckBox("<25", mainController.getGuiColors().getGuiTextColor());
         opAge_less_than_25.setSelected(cloneOfActiveFilters.getAges().contains(Enums.Age.Age_less_than_25));
         opAge_less_than_25.addActionListener(new ActionListener() {
             @Override
@@ -154,7 +154,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox opAge_25_34 = new CheckBox("25-34", Color.DARK_GRAY);
+        CheckBox opAge_25_34 = new CheckBox("25-34", mainController.getGuiColors().getGuiTextColor());
         opAge_25_34.setSelected(cloneOfActiveFilters.getAges().contains(Enums.Age.Age_25_34));
         opAge_25_34.addActionListener(new ActionListener() {
             @Override
@@ -167,7 +167,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox opAge_35_44 = new CheckBox("35-44", Color.DARK_GRAY);
+        CheckBox opAge_35_44 = new CheckBox("35-44", mainController.getGuiColors().getGuiTextColor());
         opAge_35_44.setSelected(cloneOfActiveFilters.getAges().contains(Enums.Age.Age_35_44));
         opAge_35_44.addActionListener(new ActionListener() {
             @Override
@@ -180,7 +180,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox opAge_45_54 = new CheckBox("45-54", Color.DARK_GRAY);
+        CheckBox opAge_45_54 = new CheckBox("45-54", mainController.getGuiColors().getGuiTextColor());
         opAge_45_54.setSelected(cloneOfActiveFilters.getAges().contains(Enums.Age.Age_45_54));
         opAge_45_54.addActionListener(new ActionListener() {
             @Override
@@ -193,7 +193,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox opAge_more_than_54 = new CheckBox(">54", Color.DARK_GRAY);
+        CheckBox opAge_more_than_54 = new CheckBox(">54", mainController.getGuiColors().getGuiTextColor());
         opAge_more_than_54.setSelected(cloneOfActiveFilters.getAges().contains(Enums.Age.Age_more_than_54));
         opAge_more_than_54.addActionListener(new ActionListener() {
             @Override
@@ -209,7 +209,7 @@ public class FiltersMenu extends RPanel {
 
 
         //INCOME
-        CheckBox opNews = new CheckBox("News", Color.DARK_GRAY);
+        CheckBox opNews = new CheckBox("News", mainController.getGuiColors().getGuiTextColor());
         opNews.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.News));
         opNews.addActionListener(new ActionListener() {
             @Override
@@ -222,7 +222,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox opShopping = new CheckBox("Shopping", Color.DARK_GRAY);
+        CheckBox opShopping = new CheckBox("Shopping", mainController.getGuiColors().getGuiTextColor());
         opShopping.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.Shopping));
         opShopping.addActionListener(new ActionListener() {
             @Override
@@ -235,7 +235,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox opSocialMedia = new CheckBox("Social Media", Color.DARK_GRAY);
+        CheckBox opSocialMedia = new CheckBox("Social Media", mainController.getGuiColors().getGuiTextColor());
         opSocialMedia.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.SocialMedia));
         opSocialMedia.addActionListener(new ActionListener() {
             @Override
@@ -248,7 +248,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox opTravels = new CheckBox("Travels", Color.DARK_GRAY);
+        CheckBox opTravels = new CheckBox("Travels", mainController.getGuiColors().getGuiTextColor());
         opTravels.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.Travel));
         opTravels.addActionListener(new ActionListener() {
             @Override
@@ -261,7 +261,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox opHobbies = new CheckBox("Hobbies", Color.DARK_GRAY);
+        CheckBox opHobbies = new CheckBox("Hobbies", mainController.getGuiColors().getGuiTextColor());
         opHobbies.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.Hobbies));
         opHobbies.addActionListener(new ActionListener() {
             @Override
@@ -274,7 +274,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox opBlog = new CheckBox("Blog", Color.DARK_GRAY);
+        CheckBox opBlog = new CheckBox("Blog", mainController.getGuiColors().getGuiTextColor());
         opBlog.setSelected(cloneOfActiveFilters.getContexts().contains(Enums.Context.Blog));
         opBlog.addActionListener(new ActionListener() {
             @Override
@@ -327,7 +327,7 @@ public class FiltersMenu extends RPanel {
         TitleLabel contextTitle = new TitleLabel("Income", TitleLabel.LEFT, 20, mainController.getGuiColors());
 
         // Low, Medium, High,
-        CheckBox opLowIncome = new CheckBox("Low", Color.DARK_GRAY);
+        CheckBox opLowIncome = new CheckBox("Low", mainController.getGuiColors().getGuiTextColor());
         opLowIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(Enums.Income.Low));
         opLowIncome.addActionListener(new ActionListener() {
             @Override
@@ -340,7 +340,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox opMediumIncome = new CheckBox("Medium", Color.DARK_GRAY);
+        CheckBox opMediumIncome = new CheckBox("Medium", mainController.getGuiColors().getGuiTextColor());
         opMediumIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(Enums.Income.Medium));
         opMediumIncome.addActionListener(new ActionListener() {
             @Override
@@ -353,7 +353,7 @@ public class FiltersMenu extends RPanel {
             }
         });
 
-        CheckBox highIncome = new CheckBox("High", Color.DARK_GRAY);
+        CheckBox highIncome = new CheckBox("High", mainController.getGuiColors().getGuiTextColor());
         highIncome.setSelected(cloneOfActiveFilters.getIncomes().contains(Enums.Income.High));
         highIncome.addActionListener(new ActionListener() {
             @Override

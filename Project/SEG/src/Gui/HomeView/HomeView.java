@@ -36,10 +36,6 @@ public class HomeView extends RPanel {
 
         // Impressions Row
         cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
-        cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
-        cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
-        cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
-        cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
 
 
         add(new ListView(mainController.getGuiColors(), cells).getWrappedInScroll(true), BorderLayout.CENTER);

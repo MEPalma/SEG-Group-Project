@@ -31,7 +31,7 @@ public class CompareMenu extends RPanel {
     private final DropDown timespanChooser;
 
     public CompareMenu(MainController mainController) {
-        super(GuiColors.BASE_WHITE, new BorderLayout());
+        super(mainController.getGuiColors().getGuiTextColor(), new BorderLayout());
 
         this.mainController = mainController;
         this.selections = new LinkedList<>();
@@ -43,13 +43,13 @@ public class CompareMenu extends RPanel {
             }
         };
 
-        this.metricsChooser = new DropDown(ChooseNewGraphPanel.METRICS, ChooseNewGraphPanel.METRICS_DESCRIPTIONS, 0);
+        this.metricsChooser = new DropDown(ChooseNewGraphPanel.METRICS, ChooseNewGraphPanel.METRICS_DESCRIPTIONS, 0, mainController.getGuiColors());
         this.metricsChooser.addTakeActionListener(takeActionListener);
 
-        this.bounceDefinitionChooser = new DropDown(BOUNCE_DEF, null, 0);
+        this.bounceDefinitionChooser = new DropDown(BOUNCE_DEF, null, 0, mainController.getGuiColors());
         this.bounceDefinitionChooser.addTakeActionListener(takeActionListener);
 
-        this.timespanChooser = new DropDown(ChooseNewGraphPanel.TIME_SPANS, null, 0);
+        this.timespanChooser = new DropDown(ChooseNewGraphPanel.TIME_SPANS, null, 0, mainController.getGuiColors());
         this.timespanChooser.addTakeActionListener(takeActionListener);
 
         this.allCampaigns = mainController.getDataExchange().selectAllCampaigns();
@@ -70,7 +70,7 @@ public class CompareMenu extends RPanel {
         wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         wrapper.setBackground(getBackground());
 
-        wrapper.add(new TitleLabel("Compare", TitleLabel.LEFT, 20), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Compare", TitleLabel.LEFT, 20, mainController.getGuiColors()), BorderLayout.NORTH);
 
         List<Component> cells = new LinkedList<>();
 
@@ -82,7 +82,7 @@ public class CompareMenu extends RPanel {
         cells.add(getTimeSpanChooserCell());
         cells.add(getCampaignsChooserCell());
 
-        wrapper.add(new ListView(getBackground(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
+        wrapper.add(new ListView(mainController.getGuiColors(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
 
         add(wrapper, BorderLayout.CENTER);
         repaint();
@@ -94,7 +94,7 @@ public class CompareMenu extends RPanel {
         wrapper.setBackground(getBackground());
         wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-        DropDown dropDown = new DropDown(options, null, selectedIndex);
+        DropDown dropDown = new DropDown(options, null, selectedIndex, mainController.getGuiColors());
         dropDown.addTakeActionListener(new TakeActionListener() {
             @Override
             public void takeAction() {
@@ -103,7 +103,7 @@ public class CompareMenu extends RPanel {
         });
         wrapper.add(dropDown, BorderLayout.CENTER);
 
-        MenuLabel removeMenuLabel = new MenuLabel("x", MenuLabel.RIGHT, 20);
+        MenuLabel removeMenuLabel = new MenuLabel("x", MenuLabel.RIGHT, 20, mainController.getGuiColors());
         removeMenuLabel.dropAllListeners();
         removeMenuLabel.setForeground(GuiColors.RED_ERROR);
         removeMenuLabel.addMouseListener(new MouseAdapter() {
@@ -123,7 +123,7 @@ public class CompareMenu extends RPanel {
         wrapper.setBackground(getBackground());
         wrapper.setBorder(BorderFactory.createEmptyBorder());
 
-        MenuLabel addMenuLabel = new MenuLabel("+", MenuLabel.CENTER, 20);
+        MenuLabel addMenuLabel = new MenuLabel("+", MenuLabel.CENTER, 20, mainController.getGuiColors());
         addMenuLabel.setToolTipText("Compare with another campaign");
         addMenuLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -139,10 +139,10 @@ public class CompareMenu extends RPanel {
 
     private JPanel getCampaignsChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, mainController.getGuiColors().getGuiTextColor()));
 
-        wrapper.add(new TitleLabel("Campaigns", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Campaigns", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.NORTH);
 
         List<Component> cells = new LinkedList<>();
         for (int i = 0; i < this.selections.size(); ++i)
@@ -151,7 +151,7 @@ public class CompareMenu extends RPanel {
         cells.add(getAddCampaignCell());
         cells.add(getAddButton());
 
-        wrapper.add(new ListView(getBackground(), cells), BorderLayout.CENTER);
+        wrapper.add(new ListView(mainController.getGuiColors(), cells), BorderLayout.CENTER);
 
         return wrapper;
     }
@@ -167,10 +167,10 @@ public class CompareMenu extends RPanel {
 
     private JPanel getMetricsChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, mainController.getGuiColors().getGuiTextColor()));
 
-        wrapper.add(new TitleLabel("Metric", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Metric", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.NORTH);
         wrapper.add(this.metricsChooser, BorderLayout.CENTER);
 
         return wrapper;
@@ -178,20 +178,20 @@ public class CompareMenu extends RPanel {
 
     private JPanel getBounceChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, mainController.getGuiColors().getGuiTextColor()));
 
-        wrapper.add(new TitleLabel("Bounce Definition", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Bounce Definition", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.NORTH);
         wrapper.add(this.bounceDefinitionChooser, BorderLayout.CENTER);
         return wrapper;
     }
 
     private JPanel getTimeSpanChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, mainController.getGuiColors().getGuiTextColor()));
 
-        wrapper.add(new TitleLabel("Time Grouping", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Time Grouping", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.NORTH);
         wrapper.add(this.timespanChooser, BorderLayout.CENTER);
 
         return wrapper;
@@ -202,7 +202,7 @@ public class CompareMenu extends RPanel {
         wrapper.setBackground(getBackground());
         wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-        MenuLabel addMenuLabel = new MenuLabel("Compare", MenuLabel.CENTER, 16);
+        MenuLabel addMenuLabel = new MenuLabel("Compare", MenuLabel.CENTER, 16, mainController.getGuiColors());
         addMenuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {

@@ -22,16 +22,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LoadCSVsMenu extends RPanel {
-
-    public static Color BACKGROUND = GuiColors.BASE_WHITE;
     private final MainController mainController;
     private TakeActionListener onLoaded;
     private String campaignName;
 
     public LoadCSVsMenu(MainController mainController) {
-        super(BACKGROUND, new BorderLayout());
+        super(mainController.getGuiColors().getGuiTextColor(), new BorderLayout());
         this.mainController = mainController;
-        setBorder(BorderFactory.createMatteBorder(4, 0, 4, 4, GuiColors.BASE_PRIME));
+        setBorder(BorderFactory.createMatteBorder(4, 0, 4, 4, mainController.getGuiColors().getGuiPrimeColor()));
 
         this.campaignName = "Today's campaign";
 
@@ -63,7 +61,7 @@ public class LoadCSVsMenu extends RPanel {
                 components.add(getClickLogFileFinderPanel());
                 components.add(getServerLogFileFinderPanel());
 
-                MenuLabel parseButton = new MenuLabel("LOAD", MenuLabel.CENTER, 18);
+                MenuLabel parseButton = new MenuLabel("LOAD", MenuLabel.CENTER, 18, mainController.getGuiColors());
                 parseButton.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                 parseButton.addMouseListener(new MouseAdapter() {
                     @Override
@@ -92,7 +90,7 @@ public class LoadCSVsMenu extends RPanel {
 
                                     parseButton.setText("LOAD AGAIN");
                                     parseButton.setEnabled(true);
-                                    parseButton.setForeground(GuiColors.BASE_PRIME);
+                                    parseButton.setForeground(mainController.getGuiColors().getGuiPrimeColor());
 
                                     mainController.refreshGraphs();
 
@@ -118,14 +116,14 @@ public class LoadCSVsMenu extends RPanel {
                 components.add(getChooseCampaignName());
                 components.add(parseButton);
 
-                centerComponent = new ListView(BACKGROUND, components).getWrappedInScroll(true);
+                centerComponent = new ListView(mainController.getGuiColors(), components).getWrappedInScroll(true);
 
                 return null;
             }
 
             @Override
             protected void done() {
-                TitleLabel titleLabel = new TitleLabel(" Campaigns", TitleLabel.LEFT, 18);
+                TitleLabel titleLabel = new TitleLabel(" Campaigns", TitleLabel.LEFT, 18, mainController.getGuiColors());
                 titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 10, 0));
                 add(titleLabel, BorderLayout.NORTH);
                 add(centerComponent, BorderLayout.CENTER);
@@ -137,9 +135,9 @@ public class LoadCSVsMenu extends RPanel {
             private JPanel getTitleAddNewCampaign() {
                 JPanel wrapper = new JPanel(new BorderLayout());
                 wrapper.setBorder(BorderFactory.createEmptyBorder(12, 8, 8, 8));
-                wrapper.setBackground(BACKGROUND);
+                wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
 
-                wrapper.add(new TitleLabel("Add New Campaign", TitleLabel.LEFT, 18), BorderLayout.WEST);
+                wrapper.add(new TitleLabel("Add New Campaign", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.WEST);
 
                 return wrapper;
             }
@@ -147,11 +145,11 @@ public class LoadCSVsMenu extends RPanel {
             private JPanel getChooseCampaignName() {
                 JPanel wrapper = new JPanel(new BorderLayout());
                 wrapper.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-                wrapper.setBackground(BACKGROUND);
+                wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
 
-                wrapper.add(new TitleLabel("Campaign Name", TitleLabel.LEFT, 16), BorderLayout.WEST);
+                wrapper.add(new TitleLabel("Campaign Name", TitleLabel.LEFT, 16, mainController.getGuiColors()), BorderLayout.WEST);
 
-                TextBox campaignChooser = new TextBox(BACKGROUND);
+                TextBox campaignChooser = new TextBox(mainController.getGuiColors());
                 campaignChooser.setText(campaignName);
                 campaignChooser.getDocument().addDocumentListener(new DocumentListener() {
                     @Override
@@ -177,9 +175,9 @@ public class LoadCSVsMenu extends RPanel {
             private JPanel getImpressionLogFileFinderPanel() {
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-                panel.setBackground(BACKGROUND);
+                panel.setBackground(mainController.getGuiColors().getGuiTextColor());
 
-                TitleLabel titleLabel = new TitleLabel("Impression Log", TitleLabel.LEFT, 16);
+                TitleLabel titleLabel = new TitleLabel("Impression Log", TitleLabel.LEFT, 16, mainController.getGuiColors());
                 titleLabel.setPreferredSize(new Dimension(140, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
@@ -187,10 +185,10 @@ public class LoadCSVsMenu extends RPanel {
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
-                TitleLabel pathTextBox = new TitleLabel("", TitleLabel.LEFT, 14);
+                TitleLabel pathTextBox = new TitleLabel("", TitleLabel.LEFT, 14, mainController.getGuiColors());
                 pathTextBox.setForeground(GuiColors.DARK_GRAY);
 
-                MenuLabel findFileButton = new MenuLabel(" choose", MenuLabel.CENTER, 14);
+                MenuLabel findFileButton = new MenuLabel(" choose", MenuLabel.CENTER, 14, mainController.getGuiColors());
                 findFileButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -219,7 +217,7 @@ public class LoadCSVsMenu extends RPanel {
                                 impressionLog = null;
                                 mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.IMPRESSION_LOGS, thisFileType));
                             } else {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.BASE_PRIME));
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, mainController.getGuiColors().getGuiPrimeColor()));
                                 pathTextBox.setText(impressionLog.getName());
                             }
                         }
@@ -236,9 +234,9 @@ public class LoadCSVsMenu extends RPanel {
             private JPanel getClickLogFileFinderPanel() {
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-                panel.setBackground(BACKGROUND);
+                panel.setBackground(mainController.getGuiColors().getGuiTextColor());
 
-                TitleLabel titleLabel = new TitleLabel("Click Log", TitleLabel.LEFT, 16);
+                TitleLabel titleLabel = new TitleLabel("Click Log", TitleLabel.LEFT, 16, mainController.getGuiColors());
                 titleLabel.setPreferredSize(new Dimension(140, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
@@ -246,10 +244,10 @@ public class LoadCSVsMenu extends RPanel {
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
-                TitleLabel pathTextBox = new TitleLabel("", TitleLabel.LEFT, 14);
+                TitleLabel pathTextBox = new TitleLabel("", TitleLabel.LEFT, 14, mainController.getGuiColors());
                 pathTextBox.setForeground(GuiColors.DARK_GRAY);
 
-                MenuLabel findFileButton = new MenuLabel(" choose", MenuLabel.CENTER, 14);
+                MenuLabel findFileButton = new MenuLabel(" choose", MenuLabel.CENTER, 14, mainController.getGuiColors());
                 findFileButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -277,7 +275,7 @@ public class LoadCSVsMenu extends RPanel {
                                 clickLog = null;
                                 mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.CLICK_LOGS, thisFileType));
                             } else {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.BASE_PRIME));
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, mainController.getGuiColors().getGuiPrimeColor()));
                                 pathTextBox.setText(clickLog.getName());
                             }
                         }
@@ -295,9 +293,9 @@ public class LoadCSVsMenu extends RPanel {
             private JPanel getServerLogFileFinderPanel() {
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-                panel.setBackground(BACKGROUND);
+                panel.setBackground(mainController.getGuiColors().getGuiTextColor());
 
-                TitleLabel titleLabel = new TitleLabel("Server Log", TitleLabel.LEFT, 16);
+                TitleLabel titleLabel = new TitleLabel("Server Log", TitleLabel.LEFT, 16, mainController.getGuiColors());
                 titleLabel.setPreferredSize(new Dimension(140, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
@@ -305,10 +303,10 @@ public class LoadCSVsMenu extends RPanel {
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
-                TitleLabel pathTextBox = new TitleLabel("", TitleLabel.LEFT, 14);
+                TitleLabel pathTextBox = new TitleLabel("", TitleLabel.LEFT, 14, mainController.getGuiColors());
                 pathTextBox.setForeground(GuiColors.DARK_GRAY);
 
-                MenuLabel findFileButton = new MenuLabel(" choose", MenuLabel.CENTER, 14);
+                MenuLabel findFileButton = new MenuLabel(" choose", MenuLabel.CENTER, 14, mainController.getGuiColors());
                 findFileButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -336,7 +334,7 @@ public class LoadCSVsMenu extends RPanel {
                                 serverLog = null;
                                 mainController.showErrorMessage("Invalid File", getErrorMessage(FileType.SERVER_LOGS, thisFileType));
                             } else {
-                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GuiColors.BASE_PRIME));
+                                pathFinderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, mainController.getGuiColors().getGuiPrimeColor()));
                                 pathTextBox.setText(serverLog.getName());
                             }
                         }
@@ -394,22 +392,22 @@ public class LoadCSVsMenu extends RPanel {
                 List<Tuple<Integer, String>> camps = mainController.getDataExchange().selectAllCampaigns();
 
                 if (camps.size() > 0) {
-                    TitleLabel titleLabel = new TitleLabel("Campaigns in the system", TitleLabel.LEFT, 16);
+                    TitleLabel titleLabel = new TitleLabel("Campaigns in the system", TitleLabel.LEFT, 16, mainController.getGuiColors());
                     titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                     panels.add(titleLabel);
 
                     for (Tuple<Integer, String> tuple : camps) {
                         JPanel wrapper = new JPanel(new BorderLayout());
                         wrapper.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-                        wrapper.setBackground(BACKGROUND);
+                        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
 
-                        wrapper.add(new TitleLabel(tuple.getY(), TitleLabel.LEFT, 16), BorderLayout.WEST);
+                        wrapper.add(new TitleLabel(tuple.getY(), TitleLabel.LEFT, 16, mainController.getGuiColors()), BorderLayout.WEST);
 
                         JPanel rightWrapper = new JPanel(new GridLayout(1, 2, 2, 2));
                         rightWrapper.setBackground(wrapper.getBackground());
                         rightWrapper.setBorder(BorderFactory.createEmptyBorder());
 
-                        MenuLabel changeNameLabel = new MenuLabel("nameEdit", MenuLabel.CENTER, 8);
+                        MenuLabel changeNameLabel = new MenuLabel("nameEdit", MenuLabel.CENTER, 8, mainController.getGuiColors());
                         changeNameLabel.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mousePressed(MouseEvent mouseEvent) {
@@ -441,7 +439,7 @@ public class LoadCSVsMenu extends RPanel {
                         });
                         rightWrapper.add(changeNameLabel);
 
-                        TitleLabel deleteLabel = new TitleLabel("x", MenuLabel.CENTER, 16);
+                        TitleLabel deleteLabel = new TitleLabel("x", MenuLabel.CENTER, 16, mainController.getGuiColors());
                         deleteLabel.setForeground(GuiColors.RED_ERROR);
                         deleteLabel.addMouseListener(new MouseAdapter() {
                             @Override
@@ -482,7 +480,7 @@ public class LoadCSVsMenu extends RPanel {
                     JPanel spacer = new JPanel(new BorderLayout());
                     spacer.setBorder(BorderFactory.createEmptyBorder());
                     spacer.setPreferredSize(new Dimension(50, 24));
-                    spacer.setBackground(BACKGROUND);
+                    spacer.setBackground(mainController.getGuiColors().getGuiTextColor());
                     panels.add(spacer);
                 }
 

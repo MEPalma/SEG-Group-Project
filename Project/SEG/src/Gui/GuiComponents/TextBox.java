@@ -6,12 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TextBox extends JTextField {
-    public TextBox(Color background) {
+    public TextBox(GuiColors guiColors) {
         super();
-        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GuiColors.BASE_SMOKE));
+        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, guiColors.getGuiBackgroundColor()));
         setFont(new Font("Verdana", Font.PLAIN, 14));
         setForeground(Color.BLACK);
-        setBackground(background);
+        setBackground(guiColors.getGuiBackgroundColor());
         setAlignmentX(JTextField.CENTER);
         setCaretColor(Color.BLACK);
     }

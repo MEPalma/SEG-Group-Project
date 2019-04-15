@@ -12,15 +12,19 @@ import java.util.Collection;
 
 public class HListView extends JPanel implements Scrollable {
 
-    public HListView(Color color, Collection<Component> cells) {
+    private final GuiColors guiColors;
+
+    public HListView(GuiColors guiColors, Collection<Component> cells) {
         super(new BorderLayout());
-        setBackground(color);
+        this.guiColors = guiColors;
+
+        setBackground(guiColors.getGuiTextColor());
         setBorder(BorderFactory.createEmptyBorder());
 
         JPanel refAddTo = this;
         for (Component cellContent : cells) {
             JPanel card = new JPanel(new BorderLayout());
-            card.setBackground(color);
+            card.setBackground(guiColors.getGuiTextColor());
             card.setBorder(BorderFactory.createEmptyBorder());
 
             card.add(cellContent, BorderLayout.WEST);
@@ -31,7 +35,7 @@ public class HListView extends JPanel implements Scrollable {
 
     public JPanel getWrappedInScroll() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBackground(getBackground());
         wrapper.setBorder(BorderFactory.createEmptyBorder());
 
         JPanel innerWrapper = new JPanel(new BorderLayout());
@@ -49,11 +53,11 @@ public class HListView extends JPanel implements Scrollable {
         wrapper.add(listScroller);
 
         MenuLabel goLeftLabel = new MenuLabel("<", MenuLabel.CENTER, 20);
-        goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+        goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, getBackground()));
         wrapper.add(goLeftLabel, BorderLayout.WEST);
 
         MenuLabel goRightLabel = new MenuLabel(">", MenuLabel.CENTER, 20);
-        goRightLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+        goRightLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, getBackground()));
         wrapper.add(goRightLabel, BorderLayout.EAST);
 
         TakeActionListener showHideScrollArrows = new TakeActionListener() {
@@ -92,14 +96,14 @@ public class HListView extends JPanel implements Scrollable {
                 listScroller.repaint();
                 listScroller.revalidate();
 
-                goRightLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+                goRightLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, guiColors.getGuiBackgroundColor()));
 
                 showHideScrollArrows.takeAction();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                goRightLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+                goRightLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, guiColors.getGuiTextColor()));
             }
         });
 
@@ -110,14 +114,14 @@ public class HListView extends JPanel implements Scrollable {
                 listScroller.repaint();
                 listScroller.revalidate();
 
-                goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_SMOKE));
+                goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, guiColors.getGuiBackgroundColor()));
 
                 showHideScrollArrows.takeAction();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, GuiColors.BASE_WHITE));
+                goLeftLabel.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, guiColors.getGuiTextColor()));
             }
         });
 

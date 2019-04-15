@@ -24,7 +24,7 @@ public class FiltersMenu extends RPanel {
     private FilterSpecs originalActiveFilters, cloneOfActiveFilters;
 
     public FiltersMenu(MainController mainController) {
-        super(GuiColors.BASE_WHITE, new BorderLayout());
+        super(mainController.getGuiColors().getGuiTextColor(), new BorderLayout());
         this.mainController = mainController;
 
         Object selectedGraph = this.mainController.getSelectedGraph();
@@ -369,7 +369,7 @@ public class FiltersMenu extends RPanel {
 
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
-        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
         wrapper.add(contextTitle, BorderLayout.NORTH);
         wrapper.add(contexts, BorderLayout.CENTER);
 
@@ -378,8 +378,8 @@ public class FiltersMenu extends RPanel {
 
     private JPanel getApplyOrClearButtons() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(8, 0, 0, 0, GuiColors.BASE_WHITE));
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        wrapper.setBorder(BorderFactory.createMatteBorder(8, 0, 0, 0, mainController.getGuiColors().getGuiTextColor()));
 
         JPanel choicesSplitter = new JPanel(new GridLayout(1, 2));
         choicesSplitter.setBackground(wrapper.getBackground());

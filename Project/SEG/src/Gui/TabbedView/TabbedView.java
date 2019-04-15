@@ -6,6 +6,7 @@ import Gui.GuiComponents.HListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
+import Gui.MainController;
 import Gui.TakeActionListener;
 
 import javax.swing.*;
@@ -28,19 +29,28 @@ public class TabbedView {
 
     private int selectedIndex;
 
+    private MainController mainController;
+
     public TabbedView(JPanel tabsHost, JPanel contentHost) {
         this.tabsHost = tabsHost;
-        this.tabsHost.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, GuiColors.BASE_SMOKE));
+        this.contentHost = contentHost;
+        this.tabs = new LinkedList<>();
+    }
+
+    public void init(MainController mainController) {
+        this.mainController = mainController;
+
+        this.tabsHost.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, mainController.getGuiColors().getGuiBackgroundColor()));
 
         this.homeView = null;
 
-        this.contentHost = contentHost;
-        this.tabs = new LinkedList<>();
+
+
         this.selectedIndex = 0;
 
         this.tabsHost.setLayout(new BorderLayout());
         this.contentHost.setLayout(new BorderLayout());
-        this.contentHost.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, GuiColors.BASE_SMOKE));
+        this.contentHost.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, mainController.getGuiColors().getGuiBackgroundColor()));
     }
 
     public synchronized void refresh() {
@@ -60,7 +70,7 @@ public class TabbedView {
             tabCells.add(createTab(t.getTitle(), t.getColor(), i, t.getUpdateOnSelection(), true));
         }
 
-        this.tabsHost.add(new HListView(GuiColors.BASE_WHITE, tabCells).getWrappedInScroll(), BorderLayout.CENTER);
+        this.tabsHost.add(new HListView(mainController.getGuiColors().getGuiTextColor(), tabCells).getWrappedInScroll(), BorderLayout.CENTER);
         if (this.selectedIndex >= 0)
             this.contentHost.add(this.tabs.get(this.selectedIndex).getContent(), BorderLayout.CENTER);
 
@@ -72,7 +82,7 @@ public class TabbedView {
 
     public void push(String title, JPanel content, Object comparable, TakeActionListener updateOnSelection) {
         synchronized (this) {
-            this.tabs.add(new Tab(title, GuiColors.BASE_PRIME, content, comparable, updateOnSelection));
+            this.tabs.add(new Tab(title, mainController.getGuiColors().getGuiPrimeColor(), content, comparable, updateOnSelection));
             this.selectedIndex = this.tabs.size() - 1;
         }
         refresh();
@@ -115,9 +125,9 @@ public class TabbedView {
     private JPanel createTab(String title, Color color, int myIndex, TakeActionListener updateOnSelection, boolean closable) {
         JPanel tab = new JPanel(new BorderLayout());
         tab.setBackground(color);
-        tab.setBorder(BorderFactory.createMatteBorder(0, 2, 4, 0, GuiColors.BASE_WHITE));
+        tab.setBorder(BorderFactory.createMatteBorder(0, 2, 4, 0, mainController.getGuiColors().getGuiTextColor()));
         if (myIndex == selectedIndex) {
-            tab.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, GuiColors.BASE_WHITE));
+            tab.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, mainController.getGuiColors().getGuiTextColor()));
             openTab = tab;
         }
         tab.setPreferredSize(new Dimension((closable ? 120 : 80), 50));
@@ -131,25 +141,25 @@ public class TabbedView {
                 contentHost.revalidate();
 
                 if (openTab != null) {
-                    openTab.setBorder(BorderFactory.createMatteBorder(0, 2, 4, 0, GuiColors.BASE_WHITE));
+                    openTab.setBorder(BorderFactory.createMatteBorder(0, 2, 4, 0, mainController.getGuiColors().getGuiTextColor()));
                     openTab.repaint();
                     openTab.revalidate();
                 }
                 openTab = tab;
 
-                tab.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, GuiColors.BASE_WHITE));
+                tab.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, mainController.getGuiColors().getGuiTextColor()));
                 if (updateOnSelection != null) updateOnSelection.takeAction();
             }
         });
 
         TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 14);
-        titleLabel.setForeground(GuiColors.BASE_WHITE);
+        titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
 
         tab.add(titleLabel, BorderLayout.CENTER);
 
         if (closable) {
             MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 16);
-            popLabel.setForeground(GuiColors.BASE_WHITE);
+            popLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
             popLabel.setPreferredSize(new Dimension(20, 20));
             popLabel.dropAllListeners();
             popLabel.addMouseListener(new MouseAdapter() {
@@ -162,12 +172,12 @@ public class TabbedView {
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    popLabel.setForeground(GuiColors.BASE_SMOKE);
+                    popLabel.setForeground(mainController.getGuiColors().getGuiBackgroundColor());
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    popLabel.setForeground(GuiColors.BASE_WHITE);
+                    popLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
                 }
             });
             tab.add(popLabel, BorderLayout.EAST);
@@ -178,6 +188,7 @@ public class TabbedView {
 
     public Object getSelectedComparable() {
         if (this.tabs.size() == 0) return null;
+        else if (this.homeView != null && this.selectedIndex == 0) return null;
         return this.tabs.get(this.selectedIndex).getComparable();
     }
 
@@ -185,7 +196,7 @@ public class TabbedView {
         for (Tab t : this.tabs) {
             if (t.getComparable() == (comparable)) {
                 t.setTitle(title);
-                t.setColor(GuiColors.BASE_PRIME);
+                t.setColor(mainController.getGuiColors().getGuiPrimeColor());
                 t.setContent(content);
                 t.setComparable(comparable);
             }

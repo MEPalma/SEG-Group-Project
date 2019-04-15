@@ -19,8 +19,8 @@ public class WelcomeProcedure extends JPanel {
         super(new BorderLayout());
         this.mainController = mainController;
 
-        setBorder(BorderFactory.createMatteBorder(40, 40, 40, 40, GuiColors.BASE_SMOKE));
-        setBackground(GuiColors.BASE_WHITE);
+        setBorder(BorderFactory.createMatteBorder(40, 40, 40, 40, mainController.getGuiColors().getGuiBackgroundColor()));
+        setBackground(mainController.getGuiColors().getGuiTextColor());
 
         add(getLoadFilesView(), BorderLayout.CENTER);
     }
@@ -32,7 +32,7 @@ public class WelcomeProcedure extends JPanel {
     private JPanel getLoadFilesView() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBorder(BorderFactory.createEmptyBorder());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
 
         TitleLabel logo = new TitleLabel("", TitleLabel.CENTER);
         logo.setIcon(new ImageIcon(getClass().getResource("/Icons/logo.png")));

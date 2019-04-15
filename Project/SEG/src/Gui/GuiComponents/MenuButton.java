@@ -10,14 +10,14 @@ import java.awt.*;
  */
 public class MenuButton extends JButton {
 
-    public MenuButton(String text, int textSize) {
+    public MenuButton(String text, int textSize, GuiColors guiColors) {
         //init
         super(text.toUpperCase());
 
         setFont(new Font("Verdana", Font.PLAIN, textSize));
 
         setBackground(Color.WHITE);
-        setForeground(GuiColors.TEXT_SELECTED);
+        setForeground(guiColors.getGuiTextColor());
         setOpaque(true);
 
         //set white borders

@@ -20,6 +20,7 @@ public class MainController {
     private final DataExchange dataExchange;
     private final TabbedView tabbedView;
     private final List<SwingWorker> dataLoadingTasks;
+    private final GuiColors guiColors;
     private final StatusDisplay statusDisplay;
     private final Gui gui;
 
@@ -29,6 +30,20 @@ public class MainController {
         this.tabbedView = tabbedView;
         this.statusDisplay = statusDisplay;
         this.dataLoadingTasks = new LinkedList<>();
+
+        this.guiColors = new GuiColors();
+        updateGuiColors();
+    }
+
+    public void updateGuiColors() {
+        this.guiColors.setGuiPrimeColor(this.dataExchange.getPrimeColor());
+        this.guiColors.setGuiOptionColor(this.dataExchange.getOptionColor());
+        this.guiColors.setGuiTextColor(this.dataExchange.getTextColor());
+        this.guiColors.setGuiBackgroundColor(this.dataExchange.getBackgroundColor());
+    }
+
+    public GuiColors getGuiColors() {
+        return this.guiColors;
     }
 
     public void addDataLoadingTask(SwingWorker newTask) {
@@ -283,4 +298,5 @@ public class MainController {
     public boolean isFiltersShowing() {
         return this.gui.isFiltersShowing();
     }
+
 }

@@ -19,7 +19,7 @@ public class HomeView extends RPanel {
     private final MainController mainController;
 
     public HomeView(MainController mainController) {
-        super(GuiColors.BASE_SMOKE, new BorderLayout());
+        super(mainController.getGuiColors().getGuiBackgroundColor(), new BorderLayout());
 
         this.mainController = mainController;
 
@@ -36,9 +36,13 @@ public class HomeView extends RPanel {
 
         // Impressions Row
         cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
+        cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
+        cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
+        cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
+        cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
 
 
-        add(new ListView(GuiColors.BASE_SMOKE, cells).getWrappedInScroll(true), BorderLayout.CENTER);
+        add(new ListView(mainController.getGuiColors(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
 
         repaint();
         revalidate();
@@ -46,11 +50,11 @@ public class HomeView extends RPanel {
 
     private JPanel wrapInCell(String title, BarChart barChart) {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_PRIME);
+        wrapper.setBackground(mainController.getGuiColors().getGuiPrimeColor());
         wrapper.setBorder(BorderFactory.createEmptyBorder());
 
-        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.CENTER, 18);
-        titleLabel.setForeground(GuiColors.BASE_WHITE);
+        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.CENTER, 18, mainController.getGuiColors());
+        titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
         wrapper.add(titleLabel, BorderLayout.NORTH);
         wrapper.add(barChart, BorderLayout.CENTER);
 
@@ -59,7 +63,7 @@ public class HomeView extends RPanel {
 
     private JPanel getSplitView(JPanel left, JPanel right) {
         JPanel wrapper = new JPanel(new GridLayout(1, 2, 4, 4));
-        wrapper.setBackground(GuiColors.BASE_SMOKE);
+        wrapper.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
         wrapper.setBorder(BorderFactory.createEmptyBorder());
 
         wrapper.add(left);
@@ -91,7 +95,7 @@ public class HomeView extends RPanel {
         return wrapInCell(
                   "Number of Impressions",
                         new BarChart(
-                                GuiColors.BASE_WHITE,
+                                mainController.getGuiColors().getGuiTextColor(),
                                 GuiColors.RED_ERROR,
                                 data,
                                 false

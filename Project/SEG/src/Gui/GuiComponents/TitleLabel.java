@@ -9,21 +9,21 @@ import java.awt.*;
  * Represents a standardized TitleLabel in order to maintain the style though out the application constant
  */
 public class TitleLabel extends JLabel {
-    public TitleLabel(String title, int horizontalAlignment) {
+    public TitleLabel(String title, int horizontalAlignment, GuiColors guiColors) {
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
-        super.setForeground(GuiColors.BASE_PRIME);
+        super.setForeground(guiColors.getGuiPrimeColor());
         super.setFont(new Font("Verdana", Font.PLAIN, 22));
         super.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setBackground(new Color(0, 0, 0, 0));
     }
 
-    public TitleLabel(String title, int horizontalAlignment, int size) {
+    public TitleLabel(String title, int horizontalAlignment, int size, GuiColors guiColors) {
         super(title);
         setName("");
         super.setHorizontalAlignment(horizontalAlignment);
-        super.setForeground(GuiColors.BASE_PRIME);
+        super.setForeground(guiColors.getGuiPrimeColor());
         super.setFont(new Font("Verdana", Font.PLAIN, size));
         super.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setBackground(new Color(0, 0, 0, 0));

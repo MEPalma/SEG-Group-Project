@@ -1,7 +1,9 @@
 package DatabaseManager;
 
 import Commons.*;
+import Gui.GuiColors;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -257,16 +259,6 @@ public class QueryComposer {
     }
 
     /*
-        Settings
-     */
-    public static String setColorSeries(int id) {
-        return "INSERT OR REPLACE INTO SETTINGS VALUES('colorSeries', '" + id + "');";
-    }
-
-    public static String getColorSeries = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='colorSeries';";
-
-
-    /*
         Graphs
     */
     public static String composeQuery(GraphSpecs graphSpecs) {
@@ -488,4 +480,30 @@ public class QueryComposer {
         }
         return tmp.toString();
     }
+
+
+    /*
+       Settings
+    */
+    public static String setGuiPrimeColor(Color color) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('GuiPrimeColor', '" + GuiColors.formatColor(color) + "');";
+    }
+
+    public static String setGuiOptionColor(Color color) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('GuiOptionColor', '" + GuiColors.formatColor(color) + "');";
+    }
+
+    public static String setGuiTextColor(Color color) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('GuiTextColor', '" + GuiColors.formatColor(color) + "');";
+    }
+
+    public static String setGuiBackgroundColor(Color color) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('GuiBackgroundColor', '" + GuiColors.formatColor(color) + "');";
+    }
+
+    public static String getGuiPrimeColor = "SELECT * FROM SETTINGS WHERE name='GuiPrimeColor';";
+    public static String getGuiOptionColor = "SELECT * FROM SETTINGS WHERE name='GuiOptionColor';";
+    public static String getGuiTextColor = "SELECT * FROM SETTINGS WHERE name='GuiTextColor';";
+    public static String getGuiBackgroundColor = "SELECT * FROM SETTINGS WHERE name='GuiBackgroundColor';";
+
 }

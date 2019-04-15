@@ -26,5 +26,3 @@
 [ OK ] filters on compare graphs
 
 [    ] control for compare insertion (no select same campaign more than once)
-
-**** INNER JOIN BETWEEN SERVER_LOGS AND USERS SHOULD HAPPEN ON USERID AND CAMPAIGNID!!!!!!!!!!

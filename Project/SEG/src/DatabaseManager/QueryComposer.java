@@ -386,26 +386,26 @@ public class QueryComposer {
         StringBuilder tmp = new StringBuilder();
         List<String> filters = new LinkedList<>();
         if (!graphSpecs.containsFilters())
-            filters.add("campaignId = '" + graphSpecs.getCampaignId() + "'");
-        filters.add("d > '" + Stringifiable.dateToSeconds(graphSpecs.getStartDate()) + "' ");
-        filters.add("d < '" + Stringifiable.dateToSeconds(graphSpecs.getEndDate()) + "' ");
+            filters.add(" campaignId = '" + graphSpecs.getCampaignId() + "')");
+        filters.add("d >= '" + Stringifiable.dateToSeconds(graphSpecs.getStartDate()) + "' )");
+        filters.add("d <= '" + Stringifiable.dateToSeconds(graphSpecs.getEndDate()) + "' )");
         if (graphSpecs.containsFilters()) {
             if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions || graphSpecs.getMetric() == GraphSpecs.METRICS.ImpressionCost) {
-                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "'");
-                tmp.append(" inner join Users on userid=Users.id ");
+                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "')");
+                tmp.append(" inner join Users on userid=Users.id and users.campaignId=impression_logs.campaignId ");
                 //WHERE
-                tmp.append("WHERE ");
+                tmp.append("WHERE (");
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate || graphSpecs.getMetric() == GraphSpecs.METRICS.NumberConversions || graphSpecs.getMetric() == GraphSpecs.METRICS.NumberBounces) {
-                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "'");
-                tmp.append(" inner join Users on server_logs.userid=Users.id");
-                tmp.append(" inner join impression_logs on server_logs.userid=impression_logs.userid");
-                tmp.append(" WHERE ");
+                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "')");
+                tmp.append(" inner join Users on server_logs.userid=Users.id and server_logs.campaignId=users.campaignId ");
+                tmp.append(" inner join impression_logs on server_logs.userid=impression_logs.userid and server_logs.campaignId=impression_logs.campaignId ");
+                tmp.append(" WHERE (");
             } else {
-                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "'");
-                tmp.append(" inner join Users on click_logs.userid=Users.id ");
-                tmp.append(" inner join impression_logs on click_logs.userid=impression_logs.userid  ");
+                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "')");
+                tmp.append(" inner join Users on click_logs.userid=Users.id and click_logs.campaignId=users.campaignId ");
+                tmp.append(" inner join impression_logs on click_logs.userid=impression_logs.userid and click_logs.campaignId=impression_logs.campaignId  ");
                 //WHERE
-                tmp.append("WHERE ");
+                tmp.append("WHERE (");
             }
 
             List<String> buffer = new LinkedList<>();
@@ -416,12 +416,14 @@ public class QueryComposer {
 
             StringBuilder tmpGenderBuilder = new StringBuilder("");
             for (int i = 0; i < buffer.size(); ++i) {
-                if (i == buffer.size() - 1) {
+                if(i == buffer.size() - 1) {
                     tmpGenderBuilder.append(buffer.get(i));
                 } else tmpGenderBuilder.append(buffer.get(i) + " or ");
             }
-            if (tmpGenderBuilder.length() > 0)
+            if (tmpGenderBuilder.length() > 0) {
+                tmpGenderBuilder.append(") ");
                 filters.add(tmpGenderBuilder.toString());
+            }
 
             buffer.clear();
 
@@ -435,9 +437,10 @@ public class QueryComposer {
                     tmpAgeBuilder.append(buffer.get(i));
                 } else tmpAgeBuilder.append(buffer.get(i) + " or ");
             }
-            if (tmpAgeBuilder.length() > 0)
+            if (tmpAgeBuilder.length() > 0) {
+                tmpAgeBuilder.append(") ");
                 filters.add(tmpAgeBuilder.toString());
-
+            }
             buffer.clear();
 
 
@@ -451,9 +454,10 @@ public class QueryComposer {
                     tmpContextBuilder.append(buffer.get(i));
                 } else tmpContextBuilder.append(buffer.get(i) + " or ");
             }
-            if (tmpContextBuilder.length() > 0)
+            if (tmpContextBuilder.length() > 0) {
+                tmpContextBuilder.append(")");
                 filters.add(tmpContextBuilder.toString());
-
+            }
             buffer.clear();
 
             //income
@@ -463,22 +467,24 @@ public class QueryComposer {
             StringBuilder tmpIncomeBuilder = new StringBuilder("");
             for (int i = 0; i < buffer.size(); ++i) {
                 if (i == buffer.size() - 1) {
+
                     tmpIncomeBuilder.append(buffer.get(i));
                 } else tmpIncomeBuilder.append(buffer.get(i) + " or ");
             }
-            if (tmpIncomeBuilder.length() > 0)
+            if (tmpIncomeBuilder.length() > 0) {
+                tmpIncomeBuilder.append(" ) ");
                 filters.add(tmpIncomeBuilder.toString());
-
+            }
             buffer.clear();
 
 
-        } else tmp.append(" WHERE ");
+        } else tmp.append(" WHERE (");
 
         for (int i = 0; i < filters.size(); ++i) {
 
             if (i == filters.size() - 1)
                 tmp.append(filters.get(i));
-            else tmp.append(filters.get(i) + " AND ");
+            else tmp.append(filters.get(i) + " AND (");
         }
         return tmp.toString();
     }

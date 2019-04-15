@@ -2,6 +2,7 @@ package Gui;
 
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.TitleLabel;
+import Gui.HomeView.HomeView;
 import Gui.Menus.ChooseNewGraphPanel;
 import Gui.Menus.CompareMenu;
 import Gui.Menus.FiltersMenu;
@@ -86,7 +87,10 @@ public class Gui extends JFrame {
         /*
             INIT MAIN CONTROLLER
          */
-        this.mainController = new MainController(this, this.statusDisplay, new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster));
+        TabbedView tabbedView = new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster);
+        this.mainController = new MainController(this, this.statusDisplay, tabbedView);
+
+        tabbedView.push("HOME", new HomeView(mainController), new Object(), null);
 
         /*
             ORGANIZE LAYOUT
@@ -108,7 +112,7 @@ public class Gui extends JFrame {
         this.northView.add(appTitleLabel, BorderLayout.WEST);
         this.northView.add(new TitleLabel(" Dashboard App", JLabel.LEFT, 26, this.northView.getBackground()), BorderLayout.EAST);//spacer to center campaign name
 
-        this.campaignName = new TitleLabel("FIX ME" + " ", TitleLabel.CENTER, 18, GuiColors.BASE_WHITE);
+        this.campaignName = new TitleLabel("FIX ME ", TitleLabel.CENTER, 18, GuiColors.BASE_WHITE);
         this.campaignName.setFont(new Font("Verdana", Font.ITALIC, 18));
         this.northView.add(this.campaignName, BorderLayout.CENTER);
 

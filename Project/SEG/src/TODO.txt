@@ -26,3 +26,6 @@
 [ OK ] filters on compare graphs
 
 [    ] control for compare insertion (no select same campaign more than once)
+
+[    ] refresh home view when new campaign is loaded
+[    ] home view bars of different colors(?)

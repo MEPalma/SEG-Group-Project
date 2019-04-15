@@ -11,7 +11,7 @@ public class TextBox extends JTextField {
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, guiColors.getGuiBackgroundColor()));
         setFont(new Font("Verdana", Font.PLAIN, 14));
         setForeground(Color.BLACK);
-        setBackground(guiColors.getGuiBackgroundColor());
+        setBackground(guiColors.getGuiTextColor());
         setAlignmentX(JTextField.CENTER);
         setCaretColor(Color.BLACK);
     }

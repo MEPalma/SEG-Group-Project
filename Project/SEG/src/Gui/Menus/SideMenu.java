@@ -1,6 +1,5 @@
 package Gui.Menus;
 
-import Gui.GuiColors;
 import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
@@ -84,7 +83,7 @@ public class SideMenu extends RPanel {
         });
         menus.add(getMenuCard(settingsLabel));
 
-        JPanel menuList = new ListView(mainController.getGuiColors(), menus);
+        JPanel menuList = new ListView(mainController.getGuiColors().getGuiPrimeColor(), mainController.getGuiColors().getGuiTextColor(), menus, true);
         if (this.openMenu != null) {
             this.openMenu.setPreferredSize(new Dimension(400, 250));
             add(menuList, BorderLayout.WEST);

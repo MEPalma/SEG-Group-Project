@@ -48,7 +48,7 @@ public class SettingsMenu extends RPanel {
         wrapper.setBorder(BorderFactory.createEmptyBorder(12, 8, 8, 8));
         wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
 
-        wrapper.add(new TitleLabel("Gui Colors", TitleLabel.LEFT, 18, mainController.getGuiColors()));
+        wrapper.add(new TitleLabel("Gui Colors", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.NORTH);
 
         TakeActionListener updateListener = new TakeActionListener() {
             @Override
@@ -70,7 +70,8 @@ public class SettingsMenu extends RPanel {
         cells.add(getTextColorChooser("Text and Secondary", mainController.getGuiColors().getGuiTextColor(), updateListener));
         cells.add(getBackgroundColorChooser("Background", mainController.getGuiColors().getGuiBackgroundColor(), updateListener));
 
-        MenuLabel resetToDefaults = new MenuLabel("Reset to defaults", MenuLabel.LEFT, 16, mainController.getGuiColors());
+        MenuLabel resetToDefaults = new MenuLabel(" Reset to defaults", MenuLabel.LEFT, 16, mainController.getGuiColors());
+        resetToDefaults.setBorder(BorderFactory.createEmptyBorder(8, 4, 4, 4));
         resetToDefaults.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
@@ -92,15 +93,21 @@ public class SettingsMenu extends RPanel {
     private JPanel getPrimeColorChooser(String title, Color currentColor, TakeActionListener onSelection) {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(this.mainController.getGuiColors().getGuiTextColor());
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-        wrapper.add(new TitleLabel(title, TitleLabel.CENTER, 14, mainController.getGuiColors()), BorderLayout.WEST);
+        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.LEFT, 14, mainController.getGuiColors());
+        titleLabel.setPreferredSize(new Dimension(150, 30));
+        wrapper.add(titleLabel, BorderLayout.WEST);
 
         JPanel colorDisplay = new JPanel(new GridLayout(1, 1));
         colorDisplay.setBackground(currentColor);
-        colorDisplay.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        colorDisplay.setBorder(BorderFactory.createLineBorder(colorDisplay.getBackground().darker(), 1));
         colorDisplay.setPreferredSize(new Dimension(50, 28));
-        colorDisplay.addMouseListener(new MouseAdapter() {
+
+        wrapper.add(colorDisplay, BorderLayout.CENTER);
+
+        MenuLabel changeColor = new MenuLabel(" change", MenuLabel.CENTER, 14, mainController.getGuiColors());
+        changeColor.addMouseListener(new MouseAdapter() {
             Color x = currentColor;
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
@@ -108,13 +115,13 @@ public class SettingsMenu extends RPanel {
                 if (newColor != null) {
                     mainController.getGuiColors().setGuiPrimeColor(newColor);
                     colorDisplay.setBackground(newColor);
+                    colorDisplay.setBorder(BorderFactory.createLineBorder(colorDisplay.getBackground().darker(), 1));
                     x = newColor;
                     onSelection.takeAction();
                 }
             }
         });
-
-        wrapper.add(colorDisplay, BorderLayout.CENTER);
+        wrapper.add(changeColor, BorderLayout.EAST);
 
         return wrapper;
     }
@@ -122,15 +129,21 @@ public class SettingsMenu extends RPanel {
     private JPanel getOptionColorChooser(String title, Color currentColor, TakeActionListener onSelection) {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(this.mainController.getGuiColors().getGuiTextColor());
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-        wrapper.add(new TitleLabel(title, TitleLabel.CENTER, 14, mainController.getGuiColors()), BorderLayout.WEST);
+        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.LEFT, 14, mainController.getGuiColors());
+        titleLabel.setPreferredSize(new Dimension(150, 30));
+        wrapper.add(titleLabel, BorderLayout.WEST);
 
         JPanel colorDisplay = new JPanel(new GridLayout(1, 1));
         colorDisplay.setBackground(currentColor);
-        colorDisplay.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        colorDisplay.setBorder(BorderFactory.createLineBorder(colorDisplay.getBackground().darker(), 1));
         colorDisplay.setPreferredSize(new Dimension(50, 28));
-        colorDisplay.addMouseListener(new MouseAdapter() {
+
+        wrapper.add(colorDisplay, BorderLayout.CENTER);
+
+        MenuLabel changeColor = new MenuLabel(" change", MenuLabel.CENTER, 14, mainController.getGuiColors());
+        changeColor.addMouseListener(new MouseAdapter() {
             Color x = currentColor;
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
@@ -138,13 +151,13 @@ public class SettingsMenu extends RPanel {
                 if (newColor != null) {
                     mainController.getGuiColors().setGuiOptionColor(newColor);
                     colorDisplay.setBackground(newColor);
+                    colorDisplay.setBorder(BorderFactory.createLineBorder(colorDisplay.getBackground().darker(), 1));
                     x = newColor;
                     onSelection.takeAction();
                 }
             }
         });
-
-        wrapper.add(colorDisplay, BorderLayout.CENTER);
+        wrapper.add(changeColor, BorderLayout.EAST);
 
         return wrapper;
     }
@@ -152,15 +165,21 @@ public class SettingsMenu extends RPanel {
     private JPanel getTextColorChooser(String title, Color currentColor, TakeActionListener onSelection) {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(this.mainController.getGuiColors().getGuiTextColor());
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-        wrapper.add(new TitleLabel(title, TitleLabel.CENTER, 14, mainController.getGuiColors()), BorderLayout.WEST);
+        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.LEFT, 14, mainController.getGuiColors());
+        titleLabel.setPreferredSize(new Dimension(150, 30));
+        wrapper.add(titleLabel, BorderLayout.WEST);
 
         JPanel colorDisplay = new JPanel(new GridLayout(1, 1));
         colorDisplay.setBackground(currentColor);
-        colorDisplay.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        colorDisplay.setBorder(BorderFactory.createLineBorder(colorDisplay.getBackground().darker(), 1));
         colorDisplay.setPreferredSize(new Dimension(50, 28));
-        colorDisplay.addMouseListener(new MouseAdapter() {
+
+        wrapper.add(colorDisplay, BorderLayout.CENTER);
+
+        MenuLabel changeColor = new MenuLabel(" change", MenuLabel.CENTER, 14, mainController.getGuiColors());
+        changeColor.addMouseListener(new MouseAdapter() {
             Color x = currentColor;
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
@@ -168,13 +187,13 @@ public class SettingsMenu extends RPanel {
                 if (newColor != null) {
                     mainController.getGuiColors().setGuiTextColor(newColor);
                     colorDisplay.setBackground(newColor);
+                    colorDisplay.setBorder(BorderFactory.createLineBorder(colorDisplay.getBackground().darker(), 1));
                     x = newColor;
                     onSelection.takeAction();
                 }
             }
         });
-
-        wrapper.add(colorDisplay, BorderLayout.CENTER);
+        wrapper.add(changeColor, BorderLayout.EAST);
 
         return wrapper;
     }
@@ -182,15 +201,21 @@ public class SettingsMenu extends RPanel {
     private JPanel getBackgroundColorChooser(String title, Color currentColor, TakeActionListener onSelection) {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(this.mainController.getGuiColors().getGuiTextColor());
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-        wrapper.add(new TitleLabel(title, TitleLabel.CENTER, 14, mainController.getGuiColors()), BorderLayout.WEST);
+        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.LEFT, 14, mainController.getGuiColors());
+        titleLabel.setPreferredSize(new Dimension(150, 30));
+        wrapper.add(titleLabel, BorderLayout.WEST);
 
         JPanel colorDisplay = new JPanel(new GridLayout(1, 1));
         colorDisplay.setBackground(currentColor);
-        colorDisplay.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        colorDisplay.setBorder(BorderFactory.createLineBorder(colorDisplay.getBackground().darker(), 1));
         colorDisplay.setPreferredSize(new Dimension(50, 28));
-        colorDisplay.addMouseListener(new MouseAdapter() {
+
+        wrapper.add(colorDisplay, BorderLayout.CENTER);
+
+        MenuLabel changeColor = new MenuLabel(" change", MenuLabel.CENTER, 14, mainController.getGuiColors());
+        changeColor.addMouseListener(new MouseAdapter() {
             Color x = currentColor;
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
@@ -198,13 +223,13 @@ public class SettingsMenu extends RPanel {
                 if (newColor != null) {
                     mainController.getGuiColors().setGuiBackgroundColor(newColor);
                     colorDisplay.setBackground(newColor);
+                    colorDisplay.setBorder(BorderFactory.createLineBorder(colorDisplay.getBackground().darker(), 1));
                     x = newColor;
                     onSelection.takeAction();
                 }
             }
         });
-
-        wrapper.add(colorDisplay, BorderLayout.CENTER);
+        wrapper.add(changeColor, BorderLayout.EAST);
 
         return wrapper;
     }

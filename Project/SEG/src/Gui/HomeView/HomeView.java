@@ -5,7 +5,6 @@ import Commons.Tuple;
 import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.TitleLabel;
 import Gui.MainController;
-import Gui.GuiColors;
 
 import Gui.GuiComponents.RPanel;
 

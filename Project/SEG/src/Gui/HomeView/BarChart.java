@@ -66,7 +66,7 @@ public class BarChart extends JPanel
             container.setBorder(getBorder());
 
             JPanel barPanel = new JPanel(new BorderLayout());
-            barPanel.setBackground(guiColors.getGuiTextColor());
+            barPanel.setBackground(guiColors.getGuiPrimeColor());
             barPanel.setBorder(getBorder());
             if (!representsPricing)
                 barPanel.add(new TitleLabel(Integer.toString((int) root.getY().shortValue()), TitleLabel.CENTER, 10, guiColors), BorderLayout.NORTH);

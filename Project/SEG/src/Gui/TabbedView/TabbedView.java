@@ -6,8 +6,10 @@ import Gui.GuiComponents.HListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
+import Gui.HomeView.HomeView;
 import Gui.MainController;
 import Gui.TakeActionListener;
+import sun.awt.image.ImageWatched;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,7 +91,7 @@ public class TabbedView {
     }
 
     public void pushNewHomeTab(String title, RPanel content) {
-        Tab homeTab = new Tab(title, content, null, null);
+        Tab homeTab = new Tab(title, content, content, null);
         this.homeView = content;
         this.tabs.addFirst(homeTab);
 
@@ -99,6 +101,9 @@ public class TabbedView {
     public void clear() {
         synchronized (this) {
             this.tabs.clear();
+            if (this.homeView != null) {
+                this.tabs.addFirst(new Tab("Home", this.homeView, this.homeView, null));
+            }
         }
         refresh();
     }
@@ -110,13 +115,28 @@ public class TabbedView {
         return false;
     }
 
-    public synchronized List<Object> getAllComparables() {
+    public JPanel getHomeView() {
+        return this.homeView;
+    }
+
+    public List<Object> getAllComparables() {
         List<Object> dump = new LinkedList<>();
 
         synchronized (this) {
             for (Tab t : this.tabs) {
                 dump.add(t.getComparable());
             }
+        }
+
+        return dump;
+    }
+
+    public List<JPanel> getAllContents() {
+        List<JPanel> dump = new LinkedList<>();
+
+        synchronized (this) {
+            for (Tab t : this.tabs)
+                dump.add(t.getContent());
         }
 
         return dump;

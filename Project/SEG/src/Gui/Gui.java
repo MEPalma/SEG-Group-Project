@@ -91,9 +91,15 @@ public class Gui extends JFrame {
         tabbedViewContentHoster.setBorder(BorderFactory.createEmptyBorder());
         tabbedViewTabsHoster.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
 
+        this.northView = new JPanel(new BorderLayout());
+        this.mainView = new JPanel(new BorderLayout());
 
+        this.campaignName = new TitleLabel("FIX ME ", TitleLabel.CENTER, 18, mainController.getGuiColors().getGuiTextColor());
 
+        refresh();
+    }
 
+    public void refresh() {
         /*
             ORGANIZE LAYOUT
          */
@@ -102,7 +108,7 @@ public class Gui extends JFrame {
         /*
                 NORTH_VIEW
          */
-        this.northView = new JPanel(new BorderLayout());
+        this.northView.removeAll();
         this.northView.setBackground(mainController.getGuiColors().getGuiPrimeColor());
         this.northView.setLayout(new BorderLayout());
         this.northView.setBorder(BorderFactory.createEmptyBorder());
@@ -114,7 +120,7 @@ public class Gui extends JFrame {
         this.northView.add(appTitleLabel, BorderLayout.WEST);
         this.northView.add(new TitleLabel(" Dashboard App", JLabel.LEFT, 26, this.northView.getBackground()), BorderLayout.EAST);//spacer to center campaign name
 
-        this.campaignName = new TitleLabel("FIX ME ", TitleLabel.CENTER, 18, mainController.getGuiColors().getGuiTextColor());
+
         this.campaignName.setFont(new Font("Verdana", Font.ITALIC, 18));
         this.northView.add(this.campaignName, BorderLayout.CENTER);
 
@@ -124,7 +130,7 @@ public class Gui extends JFrame {
         /*
                 MAIN_VIEW
          */
-        this.mainView = new JPanel(new BorderLayout());
+        this.mainView.removeAll();
         this.mainView.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
         this.mainView.add(statusDisplay, BorderLayout.NORTH);
         this.getContentPane().add(this.mainView, BorderLayout.CENTER);
@@ -141,7 +147,6 @@ public class Gui extends JFrame {
             });
             this.mainView.add(welcomeProcedure, BorderLayout.CENTER);
         } else setupMainView();
-
 
         repaint();
         revalidate();
@@ -314,13 +319,6 @@ public class Gui extends JFrame {
             super.setLocation(x, y);
         }
         super.setVisible(visible);
-    }
-
-    //TODO FUCK
-    public void updateCampaignName(int id) {
-        this.campaignName.setText(mainController.getCampaignName(id));
-        this.campaignName.repaint();
-        this.campaignName.revalidate();
     }
 
     public void openAddGraph() {

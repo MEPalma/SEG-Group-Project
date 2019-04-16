@@ -67,7 +67,7 @@ public class TabbedView {
         List<Component> tabCells = new LinkedList<>();
         for (int i = ((this.homeView == null) ? 0 : 1); i < this.tabs.size(); ++i) {
             Tab t = this.tabs.get(i);
-            tabCells.add(createTab(t.getTitle(), t.getColor(), i, t.getUpdateOnSelection(), true));
+            tabCells.add(createTab(t.getTitle(), mainController.getGuiColors().getGuiPrimeColor(), i, t.getUpdateOnSelection(), true));
         }
 
         this.tabsHost.add(new HListView(mainController.getGuiColors(), tabCells).getWrappedInScroll(), BorderLayout.CENTER);
@@ -82,14 +82,14 @@ public class TabbedView {
 
     public void push(String title, JPanel content, Object comparable, TakeActionListener updateOnSelection) {
         synchronized (this) {
-            this.tabs.add(new Tab(title, mainController.getGuiColors().getGuiPrimeColor(), content, comparable, updateOnSelection));
+            this.tabs.add(new Tab(title, content, comparable, updateOnSelection));
             this.selectedIndex = this.tabs.size() - 1;
         }
         refresh();
     }
 
     public void pushNewHomeTab(String title, RPanel content) {
-        Tab homeTab = new Tab(title, GuiColors.RED_ERROR, content, null, null);
+        Tab homeTab = new Tab(title, content, null, null);
         this.homeView = content;
         this.tabs.addFirst(homeTab);
 
@@ -196,7 +196,6 @@ public class TabbedView {
         for (Tab t : this.tabs) {
             if (t.getComparable() == (comparable)) {
                 t.setTitle(title);
-                t.setColor(mainController.getGuiColors().getGuiPrimeColor());
                 t.setContent(content);
                 t.setComparable(comparable);
             }
@@ -209,14 +208,12 @@ public class TabbedView {
 
 class Tab {
     private String title;
-    private Color color;
     private JPanel content;
     private Object comparable;
     private TakeActionListener updateOnSelection;
 
-    public Tab(String title, Color color, JPanel content, Object comparable, TakeActionListener updateOnSelecetion) {
+    public Tab(String title, JPanel content, Object comparable, TakeActionListener updateOnSelecetion) {
         this.title = title;
-        this.color = color;
         this.content = content;
         this.comparable = comparable;
         this.updateOnSelection = updateOnSelecetion;
@@ -253,14 +250,6 @@ class Tab {
 
     public void setContent(JPanel content) {
         this.content = content;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
     }
 
     public Object getComparable() {

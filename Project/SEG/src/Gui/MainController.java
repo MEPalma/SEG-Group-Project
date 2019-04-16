@@ -8,6 +8,7 @@ import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
 import DatabaseManager.Stringifiable;
 import Gui.GraphManager.GraphManager;
+import Gui.GuiComponents.RPanel;
 import Gui.TabbedView.TabbedView;
 
 import javax.swing.*;
@@ -298,5 +299,33 @@ public class MainController {
     public boolean isFiltersShowing() {
         return this.gui.isFiltersShowing();
     }
+
+    public void repaintAll() {
+        this.gui.refresh();
+        this.tabbedView.refresh();
+//        this.gui.repaint();
+//        this.gui.revalidate();
+
+//        JComponent[] children = this.gui.getContentPane().getComponents();
+//        for (JComponent c : children)
+//            repaintAllrc(c);
+    }
+
+//    private void repaintAllrc(JComponent c) {
+//        System.out.println(c.toString());
+//        if (c == null) return;
+//        else {
+//            c.repaint();
+//            c.revalidate();
+//            c.getCompo
+//
+//            if (c instanceof JPanel) {
+//                if (c instanceof RPanel) ((RPanel) c).refresh();
+//
+//                Component[] children = ((JPanel) c).getComponents();
+//                for (Component i : children) repaintAllrc(i);
+//            }
+//        }
+//    }
 
 }

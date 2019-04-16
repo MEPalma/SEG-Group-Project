@@ -66,9 +66,16 @@ public class SideMenu extends RPanel {
         settingsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                //TODO NEXT INCREMENT
-                JOptionPane.showMessageDialog(null, "Features not supported yet", "Unsupported features", JOptionPane.WARNING_MESSAGE);
-                this.mouseExited(e);
+                removeAll();
+                if (openMenu != null) {
+                    if (openMenu instanceof SettingsMenu)
+                        openMenu = null;
+                    refresh();
+                    return;
+                } else {
+                    openMenu = new SettingsMenu(mainController);
+                    refresh();
+                }
             }
 
             @Override

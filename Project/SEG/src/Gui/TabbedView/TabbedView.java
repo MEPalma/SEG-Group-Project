@@ -46,8 +46,6 @@ public class TabbedView {
 
         this.homeView = null;
 
-
-
         this.selectedIndex = 0;
 
         this.tabsHost.setLayout(new BorderLayout());
@@ -56,6 +54,9 @@ public class TabbedView {
     }
 
     public synchronized void refresh() {
+        this.tabsHost.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, mainController.getGuiColors().getGuiBackgroundColor()));
+        this.contentHost.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, mainController.getGuiColors().getGuiBackgroundColor()));
+
         this.tabsHost.removeAll();
         this.contentHost.removeAll();
 

@@ -8,12 +8,10 @@ import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
 import DatabaseManager.Stringifiable;
 import Gui.GraphManager.GraphManager;
-import Gui.GuiComponents.RPanel;
 import Gui.HomeView.HomeView;
 import Gui.TabbedView.TabbedView;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -325,7 +323,7 @@ public class MainController {
             }
             else if (g instanceof CompareGraphSpec) {
                 CompareGraphSpec tmp = (CompareGraphSpec) g;
-                tabbedView.push("TODO", GraphManager.getGraphCard(tmp, this.guiColors), tmp, updateOnClick);
+                tabbedView.push(tmp.getCardTitle(), GraphManager.getGraphCard(tmp, this.guiColors), tmp, updateOnClick);
             }
             else if (g instanceof GraphSpecs){
                 GraphSpecs tmp = (GraphSpecs) g;

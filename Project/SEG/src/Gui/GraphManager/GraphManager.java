@@ -4,6 +4,7 @@ import Commons.CompareGraphSpec;
 import Commons.GraphSpecs;
 import Commons.Tuple;
 import DatabaseManager.Stringifiable;
+import Gui.Gui;
 import Gui.GuiColors;
 import Gui.GuiComponents.TitleLabel;
 import org.jfree.chart.ChartFactory;
@@ -50,7 +51,7 @@ public class GraphManager {
         ((BarRenderer) cplot.getRenderer()).setBarPainter(new StandardBarPainter());
 
         BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
-        r.setSeriesPaint(0, GuiColors.BASE_PRIME);
+        r.setSeriesPaint(0, GuiColors.DEFAULT_BASE_PRIME);
         r.setSeriesPaint(1, GuiColors.OPTION_GREEN);
         r.setSeriesPaint(2, GuiColors.OPTION_PURPLE);
         r.setSeriesPaint(3, GuiColors.OPTION_ORANGE);
@@ -95,7 +96,7 @@ public class GraphManager {
         ((BarRenderer) cplot.getRenderer()).setBarPainter(new StandardBarPainter());
 
         BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
-        r.setSeriesPaint(0, GuiColors.BASE_PRIME);
+        r.setSeriesPaint(0, GuiColors.DEFAULT_BASE_PRIME);
 
         Plot plot = barChart.getPlot();
         plot.setBackgroundPaint(Color.WHITE);
@@ -127,39 +128,39 @@ public class GraphManager {
         return dataset;
     }
 
-    public static JPanel getGraphCard(GraphSpecs spec) {
+    public static JPanel getGraphCard(GraphSpecs spec, GuiColors guiColors) {
         JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(GuiColors.BASE_PRIME);
-        card.setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, GuiColors.BASE_SMOKE));
+        card.setBackground(guiColors.getGuiPrimeColor());
+        card.setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, guiColors.getGuiBackgroundColor()));
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(GuiColors.BASE_PRIME);
+        topPanel.setBackground(guiColors.getGuiPrimeColor());
         topPanel.setPreferredSize(new Dimension(100, 50));
 
-        TitleLabel titleLabel = new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16);
-        titleLabel.setForeground(GuiColors.BASE_WHITE);
+        TitleLabel titleLabel = new TitleLabel(spec.getTitle(), TitleLabel.CENTER, 16, guiColors);
+        titleLabel.setForeground(guiColors.getGuiTextColor());
         topPanel.add(titleLabel, BorderLayout.CENTER);
 
         JPanel graph = GraphManager.createBarChar(spec);
 
-        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_WHITE));
+        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, guiColors.getGuiTextColor()));
         card.add(topPanel, BorderLayout.NORTH);
         card.add(graph, BorderLayout.CENTER);
 
         return card;
     }
 
-    public static JPanel getGraphCard(CompareGraphSpec cmpGraphSpec) {
+    public static JPanel getGraphCard(CompareGraphSpec cmpGraphSpec, GuiColors guiColors) {
         JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(GuiColors.BASE_PRIME);
-        card.setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, GuiColors.BASE_SMOKE));
+        card.setBackground(guiColors.getGuiPrimeColor());
+        card.setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, guiColors.getGuiBackgroundColor()));
 
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(GuiColors.BASE_PRIME);
+        topPanel.setBackground(guiColors.getGuiPrimeColor());
         topPanel.setPreferredSize(new Dimension(100, 50));
 
-        TitleLabel titleLabel = new TitleLabel(cmpGraphSpec.getGraphTitle(), TitleLabel.CENTER, 16);
-        titleLabel.setForeground(GuiColors.BASE_WHITE);
+        TitleLabel titleLabel = new TitleLabel(cmpGraphSpec.getGraphTitle(), TitleLabel.CENTER, 16, guiColors);
+        titleLabel.setForeground(guiColors.getGuiTextColor());
         topPanel.add(titleLabel, BorderLayout.CENTER);
 
         //organize by date
@@ -188,7 +189,7 @@ public class GraphManager {
 
         JPanel graph = GraphManager.createBarChar(cmpGraphSpec.getxAxis(), cmpGraphSpec.getyAxis(), sortedData);
 
-        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_WHITE));
+        graph.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, guiColors.getGuiTextColor()));
         card.add(topPanel, BorderLayout.NORTH);
         card.add(graph, BorderLayout.CENTER);
 

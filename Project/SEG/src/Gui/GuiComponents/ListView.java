@@ -8,24 +8,28 @@ import java.util.Collection;
 
 public class ListView extends JPanel implements Scrollable {
 
-    public ListView(Color color, Collection<Component> cells, boolean separatorsOn) {
+    private final GuiColors guiColors;
+
+    public ListView(GuiColors guiColors, Collection<Component> cells, boolean separatorsOn) {
         super(new BorderLayout());
-        setBackground(color);
+        this.guiColors = guiColors;
+
+        setBackground(guiColors.getGuiTextColor());
         setBorder(BorderFactory.createEmptyBorder());
 
         JPanel refAddTo = this;
         for (Component cellContent : cells) {
             JPanel card = new JPanel(new BorderLayout());
-            card.setBackground(color);
+            card.setBackground(guiColors.getGuiTextColor());
             card.setBorder(BorderFactory.createEmptyBorder());
 
             if (separatorsOn) {
                 JSeparator separator2 = new JSeparator(JToolBar.Separator.HORIZONTAL);
-                separator2.setBackground(color);
-                separator2.setForeground(GuiColors.BASE_SMOKE);
+                separator2.setBackground(guiColors.getGuiTextColor());
+                separator2.setForeground(guiColors.getGuiBackgroundColor());
 
                 JPanel wrapperPanel = new JPanel(new BorderLayout());
-                wrapperPanel.setBackground(color);
+                wrapperPanel.setBackground(guiColors.getGuiTextColor());
                 wrapperPanel.setBorder(BorderFactory.createEmptyBorder());
                 wrapperPanel.add(cellContent, BorderLayout.NORTH);
                 wrapperPanel.add(separator2);
@@ -41,8 +45,44 @@ public class ListView extends JPanel implements Scrollable {
 
     }
 
-    public ListView(Color color, Collection<Component> cells) {
-        this(color, cells, true);
+    public ListView(GuiColors guiColors, Collection<Component> cells) {
+        this(guiColors, cells, true);
+    }
+
+    public ListView(Color color, Color separatorColor, Collection<Component> cells, boolean separatorsOn) {
+        super(new BorderLayout());
+        this.guiColors = new GuiColors();
+        guiColors.setGuiTextColor(color);
+        guiColors.setGuiBackgroundColor(separatorColor);
+
+        setBackground(guiColors.getGuiTextColor());
+        setBorder(BorderFactory.createEmptyBorder());
+
+        JPanel refAddTo = this;
+        for (Component cellContent : cells) {
+            JPanel card = new JPanel(new BorderLayout());
+            card.setBackground(guiColors.getGuiTextColor());
+            card.setBorder(BorderFactory.createEmptyBorder());
+
+            if (separatorsOn) {
+                JSeparator separator2 = new JSeparator(JToolBar.Separator.HORIZONTAL);
+                separator2.setBackground(guiColors.getGuiTextColor());
+                separator2.setForeground(guiColors.getGuiBackgroundColor());
+
+                JPanel wrapperPanel = new JPanel(new BorderLayout());
+                wrapperPanel.setBackground(guiColors.getGuiTextColor());
+                wrapperPanel.setBorder(BorderFactory.createEmptyBorder());
+                wrapperPanel.add(cellContent, BorderLayout.NORTH);
+                wrapperPanel.add(separator2);
+
+                card.add(wrapperPanel, BorderLayout.NORTH);
+            } else {
+                card.add(cellContent, BorderLayout.NORTH);
+            }
+
+            refAddTo.add(card, BorderLayout.CENTER);
+            refAddTo = card;
+        }
     }
 
     public JScrollPane getWrappedInScroll(boolean visibleScrollbar) {

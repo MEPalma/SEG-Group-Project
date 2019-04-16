@@ -4,14 +4,12 @@ import Commons.Enums;
 import Gui.MainController;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,7 +71,7 @@ public class CSVParser {
 
         int newCampaignID = this.dataExchange.insertNewCampaign(campaignName);
 
-        this.dataExchange.setForiegnKeyPragma(false);
+        this.dataExchange.setForeignKeyPragma(false);
         this.dataExchange.setAutoCommit(false);
 
         Statement insertionStatement = this.dataExchange.getSqlStatement();
@@ -85,7 +83,7 @@ public class CSVParser {
         this.dataExchange.writeSqlStatement(insertionStatement);
         this.dataExchange.commitNow();
 
-        this.dataExchange.setForiegnKeyPragma(true);
+        this.dataExchange.setForeignKeyPragma(true);
         this.dataExchange.setAutoCommit(true);
 
         sourceIdToNewId.clear();

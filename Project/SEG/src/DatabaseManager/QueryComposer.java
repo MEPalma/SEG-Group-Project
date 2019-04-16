@@ -1,7 +1,9 @@
 package DatabaseManager;
 
 import Commons.*;
+import Gui.GuiColors;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,8 +70,8 @@ public class QueryComposer {
         return "INSERT INTO CAMPAIGNS VALUES (NULL, '" + name + "');";
     }
 
-    public static String updateCampaignName(int id, String name) {
-        return "UPDATE CAMPAIGNS SET campaignName='" + name + "' WHERE id='" + id + "';";
+    public static String updateCampaignName(int id, String newName) {
+        return "UPDATE CAMPAIGNS SET campaignName='" + newName + "' WHERE id='" + id + "';";
     }
 
     public static String getCampaignName(int id) {
@@ -130,8 +132,8 @@ public class QueryComposer {
             + "gender INTEGER,\n"
             + "age INTEGER,\n"
             + "income INTEGER,\n"
-            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id),\n"
-            + "PRIMARY KEY (id, campaignID)"
+            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id) ON DELETE CASCADE,\n"
+            + "PRIMARY KEY (id, campaignId)"
             + ");";
     private static String CREATE_TABLE_IMPRESSION_LOGS
             = "CREATE TABLE IF NOT EXISTS IMPRESSION_LOGS(\n"
@@ -141,8 +143,8 @@ public class QueryComposer {
             + "date INTEGER,\n"
             + "context INTEGER,\n"
             + "impressionCost NUMERIC,\n"
-            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id),\n"
-            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
+            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id) ON DELETE CASCADE,\n"
+            + "FOREIGN KEY (userId, campaignId) REFERENCES USERS(id, campaignId) ON DELETE CASCADE\n"
             + ");";
     private static String CREATE_TABLE_CLICK_LOGS
             = "CREATE TABLE IF NOT EXISTS CLICK_LOGS(\n"
@@ -151,8 +153,8 @@ public class QueryComposer {
             + "campaignId INTEGER NOT NULL,\n"
             + "date INTEGER,\n"
             + "clickCost NUMERIC,\n"
-            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id),\n"
-            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
+            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id) ON DELETE CASCADE,\n"
+            + "FOREIGN KEY (userId, campaignId) REFERENCES USERS(id, campaignId) ON DELETE CASCADE\n"
             + ");";
     private static String CREATE_TABLE_SERVER_LOGS
             = "CREATE TABLE IF NOT EXISTS SERVER_LOGS(\n"
@@ -163,8 +165,8 @@ public class QueryComposer {
             + "exitDate INTEGER,\n"
             + "pagesViewed INTEGER,\n"
             + "conversion INTEGER,\n"
-            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id),\n"
-            + "FOREIGN KEY (userId) REFERENCES USERS(id)\n"
+            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id) ON DELETE CASCADE,\n"
+            + "FOREIGN KEY (userId, campaignId) REFERENCES USERS(id, campaignId) ON DELETE CASCADE\n"
             + ");";
     private static String CREATE_TABLE_SETTINGS
             = "CREATE TABLE IF NOT EXISTS SETTINGS (\n"
@@ -174,7 +176,8 @@ public class QueryComposer {
             + ");";
     public static String[] CREATE_TABLES =
             {
-                "PRAGMA foreign_keys = ON;",
+                "PRAGMA foreign_keys=ON;",
+                "PRAGMA secure_delete=OFF",
                 CAMPAIGNS,
                 CREATE_TABLE_USERS,
                 CREATE_TABLE_IMPRESSION_LOGS,
@@ -182,6 +185,17 @@ public class QueryComposer {
                 CREATE_TABLE_SERVER_LOGS,
                 CREATE_TABLE_SETTINGS
             };
+
+    public static String rebuildDatabase() {
+        return "VACUUM;";
+    }
+
+    public static String[] deleteCampaign(int id) {
+        return new String[] {
+            "DELETE FROM CAMPAIGNS WHERE id = " + id + ";",
+            rebuildDatabase()
+        };
+    }
 
     /*
         INSERT STATEMENTS
@@ -243,16 +257,6 @@ public class QueryComposer {
     public static String selectByNameFrom_SETTINGS(String name) {
         return "SELECT * FROM SETTINGS WHERE SETTINGS.name='" + name + "' LIMIT 1;";
     }
-
-    /*
-        Settings
-     */
-    public static String setColorSeries(int id) {
-        return "INSERT OR REPLACE INTO SETTINGS VALUES('colorSeries', '" + id + "');";
-    }
-
-    public static String getColorSeries = "SELECT SETTINGS.VALUE AS v FROM SETTINGS WHERE SETTINGS.NAME='colorSeries';";
-
 
     /*
         Graphs
@@ -374,26 +378,26 @@ public class QueryComposer {
         StringBuilder tmp = new StringBuilder();
         List<String> filters = new LinkedList<>();
         if (!graphSpecs.containsFilters())
-            filters.add("campaignId = '" + graphSpecs.getCampaignId() + "'");
-        filters.add("d > '" + Stringifiable.dateToSeconds(graphSpecs.getStartDate()) + "' ");
-        filters.add("d < '" + Stringifiable.dateToSeconds(graphSpecs.getEndDate()) + "' ");
+            filters.add(" campaignId = '" + graphSpecs.getCampaignId() + "')");
+        filters.add("d >= '" + Stringifiable.dateToSeconds(graphSpecs.getStartDate()) + "' )");
+        filters.add("d <= '" + Stringifiable.dateToSeconds(graphSpecs.getEndDate()) + "' )");
         if (graphSpecs.containsFilters()) {
             if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions || graphSpecs.getMetric() == GraphSpecs.METRICS.ImpressionCost) {
-                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "'");
-                tmp.append(" inner join Users on userid=Users.id ");
+                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "')");
+                tmp.append(" inner join Users on userid=Users.id and users.campaignId=impression_logs.campaignId ");
                 //WHERE
-                tmp.append("WHERE ");
+                tmp.append("WHERE (");
             } else if (graphSpecs.getMetric() == GraphSpecs.METRICS.BounceRate || graphSpecs.getMetric() == GraphSpecs.METRICS.NumberConversions || graphSpecs.getMetric() == GraphSpecs.METRICS.NumberBounces) {
-                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "'");
-                tmp.append(" inner join Users on server_logs.userid=Users.id");
-                tmp.append(" inner join impression_logs on server_logs.userid=impression_logs.userid");
-                tmp.append(" WHERE ");
+                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "')");
+                tmp.append(" inner join Users on server_logs.userid=Users.id and server_logs.campaignId=users.campaignId ");
+                tmp.append(" inner join impression_logs on server_logs.userid=impression_logs.userid and server_logs.campaignId=impression_logs.campaignId ");
+                tmp.append(" WHERE (");
             } else {
-                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "'");
-                tmp.append(" inner join Users on click_logs.userid=Users.id ");
-                tmp.append(" inner join impression_logs on click_logs.userid=impression_logs.userid  ");
+                filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "')");
+                tmp.append(" inner join Users on click_logs.userid=Users.id and click_logs.campaignId=users.campaignId ");
+                tmp.append(" inner join impression_logs on click_logs.userid=impression_logs.userid and click_logs.campaignId=impression_logs.campaignId  ");
                 //WHERE
-                tmp.append("WHERE ");
+                tmp.append("WHERE (");
             }
 
             List<String> buffer = new LinkedList<>();
@@ -404,12 +408,14 @@ public class QueryComposer {
 
             StringBuilder tmpGenderBuilder = new StringBuilder("");
             for (int i = 0; i < buffer.size(); ++i) {
-                if (i == buffer.size() - 1) {
+                if(i == buffer.size() - 1) {
                     tmpGenderBuilder.append(buffer.get(i));
                 } else tmpGenderBuilder.append(buffer.get(i) + " or ");
             }
-            if (tmpGenderBuilder.length() > 0)
+            if (tmpGenderBuilder.length() > 0) {
+                tmpGenderBuilder.append(") ");
                 filters.add(tmpGenderBuilder.toString());
+            }
 
             buffer.clear();
 
@@ -423,9 +429,10 @@ public class QueryComposer {
                     tmpAgeBuilder.append(buffer.get(i));
                 } else tmpAgeBuilder.append(buffer.get(i) + " or ");
             }
-            if (tmpAgeBuilder.length() > 0)
+            if (tmpAgeBuilder.length() > 0) {
+                tmpAgeBuilder.append(") ");
                 filters.add(tmpAgeBuilder.toString());
-
+            }
             buffer.clear();
 
 
@@ -439,9 +446,10 @@ public class QueryComposer {
                     tmpContextBuilder.append(buffer.get(i));
                 } else tmpContextBuilder.append(buffer.get(i) + " or ");
             }
-            if (tmpContextBuilder.length() > 0)
+            if (tmpContextBuilder.length() > 0) {
+                tmpContextBuilder.append(")");
                 filters.add(tmpContextBuilder.toString());
-
+            }
             buffer.clear();
 
             //income
@@ -451,23 +459,51 @@ public class QueryComposer {
             StringBuilder tmpIncomeBuilder = new StringBuilder("");
             for (int i = 0; i < buffer.size(); ++i) {
                 if (i == buffer.size() - 1) {
+
                     tmpIncomeBuilder.append(buffer.get(i));
                 } else tmpIncomeBuilder.append(buffer.get(i) + " or ");
             }
-            if (tmpIncomeBuilder.length() > 0)
+            if (tmpIncomeBuilder.length() > 0) {
+                tmpIncomeBuilder.append(" ) ");
                 filters.add(tmpIncomeBuilder.toString());
-
+            }
             buffer.clear();
 
 
-        } else tmp.append(" WHERE ");
+        } else tmp.append(" WHERE (");
 
         for (int i = 0; i < filters.size(); ++i) {
 
             if (i == filters.size() - 1)
                 tmp.append(filters.get(i));
-            else tmp.append(filters.get(i) + " AND ");
+            else tmp.append(filters.get(i) + " AND (");
         }
         return tmp.toString();
     }
+
+
+    /*
+       Settings
+    */
+    public static String setGuiPrimeColor(Color color) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('GuiPrimeColor', '" + GuiColors.formatColor(color) + "');";
+    }
+
+    public static String setGuiOptionColor(Color color) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('GuiOptionColor', '" + GuiColors.formatColor(color) + "');";
+    }
+
+    public static String setGuiTextColor(Color color) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('GuiTextColor', '" + GuiColors.formatColor(color) + "');";
+    }
+
+    public static String setGuiBackgroundColor(Color color) {
+        return "INSERT OR REPLACE INTO SETTINGS VALUES('GuiBackgroundColor', '" + GuiColors.formatColor(color) + "');";
+    }
+
+    public static String getGuiPrimeColor = "SELECT value FROM SETTINGS WHERE name='GuiPrimeColor';";
+    public static String getGuiOptionColor = "SELECT value FROM SETTINGS WHERE name='GuiOptionColor';";
+    public static String getGuiTextColor = "SELECT value FROM SETTINGS WHERE name='GuiTextColor';";
+    public static String getGuiBackgroundColor = "SELECT value FROM SETTINGS WHERE name='GuiBackgroundColor';";
+
 }

@@ -12,46 +12,36 @@ import java.awt.event.MouseListener;
  * Represents a standardized MenuLabel in order to maintain the style though out the application constant
  */
 public class MenuLabel extends JLabel {
-    public MenuLabel(String title) {
+    public MenuLabel(String title, GuiColors guiColors) {
         super(title);
         setName("");
         super.setBackground(new Color(0, 0, 0, 0));
         super.setFont(new Font("Verdana", Font.PLAIN, 16));
-        super.setForeground(GuiColors.BASE_PRIME);
+        super.setForeground(guiColors.getGuiPrimeColor());
         super.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-        addListeners();
+        addListeners(guiColors);
     }
 
-    public MenuLabel(String title, int horizontalAlignment, int size) {
-        this(title, horizontalAlignment);
-        super.setForeground(GuiColors.BASE_PRIME);
-        super.setBackground(new Color(0, 0, 0, 0));
+    public MenuLabel(String title, int horizontalAlignment, int size, GuiColors guiColors) {
+        this(title, horizontalAlignment, guiColors);
         super.setFont(new Font("Verdana", Font.PLAIN, size));
-        setName("");
-        addListeners();
     }
 
-    public MenuLabel(String title, int horizontalAlignment) {
-        super(title);
+    public MenuLabel(String title, int horizontalAlignment, GuiColors guiColors) {
+        this(title, guiColors);
         super.setHorizontalAlignment(horizontalAlignment);
-        super.setFont(new Font("Verdana", Font.PLAIN, 16));
-        super.setForeground(GuiColors.BASE_PRIME);
-        super.setBackground(new Color(0, 0, 0, 0));
-        super.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-        setName("");
-        addListeners();
     }
 
-    private void addListeners() {
+    private void addListeners(GuiColors guiColors) {
         super.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                setForeground(GuiColors.BASE_OPTION);
+                setForeground(guiColors.getGuiOptionColor());
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                setForeground(GuiColors.BASE_PRIME);
+                setForeground(guiColors.getGuiPrimeColor());
             }
 
             @Override

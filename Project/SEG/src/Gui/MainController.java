@@ -8,10 +8,10 @@ import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
 import DatabaseManager.Stringifiable;
 import Gui.GraphManager.GraphManager;
+import Gui.HomeView.HomeView;
 import Gui.TabbedView.TabbedView;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,15 +20,30 @@ public class MainController {
     private final DataExchange dataExchange;
     private final TabbedView tabbedView;
     private final List<SwingWorker> dataLoadingTasks;
+    private final GuiColors guiColors;
     private final StatusDisplay statusDisplay;
     private final Gui gui;
 
-    public MainController(Gui gui, StatusDisplay statusDisplay, TabbedView tabbedView) {
+    public MainController(Gui gui, StatusDisplay statusDisplay, TabbedView tabbedView, GuiColors guiColors) {
         this.dataExchange = new DataExchange(new DatabaseManager());
         this.gui = gui;
         this.tabbedView = tabbedView;
         this.statusDisplay = statusDisplay;
         this.dataLoadingTasks = new LinkedList<>();
+
+        this.guiColors = guiColors;
+        updateGuiColors();
+    }
+
+    public void updateGuiColors() {
+        this.guiColors.setGuiPrimeColor(this.dataExchange.getPrimeColor());
+        this.guiColors.setGuiOptionColor(this.dataExchange.getOptionColor());
+        this.guiColors.setGuiTextColor(this.dataExchange.getTextColor());
+        this.guiColors.setGuiBackgroundColor(this.dataExchange.getBackgroundColor());
+    }
+
+    public GuiColors getGuiColors() {
+        return this.guiColors;
     }
 
     public void addDataLoadingTask(SwingWorker newTask) {
@@ -129,7 +144,7 @@ public class MainController {
                     }
                 };
 
-                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs.getMetric()), GraphManager.getGraphCard(newGraphSpecs), newGraphSpecs, updateOnClick);
+                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs.getMetric()), GraphManager.getGraphCard(newGraphSpecs, guiColors), newGraphSpecs, updateOnClick);
                 stopProgressBar();
                 removeDataLoadingTask(this);
                 super.done();
@@ -167,7 +182,7 @@ public class MainController {
 
                 tabbedView.push(
                         cmpGraphSpec.getCardTitle(),
-                        GraphManager.getGraphCard(cmpGraphSpec),
+                        GraphManager.getGraphCard(cmpGraphSpec, guiColors),
                         cmpGraphSpec,//TODO check
                         updateOnClick);
                 stopProgressBar();
@@ -211,7 +226,7 @@ public class MainController {
             protected void done() {
                 tabbedView.replaceOnComparable(
                         GraphManager.getGraphShortTitle(graphSpecs.getMetric()),
-                        GraphManager.getGraphCard(graphSpecs),
+                        GraphManager.getGraphCard(graphSpecs, guiColors),
                         graphSpecs);
 
                 stopProgressBar();
@@ -244,7 +259,7 @@ public class MainController {
             protected void done() {
                 tabbedView.replaceOnComparable(
                         cmpGraphSpec.getGraphTitle(),
-                        GraphManager.getGraphCard(cmpGraphSpec),
+                        GraphManager.getGraphCard(cmpGraphSpec, guiColors),
                         cmpGraphSpec);
 
                 stopProgressBar();
@@ -283,4 +298,38 @@ public class MainController {
     public boolean isFiltersShowing() {
         return this.gui.isFiltersShowing();
     }
+
+    public void repaintAll() {
+        this.gui.refresh();
+        this.tabbedView.refresh();
+
+        List<Object> graphSpecs = this.tabbedView.getAllComparables();
+        tabbedView.clear();
+
+
+
+        TakeActionListener updateOnClick = new TakeActionListener() {
+            @Override
+            public void takeAction() {
+                if (isFiltersShowing()) {
+                    openFiltersMenu();
+                }
+            }
+        };
+        for (Object g : graphSpecs) {
+            if (g instanceof HomeView) {
+                HomeView tmp = (HomeView) g;
+                tmp.refresh();
+            }
+            else if (g instanceof CompareGraphSpec) {
+                CompareGraphSpec tmp = (CompareGraphSpec) g;
+                tabbedView.push(tmp.getCardTitle(), GraphManager.getGraphCard(tmp, this.guiColors), tmp, updateOnClick);
+            }
+            else if (g instanceof GraphSpecs){
+                GraphSpecs tmp = (GraphSpecs) g;
+                tabbedView.push(tmp.getTitle(), GraphManager.getGraphCard(tmp, this.guiColors), tmp, updateOnClick);
+            }
+        }
+    }
+
 }

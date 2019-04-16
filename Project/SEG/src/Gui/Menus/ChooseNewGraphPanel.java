@@ -49,12 +49,16 @@ public class ChooseNewGraphPanel extends RPanel {
     private final DropDown bounceDefinitionChooser;
     private final DropDown timespanChooser;
 
+    private final List<Tuple<Integer, String>> allCampaigns;
+
     public ChooseNewGraphPanel(MainController mainController) {
-        super(GuiColors.BASE_WHITE, new BorderLayout());
+        super(mainController.getGuiColors().getGuiTextColor(), new BorderLayout());
 
         this.mainController = mainController;
 
-        this.messageLabel = new TitleLabel("", TitleLabel.CENTER, 12);
+        this.allCampaigns = mainController.getDataExchange().selectAllCampaigns();
+
+        this.messageLabel = new TitleLabel("", TitleLabel.CENTER, 12, mainController.getGuiColors());
         messageLabel.setForeground(GuiColors.RED_ERROR);
 
         TakeActionListener takeActionListener = new TakeActionListener() {
@@ -71,15 +75,15 @@ public class ChooseNewGraphPanel extends RPanel {
         for (int i = 0; i < allCampaigns.size(); ++i)
             campaignsOptions[i] = allCampaigns.get(i).getY();
 
-        this.campaignChooser = new DropDown(campaignsOptions, null, 0);
+        this.campaignChooser = new DropDown(campaignsOptions, null, 0, mainController.getGuiColors());
 
-        this.metricsChooser = new DropDown(METRICS, METRICS_DESCRIPTIONS, 0);
+        this.metricsChooser = new DropDown(METRICS, METRICS_DESCRIPTIONS, 0, mainController.getGuiColors());
         this.metricsChooser.addTakeActionListener(takeActionListener);
 
-        this.bounceDefinitionChooser = new DropDown(BOUNCE_DEF, null, 0);
+        this.bounceDefinitionChooser = new DropDown(BOUNCE_DEF, null, 0, mainController.getGuiColors());
         this.bounceDefinitionChooser.addTakeActionListener(takeActionListener);
 
-        this.timespanChooser = new DropDown(TIME_SPANS, null, 0);
+        this.timespanChooser = new DropDown(TIME_SPANS, null, 0, mainController.getGuiColors());
         this.timespanChooser.addTakeActionListener(takeActionListener);
 
         refresh();
@@ -91,7 +95,7 @@ public class ChooseNewGraphPanel extends RPanel {
 
         add(this.messageLabel, BorderLayout.NORTH);
 
-        MenuLabel addLabel = new MenuLabel("ADD", MenuLabel.CENTER, 16);
+        MenuLabel addLabel = new MenuLabel("ADD", MenuLabel.CENTER, 16, mainController.getGuiColors());
         addLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -100,8 +104,8 @@ public class ChooseNewGraphPanel extends RPanel {
         });
 
         JPanel addLabelWrapper = new JPanel(new GridLayout(1, 1));
-        addLabelWrapper.setBackground(GuiColors.BASE_WHITE);
-        addLabelWrapper.setBorder(BorderFactory.createMatteBorder(12, 4, 8, 4, GuiColors.BASE_WHITE));
+        addLabelWrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        addLabelWrapper.setBorder(BorderFactory.createMatteBorder(12, 4, 8, 4, mainController.getGuiColors().getGuiTextColor()));
         addLabelWrapper.add(addLabel);
 
         List<Component> items = new LinkedList<Component>();
@@ -114,7 +118,7 @@ public class ChooseNewGraphPanel extends RPanel {
         items.add(getTimeSpanChooserCell());
         items.add(addLabelWrapper);
 
-        add(new ListView(GuiColors.BASE_WHITE, items, false).getWrappedInScroll(true), BorderLayout.CENTER);
+        add(new ListView(mainController.getGuiColors(), items, false).getWrappedInScroll(true), BorderLayout.CENTER);
 
         repaint();
         revalidate();
@@ -127,10 +131,10 @@ public class ChooseNewGraphPanel extends RPanel {
 
     private JPanel getCampaignChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, mainController.getGuiColors().getGuiTextColor()));
 
-        wrapper.add(new TitleLabel("Campaign", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Campaign", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.NORTH);
         wrapper.add(this.campaignChooser, BorderLayout.CENTER);
 
         return wrapper;
@@ -138,10 +142,10 @@ public class ChooseNewGraphPanel extends RPanel {
 
     private JPanel getMetricsChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, mainController.getGuiColors().getGuiTextColor()));
 
-        wrapper.add(new TitleLabel("Metric", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Metric", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.NORTH);
         wrapper.add(this.metricsChooser, BorderLayout.CENTER);
 
         return wrapper;
@@ -149,31 +153,31 @@ public class ChooseNewGraphPanel extends RPanel {
 
     private JPanel getBounceChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, mainController.getGuiColors().getGuiTextColor()));
 
-        wrapper.add(new TitleLabel("Bounce Definition", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Bounce Definition", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.NORTH);
         wrapper.add(this.bounceDefinitionChooser, BorderLayout.CENTER);
         return wrapper;
     }
 
     private JPanel getTimeSpanChooserCell() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
-        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, GuiColors.BASE_WHITE));
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        wrapper.setBorder(BorderFactory.createMatteBorder(12, 8, 8, 8, mainController.getGuiColors().getGuiTextColor()));
 
-        wrapper.add(new TitleLabel("Time Grouping", TitleLabel.LEFT, 18), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Time Grouping", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.NORTH);
         wrapper.add(this.timespanChooser, BorderLayout.CENTER);
 
         return wrapper;
     }
 
     private int getCampaignId() {
-        return this.campaignChooser.getSelectedIndex() + 1;
+        return this.allCampaigns.get(this.campaignChooser.getSelectedIndex()).getX();
     }
 
     private String getCampaignName() {
-        return this.campaignChooser.getSelectedContent();
+        return this.allCampaigns.get(this.campaignChooser.getSelectedIndex()).getY();
     }
 
     private GraphSpecs.METRICS getChosenMetric() {

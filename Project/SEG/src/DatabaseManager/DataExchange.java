@@ -1,12 +1,15 @@
 package DatabaseManager;
 
 import Commons.*;
+import Gui.GuiColors;
 
+import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -101,7 +104,7 @@ public class DataExchange {
      *
      * @param b
      */
-    public void setForiegnKeyPragma(boolean b) {
+    public void setForeignKeyPragma(boolean b) {
         if (b) {
             this.dbM.writeQuery("PRAGMA foreign_keys = ON;");
         } else {
@@ -148,6 +151,13 @@ public class DataExchange {
         }
         System.exit(8);
         return -1;
+    }
+
+    /**
+     * Run after delete query to rebuild database and compress empty pages: reduces file size;
+     */
+    public void rebuildDatabase() {
+        this.dbM.writeQuery(QueryComposer.rebuildDatabase());
     }
 
     public boolean isEmpty() {
@@ -601,8 +611,8 @@ public class DataExchange {
         return getLastID();
     }
 
-    public void setCampaignName(int id, String name) {
-        this.dbM.writeQuery(QueryComposer.updateCampaignName(id, name));
+    public void setCampaignName(int id, String newName) {
+        this.dbM.writeQuery(QueryComposer.updateCampaignName(id, newName));
     }
 
     public String getCampaignName(int id) {
@@ -615,18 +625,8 @@ public class DataExchange {
         }
     }
 
-    public void setColorSeries(int id) {
-        this.dbM.writeQuery(QueryComposer.setColorSeries(id));
-    }
-
-    public int getColorSeries() {
-        ResultSet resultSet = this.dbM.query(QueryComposer.getColorSeries);
-        try {
-            return resultSet.getInt("v");
-        } catch (SQLException ex) {
-            setColorSeries(1);
-            return getColorSeries();
-        }
+    public void deleteCampaign(int id) {
+        this.dbM.writeQuery(QueryComposer.deleteCampaign(id));
     }
 
     public List<Tuple<String, Number>> getGraphData(GraphSpecs graphSpecs) {
@@ -1057,7 +1057,7 @@ public class DataExchange {
             Date tmp = Stringifiable.secondsToDate(resultStartDate.getLong("d"));
             close(resultStartDate);
             return tmp;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return new Date();
         }
     }
@@ -1068,9 +1068,69 @@ public class DataExchange {
             Date tmp = Stringifiable.secondsToDate(resultStartDate.getLong("d"));
             close(resultStartDate);
             return tmp;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return new Date();
         }
+    }
+
+
+
+
+
+    public Color getPrimeColor() {
+        try {
+            ResultSet rset = this.dbM.query(QueryComposer.getGuiPrimeColor);
+            return GuiColors.parseFormattedColor(rset.getString(1));
+        } catch(Exception e) {
+            updateGuiPrimeColor(GuiColors.DEFAULT_BASE_PRIME);
+            return getPrimeColor();
+        }
+    }
+
+    public Color getOptionColor() {
+        try {
+            ResultSet rset = this.dbM.query(QueryComposer.getGuiOptionColor);
+            return GuiColors.parseFormattedColor(rset.getString(1));
+        } catch(Exception e) {
+            updateGuiOptionColor(GuiColors.DEFAULT_BASE_OPTION);
+            return getOptionColor();
+        }
+    }
+
+    public Color getTextColor() {
+        try {
+            ResultSet rset = this.dbM.query(QueryComposer.getGuiTextColor);
+            return GuiColors.parseFormattedColor(rset.getString(1));
+        } catch(Exception e) {
+            updateGuiTextColor(GuiColors.DEFAULT_TEXT);
+            return getTextColor();
+        }
+    }
+
+    public Color getBackgroundColor() {
+        try {
+            ResultSet rset = this.dbM.query(QueryComposer.getGuiBackgroundColor);
+            return GuiColors.parseFormattedColor(rset.getString(1));
+        } catch(Exception e) {
+            updateGuiBackgroundColor(GuiColors.DEFAULT_BACKGROUND);
+            return getTextColor();
+        }
+    }
+
+    public void updateGuiPrimeColor(Color newPrimeColor) {
+        this.dbM.writeQuery(QueryComposer.setGuiPrimeColor(newPrimeColor));
+    }
+
+    public void updateGuiOptionColor(Color newOptionColor) {
+        this.dbM.writeQuery(QueryComposer.setGuiOptionColor(newOptionColor));
+    }
+
+    public void updateGuiTextColor(Color newTextColor) {
+        this.dbM.writeQuery(QueryComposer.setGuiTextColor(newTextColor));
+    }
+
+    public void updateGuiBackgroundColor(Color newTextColor) {
+        this.dbM.writeQuery(QueryComposer.setGuiBackgroundColor(newTextColor));
     }
 
 }

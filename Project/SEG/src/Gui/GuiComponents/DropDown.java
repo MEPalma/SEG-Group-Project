@@ -15,15 +15,17 @@ public class DropDown extends RPanel {
     private int selectedIndex;
     private TakeActionListener takeActionListener;
     private MenuLabel openPopupLabel;
+    private final GuiColors guiColors;
 
-    public DropDown(String[] choices, String[] descriptions, int selectedIndex) {
-        super(GuiColors.BASE_WHITE, new BorderLayout());
-        setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, GuiColors.BASE_SMOKE));
+    public DropDown(String[] choices, String[] descriptions, int selectedIndex, GuiColors guiColors) {
+        super(guiColors.getGuiTextColor(), new BorderLayout());
+        setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, guiColors.getGuiBackgroundColor()));
 
+        this.guiColors = guiColors;
         this.choices = choices;
         this.descriptions = descriptions;
         this.selectedIndex = selectedIndex;
-        this.openPopupLabel = new MenuLabel(this.choices[this.selectedIndex], MenuLabel.CENTER, 14);
+        this.openPopupLabel = new MenuLabel(this.choices[this.selectedIndex], MenuLabel.CENTER, 14, guiColors);
 
         refresh();
     }
@@ -39,7 +41,7 @@ public class DropDown extends RPanel {
         MouseAdapter openListener = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                DropDownPopUp dropDownPopUp = new DropDownPopUp();
+                DropDownPopUp dropDownPopUp = new DropDownPopUp(guiColors);
                 dropDownPopUp.init(openPopupLabel.getLocationOnScreen().x,
                         openPopupLabel.getLocationOnScreen().y + openPopupLabel.getHeight(),
                         choices,
@@ -61,7 +63,7 @@ public class DropDown extends RPanel {
         openPopupLabel.addMouseListener(openListener);
         add(openPopupLabel, BorderLayout.CENTER);
 
-        MenuLabel arrow = new MenuLabel("");
+        MenuLabel arrow = new MenuLabel("", guiColors);
         arrow.setIcon(new ImageIcon(getClass().getResource("/Icons/down.png")));
         arrow.addMouseListener(openListener);
         add(arrow, BorderLayout.EAST);
@@ -90,10 +92,13 @@ class DropDownPopUp extends JDialog {
 
     private DropDownPopUpHelper helperRef;
 
-    public DropDownPopUp() {
+    private final GuiColors guiColors;
+
+    public DropDownPopUp(GuiColors guiColors) {
         super();
+        this.guiColors = guiColors;
         setUndecorated(true);
-        getContentPane().setBackground(GuiColors.BASE_WHITE);
+        getContentPane().setBackground(guiColors.getGuiTextColor());
         getContentPane().setLayout(new BorderLayout());
     }
 
@@ -104,7 +109,7 @@ class DropDownPopUp extends JDialog {
         this.descriptions = descriptions;
         this.takeActionListener = takeActionListener;
 
-        this.helperRef = new DropDownPopUpHelper(x - DropDownPopUpHelper.WIDTH - 4, y);
+        this.helperRef = new DropDownPopUpHelper(x - DropDownPopUpHelper.WIDTH - 4, y, guiColors);
 
         getContentPane().add(getDropDownChoices(), BorderLayout.CENTER);
 
@@ -120,14 +125,14 @@ class DropDownPopUp extends JDialog {
 
     private JPanel getDropDownChoices() {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBackground(guiColors.getGuiTextColor());
         wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         List<Component> cells = new LinkedList<Component>();
         for (int i = 0; i < this.choices.length; ++i) {
             final int indexChoice = i;
             JPanel cell = new JPanel(new BorderLayout());
-            cell.setBackground(GuiColors.BASE_WHITE);
+            cell.setBackground(guiColors.getGuiTextColor());
             cell.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
             cell.addMouseListener(new MouseAdapter() {
                 @Override
@@ -140,7 +145,7 @@ class DropDownPopUp extends JDialog {
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    cell.setBackground(GuiColors.BASE_SMOKE);
+                    cell.setBackground(guiColors.getGuiBackgroundColor());
                     if (descriptions != null) {
                         if (descriptions[indexChoice] != null) {
                             helperRef.setText(descriptions[indexChoice]);
@@ -153,17 +158,17 @@ class DropDownPopUp extends JDialog {
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    cell.setBackground(GuiColors.BASE_WHITE);
+                    cell.setBackground(guiColors.getGuiTextColor());
                 }
             });
 
-            TitleLabel contentLabel = new TitleLabel(this.choices[i], TitleLabel.LEFT, 12);
+            TitleLabel contentLabel = new TitleLabel(this.choices[i], TitleLabel.LEFT, 12, guiColors);
             cell.add(contentLabel, BorderLayout.CENTER);
 
             cells.add(cell);
         }
 
-        wrapper.add(new ListView(wrapper.getBackground(), cells, false).getWrappedInScroll(true), BorderLayout.CENTER);
+        wrapper.add(new ListView(guiColors, cells, false).getWrappedInScroll(true), BorderLayout.CENTER);
 
         return wrapper;
     }
@@ -193,19 +198,22 @@ class DropDownPopUpHelper extends JDialog {
     private String text;
     private TitleLabel titleLabel;
 
-    public DropDownPopUpHelper(int x, int y) {
+    private final GuiColors guiColors;
+
+    public DropDownPopUpHelper(int x, int y, GuiColors guiColors) {
         super();
+        this.guiColors = guiColors;
         setUndecorated(true);
 
         this.x = x;
         this.y = y;
 
         this.text = "";
-        this.titleLabel = new TitleLabel(this.text, TitleLabel.CENTER, 10);
+        this.titleLabel = new TitleLabel(this.text, TitleLabel.CENTER, 10, guiColors);
         this.titleLabel.setForeground(GuiColors.DARK_GRAY);
 
-        getContentPane().setBackground(GuiColors.BASE_WHITE);
-        getContentPane().add(new TitleLabel("Info", TitleLabel.CENTER, 12), BorderLayout.NORTH);
+        getContentPane().setBackground(guiColors.getGuiTextColor());
+        getContentPane().add(new TitleLabel("Info", TitleLabel.CENTER, 12, guiColors), BorderLayout.NORTH);
         getContentPane().add(this.titleLabel, BorderLayout.CENTER);
 
         refresh();

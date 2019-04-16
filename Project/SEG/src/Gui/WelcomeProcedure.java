@@ -19,8 +19,8 @@ public class WelcomeProcedure extends JPanel {
         super(new BorderLayout());
         this.mainController = mainController;
 
-        setBorder(BorderFactory.createMatteBorder(40, 40, 40, 40, GuiColors.BASE_SMOKE));
-        setBackground(GuiColors.BASE_WHITE);
+        setBorder(BorderFactory.createMatteBorder(40, 40, 40, 40, mainController.getGuiColors().getGuiBackgroundColor()));
+        setBackground(mainController.getGuiColors().getGuiTextColor());
 
         add(getLoadFilesView(), BorderLayout.CENTER);
     }
@@ -32,14 +32,14 @@ public class WelcomeProcedure extends JPanel {
     private JPanel getLoadFilesView() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBorder(BorderFactory.createEmptyBorder());
-        wrapper.setBackground(GuiColors.BASE_WHITE);
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
 
-        TitleLabel logo = new TitleLabel("", TitleLabel.CENTER);
+        TitleLabel logo = new TitleLabel("", TitleLabel.CENTER, mainController.getGuiColors());
         logo.setIcon(new ImageIcon(getClass().getResource("/Icons/logo.png")));
         logo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         wrapper.add(logo, BorderLayout.NORTH);
 
-        MenuLabel segue = new MenuLabel("Next", MenuLabel.CENTER, 16);
+        MenuLabel segue = new MenuLabel("Next", MenuLabel.CENTER, 16, mainController.getGuiColors());
         segue.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         segue.addMouseListener(new MouseAdapter() {
             @Override

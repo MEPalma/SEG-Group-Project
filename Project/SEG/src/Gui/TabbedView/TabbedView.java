@@ -9,7 +9,7 @@ import Gui.GuiComponents.TitleLabel;
 import Gui.HomeView.HomeView;
 import Gui.MainController;
 import Gui.TakeActionListener;
-//import sun.awt.image.ImageWatched;
+import sun.awt.image.ImageWatched;
 
 import javax.swing.*;
 import java.awt.*;

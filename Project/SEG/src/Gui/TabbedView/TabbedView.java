@@ -9,7 +9,7 @@ import Gui.GuiComponents.TitleLabel;
 import Gui.HomeView.HomeView;
 import Gui.MainController;
 import Gui.TakeActionListener;
-import sun.awt.image.ImageWatched;
+//import sun.awt.image.ImageWatched;
 
 import javax.swing.*;
 import java.awt.*;
@@ -151,7 +151,7 @@ public class TabbedView {
             tab.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, mainController.getGuiColors().getGuiTextColor()));
             openTab = tab;
         }
-        tab.setPreferredSize(new Dimension((closable ? 120 : 80), 50));
+
         tab.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -172,11 +172,39 @@ public class TabbedView {
                 if (updateOnSelection != null) updateOnSelection.takeAction();
             }
         });
+        String htmlTitle;
+        int length;
 
-        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
-        titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+        TitleLabel topLabel;
+        TitleLabel bottomLabel;
 
-        tab.add(titleLabel, BorderLayout.CENTER);
+        if (closable) {
+            String[] titleHalves = title.split(":");
+            topLabel = new TitleLabel("<html>" + titleHalves[0] + "</html>", TitleLabel.LEFT, 14, mainController.getGuiColors());
+            bottomLabel = new TitleLabel("<html> <b>" + titleHalves[1] + "</b> </html>", TitleLabel.LEFT, 14, mainController.getGuiColors());
+        } else {
+            topLabel = new TitleLabel("<html><b>" + title + "</b></html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
+            bottomLabel = new TitleLabel("<html>" + "</html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
+
+        }
+
+        int longest = topLabel.getFontMetrics(topLabel.getFont()).stringWidth(topLabel.getText());
+        int other = bottomLabel.getFontMetrics(bottomLabel.getFont()).stringWidth(bottomLabel.getText());
+        if (other > longest)
+            longest = other;
+
+        //TitleLabel titleLabel = new TitleLabel();
+        //titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+        //tab.add(titleLabel, BorderLayout.CENTER);
+
+        topLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+        tab.add(topLabel, BorderLayout.CENTER);
+
+        bottomLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+        tab.add(bottomLabel, BorderLayout.SOUTH);
+
+        tab.setPreferredSize(new Dimension((closable ? longest -120 : 80), 50));
+
 
         if (closable) {
             MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 16, mainController.getGuiColors());

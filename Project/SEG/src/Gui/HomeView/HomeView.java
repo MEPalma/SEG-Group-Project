@@ -33,9 +33,35 @@ public class HomeView extends RPanel {
 
         List<Component> cells = new LinkedList<>();
 
-        // Impressions Row
-        cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
+        cells.add(getSplitView(
+                getGraph(allCampaigns, "Number of impressions", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                getGraph(allCampaigns, "Number of clicks", GraphSpecs.METRICS.NumberClicks, GraphSpecs.BOUNCE_DEF.NPAGES, false)
+        ));
 
+        cells.add(getSplitView(
+                getGraph(allCampaigns, "Number of Uniques", GraphSpecs.METRICS.NumberUniques, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                getGraph(allCampaigns, "Number of Bounces", GraphSpecs.METRICS.NumberBounces, GraphSpecs.BOUNCE_DEF.NPAGES, false)
+        ));
+
+        cells.add(getSplitView(
+                getGraph(allCampaigns, "Number of Conversion", GraphSpecs.METRICS.NumberConversions, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                getGraph(allCampaigns, "Total Cost", GraphSpecs.METRICS.TotalCost, GraphSpecs.BOUNCE_DEF.NPAGES, true)
+        ));
+
+        cells.add(getSplitView(
+                getGraph(allCampaigns, "CTR", GraphSpecs.METRICS.CTR, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                getGraph(allCampaigns, "CPA", GraphSpecs.METRICS.CPA, GraphSpecs.BOUNCE_DEF.NPAGES, false)
+        ));
+
+        cells.add(getSplitView(
+                getGraph(allCampaigns, "CPC", GraphSpecs.METRICS.CPC, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                getGraph(allCampaigns, "CPM", GraphSpecs.METRICS.CPM, GraphSpecs.BOUNCE_DEF.NPAGES, false)
+        ));
+
+        cells.add(getSplitView(
+                getGraph(allCampaigns, "Bounce rate / pages", GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                getGraph(allCampaigns, "Bounce rate / time", GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.TIME, false)
+        ));
 
         add(new ListView(mainController.getGuiColors(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
 
@@ -67,33 +93,32 @@ public class HomeView extends RPanel {
         return wrapper;
     }
 
-    private JPanel getImpressions(List<Tuple<Integer, String>> allCampaigns) {
+    private JPanel getGraph(List<Tuple<Integer, String>> allCampaigns, String title, GraphSpecs.METRICS metric, GraphSpecs.BOUNCE_DEF bounceDef, boolean representsPricing) {
 
         List<Tuple<String, Number>> data = new LinkedList<>();
 
         for (Tuple<Integer, String> c : allCampaigns) {
 
-            //TODO change to add with new queries!
             data.addAll(mainController.getGraphSpecData(
-                                            new GraphSpecs(
-                                                    c.getX(),
-                                                    c.getY(),
-                                                    GraphSpecs.METRICS.NumberImpressions,
-                                                    GraphSpecs.TIME_SPAN.MONTH_SPAN, //TODO change to null
-                                                    GraphSpecs.BOUNCE_DEF.NPAGES,
-                                                    mainController.getInitFilters()//TODO change ot null
-                                            )
-                                        )
-                        );
+                    new GraphSpecs(
+                            c.getX(),
+                            c.getY(),
+                            metric,
+                            null,
+                            bounceDef,
+                            null
+                    )
+                    )
+            );
         }
 
         return wrapInCell(
-                  "Number of Impressions",
-                        new BarChart(
-                                mainController.getGuiColors(),
-                                data,
-                                false
-                        )
-                );
+                title,
+                new BarChart(
+                        mainController.getGuiColors(),
+                        data,
+                        representsPricing
+                )
+        );
     }
 }

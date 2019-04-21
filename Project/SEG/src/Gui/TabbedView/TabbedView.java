@@ -6,10 +6,8 @@ import Gui.GuiComponents.HListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
-import Gui.HomeView.HomeView;
 import Gui.MainController;
 import Gui.TakeActionListener;
-import sun.awt.image.ImageWatched;
 
 import javax.swing.*;
 import java.awt.*;

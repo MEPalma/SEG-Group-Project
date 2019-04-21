@@ -375,12 +375,16 @@ public class QueryComposer {
     }
 
     private static String getFilters(GraphSpecs graphSpecs) {
+
+        if (graphSpecs.getFilterSpecs() == null) return "";
+
         StringBuilder tmp = new StringBuilder();
         List<String> filters = new LinkedList<>();
         if (!graphSpecs.containsFilters())
             filters.add(" campaignId = '" + graphSpecs.getCampaignId() + "')");
         filters.add("d >= '" + Stringifiable.dateToSeconds(graphSpecs.getStartDate()) + "' )");
         filters.add("d <= '" + Stringifiable.dateToSeconds(graphSpecs.getEndDate()) + "' )");
+
         if (graphSpecs.containsFilters()) {
             if (graphSpecs.getMetric() == GraphSpecs.METRICS.NumberImpressions || graphSpecs.getMetric() == GraphSpecs.METRICS.ImpressionCost) {
                 filters.add("users.campaignId = '" + graphSpecs.getCampaignId() + "')");

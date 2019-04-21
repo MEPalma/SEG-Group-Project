@@ -68,11 +68,20 @@ public class BarChart extends JPanel
             JPanel barPanel = new JPanel(new BorderLayout());
             barPanel.setBackground(guiColors.getGuiPrimeColor());
             barPanel.setBorder(getBorder());
-            if (!representsPricing)
-                barPanel.add(new TitleLabel(Integer.toString((int) root.getY().shortValue()), TitleLabel.CENTER, 10, guiColors), BorderLayout.NORTH);
-            else
-                barPanel.add(new TitleLabel(DataExchange.formatPrice(root.getY().doubleValue()), TitleLabel.CENTER, 10, guiColors), BorderLayout.NORTH);
-            barPanel.add(new TitleLabel(root.getX(), TitleLabel.CENTER, 10, guiColors), BorderLayout.SOUTH);
+            if (!representsPricing) {
+                TitleLabel titleLabel = new TitleLabel(Integer.toString((int) root.getY().shortValue()), TitleLabel.CENTER, 10, guiColors);
+                titleLabel.setForeground(guiColors.getGuiTextColor());
+                barPanel.add(titleLabel, BorderLayout.NORTH);
+            }
+            else {
+                TitleLabel titleLabel = new TitleLabel(DataExchange.formatPrice(root.getY().doubleValue()), TitleLabel.CENTER, 10, guiColors);
+                titleLabel.setForeground(guiColors.getGuiTextColor());
+                barPanel.add(titleLabel, BorderLayout.NORTH);
+            }
+
+            TitleLabel titleLabel = new TitleLabel(root.getX(), TitleLabel.CENTER, 10, guiColors);
+            titleLabel.setForeground(guiColors.getGuiTextColor());
+            barPanel.add(titleLabel, BorderLayout.SOUTH);
             barPanel.setPreferredSize(new Dimension(100, (int) percOf(root.getY().doubleValue(), max) + 40));
 
             container.add(barPanel, BorderLayout.SOUTH);

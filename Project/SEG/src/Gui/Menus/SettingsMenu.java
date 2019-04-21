@@ -96,7 +96,7 @@ public class SettingsMenu extends RPanel {
         wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         TitleLabel titleLabel = new TitleLabel(title, TitleLabel.LEFT, 14, mainController.getGuiColors());
-        titleLabel.setPreferredSize(new Dimension(150, 30));
+        titleLabel.setPreferredSize(new Dimension(154, 30));
         wrapper.add(titleLabel, BorderLayout.WEST);
 
         JPanel colorDisplay = new JPanel(new GridLayout(1, 1));
@@ -132,7 +132,7 @@ public class SettingsMenu extends RPanel {
         wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         TitleLabel titleLabel = new TitleLabel(title, TitleLabel.LEFT, 14, mainController.getGuiColors());
-        titleLabel.setPreferredSize(new Dimension(150, 30));
+        titleLabel.setPreferredSize(new Dimension(154, 30));
         wrapper.add(titleLabel, BorderLayout.WEST);
 
         JPanel colorDisplay = new JPanel(new GridLayout(1, 1));
@@ -168,7 +168,7 @@ public class SettingsMenu extends RPanel {
         wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         TitleLabel titleLabel = new TitleLabel(title, TitleLabel.LEFT, 14, mainController.getGuiColors());
-        titleLabel.setPreferredSize(new Dimension(150, 30));
+        titleLabel.setPreferredSize(new Dimension(154, 30));
         wrapper.add(titleLabel, BorderLayout.WEST);
 
         JPanel colorDisplay = new JPanel(new GridLayout(1, 1));
@@ -204,7 +204,7 @@ public class SettingsMenu extends RPanel {
         wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         TitleLabel titleLabel = new TitleLabel(title, TitleLabel.LEFT, 14, mainController.getGuiColors());
-        titleLabel.setPreferredSize(new Dimension(150, 30));
+        titleLabel.setPreferredSize(new Dimension(154, 30));
         wrapper.add(titleLabel, BorderLayout.WEST);
 
         JPanel colorDisplay = new JPanel(new GridLayout(1, 1));

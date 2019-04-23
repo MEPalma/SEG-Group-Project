@@ -29,44 +29,61 @@ public class HomeView extends RPanel {
     public void refresh() {
         removeAll();
 
-        List<Tuple<Integer, String>> allCampaigns = mainController.getDataExchange().selectAllCampaigns();
+        SwingWorker<Void, Void> backTask = new SwingWorker<Void, Void>() {
+            List<Component> cells = new LinkedList<>();
 
-        List<Component> cells = new LinkedList<>();
+            @Override
+            protected Void doInBackground() throws Exception {
+                List<Tuple<Integer, String>> allCampaigns = mainController.getDataExchange().selectAllCampaigns();
 
-        cells.add(getSplitView(
-                getGraph(allCampaigns, "Number of impressions", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                getGraph(allCampaigns, "Number of clicks", GraphSpecs.METRICS.NumberClicks, GraphSpecs.BOUNCE_DEF.NPAGES, false)
-        ));
+                cells.add(getSplitView(
+                        getGraph(allCampaigns, "Number of impressions", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                        getGraph(allCampaigns, "Number of clicks", GraphSpecs.METRICS.NumberClicks, GraphSpecs.BOUNCE_DEF.NPAGES, false)
+                ));
 
-        cells.add(getSplitView(
-                getGraph(allCampaigns, "Number of Uniques", GraphSpecs.METRICS.NumberUniques, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                getGraph(allCampaigns, "Number of Bounces", GraphSpecs.METRICS.NumberBounces, GraphSpecs.BOUNCE_DEF.NPAGES, false)
-        ));
+                cells.add(getSplitView(
+                        getGraph(allCampaigns, "Number of Uniques", GraphSpecs.METRICS.NumberUniques, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                        getGraph(allCampaigns, "Number of Bounces", GraphSpecs.METRICS.NumberBounces, GraphSpecs.BOUNCE_DEF.NPAGES, false)
+                ));
 
-        cells.add(getSplitView(
-                getGraph(allCampaigns, "Number of Conversion", GraphSpecs.METRICS.NumberConversions, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                getGraph(allCampaigns, "Total Cost", GraphSpecs.METRICS.TotalCost, GraphSpecs.BOUNCE_DEF.NPAGES, true)
-        ));
+                cells.add(getSplitView(
+                        getGraph(allCampaigns, "Number of Conversion", GraphSpecs.METRICS.NumberConversions, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                        getGraph(allCampaigns, "Total Cost", GraphSpecs.METRICS.TotalCost, GraphSpecs.BOUNCE_DEF.NPAGES, true)
+                ));
 
-        cells.add(getSplitView(
-                getGraph(allCampaigns, "CTR", GraphSpecs.METRICS.CTR, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                getGraph(allCampaigns, "CPA", GraphSpecs.METRICS.CPA, GraphSpecs.BOUNCE_DEF.NPAGES, false)
-        ));
+                cells.add(getSplitView(
+                        getGraph(allCampaigns, "CTR", GraphSpecs.METRICS.CTR, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                        getGraph(allCampaigns, "CPA", GraphSpecs.METRICS.CPA, GraphSpecs.BOUNCE_DEF.NPAGES, false)
+                ));
 
-        cells.add(getSplitView(
-                getGraph(allCampaigns, "CPC", GraphSpecs.METRICS.CPC, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                getGraph(allCampaigns, "CPM", GraphSpecs.METRICS.CPM, GraphSpecs.BOUNCE_DEF.NPAGES, false)
-        ));
+                cells.add(getSplitView(
+                        getGraph(allCampaigns, "CPC", GraphSpecs.METRICS.CPC, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                        getGraph(allCampaigns, "CPM", GraphSpecs.METRICS.CPM, GraphSpecs.BOUNCE_DEF.NPAGES, false)
+                ));
 
-        cells.add(getSplitView(
-                getGraph(allCampaigns, "Bounce rate / pages", GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                getGraph(allCampaigns, "Bounce rate / time", GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.TIME, false)
-        ));
+                cells.add(getSplitView(
+                        getGraph(allCampaigns, "Bounce rate / pages", GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.NPAGES, false),
+                        getGraph(allCampaigns, "Bounce rate / time", GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.TIME, false)
+                ));
 
-        add(new ListView(mainController.getGuiColors(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
+                return null;
+            }
 
-        repaint();
-        revalidate();
+            @Override
+            protected void done() {
+                add(new ListView(mainController.getGuiColors(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
+
+                repaint();
+                revalidate();
+
+                mainController.removeDataLoadingTask(this);
+                mainController.stopProgressBar();
+            }
+        };
+
+        mainController.startProgressBar();
+        backTask.execute();
+        mainController.addDataLoadingTask(backTask);
     }
 
     private JPanel wrapInCell(String title, BarChart barChart) {
@@ -83,9 +100,9 @@ public class HomeView extends RPanel {
     }
 
     private JPanel getSplitView(JPanel left, JPanel right) {
-        JPanel wrapper = new JPanel(new GridLayout(1, 2, 4, 4));
+        JPanel wrapper = new JPanel(new GridLayout(1, 2, 8, 4));
         wrapper.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
 
         wrapper.add(left);
         wrapper.add(right);
@@ -99,7 +116,7 @@ public class HomeView extends RPanel {
 
         for (Tuple<Integer, String> c : allCampaigns) {
 
-            data.addAll(mainController.getGraphSpecData(
+            List<Tuple<String, Number>> tmp = mainController.getGraphSpecData(
                     new GraphSpecs(
                             c.getX(),
                             c.getY(),
@@ -108,8 +125,10 @@ public class HomeView extends RPanel {
                             bounceDef,
                             null
                     )
-                    )
             );
+
+            if (tmp.size() > 0)
+                data.add(new Tuple<String, Number>("<html>" + c.getY() + "</html>", (tmp.get(0).getY())));
         }
 
         return wrapInCell(

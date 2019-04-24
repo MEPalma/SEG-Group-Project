@@ -17,6 +17,7 @@
 [ OK ] Fix space not freeing up after delete
 
 [    ] group dates
+[    ] fix home view queries
 
 [ OK ] add choose campaign in add graph
 
@@ -29,5 +30,5 @@
 [ OK ] refresh home view when new campaign is loaded
 [ OK ] home view bars of different colors
 
-[    ] cache home view data in db... it would be awesome! but queries need to be working first..
+[ OK ] cache home view data in db... it would be awesome! but queries need to be working first..
 [ OK ] menu switching in side menu

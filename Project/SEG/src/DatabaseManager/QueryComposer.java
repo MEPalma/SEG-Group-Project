@@ -253,7 +253,7 @@ public class QueryComposer {
                                              Number bounceRate_Time)
     {
         String sep = "' , '";
-        return "INSERT OR REPLACE INTO HOMEVIEW_CACHE VALUES ('"
+        return "INSERT INTO HOMEVIEW_CACHE VALUES ('"
                 + id
                 + sep + nImpressions.doubleValue()
                 + sep + nClicks.doubleValue()

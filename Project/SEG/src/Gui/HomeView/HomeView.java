@@ -30,47 +30,68 @@ public class HomeView extends RPanel {
         removeAll();
 
         SwingWorker<Void, Void> backTask = new SwingWorker<Void, Void>() {
-            List<Component> cells = new LinkedList<>();
+            List<JPanel> graphs = new LinkedList<>();
 
             @Override
             protected Void doInBackground() throws Exception {
                 List<Tuple<Integer, String>> allCampaigns = mainController.getDataExchange().selectAllCampaigns();
 
-                cells.add(getSplitView(
-                        getGraph(allCampaigns, "Number of impressions", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                        getGraph(allCampaigns, "Number of clicks", GraphSpecs.METRICS.NumberClicks, GraphSpecs.BOUNCE_DEF.NPAGES, false)
-                ));
+                String[] headings = {
+                    "Number of Impressions",
+                    "Number of Clicks",
+                    "Number of Uniques",
+                    "Number of Bounces",
+                    "Number of Conversions",
+                    "Total Cost",
+                    "CTR",
+                    "CPA",
+                    "CPC",
+                    "CPM",
+                    "Bounce Rate / Pages",
+                    "Bounce Rate / Time"
+                };
+                Boolean[] representPricing = {
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false
+                };
 
-                cells.add(getSplitView(
-                        getGraph(allCampaigns, "Number of Uniques", GraphSpecs.METRICS.NumberUniques, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                        getGraph(allCampaigns, "Number of Bounces", GraphSpecs.METRICS.NumberBounces, GraphSpecs.BOUNCE_DEF.NPAGES, false)
-                ));
+                List<String> campaignNames = new LinkedList<>();
+                List<Number[]> cachedValues = new LinkedList<>();
 
-                cells.add(getSplitView(
-                        getGraph(allCampaigns, "Number of Conversion", GraphSpecs.METRICS.NumberConversions, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                        getGraph(allCampaigns, "Total Cost", GraphSpecs.METRICS.TotalCost, GraphSpecs.BOUNCE_DEF.NPAGES, true)
-                ));
+                for (Tuple<Integer, String> campaign : allCampaigns) {
+                    campaignNames.add(campaign.getY());
+                    cachedValues.add(mainController.getDataExchange().selectByIdFrom_HOMEVIEW_CACHE(campaign.getX()));
+                }
 
-                cells.add(getSplitView(
-                        getGraph(allCampaigns, "CTR", GraphSpecs.METRICS.CTR, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                        getGraph(allCampaigns, "CPA", GraphSpecs.METRICS.CPA, GraphSpecs.BOUNCE_DEF.NPAGES, false)
-                ));
+                for (int i = 0; i < headings.length; ++i) {
+                    List<Tuple<String, Number>> barChartData = new LinkedList<>();
 
-                cells.add(getSplitView(
-                        getGraph(allCampaigns, "CPC", GraphSpecs.METRICS.CPC, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                        getGraph(allCampaigns, "CPM", GraphSpecs.METRICS.CPM, GraphSpecs.BOUNCE_DEF.NPAGES, false)
-                ));
-
-                cells.add(getSplitView(
-                        getGraph(allCampaigns, "Bounce rate / pages", GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.NPAGES, false),
-                        getGraph(allCampaigns, "Bounce rate / time", GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.TIME, false)
-                ));
+                    for (int j = 0; j < cachedValues.size(); ++j) {
+                        barChartData.add(new Tuple<>(campaignNames.get(j), cachedValues.get(j)[i]));
+                    }
+                    graphs.add(getGraph(headings[i], barChartData, representPricing[i]));
+                }
 
                 return null;
             }
 
             @Override
             protected void done() {
+                List<Component> cells = new LinkedList<>();
+
+                for (int i = 0; i < graphs.size() - 1; i += 2)
+                    cells.add(getSplitView(graphs.get(i), graphs.get(i + 1)));
+
                 add(new ListView(mainController.getGuiColors(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
 
                 repaint();
@@ -110,27 +131,7 @@ public class HomeView extends RPanel {
         return wrapper;
     }
 
-    private JPanel getGraph(List<Tuple<Integer, String>> allCampaigns, String title, GraphSpecs.METRICS metric, GraphSpecs.BOUNCE_DEF bounceDef, boolean representsPricing) {
-
-        List<Tuple<String, Number>> data = new LinkedList<>();
-
-        for (Tuple<Integer, String> c : allCampaigns) {
-
-            List<Tuple<String, Number>> tmp = mainController.getGraphSpecData(
-                    new GraphSpecs(
-                            c.getX(),
-                            c.getY(),
-                            metric,
-                            null,
-                            bounceDef,
-                            null
-                    )
-            );
-
-            if (tmp.size() > 0)
-                data.add(new Tuple<String, Number>("<html>" + c.getY() + "</html>", (tmp.get(0).getY())));
-        }
-
+    private JPanel getGraph(String title,  List<Tuple<String, Number>> data, boolean representsPricing) {
         return wrapInCell(
                 title,
                 new BarChart(

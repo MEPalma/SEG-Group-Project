@@ -567,9 +567,12 @@ public class DataExchange {
             cached[10] = rset.getDouble(12);
             cached[11] = rset.getDouble(13);
 
+            rset.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
 
         return cached;
     }

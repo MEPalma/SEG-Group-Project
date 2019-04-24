@@ -4,6 +4,7 @@ import Commons.*;
 import Gui.GuiColors;
 
 import java.awt.*;
+import java.awt.desktop.QuitEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -406,14 +407,8 @@ public class DataExchange {
         this.dbM.writeQuery(QueryComposer.insertSettingStmt(name, value));
     }
 
-    /*
-        UPDATE STATEMENTS
-     */
-    // if you need them call me up (Marco)
-    /*
-        DELETE STATEMENTS
-     */
-    // if you need them call me up (Marco)
+
+
     /*
         DROP ALL STATEMENTS
      */
@@ -551,6 +546,32 @@ public class DataExchange {
 
         close(rset);
         return tmp;
+    }
+
+    public Number[] selectByIdFrom_HOMEVIEW_CACHE(int campaignId) {
+        ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_HOMEVIEW_CACHE(campaignId));
+
+        Number[] cached = new Number[12];
+        try {
+            //index 1 = campaignId..
+            cached[0] = rset.getDouble(2);
+            cached[1] = rset.getDouble(3);
+            cached[2] = rset.getDouble(4);
+            cached[3] = rset.getDouble(5);
+            cached[4] = rset.getDouble(6);
+            cached[5] = rset.getDouble(7);
+            cached[6] = rset.getDouble(8);
+            cached[7] = rset.getDouble(9);
+            cached[8] = rset.getDouble(10);
+            cached[9] = rset.getDouble(11);
+            cached[10] = rset.getDouble(12);
+            cached[11] = rset.getDouble(13);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cached;
     }
 
     /*
@@ -1131,6 +1152,43 @@ public class DataExchange {
 
     public void updateGuiBackgroundColor(Color newTextColor) {
         this.dbM.writeQuery(QueryComposer.setGuiBackgroundColor(newTextColor));
+    }
+
+    public void updateHomeViewCacheForCampaign(int campaignId) {
+        this.dbM.writeQuery(QueryComposer.deleteHomeViewCache(campaignId));
+
+        this.dbM.writeQuery(QueryComposer.insertHomeViewCache(
+                campaignId,
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.NumberImpressions, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.NumberClicks, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.NumberUniques, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.NumberBounces, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.NumberConversions, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.TotalCost, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.CTR, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.CPA, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.CPC, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.CPM, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.TIME)
+        ));
+    }
+
+    private Number getHomeViewCache(int campaignId, GraphSpecs.METRICS metric, GraphSpecs.BOUNCE_DEF bounceDef) {
+        List<Tuple<String, Number>> tmp = getGraphData(
+                new GraphSpecs(
+                        campaignId,
+                        "",
+                        metric,
+                        null,
+                        bounceDef,
+                        null
+                )
+        );
+
+        if (tmp.size() > 0)
+            return (tmp.get(0).getY());
+        else return 0;
     }
 
 }

@@ -174,6 +174,23 @@ public class QueryComposer {
             + "value TEXT,\n"
             + "PRIMARY KEY (name)\n"
             + ");";
+    private static String CREATE_TABLE_HOMEVIEW_CACHE
+            = "CREATE TABLE IF NOT EXISTS HOMEVIEW_CACHE (\n"
+            + "campaignId INTEGER NOT NULL,\n"
+            + "nImpressions NUMERIC, \n"
+            + "nClicks NUMERIC, \n"
+            + "nUniques NUMERIC, \n"
+            + "nBounces NUMERIC, \n"
+            + "nConversions NUMERIC, \n"
+            + "totalCost NUMERIC, \n"
+            + "CTR NUMERIC, \n"
+            + "CPA NUMERIC, \n"
+            + "CPC NUMERIC, \n"
+            + "CPM NUMERIC, \n"
+            + "bounceRate_Pages NUMERIC, \n"
+            + "bounceRate_Time NUMERIC, \n"
+            + "FOREIGN KEY (campaignId) REFERENCES CAMPAIGNS(id) ON DELETE CASCADE\n"
+            + ");";
     public static String[] CREATE_TABLES =
             {
                 "PRAGMA foreign_keys=ON;",
@@ -183,7 +200,8 @@ public class QueryComposer {
                 CREATE_TABLE_IMPRESSION_LOGS,
                 CREATE_TABLE_CLICK_LOGS,
                 CREATE_TABLE_SERVER_LOGS,
-                CREATE_TABLE_SETTINGS
+                CREATE_TABLE_SETTINGS,
+                CREATE_TABLE_HOMEVIEW_CACHE
             };
 
     public static String rebuildDatabase() {
@@ -220,6 +238,38 @@ public class QueryComposer {
         return "INSERT INTO SETTINGS VALUES ('" + name + "', '" + value + "');";
     }
 
+    public static String insertHomeViewCache(int id,
+                                             Number nImpressions,
+                                             Number nClicks,
+                                             Number nUniques,
+                                             Number nBounces,
+                                             Number nConversions,
+                                             Number totalCost,
+                                             Number CTR,
+                                             Number CPA,
+                                             Number CPC,
+                                             Number CPM,
+                                             Number bounceRate_Pages,
+                                             Number bounceRate_Time)
+    {
+        String sep = "' , '";
+        return "INSERT OR REPLACE INTO HOMEVIEW_CACHE VALUES ('"
+                + id
+                + sep + nImpressions.doubleValue()
+                + sep + nClicks.doubleValue()
+                + sep + nUniques.doubleValue()
+                + sep + nBounces.doubleValue()
+                + sep + nConversions.doubleValue()
+                + sep + totalCost.doubleValue()
+                + sep + CTR.doubleValue()
+                + sep + CPA.doubleValue()
+                + sep + CPC.doubleValue()
+                + sep + CPM.doubleValue()
+                + sep + bounceRate_Pages.doubleValue()
+                + sep + bounceRate_Time.doubleValue()
+                + "');";
+    }
+
     /*
         SELECT BY ID
      */
@@ -237,6 +287,10 @@ public class QueryComposer {
 
     public static String selectByIdFrom_SERVER_LOGS(int id) {
         return "SELECT * FROM SERVER_LOGS WHERE SERVER_LOGS.id=" + id + " LIMIT 1;";
+    }
+
+    public static String selectByIdFrom_HOMEVIEW_CACHE(int id) {
+        return "SELECT * FROM HOMEVIEW_CACHE WHERE HOMEVIEW_CACHE.campaignId=" + id + " LIMIT 1;";
     }
 
     /*
@@ -510,4 +564,7 @@ public class QueryComposer {
     public static String getGuiTextColor = "SELECT value FROM SETTINGS WHERE name='GuiTextColor';";
     public static String getGuiBackgroundColor = "SELECT value FROM SETTINGS WHERE name='GuiBackgroundColor';";
 
+    public static String deleteHomeViewCache(int campaignId) {
+        return "DELETE FROM HOMEVIEW_CACHE WHERE campaignId=" + campaignId + ";";
+    }
 }

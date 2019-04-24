@@ -89,6 +89,8 @@ public class CSVParser {
         sourceIdToNewId.clear();
         System.gc();
 
+        this.dataExchange.updateHomeViewCacheForCampaign(newCampaignID);
+
         JOptionPane.showMessageDialog(null, "Successfully updated the library", "Alert", JOptionPane.INFORMATION_MESSAGE);
     }
 

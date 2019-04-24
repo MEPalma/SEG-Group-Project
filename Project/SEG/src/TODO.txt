@@ -1,24 +1,23 @@
 [ OK ] add compare button
-[    ] hide filter button when no graphs
-[    ] hide compare button when less than two campaigns
-[    ] fix bug filters left open and click on home tab
+[ OK ] fix bug filters left open and click on home tab
 
 [ OK ] add compare menu
 [ OK ] multiple columns in compare chart
 
 [ OK ] go back to unique color.. because supervisors are ....
-[    ] change color in settings
+[ OK ] change color in settings
 [ OK ] remove space between tab bar and pane
 
-[    ] buttons for apply and clear filters
+[ NO ] buttons for apply and clear filters
 
-[  ~ ] home page
+[ OK ] home page
 
-[ OK ] reorganise add campaign view // TODO swap text with icons + delete should happen right away and leave delete process in the background
+[ OK ] reorganise add campaign view
 [ OK ] ON DELETE CASCADE on database -> on campaignId
 [ OK ] Fix space not freeing up after delete
 
 [    ] group dates
+[    ] fix home view queries
 
 [ OK ] add choose campaign in add graph
 
@@ -26,7 +25,10 @@
 
 [ OK ] filters on compare graphs
 
-[    ] control for compare insertion (no select same campaign more than once)
+[ OK ] control for compare insertion (no select same campaign more than once)
 
-[    ] refresh home view when new campaign is loaded
-[    ] home view bars of different colors(?)
+[ OK ] refresh home view when new campaign is loaded
+[ OK ] home view bars of different colors
+
+[ OK ] cache home view data in db... it would be awesome! but queries need to be working first..
+[ OK ] menu switching in side menu

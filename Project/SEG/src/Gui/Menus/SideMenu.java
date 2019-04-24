@@ -37,14 +37,15 @@ public class SideMenu extends RPanel {
             public void mousePressed(MouseEvent e) {
                 removeAll();
                 if (openMenu != null) {
-                    if (openMenu instanceof LoadCSVsMenu)
+                    if (openMenu instanceof LoadCSVsMenu) {
                         openMenu = null;
-                    refresh();
-                    return;
-                } else {
-                    openMenu = new LoadCSVsMenu(mainController);
-                    refresh();
+                        refresh();
+                        return;
+                    }
                 }
+
+                openMenu = new LoadCSVsMenu(mainController);
+                refresh();
             }
 
             @Override
@@ -68,14 +69,14 @@ public class SideMenu extends RPanel {
             public void mousePressed(MouseEvent e) {
                 removeAll();
                 if (openMenu != null) {
-                    if (openMenu instanceof SettingsMenu)
+                    if (openMenu instanceof SettingsMenu) {
                         openMenu = null;
-                    refresh();
-                    return;
-                } else {
-                    openMenu = new SettingsMenu(mainController);
-                    refresh();
+                        refresh();
+                        return;
+                    }
                 }
+                openMenu = new SettingsMenu(mainController);
+                refresh();
             }
 
             @Override
@@ -110,5 +111,9 @@ public class SideMenu extends RPanel {
         tmp.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         tmp.setBackground(getBackground());
         return tmp;
+    }
+
+    public JPanel getOpenMenu() {
+        return this.openMenu;
     }
 }

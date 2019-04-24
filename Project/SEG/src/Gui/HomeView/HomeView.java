@@ -29,18 +29,82 @@ public class HomeView extends RPanel {
     public void refresh() {
         removeAll();
 
-        List<Tuple<Integer, String>> allCampaigns = mainController.getDataExchange().selectAllCampaigns();
+        SwingWorker<Void, Void> backTask = new SwingWorker<Void, Void>() {
+            List<JPanel> graphs = new LinkedList<>();
 
-        List<Component> cells = new LinkedList<>();
+            @Override
+            protected Void doInBackground() throws Exception {
+                List<Tuple<Integer, String>> allCampaigns = mainController.getDataExchange().selectAllCampaigns();
 
-        // Impressions Row
-        cells.add(getSplitView(getImpressions(allCampaigns), getImpressions(allCampaigns)));
+                String[] headings = {
+                    "Number of Impressions",
+                    "Number of Clicks",
+                    "Number of Uniques",
+                    "Number of Bounces",
+                    "Number of Conversions",
+                    "Total Cost",
+                    "CTR",
+                    "CPA",
+                    "CPC",
+                    "CPM",
+                    "Bounce Rate / Pages",
+                    "Bounce Rate / Time"
+                };
+                Boolean[] representPricing = {
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false
+                };
 
+                List<String> campaignNames = new LinkedList<>();
+                List<Number[]> cachedValues = new LinkedList<>();
 
-        add(new ListView(mainController.getGuiColors(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
+                for (Tuple<Integer, String> campaign : allCampaigns) {
+                    campaignNames.add(campaign.getY());
+                    cachedValues.add(mainController.getDataExchange().selectByIdFrom_HOMEVIEW_CACHE(campaign.getX()));
+                }
 
-        repaint();
-        revalidate();
+                for (int i = 0; i < headings.length; ++i) {
+                    List<Tuple<String, Number>> barChartData = new LinkedList<>();
+
+                    for (int j = 0; j < cachedValues.size(); ++j) {
+                        barChartData.add(new Tuple<>(campaignNames.get(j), cachedValues.get(j)[i]));
+                    }
+                    graphs.add(getGraph(headings[i], barChartData, representPricing[i]));
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                List<Component> cells = new LinkedList<>();
+
+                for (int i = 0; i < graphs.size() - 1; i += 2)
+                    cells.add(getSplitView(graphs.get(i), graphs.get(i + 1)));
+
+                add(new ListView(mainController.getGuiColors(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
+
+                repaint();
+                revalidate();
+
+                mainController.removeDataLoadingTask(this);
+                mainController.stopProgressBar();
+            }
+        };
+
+        mainController.startProgressBar();
+        backTask.execute();
+        mainController.addDataLoadingTask(backTask);
     }
 
     private JPanel wrapInCell(String title, BarChart barChart) {
@@ -57,9 +121,9 @@ public class HomeView extends RPanel {
     }
 
     private JPanel getSplitView(JPanel left, JPanel right) {
-        JPanel wrapper = new JPanel(new GridLayout(1, 2, 4, 4));
+        JPanel wrapper = new JPanel(new GridLayout(1, 2, 8, 4));
         wrapper.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
 
         wrapper.add(left);
         wrapper.add(right);
@@ -67,33 +131,14 @@ public class HomeView extends RPanel {
         return wrapper;
     }
 
-    private JPanel getImpressions(List<Tuple<Integer, String>> allCampaigns) {
-
-        List<Tuple<String, Number>> data = new LinkedList<>();
-
-        for (Tuple<Integer, String> c : allCampaigns) {
-
-            //TODO change to add with new queries!
-            data.addAll(mainController.getGraphSpecData(
-                                            new GraphSpecs(
-                                                    c.getX(),
-                                                    c.getY(),
-                                                    GraphSpecs.METRICS.NumberImpressions,
-                                                    GraphSpecs.TIME_SPAN.MONTH_SPAN, //TODO change to null
-                                                    GraphSpecs.BOUNCE_DEF.NPAGES,
-                                                    mainController.getInitFilters()//TODO change ot null
-                                            )
-                                        )
-                        );
-        }
-
+    private JPanel getGraph(String title,  List<Tuple<String, Number>> data, boolean representsPricing) {
         return wrapInCell(
-                  "Number of Impressions",
-                        new BarChart(
-                                mainController.getGuiColors(),
-                                data,
-                                false
-                        )
-                );
+                title,
+                new BarChart(
+                        mainController.getGuiColors(),
+                        data,
+                        representsPricing
+                )
+        );
     }
 }

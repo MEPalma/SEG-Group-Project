@@ -18,6 +18,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.category.SlidingCategoryDataset;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,8 +43,9 @@ public class GraphManager {
                 true, true, false);
         barChart.setBorderVisible(false);
         barChart.setAntiAlias(true);
-//        barChart.removeLegend();
         barChart.setBackgroundPaint(Color.WHITE);
+//        barChart.getCategoryPlot().getDomainAxis().setMaximumCategoryLabelLines(10);
+//        barChart.getCategoryPlot().setPa
 
         CategoryPlot cplot = (CategoryPlot) barChart.getPlot();
         cplot.setBackgroundPaint(SystemColor.inactiveCaption);

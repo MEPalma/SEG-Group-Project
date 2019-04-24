@@ -4,7 +4,7 @@
 [ OK ] add compare menu
 [ OK ] multiple columns in compare chart
 
-[ OK ] go back to unique color.. because supervisors are ....
+[ OK ] go back to unique color....
 [ OK ] change color in settings
 [ OK ] remove space between tab bar and pane
 
@@ -17,7 +17,8 @@
 [ OK ] Fix space not freeing up after delete
 
 [    ] group dates
-[    ] fix home view queries
+[ ?? ] fix home view queries
+[ OK ] popup descriptions on home view
 
 [ OK ] add choose campaign in add graph
 
@@ -32,3 +33,5 @@
 
 [ OK ] cache home view data in db... it would be awesome! but queries need to be working first..
 [ OK ] menu switching in side menu
+
+** fix queries with null filters!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

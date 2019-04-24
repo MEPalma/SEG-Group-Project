@@ -33,6 +33,9 @@ public class Gui extends JFrame {
 
     private MenuLabel filtersMenuLabel, compareMenuLabel; //addGraphMenuLabel,
 
+    private TabbedView tabbedView;
+    private SideMenu sideMenu;
+
     public Gui() {
         super("Dashboard App");
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Icons/logo.png")));
@@ -66,12 +69,17 @@ public class Gui extends JFrame {
         GuiColors guiColors = new GuiColors();
         this.statusDisplay = new StatusDisplay(guiColors);
 
-        TabbedView tabbedView = new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster);
+        this.tabbedView = new TabbedView(tabbedViewTabsHoster, tabbedViewContentHoster);
         this.mainController = new MainController(this, this.statusDisplay, tabbedView, guiColors);
 
         tabbedView.init(this.mainController);
 
-        tabbedView.pushNewHomeTab("HOME", new HomeView(mainController));
+        TakeActionListener onHomeViewClick = () -> {
+            if (tabbedView.isHomeOpen() && mainController.isFiltersShowing())
+                closeFiltersMenu();
+        };
+
+        tabbedView.pushNewHomeTab("HOME", new HomeView(mainController), onHomeViewClick);
 
         /*
             POPUPS
@@ -153,7 +161,9 @@ public class Gui extends JFrame {
     }
 
     private void setupMainView() {
-        this.mainView.add(new SideMenu(mainController), BorderLayout.WEST);
+
+        this.sideMenu = new SideMenu(mainController);
+        this.mainView.add(this.sideMenu, BorderLayout.WEST);
 
         JPanel tabbedViewTopWrapper = new JPanel(new BorderLayout());
         tabbedViewTopWrapper.setBorder(BorderFactory.createEmptyBorder());
@@ -371,6 +381,7 @@ public class Gui extends JFrame {
         popupMessageArea.setPreferredSize(new Dimension(380, 380));
         popupMessageArea.repaint();
         popupMessageArea.revalidate();
+
     }
 
     public boolean isFiltersShowing() {
@@ -379,4 +390,16 @@ public class Gui extends JFrame {
         } else return false;
     }
 
+    public void closeFiltersMenu() {
+        if (this.currentPopup instanceof FiltersMenu) {
+            currentPopup = null;
+
+            filterButtonWrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
+
+            popupMessageArea.setPreferredSize(new Dimension(0, 0));
+            popupMessageArea.removeAll();
+            popupMessageArea.repaint();
+            popupMessageArea.revalidate();
+        }
+    }
 }

@@ -106,17 +106,19 @@ public class CompareMenu extends RPanel {
         });
         wrapper.add(dropDown, BorderLayout.CENTER);
 
-        MenuLabel removeMenuLabel = new MenuLabel("x", MenuLabel.RIGHT, 20, mainController.getGuiColors());
-        removeMenuLabel.dropAllListeners();
-        removeMenuLabel.setForeground(GuiColors.RED_ERROR);
-        removeMenuLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                selections.remove(indexInPool);
-                refresh();
-            }
-        });
-        wrapper.add(removeMenuLabel, BorderLayout.EAST);
+        if (this.selections.size() > 1) {
+            MenuLabel removeMenuLabel = new MenuLabel("x", MenuLabel.RIGHT, 20, mainController.getGuiColors());
+            removeMenuLabel.dropAllListeners();
+            removeMenuLabel.setForeground(GuiColors.RED_ERROR);
+            removeMenuLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent mouseEvent) {
+                    selections.remove(indexInPool);
+                    refresh();
+                }
+            });
+            wrapper.add(removeMenuLabel, BorderLayout.EAST);
+        }
 
         return wrapper;
     }

@@ -21,7 +21,7 @@ public class TabbedView {
     private final JPanel tabsHost;
     private final JPanel contentHost;
 
-    private JPanel homeView;
+    private RPanel homeView;
 
     private final LinkedList<Tab> tabs;
 
@@ -59,7 +59,7 @@ public class TabbedView {
         this.contentHost.removeAll();
 
         if(this.homeView != null) {
-            this.tabsHost.add(createTab("Home", GuiColors.RED_ERROR, 0, null, false), BorderLayout.WEST);
+            this.tabsHost.add(createTab("Home", GuiColors.RED_ERROR, 0, this.tabs.get(0).getUpdateOnSelection(), false), BorderLayout.WEST);
         }
 
         if (this.selectedIndex > this.tabs.size() - 1)
@@ -89,8 +89,8 @@ public class TabbedView {
         refresh();
     }
 
-    public void pushNewHomeTab(String title, RPanel content) {
-        Tab homeTab = new Tab(title, content, content, null);
+    public void pushNewHomeTab(String title, RPanel content, TakeActionListener updateOnSelection) {
+        Tab homeTab = new Tab(title, content, content, updateOnSelection);
         this.homeView = content;
         this.tabs.addFirst(homeTab);
 
@@ -114,7 +114,7 @@ public class TabbedView {
         return false;
     }
 
-    public JPanel getHomeView() {
+    public RPanel getHomeView() {
         return this.homeView;
     }
 
@@ -221,6 +221,10 @@ public class TabbedView {
         }
 
         refresh();
+    }
+
+    public boolean isHomeOpen() {
+        return (this.selectedIndex == 0);
     }
 
 }

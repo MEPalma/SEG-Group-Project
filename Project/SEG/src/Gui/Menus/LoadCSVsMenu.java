@@ -92,7 +92,7 @@ public class LoadCSVsMenu extends RPanel {
                                     parseButton.setEnabled(true);
                                     parseButton.setForeground(mainController.getGuiColors().getGuiPrimeColor());
 
-                                    mainController.refreshGraphs();
+                                    mainController.refreshHomeView();
 
                                     return null;
                                 }
@@ -407,7 +407,7 @@ public class LoadCSVsMenu extends RPanel {
                         rightWrapper.setBackground(wrapper.getBackground());
                         rightWrapper.setBorder(BorderFactory.createEmptyBorder());
 
-                        MenuLabel changeNameLabel = new MenuLabel("nameEdit", MenuLabel.CENTER, 8, mainController.getGuiColors());
+                        MenuLabel changeNameLabel = new MenuLabel("rename", MenuLabel.CENTER, 14, mainController.getGuiColors());
                         changeNameLabel.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mousePressed(MouseEvent mouseEvent) {
@@ -423,6 +423,7 @@ public class LoadCSVsMenu extends RPanel {
 
                                                 mainController.startProgressBar();
                                                 mainController.getDataExchange().setCampaignName(tuple.getX(), newName.trim().replace("'", "''").replace("-", "--"));
+                                                mainController.refreshHomeView();
 
                                                 return null;
                                             }
@@ -439,7 +440,7 @@ public class LoadCSVsMenu extends RPanel {
                         });
                         rightWrapper.add(changeNameLabel);
 
-                        TitleLabel deleteLabel = new TitleLabel("x", MenuLabel.CENTER, 16, mainController.getGuiColors());
+                        TitleLabel deleteLabel = new TitleLabel("x", MenuLabel.CENTER, 18, mainController.getGuiColors());
                         deleteLabel.setForeground(GuiColors.RED_ERROR);
                         deleteLabel.addMouseListener(new MouseAdapter() {
                             @Override
@@ -457,6 +458,7 @@ public class LoadCSVsMenu extends RPanel {
 
                                             mainController.startProgressBar();
                                             mainController.getDataExchange().deleteCampaign(tuple.getX());
+                                            mainController.refreshHomeView();
 
                                             return null;
                                         }

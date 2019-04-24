@@ -17,6 +17,14 @@ public class BarChart extends JPanel
     private JPanel graphPanel;
 
     private final GuiColors guiColors;
+    private Color[] barColors = {
+            GuiColors.OPTION_GREEN,
+            GuiColors.OPTION_PURPLE,
+            GuiColors.OPTION_ORANGE,
+            GuiColors.OPTION_GREENBLUE,
+            GuiColors.RED_ERROR,
+            GuiColors.DEFAULT_BASE_PRIME
+    };
 
     public BarChart(GuiColors guiColors, List<Tuple<String, Number>> roots, boolean representsPricing)
     {
@@ -59,6 +67,8 @@ public class BarChart extends JPanel
 
         double max = getMax();
 
+        int nextColorIndex = 0;
+
         for (Tuple<String, Number> root : this.roots)
         {
             JPanel container = new JPanel(new BorderLayout());
@@ -66,7 +76,7 @@ public class BarChart extends JPanel
             container.setBorder(getBorder());
 
             JPanel barPanel = new JPanel(new BorderLayout());
-            barPanel.setBackground(guiColors.getGuiPrimeColor());
+            barPanel.setBackground(barColors[nextColorIndex]);
             barPanel.setBorder(getBorder());
             if (!representsPricing) {
                 TitleLabel titleLabel = new TitleLabel(Integer.toString((int) root.getY().shortValue()), TitleLabel.CENTER, 10, guiColors);
@@ -87,6 +97,10 @@ public class BarChart extends JPanel
             container.add(barPanel, BorderLayout.SOUTH);
 
             this.graphPanel.add(container);
+
+            //update color index
+            nextColorIndex++;
+            if (nextColorIndex >= barColors.length) nextColorIndex = 0;
         }
 
         this.graphPanel.repaint();

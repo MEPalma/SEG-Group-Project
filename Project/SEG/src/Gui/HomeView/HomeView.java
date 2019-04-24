@@ -18,7 +18,7 @@ public class HomeView extends RPanel {
     private final MainController mainController;
 
     public HomeView(MainController mainController) {
-        super(mainController.getGuiColors().getGuiBackgroundColor(), new BorderLayout());
+        super(mainController.getGuiColors().getGuiTextColor(), new BorderLayout());
 
         this.mainController = mainController;
 
@@ -65,6 +65,20 @@ public class HomeView extends RPanel {
                         false
                 };
 
+                String[] popupsDescriptions = {
+                        "<html>An impression occurs whenever an ad is shown to a user, regardless of whether they click on it.</html>",
+                        "<html>A click occurs when a user clicks on an ad that is shown to them.</html>",
+                        "<html>The number of unique users that click on an ad during the course of a campaign.</html>",
+                        "<html>A user clicks on an ad, but then fails to interact with the website (typically detected when a <br>user navigates away from the website after a short time, <br>or when only a single page has been viewed).</html>",
+                        "<html>A conversion, or acquisition, occurs when a user clicks and then acts on an ad. The specific <br>definition of an action depends on the campaign <br>(e.g., buying a product, registering as a new <br>customer or joining a mailing list).</html>",
+                        "<html>The total of the click cost and impression cost.</html>",
+                        "<html>The average number of clicks per impression.</html>",
+                        "<html>The average amount of money spent on an advertising <br>campaign for each acquisition (i.e., conversion).</html>",
+                        "<html>The average amount of money spent on an advertising <br>campaign for each click.</html>",
+                        "<html>The average amount of money spent on an advertising <br>campaign for every one thousand impressions.</html>",
+                        "<html>The average number of bounces per number of pages.</html>",
+                        "<html>The average number of bounces per time spent on a page.</html>"};
+
                 List<String> campaignNames = new LinkedList<>();
                 List<Number[]> cachedValues = new LinkedList<>();
 
@@ -79,7 +93,10 @@ public class HomeView extends RPanel {
                     for (int j = 0; j < cachedValues.size(); ++j) {
                         barChartData.add(new Tuple<>(campaignNames.get(j), cachedValues.get(j)[i]));
                     }
-                    graphs.add(getGraph(headings[i], barChartData, representPricing[i]));
+
+                    JPanel tmp = getGraph(headings[i], barChartData, representPricing[i]);
+                    tmp.setToolTipText(popupsDescriptions[i]);
+                    graphs.add(tmp);
                 }
 
                 return null;
@@ -87,12 +104,23 @@ public class HomeView extends RPanel {
 
             @Override
             protected void done() {
+                setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
+
+                JPanel topPanel = new JPanel(new BorderLayout());
+                topPanel.setBackground(mainController.getGuiColors().getGuiPrimeColor());
+                topPanel.setPreferredSize(new Dimension(100, 50));
+
+                TitleLabel titleLabel = new TitleLabel("Home", TitleLabel.CENTER, 16, mainController.getGuiColors());
+                titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+                topPanel.add(titleLabel, BorderLayout.CENTER);
+                add(topPanel, BorderLayout.NORTH);
+
                 List<Component> cells = new LinkedList<>();
 
                 for (int i = 0; i < graphs.size() - 1; i += 2)
                     cells.add(getSplitView(graphs.get(i), graphs.get(i + 1)));
 
-                add(new ListView(mainController.getGuiColors(), cells).getWrappedInScroll(true), BorderLayout.CENTER);
+                add(new ListView(mainController.getGuiColors(), cells, false).getWrappedInScroll(true), BorderLayout.CENTER);
 
                 repaint();
                 revalidate();
@@ -121,9 +149,12 @@ public class HomeView extends RPanel {
     }
 
     private JPanel getSplitView(JPanel left, JPanel right) {
-        JPanel wrapper = new JPanel(new GridLayout(1, 2, 8, 4));
-        wrapper.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
-        wrapper.setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
+        JPanel wrapper = new JPanel(new GridLayout(1, 2, 16, 0));
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+        wrapper.setBorder(BorderFactory.createMatteBorder(16, 16, 0, 16, mainController.getGuiColors().getGuiTextColor()));
+
+        left.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, mainController.getGuiColors().getGuiPrimeColor()));
+        right.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, mainController.getGuiColors().getGuiPrimeColor()));
 
         wrapper.add(left);
         wrapper.add(right);

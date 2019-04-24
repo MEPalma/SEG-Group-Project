@@ -430,7 +430,7 @@ public class QueryComposer {
 
     private static String getFilters(GraphSpecs graphSpecs) {
 
-        if (graphSpecs.getFilterSpecs() == null) return "";
+        if (graphSpecs.getFilterSpecs() == null) return " WHERE campaignId = " + graphSpecs.getCampaignId() + " ";
 
         StringBuilder tmp = new StringBuilder();
         List<String> filters = new LinkedList<>();

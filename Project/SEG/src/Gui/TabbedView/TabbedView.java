@@ -59,7 +59,7 @@ public class TabbedView {
         this.contentHost.removeAll();
 
         if(this.homeView != null) {
-            this.tabsHost.add(createTab("Home", GuiColors.RED_ERROR, 0, this.tabs.get(0).getUpdateOnSelection(), false), BorderLayout.WEST);
+            this.tabsHost.add(createTab("Home", mainController.getGuiColors().getGuiPrimeColor(), 0, this.tabs.get(0).getUpdateOnSelection(), false), BorderLayout.WEST);
         }
 
         if (this.selectedIndex > this.tabs.size() - 1)

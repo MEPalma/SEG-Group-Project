@@ -107,7 +107,7 @@ public class HomeView extends RPanel {
                 setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
 
                 JPanel topPanel = new JPanel(new BorderLayout());
-                topPanel.setBackground(mainController.getGuiColors().getGuiPrimeColor());
+                topPanel.setBackground(mainController.getGuiColors().getGuiPrimeColor().darker());
                 topPanel.setPreferredSize(new Dimension(100, 50));
 
                 TitleLabel titleLabel = new TitleLabel("Home", TitleLabel.CENTER, 16, mainController.getGuiColors());
@@ -137,11 +137,11 @@ public class HomeView extends RPanel {
 
     private JPanel wrapInCell(String title, BarChart barChart) {
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(mainController.getGuiColors().getGuiPrimeColor());
+        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
         wrapper.setBorder(BorderFactory.createEmptyBorder());
 
         TitleLabel titleLabel = new TitleLabel(title, TitleLabel.CENTER, 18, mainController.getGuiColors());
-        titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+        titleLabel.setForeground(mainController.getGuiColors().getGuiPrimeColor().darker());
         wrapper.add(titleLabel, BorderLayout.NORTH);
         wrapper.add(barChart, BorderLayout.CENTER);
 
@@ -153,8 +153,8 @@ public class HomeView extends RPanel {
         wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
         wrapper.setBorder(BorderFactory.createMatteBorder(16, 16, 0, 16, mainController.getGuiColors().getGuiTextColor()));
 
-        left.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, mainController.getGuiColors().getGuiPrimeColor()));
-        right.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, mainController.getGuiColors().getGuiPrimeColor()));
+        left.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, mainController.getGuiColors().getGuiBackgroundColor()));
+        right.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, mainController.getGuiColors().getGuiBackgroundColor()));
 
         wrapper.add(left);
         wrapper.add(right);

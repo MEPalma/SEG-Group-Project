@@ -90,19 +90,10 @@ public class Gui extends JFrame {
         this.popupMessageArea.setPreferredSize(new Dimension(0, 0));
 
 
-        /*
-            TABBED VIEW VIEWS INITIALIZATION
-         */
-        tabbedViewTabsHoster.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-        tabbedViewTabsHoster.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
-
-        tabbedViewContentHoster.setBorder(BorderFactory.createEmptyBorder());
-        tabbedViewTabsHoster.setBackground(mainController.getGuiColors().getGuiBackgroundColor());
-
         this.northView = new JPanel(new BorderLayout());
         this.mainView = new JPanel(new BorderLayout());
 
-        this.campaignName = new TitleLabel("FIX ME ", TitleLabel.CENTER, 18, mainController.getGuiColors().getGuiTextColor());
+//        this.campaignName = new TitleLabel("", TitleLabel.CENTER, 18, mainController.getGuiColors().getGuiTextColor());
 
         refresh();
     }
@@ -129,8 +120,8 @@ public class Gui extends JFrame {
         this.northView.add(new TitleLabel(" Dashboard App", JLabel.LEFT, 26, this.northView.getBackground()), BorderLayout.EAST);//spacer to center campaign name
 
 
-        this.campaignName.setFont(new Font("Verdana", Font.ITALIC, 18));
-        this.northView.add(this.campaignName, BorderLayout.CENTER);
+//        this.campaignName.setFont(new Font("Verdana", Font.ITALIC, 18));
+//        this.northView.add(this.campaignName, BorderLayout.CENTER);
 
         getContentPane().add(this.northView, BorderLayout.NORTH);
 

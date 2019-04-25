@@ -18,8 +18,8 @@ public class BarChart extends JPanel
 
     private final GuiColors guiColors;
     private Color[] barColors = {
-            GuiColors.OPTION_GREEN,
-            GuiColors.OPTION_PURPLE,
+            GuiColors.OPTION_BLUE1,
+            GuiColors.OPTION_RED,
             GuiColors.OPTION_ORANGE,
             GuiColors.OPTION_GREENBLUE,
             GuiColors.RED_ERROR,
@@ -79,17 +79,17 @@ public class BarChart extends JPanel
             barPanel.setBackground(barColors[nextColorIndex]);
             barPanel.setBorder(getBorder());
             if (!representsPricing) {
-                TitleLabel titleLabel = new TitleLabel(Integer.toString((int) root.getY().shortValue()), TitleLabel.CENTER, 10, guiColors);
+                TitleLabel titleLabel = new TitleLabel(Integer.toString((int) root.getY().shortValue()), TitleLabel.CENTER, 14, guiColors);
                 titleLabel.setForeground(guiColors.getGuiTextColor());
                 barPanel.add(titleLabel, BorderLayout.NORTH);
             }
             else {
-                TitleLabel titleLabel = new TitleLabel(DataExchange.formatPrice(root.getY().doubleValue()), TitleLabel.CENTER, 10, guiColors);
+                TitleLabel titleLabel = new TitleLabel(DataExchange.formatPrice(root.getY().doubleValue()), TitleLabel.CENTER, 14, guiColors);
                 titleLabel.setForeground(guiColors.getGuiTextColor());
                 barPanel.add(titleLabel, BorderLayout.NORTH);
             }
 
-            TitleLabel titleLabel = new TitleLabel(root.getX(), TitleLabel.CENTER, 10, guiColors);
+            TitleLabel titleLabel = new TitleLabel(root.getX(), TitleLabel.CENTER, 12, guiColors);
             titleLabel.setForeground(guiColors.getGuiTextColor());
             barPanel.add(titleLabel, BorderLayout.SOUTH);
             barPanel.setPreferredSize(new Dimension(100, (int) percOf(root.getY().doubleValue(), max) + 40));

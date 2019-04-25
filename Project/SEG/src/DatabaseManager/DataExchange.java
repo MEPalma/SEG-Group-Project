@@ -4,7 +4,6 @@ import Commons.*;
 import Gui.GuiColors;
 
 import java.awt.*;
-import java.awt.desktop.QuitEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;

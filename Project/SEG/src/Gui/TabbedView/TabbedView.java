@@ -100,9 +100,11 @@ public class TabbedView {
     public void clear() {
         synchronized (this) {
             if (this.homeView != null) {
-                this.tabs.addFirst(new Tab("Home", this.homeView, this.homeView, this.tabs.get(0).getUpdateOnSelection()));
+                Tab tmp = new Tab("Home", this.homeView, this.homeView, this.tabs.get(0).getUpdateOnSelection());
+                this.tabs.clear();
+                this.tabs.addFirst(tmp);
             }
-            this.tabs.clear();
+            else this.tabs.clear();
         }
         refresh();
     }

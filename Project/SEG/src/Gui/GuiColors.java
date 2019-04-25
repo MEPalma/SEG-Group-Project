@@ -16,11 +16,11 @@ public class GuiColors {
 
     public static Color RED_ERROR = new Color(242, 58, 48);
 
-    public static Color OPTION_GREEN = new Color(59, 150, 42);
+    public static Color OPTION_BLUE1 = new Color(57, 135, 203);
     public static Color OPTION_ORANGE = new Color(244, 112, 1);
-    public static Color OPTION_GREENBLUE = new Color(0, 139, 125);
-    public static Color OPTION_PURPLE = new Color(198, 4, 231);
-
+    public static Color OPTION_GREENBLUE = new Color(59, 150, 42);
+    public static Color OPTION_RED = new Color(236, 95, 89);
+//
     private Color guiPrimeColor, guiOptionColor, guiTextColor, guiBackgroundColor;
 
     public GuiColors() {

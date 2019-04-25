@@ -19,7 +19,7 @@ public class WelcomeProcedure extends JPanel {
         super(new BorderLayout());
         this.mainController = mainController;
 
-        setBorder(BorderFactory.createMatteBorder(40, 40, 40, 40, mainController.getGuiColors().getGuiBackgroundColor()));
+        setBorder(BorderFactory.createMatteBorder(20, 40, 20, 40, mainController.getGuiColors().getGuiBackgroundColor()));
         setBackground(mainController.getGuiColors().getGuiTextColor());
 
         add(getLoadFilesView(), BorderLayout.CENTER);

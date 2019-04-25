@@ -58,10 +58,6 @@ public class TabbedView {
         this.tabsHost.removeAll();
         this.contentHost.removeAll();
 
-        if(this.homeView != null) {
-            this.tabsHost.add(createTab("Home", mainController.getGuiColors().getGuiPrimeColor(), 0, this.tabs.get(0).getUpdateOnSelection(), false), BorderLayout.WEST);
-        }
-
         if (this.selectedIndex > this.tabs.size() - 1)
             this.selectedIndex = this.tabs.size() - 1;
 
@@ -72,6 +68,11 @@ public class TabbedView {
         }
 
         this.tabsHost.add(new HListView(mainController.getGuiColors(), tabCells).getWrappedInScroll(), BorderLayout.CENTER);
+
+        if(this.homeView != null) {
+            this.tabsHost.add(createTab("Home", mainController.getGuiColors().getGuiPrimeColor().darker(), 0, this.tabs.get(0).getUpdateOnSelection(), false), BorderLayout.WEST);
+        }
+
         if (this.selectedIndex >= 0)
             this.contentHost.add(this.tabs.get(this.selectedIndex).getContent(), BorderLayout.CENTER);
 
@@ -90,19 +91,20 @@ public class TabbedView {
     }
 
     public void pushNewHomeTab(String title, RPanel content, TakeActionListener updateOnSelection) {
-        Tab homeTab = new Tab(title, content, content, updateOnSelection);
         this.homeView = content;
-        this.tabs.addFirst(homeTab);
+        this.tabs.addFirst(new Tab(title, content, content, updateOnSelection));
 
         refresh();
     }
 
     public void clear() {
         synchronized (this) {
-            this.tabs.clear();
             if (this.homeView != null) {
-                this.tabs.addFirst(new Tab("Home", this.homeView, this.homeView, null));
+                Tab tmp = new Tab("Home", this.homeView, this.homeView, this.tabs.get(0).getUpdateOnSelection());
+                this.tabs.clear();
+                this.tabs.addFirst(tmp);
             }
+            else this.tabs.clear();
         }
         refresh();
     }

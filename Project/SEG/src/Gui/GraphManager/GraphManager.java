@@ -4,7 +4,6 @@ import Commons.CompareGraphSpec;
 import Commons.GraphSpecs;
 import Commons.Tuple;
 import DatabaseManager.Stringifiable;
-import Gui.Gui;
 import Gui.GuiColors;
 import Gui.GuiComponents.TitleLabel;
 import org.jfree.chart.ChartFactory;
@@ -18,7 +17,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.category.SlidingCategoryDataset;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,8 +52,8 @@ public class GraphManager {
 
         BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
         r.setSeriesPaint(0, GuiColors.DEFAULT_BASE_PRIME);
-        r.setSeriesPaint(1, GuiColors.OPTION_GREEN);
-        r.setSeriesPaint(2, GuiColors.OPTION_PURPLE);
+        r.setSeriesPaint(1, GuiColors.OPTION_BLUE1);
+        r.setSeriesPaint(2, GuiColors.OPTION_RED);
         r.setSeriesPaint(3, GuiColors.OPTION_ORANGE);
         r.setSeriesPaint(4, GuiColors.OPTION_GREENBLUE);
 

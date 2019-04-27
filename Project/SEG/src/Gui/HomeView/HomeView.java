@@ -1,6 +1,5 @@
 package Gui.HomeView;
 
-import Commons.GraphSpecs;
 import Commons.Tuple;
 import Gui.GuiComponents.ListView;
 import Gui.GuiComponents.TitleLabel;
@@ -10,19 +9,103 @@ import Gui.GuiComponents.RPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.LinkedList;
 import java.util.List;
 
 public class HomeView extends RPanel {
 
+    private static int DEFAULT_BAR_WIDTH = 120;
+
     private final MainController mainController;
+
+    private final List<JPanel> graphs;
+
+    private int prevWidth;
+    private int nCampaigns;
 
     public HomeView(MainController mainController) {
         super(mainController.getGuiColors().getGuiTextColor(), new BorderLayout());
 
         this.mainController = mainController;
+        this.graphs = new LinkedList<JPanel>();
+
+        this.prevWidth = -1;
+        this.nCampaigns = 0;
+
+        addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (Math.abs(prevWidth - getWidth()) > DEFAULT_BAR_WIDTH) {
+                    prevWidth = getWidth();
+                    format();
+                }
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+        });
 
         refresh();
+    }
+
+    private void format() {
+        if (this.graphs == null) {
+
+        }
+        else if (this.graphs.size() == 0) {
+            refresh();
+        } else {
+
+            if (prevWidth == -1) prevWidth = getWidth();
+
+            setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
+
+            JPanel topPanel = new JPanel(new BorderLayout());
+            topPanel.setBackground(mainController.getGuiColors().getGuiPrimeColor().darker());
+            topPanel.setPreferredSize(new Dimension(100, 50));
+
+            TitleLabel titleLabel = new TitleLabel("Home", TitleLabel.CENTER, 16, mainController.getGuiColors());
+            titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+            topPanel.add(titleLabel, BorderLayout.CENTER);
+
+            List<Component> cells = new LinkedList<>();
+
+            int nPerRow = prevWidth / (nCampaigns * DEFAULT_BAR_WIDTH);
+            if (nPerRow < 2) nPerRow = 1;
+
+            for (int i = 0; i < graphs.size(); i += nPerRow) {
+
+                JPanel tmpWrapper = new JPanel(new GridLayout(1, nPerRow, 12, 0));
+                tmpWrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
+                tmpWrapper.setBorder(BorderFactory.createMatteBorder(16, 16, 0, 16, mainController.getGuiColors().getGuiTextColor()));
+
+                for (int j = i; (j < i+nPerRow) && (j < graphs.size()); ++j) {
+                    tmpWrapper.add(graphs.get(j));
+                }
+                cells.add(tmpWrapper);
+            }
+
+            removeAll();
+            add(topPanel, BorderLayout.NORTH);
+            add(new ListView(mainController.getGuiColors(), cells, false).getWrappedInScroll(true), BorderLayout.CENTER);
+        }
+
+        repaint();
+        revalidate();
     }
 
     @Override
@@ -30,11 +113,12 @@ public class HomeView extends RPanel {
         removeAll();
 
         SwingWorker<Void, Void> backTask = new SwingWorker<Void, Void>() {
-            List<JPanel> graphs = new LinkedList<>();
-
             @Override
             protected Void doInBackground() throws Exception {
+                graphs.clear();
+
                 List<Tuple<Integer, String>> allCampaigns = mainController.getDataExchange().selectAllCampaigns();
+                nCampaigns = allCampaigns.size();
 
                 String[] headings = {
                     "Number of Impressions",
@@ -118,26 +202,7 @@ public class HomeView extends RPanel {
 
             @Override
             protected void done() {
-                setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
-
-                JPanel topPanel = new JPanel(new BorderLayout());
-                topPanel.setBackground(mainController.getGuiColors().getGuiPrimeColor().darker());
-                topPanel.setPreferredSize(new Dimension(100, 50));
-
-                TitleLabel titleLabel = new TitleLabel("Home", TitleLabel.CENTER, 16, mainController.getGuiColors());
-                titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
-                topPanel.add(titleLabel, BorderLayout.CENTER);
-                add(topPanel, BorderLayout.NORTH);
-
-                List<Component> cells = new LinkedList<>();
-
-                for (int i = 0; i < graphs.size() - 1; i += 2)
-                    cells.add(getSplitView(graphs.get(i), graphs.get(i + 1)));
-
-                add(new ListView(mainController.getGuiColors(), cells, false).getWrappedInScroll(true), BorderLayout.CENTER);
-
-                repaint();
-                revalidate();
+                format();
 
                 mainController.removeDataLoadingTask(this);
                 mainController.stopProgressBar();
@@ -152,7 +217,7 @@ public class HomeView extends RPanel {
     private JPanel wrapInCell(String title, BarChart barChart) {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
-        wrapper.setBorder(BorderFactory.createEmptyBorder());
+        wrapper.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, mainController.getGuiColors().getGuiBackgroundColor()));
 
         TitleLabel titleLabel = new TitleLabel(title, TitleLabel.CENTER, 18, mainController.getGuiColors());
         titleLabel.setForeground(mainController.getGuiColors().getGuiPrimeColor().darker());

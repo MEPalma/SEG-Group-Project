@@ -847,14 +847,11 @@ public class DataExchange {
 
         try {
             while (resultSet.next()) {
-
                 root1.add(new Tuple<String, Number>(Stringifiable.secondsToDate(resultSet.getLong("d")).toString(), (resultSet.getFloat("c"))));
-
             }
             //return
             for (int i = 0; i < root1.size(); i++) {
-
-                result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() + list.get(i).getY().floatValue())));
+                result.add(new Tuple<>(root1.get(i).getX(), (list.get(i).getY().floatValue()/root1.get(i).getY().floatValue())));
             }
 
             return result;

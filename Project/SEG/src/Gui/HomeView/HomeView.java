@@ -64,6 +64,20 @@ public class HomeView extends RPanel {
                         false,
                         false
                 };
+                Boolean[] isFloat = {
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true
+                };
 
                 String[] popupsDescriptions = {
                         "<html>An impression occurs whenever an ad is shown to a user, regardless of whether they click on it.</html>",
@@ -94,7 +108,7 @@ public class HomeView extends RPanel {
                         barChartData.add(new Tuple<>(campaignNames.get(j), cachedValues.get(j)[i]));
                     }
 
-                    JPanel tmp = getGraph(headings[i], barChartData, representPricing[i]);
+                    JPanel tmp = getGraph(headings[i], barChartData, representPricing[i], isFloat[i]);
                     tmp.setToolTipText(popupsDescriptions[i]);
                     graphs.add(tmp);
                 }
@@ -162,13 +176,14 @@ public class HomeView extends RPanel {
         return wrapper;
     }
 
-    private JPanel getGraph(String title,  List<Tuple<String, Number>> data, boolean representsPricing) {
+    private JPanel getGraph(String title,  List<Tuple<String, Number>> data, boolean representsPricing, boolean isFloat) {
         return wrapInCell(
                 title,
                 new BarChart(
                         mainController.getGuiColors(),
                         data,
-                        representsPricing
+                        representsPricing,
+                        isFloat
                 )
         );
     }

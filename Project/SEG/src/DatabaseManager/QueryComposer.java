@@ -338,13 +338,13 @@ public class QueryComposer {
     }
 
     private static String getTimeSpanGroup(GraphSpecs.TIME_SPAN timeSpan) {
-        if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return " group by strftime('%W', d, 'unixepoch') order by d";
+        if (timeSpan == null) return "";
+        else if (timeSpan == GraphSpecs.TIME_SPAN.WEEK_SPAN) return " group by strftime('%W', d, 'unixepoch') order by d";
         else if (timeSpan == GraphSpecs.TIME_SPAN.DAY_SPAN)
             return " group by strftime('%d', d, 'unixepoch') order by d";
         else if (timeSpan == GraphSpecs.TIME_SPAN.HOUR_SPAN)
             return " group by strftime('%H:%d', d, 'unixepoch') order by d";
         return " group by strftime('%m', d, 'unixepoch') order by d";
-
     }
 
     private static String getNumberOfImpressions(GraphSpecs graphSpecs) {

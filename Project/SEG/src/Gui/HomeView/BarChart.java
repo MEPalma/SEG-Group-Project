@@ -12,7 +12,7 @@ import java.util.List;
 public class BarChart extends JPanel
 {
     private List<Tuple<String, Number>> roots;
-    private boolean representsPricing;
+    private boolean representsPricing, isFloat;
 
     private JPanel graphPanel;
 
@@ -26,12 +26,13 @@ public class BarChart extends JPanel
             GuiColors.DEFAULT_BASE_PRIME
     };
 
-    public BarChart(GuiColors guiColors, List<Tuple<String, Number>> roots, boolean representsPricing)
+    public BarChart(GuiColors guiColors, List<Tuple<String, Number>> roots, boolean representsPricing, boolean isFloat)
     {
         super(new BorderLayout());
         this.guiColors = guiColors;
         this.roots = roots;
         this.representsPricing = representsPricing;
+        this.isFloat = isFloat;
 
         setBackground(guiColors.getGuiTextColor());
         setBorder(BorderFactory.createEmptyBorder());
@@ -77,17 +78,14 @@ public class BarChart extends JPanel
 
             JPanel barPanel = new JPanel(new BorderLayout());
             barPanel.setBackground(barColors[nextColorIndex]);
+
             barPanel.setBorder(getBorder());
-            if (!representsPricing) {
-                TitleLabel titleLabel = new TitleLabel(Integer.toString((int) root.getY().shortValue()), TitleLabel.CENTER, 14, guiColors);
-                titleLabel.setForeground(guiColors.getGuiTextColor());
-                barPanel.add(titleLabel, BorderLayout.NORTH);
-            }
-            else {
-                TitleLabel titleLabel = new TitleLabel(DataExchange.formatPrice(root.getY().doubleValue()), TitleLabel.CENTER, 14, guiColors);
-                titleLabel.setForeground(guiColors.getGuiTextColor());
-                barPanel.add(titleLabel, BorderLayout.NORTH);
-            }
+
+            String value = representsPricing ? (DataExchange.formatPrice(root.getY().doubleValue())) : (isFloat ? String.format("%.4f", (root.getY().floatValue())) : Integer.toString(root.getY().intValue()));
+
+            TitleLabel valueLabel = new TitleLabel(value, TitleLabel.CENTER, 14, guiColors);
+            valueLabel.setForeground(guiColors.getGuiTextColor());
+            barPanel.add(valueLabel, BorderLayout.NORTH);
 
             TitleLabel titleLabel = new TitleLabel(root.getX(), TitleLabel.CENTER, 12, guiColors);
             titleLabel.setForeground(guiColors.getGuiTextColor());

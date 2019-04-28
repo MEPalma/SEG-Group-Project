@@ -6,8 +6,6 @@ import java.text.ParseException;
 public class GuiColors {
     public static Color DARK_GRAY = new Color(43, 43, 43);
 
-//    public static Color TEXT_SELECTED = Color.BLACK;
-
     public static Color DEFAULT_BASE_PRIME = new Color(0, 134, 231);
     public static Color DEFAULT_BASE_OPTION = new Color(0, 167, 255);
 
@@ -20,7 +18,7 @@ public class GuiColors {
     public static Color OPTION_ORANGE = new Color(244, 112, 1);
     public static Color OPTION_GREENBLUE = new Color(59, 150, 42);
     public static Color OPTION_RED = new Color(236, 95, 89);
-//
+
     private Color guiPrimeColor, guiOptionColor, guiTextColor, guiBackgroundColor;
 
     public GuiColors() {

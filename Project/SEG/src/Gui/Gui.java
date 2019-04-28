@@ -3,7 +3,6 @@ package Gui;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.TitleLabel;
 import Gui.HomeView.HomeView;
-import Gui.Menus.ChooseNewGraphPanel;
 import Gui.Menus.CompareMenu;
 import Gui.Menus.FiltersMenu;
 import Gui.Menus.SideMenu;
@@ -27,7 +26,6 @@ public class Gui extends JFrame {
 
     private JPanel popupMessageArea;
     private JPanel currentPopup;
-    private TitleLabel campaignName;
 
     private JPanel filterButtonWrapper, compareButtonWrapper; //addGraphButtonWrapper,
 
@@ -35,6 +33,8 @@ public class Gui extends JFrame {
 
     private TabbedView tabbedView;
     private SideMenu sideMenu;
+
+    private HomeView homeView;
 
     public Gui() {
         super("Dashboard App");
@@ -79,7 +79,9 @@ public class Gui extends JFrame {
                 closeFiltersMenu();
         };
 
-        tabbedView.pushNewHomeTab("HOME", new HomeView(mainController), onHomeViewClick);
+        this.homeView = new HomeView(mainController);
+        tabbedView.pushNewHomeTab("HOME", this.homeView, onHomeViewClick);
+        this.mainController.refreshHomeView();
 
         /*
             POPUPS
@@ -92,8 +94,6 @@ public class Gui extends JFrame {
 
         this.northView = new JPanel(new BorderLayout());
         this.mainView = new JPanel(new BorderLayout());
-
-//        this.campaignName = new TitleLabel("", TitleLabel.CENTER, 18, mainController.getGuiColors().getGuiTextColor());
 
         refresh();
     }
@@ -117,11 +117,6 @@ public class Gui extends JFrame {
         TitleLabel appTitleLabel = new TitleLabel(" Dashboard App", JLabel.LEFT, 26, mainController.getGuiColors());
         appTitleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
         this.northView.add(appTitleLabel, BorderLayout.WEST);
-        this.northView.add(new TitleLabel(" Dashboard App", JLabel.LEFT, 26, this.northView.getBackground()), BorderLayout.EAST);//spacer to center campaign name
-
-
-//        this.campaignName.setFont(new Font("Verdana", Font.ITALIC, 18));
-//        this.northView.add(this.campaignName, BorderLayout.CENTER);
 
         getContentPane().add(this.northView, BorderLayout.NORTH);
 
@@ -171,7 +166,7 @@ public class Gui extends JFrame {
 
         this.mainView.add(tabbedViewWrapper, BorderLayout.CENTER);
 
-//        updateCampaignName();
+        this.homeView.refresh();
 
         repaint();
         revalidate();
@@ -372,7 +367,6 @@ public class Gui extends JFrame {
         popupMessageArea.setPreferredSize(new Dimension(380, 380));
         popupMessageArea.repaint();
         popupMessageArea.revalidate();
-
     }
 
     public boolean isFiltersShowing() {

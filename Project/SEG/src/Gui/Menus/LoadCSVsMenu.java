@@ -35,6 +35,8 @@ public class LoadCSVsMenu extends RPanel {
         this.mainController = mainController;
         setBorder(BorderFactory.createMatteBorder(4, 0, 4, 4, mainController.getGuiColors().getGuiPrimeColor()));
 
+        this.toUploadCampaignName = "";
+
         this.reuploadModeOn = false;
         this.reuploadingId = -1;
 
@@ -67,6 +69,8 @@ public class LoadCSVsMenu extends RPanel {
                 components.add(getServerLogFileFinderPanel());
                 components.add(getChooseCampaignName());
 
+                final MenuLabel cancelButton = new MenuLabel("CANCEL", MenuLabel.CENTER, 16, mainController.getGuiColors());
+
                 MenuLabel parseButton = new MenuLabel("LOAD", MenuLabel.CENTER, 16, mainController.getGuiColors());
                 parseButton.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                 parseButton.addMouseListener(new MouseAdapter() {
@@ -76,7 +80,7 @@ public class LoadCSVsMenu extends RPanel {
 
                             parseButton.setText("LOADING..");
                             parseButton.setEnabled(false);
-                            parseButton.setVisible(true);
+                            cancelButton.setEnabled(false);
 
                             if (toUploadCampaignName.trim().equals("") || toUploadCampaignName.trim().equals(" "))
                                 toUploadCampaignName = "Today's campaign";
@@ -133,7 +137,6 @@ public class LoadCSVsMenu extends RPanel {
                     layoutPanel.setBorder(BorderFactory.createEmptyBorder());
                     layoutPanel.setBackground(getBackground());
 
-                    MenuLabel cancelButton = new MenuLabel("CANCEL", MenuLabel.CENTER, 16, mainController.getGuiColors());
                     cancelButton.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                     cancelButton.addMouseListener(new MouseAdapter() {
                         @Override

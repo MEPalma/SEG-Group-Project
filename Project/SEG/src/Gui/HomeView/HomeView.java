@@ -58,6 +58,7 @@ public class HomeView extends RPanel {
     }
 
     private int getColumns() {
+        if (getWidth() == 0) return 2;
         return getWidth() / Math.max(nCampaigns * DEFAULT_BAR_WIDTH, 2 * DEFAULT_BAR_WIDTH);
     }
 
@@ -76,12 +77,7 @@ public class HomeView extends RPanel {
     }
 
     private void format() {
-        if (this.graphs == null) {
-            ;
-        }
-        else if (this.graphs.size() == 0) {
-            refresh();
-        } else {
+        if (this.graphs != null && this.graphs.size() > 0) {
             setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
 
             JPanel topPanel = new JPanel(new BorderLayout());
@@ -210,15 +206,16 @@ public class HomeView extends RPanel {
                     graphs.add(tmp);
                 }
 
+                format();
+
+                mainController.removeDataLoadingTask(this);
+                mainController.stopProgressBar();
                 return null;
             }
 
             @Override
             protected void done() {
-                format();
 
-                mainController.removeDataLoadingTask(this);
-                mainController.stopProgressBar();
             }
         };
 

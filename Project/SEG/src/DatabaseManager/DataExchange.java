@@ -629,6 +629,10 @@ public class DataExchange {
         return names;
     }
 
+    public void insertNewCampaign(int id, String name) {
+        this.dbM.writeQuery(QueryComposer.insertNewCampaign(id, name));
+    }
+
     public int insertNewCampaign(String name) {
         this.dbM.writeQuery(QueryComposer.insertNewCampaign(name));
         return getLastID();
@@ -1133,7 +1137,7 @@ public class DataExchange {
             return GuiColors.parseFormattedColor(rset.getString(1));
         } catch(Exception e) {
             updateGuiBackgroundColor(GuiColors.DEFAULT_BACKGROUND);
-            return getTextColor();
+            return getBackgroundColor();
         }
     }
 
@@ -1149,8 +1153,8 @@ public class DataExchange {
         this.dbM.writeQuery(QueryComposer.setGuiTextColor(newTextColor));
     }
 
-    public void updateGuiBackgroundColor(Color newTextColor) {
-        this.dbM.writeQuery(QueryComposer.setGuiBackgroundColor(newTextColor));
+    public void updateGuiBackgroundColor(Color newBackgroundColor) {
+        this.dbM.writeQuery(QueryComposer.setGuiBackgroundColor(newBackgroundColor));
     }
 
     public void updateHomeViewCacheForCampaign(int campaignId) {

@@ -16,11 +16,11 @@ import java.util.List;
 
 public class HomeView extends RPanel {
 
-    private static int DEFAULT_BAR_WIDTH = 120;
+    private static int DEFAULT_BAR_WIDTH = 150;
 
     private final MainController mainController;
 
-    private final List<JPanel> graphs;
+    private final List<BarChart> graphs;
 
     private int prevWidth;
     private int nCampaigns;
@@ -29,7 +29,7 @@ public class HomeView extends RPanel {
         super(mainController.getGuiColors().getGuiTextColor(), new BorderLayout());
 
         this.mainController = mainController;
-        this.graphs = new LinkedList<JPanel>();
+        this.graphs = new LinkedList<BarChart>();
 
         this.prevWidth = -1;
         this.nCampaigns = 0;
@@ -37,10 +37,10 @@ public class HomeView extends RPanel {
         addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (Math.abs(prevWidth - getWidth()) > DEFAULT_BAR_WIDTH) {
+//                if (Math.abs(prevWidth - getWidth()) > DEFAULT_BAR_WIDTH) {
                     prevWidth = getWidth();
                     format();
-                }
+//                }
             }
 
             @Override
@@ -60,6 +60,24 @@ public class HomeView extends RPanel {
         });
 
         refresh();
+    }
+
+    private int getColumns() {
+        return getWidth() / (nCampaigns * DEFAULT_BAR_WIDTH);
+    }
+
+    private int getMaxHeightPerRow() {
+        int min = 100;
+        int nFields = 12;
+
+        int columns = getColumns();
+        int rows = nFields / columns;
+        int height = getHeight() - 60; //60 is the title banner
+        height -= (120 * rows);//the panning spaces
+
+        int maxHeight = height / rows;
+
+        return Math.max(min, maxHeight);
     }
 
     private void format() {
@@ -84,8 +102,10 @@ public class HomeView extends RPanel {
 
             List<Component> cells = new LinkedList<>();
 
-            int nPerRow = prevWidth / (nCampaigns * DEFAULT_BAR_WIDTH);
+            int nPerRow = getColumns();
             if (nPerRow < 2) nPerRow = 1;
+
+            int maxHeightPerRow = getMaxHeightPerRow();
 
             for (int i = 0; i < graphs.size(); i += nPerRow) {
 
@@ -94,6 +114,7 @@ public class HomeView extends RPanel {
                 tmpWrapper.setBorder(BorderFactory.createMatteBorder(16, 16, 0, 16, mainController.getGuiColors().getGuiTextColor()));
 
                 for (int j = i; (j < i+nPerRow) && (j < graphs.size()); ++j) {
+                    graphs.get(j).updateRatioAndRepaint(DEFAULT_BAR_WIDTH, maxHeightPerRow);
                     tmpWrapper.add(graphs.get(j));
                 }
                 cells.add(tmpWrapper);
@@ -192,7 +213,7 @@ public class HomeView extends RPanel {
                         barChartData.add(new Tuple<>(campaignNames.get(j), cachedValues.get(j)[i]));
                     }
 
-                    JPanel tmp = getGraph(headings[i], barChartData, representPricing[i], isFloat[i]);
+                    BarChart tmp = getGraph(headings[i], barChartData, representPricing[i], isFloat[i]);
                     tmp.setToolTipText(popupsDescriptions[i]);
                     graphs.add(tmp);
                 }
@@ -214,42 +235,16 @@ public class HomeView extends RPanel {
         mainController.addDataLoadingTask(backTask);
     }
 
-    private JPanel wrapInCell(String title, BarChart barChart) {
-        JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
-        wrapper.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, mainController.getGuiColors().getGuiBackgroundColor()));
+    private BarChart getGraph(String title,  List<Tuple<String, Number>> data, boolean representsPricing, boolean isFloat) {
 
-        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.CENTER, 18, mainController.getGuiColors());
-        titleLabel.setForeground(mainController.getGuiColors().getGuiPrimeColor().darker());
-        wrapper.add(titleLabel, BorderLayout.NORTH);
-        wrapper.add(barChart, BorderLayout.CENTER);
-
-        return wrapper;
-    }
-
-    private JPanel getSplitView(JPanel left, JPanel right) {
-        JPanel wrapper = new JPanel(new GridLayout(1, 2, 16, 0));
-        wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
-        wrapper.setBorder(BorderFactory.createMatteBorder(16, 16, 0, 16, mainController.getGuiColors().getGuiTextColor()));
-
-        left.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, mainController.getGuiColors().getGuiBackgroundColor()));
-        right.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, mainController.getGuiColors().getGuiBackgroundColor()));
-
-        wrapper.add(left);
-        wrapper.add(right);
-
-        return wrapper;
-    }
-
-    private JPanel getGraph(String title,  List<Tuple<String, Number>> data, boolean representsPricing, boolean isFloat) {
-        return wrapInCell(
+        return new BarChart(
                 title,
-                new BarChart(
-                        mainController.getGuiColors(),
-                        data,
-                        representsPricing,
-                        isFloat
-                )
+                mainController.getGuiColors(),
+                DEFAULT_BAR_WIDTH,
+                getMaxHeightPerRow(),
+                data,
+                representsPricing,
+                isFloat
         );
     }
 }

@@ -16,6 +16,10 @@ public class BarChart extends JPanel
 
     private JPanel graphPanel;
 
+    private int maxBarHeight;
+    private int maxBarWidth;
+    private String title;
+
     private final GuiColors guiColors;
     private Color[] barColors = {
             GuiColors.OPTION_BLUE1,
@@ -26,23 +30,36 @@ public class BarChart extends JPanel
             GuiColors.DEFAULT_BASE_PRIME
     };
 
-    public BarChart(GuiColors guiColors, List<Tuple<String, Number>> roots, boolean representsPricing, boolean isFloat)
+    public BarChart(String title, GuiColors guiColors, int barWidth, int maxBarHeight, List<Tuple<String, Number>> roots, boolean representsPricing, boolean isFloat)
     {
         super(new BorderLayout());
+        this.title = title;
         this.guiColors = guiColors;
+        this.maxBarWidth = barWidth;
+        this.maxBarHeight = maxBarHeight;
         this.roots = roots;
         this.representsPricing = representsPricing;
         this.isFloat = isFloat;
 
         setBackground(guiColors.getGuiTextColor());
-        setBorder(BorderFactory.createEmptyBorder());
+        setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, guiColors.getGuiBackgroundColor()));
 
         this.graphPanel = new JPanel(new GridLayout(1, this.roots.size(), 5, 5));
         this.graphPanel.setBackground(guiColors.getGuiTextColor());
         this.graphPanel.setBorder(getBorder());
 
+        TitleLabel titleLabel = new TitleLabel(title, TitleLabel.CENTER, 18, guiColors);
+        titleLabel.setForeground(guiColors.getGuiPrimeColor().darker());
+
+        add(titleLabel, BorderLayout.NORTH);
         add(this.graphPanel, BorderLayout.CENTER);
 
+        refresh();
+    }
+
+    public void updateRatioAndRepaint(int maxBarWidth, int maxBarHeight) {
+        this.maxBarWidth = maxBarWidth;
+        this.maxBarHeight = maxBarHeight;
         refresh();
     }
 
@@ -57,13 +74,15 @@ public class BarChart extends JPanel
 
     private double percOf(double n, double max)
     {
-        return n * 100 / max;
+        double value = ((n * 100 / max) / 100) * this.maxBarHeight;
+        return Math.max(value, 60);
     }
 
     public void refresh()
     {
         this.graphPanel.removeAll();
-        this.graphPanel.setLayout(new GridLayout(1, roots.size(), 5, 5));
+        this.graphPanel.setBackground(guiColors.getGuiTextColor());
+        this.graphPanel.setLayout(new GridLayout(1, roots.size(), 0, 0));
         this.graphPanel.setBorder(BorderFactory.createLineBorder(guiColors.getGuiTextColor(), 5, false));
 
         double max = getMax();
@@ -74,12 +93,11 @@ public class BarChart extends JPanel
         {
             JPanel container = new JPanel(new BorderLayout());
             container.setBackground(guiColors.getGuiTextColor());
-            container.setBorder(getBorder());
+            container.setBorder(BorderFactory.createEmptyBorder());
 
             JPanel barPanel = new JPanel(new BorderLayout());
             barPanel.setBackground(barColors[nextColorIndex]);
-
-            barPanel.setBorder(getBorder());
+            barPanel.setBorder(BorderFactory.createMatteBorder(8, 8, 8, 8, guiColors.getGuiTextColor()));
 
             String value = representsPricing ? (DataExchange.formatPrice(root.getY().doubleValue())) : (isFloat ? String.format("%.4f", (root.getY().floatValue())) : Integer.toString(root.getY().intValue()));
 
@@ -90,7 +108,7 @@ public class BarChart extends JPanel
             TitleLabel titleLabel = new TitleLabel(root.getX(), TitleLabel.CENTER, 12, guiColors);
             titleLabel.setForeground(guiColors.getGuiTextColor());
             barPanel.add(titleLabel, BorderLayout.SOUTH);
-            barPanel.setPreferredSize(new Dimension(100, (int) percOf(root.getY().doubleValue(), max) + 40));
+            barPanel.setPreferredSize(new Dimension(this.maxBarWidth, (int) percOf(root.getY().intValue(), max)));
 
             container.add(barPanel, BorderLayout.SOUTH);
 

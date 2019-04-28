@@ -66,6 +66,10 @@ public class QueryComposer {
     public static String selectAllFrom_SETTINGS = "SELECT * FROM SETTINGS;";
     public static String selectAllCampaigns = "SELECT * from CAMPAIGNS;";
 
+    public static String insertNewCampaign(int id, String name) {
+        return "INSERT INTO CAMPAIGNS VALUES (" + id + ", '" + name + "');";
+    }
+
     public static String insertNewCampaign(String name) {
         return "INSERT INTO CAMPAIGNS VALUES (NULL, '" + name + "');";
     }
@@ -210,8 +214,8 @@ public class QueryComposer {
 
     public static String[] deleteCampaign(int id) {
         return new String[] {
-            "DELETE FROM CAMPAIGNS WHERE id = " + id + ";",
-            rebuildDatabase()
+            "DELETE FROM CAMPAIGNS WHERE id = " + id + ";"
+            //rebuildDatabase()
         };
     }
 

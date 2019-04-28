@@ -22,7 +22,6 @@ public class HomeView extends RPanel {
 
     private final List<BarChart> graphs;
 
-    private int prevWidth;
     private int nCampaigns;
 
     public HomeView(MainController mainController) {
@@ -31,16 +30,12 @@ public class HomeView extends RPanel {
         this.mainController = mainController;
         this.graphs = new LinkedList<BarChart>();
 
-        this.prevWidth = -1;
         this.nCampaigns = 0;
 
         addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-//                if (Math.abs(prevWidth - getWidth()) > DEFAULT_BAR_WIDTH) {
-                    prevWidth = getWidth();
-                    format();
-//                }
+                format();
             }
 
             @Override
@@ -63,6 +58,7 @@ public class HomeView extends RPanel {
     }
 
     private int getColumns() {
+        if (getWidth() == 0) return 2;
         return getWidth() / Math.max(nCampaigns * DEFAULT_BAR_WIDTH, 2 * DEFAULT_BAR_WIDTH);
     }
 
@@ -81,15 +77,7 @@ public class HomeView extends RPanel {
     }
 
     private void format() {
-        if (this.graphs == null) {
-
-        }
-        else if (this.graphs.size() == 0) {
-            refresh();
-        } else {
-
-            if (prevWidth == -1) prevWidth = getWidth();
-
+        if (this.graphs != null && this.graphs.size() > 0) {
             setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
 
             JPanel topPanel = new JPanel(new BorderLayout());
@@ -218,15 +206,16 @@ public class HomeView extends RPanel {
                     graphs.add(tmp);
                 }
 
+                format();
+
+                mainController.removeDataLoadingTask(this);
+                mainController.stopProgressBar();
                 return null;
             }
 
             @Override
             protected void done() {
-                format();
 
-                mainController.removeDataLoadingTask(this);
-                mainController.stopProgressBar();
             }
         };
 

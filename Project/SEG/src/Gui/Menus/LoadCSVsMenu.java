@@ -24,14 +24,19 @@ import java.util.List;
 public class LoadCSVsMenu extends RPanel {
     private final MainController mainController;
     private TakeActionListener onLoaded;
-    private String campaignName;
+    private String toUploadCampaignName;
+
+    private boolean reuploadModeOn;
+
+    private int reuploadingId;
 
     public LoadCSVsMenu(MainController mainController) {
         super(mainController.getGuiColors().getGuiTextColor(), new BorderLayout());
         this.mainController = mainController;
         setBorder(BorderFactory.createMatteBorder(4, 0, 4, 4, mainController.getGuiColors().getGuiPrimeColor()));
 
-        this.campaignName = "Today's campaign";
+        this.reuploadModeOn = false;
+        this.reuploadingId = -1;
 
         refresh();
     }
@@ -60,8 +65,9 @@ public class LoadCSVsMenu extends RPanel {
                 components.add(getImpressionLogFileFinderPanel());
                 components.add(getClickLogFileFinderPanel());
                 components.add(getServerLogFileFinderPanel());
+                components.add(getChooseCampaignName());
 
-                MenuLabel parseButton = new MenuLabel("LOAD", MenuLabel.CENTER, 18, mainController.getGuiColors());
+                MenuLabel parseButton = new MenuLabel("LOAD", MenuLabel.CENTER, 16, mainController.getGuiColors());
                 parseButton.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                 parseButton.addMouseListener(new MouseAdapter() {
                     @Override
@@ -72,9 +78,9 @@ public class LoadCSVsMenu extends RPanel {
                             parseButton.setEnabled(false);
                             parseButton.setVisible(true);
 
-                            if (campaignName.trim().equals("") || campaignName.trim().equals(" "))
-                                campaignName = "Today's campaign";
-                            else campaignName = campaignName.trim().replace("-", "").replace("'", "").replace("\"", "");
+                            if (toUploadCampaignName.trim().equals("") || toUploadCampaignName.trim().equals(" "))
+                                toUploadCampaignName = "Today's campaign";
+                            else toUploadCampaignName = toUploadCampaignName.trim().replace("-", "").replace("'", "''").replace("\"", "\"\"");
 
                             //new background thread
                             SwingWorker<Void, Void> loadTask = new SwingWorker<Void, Void>() {
@@ -82,13 +88,21 @@ public class LoadCSVsMenu extends RPanel {
                                 protected Void doInBackground() throws Exception {
                                     mainController.startProgressBar();
                                     CSVParser parser = new CSVParser(mainController, impressionLog, clickLog, serverLog);
-                                    parser.parseAll(campaignName);
+
+                                    if (reuploadModeOn) {
+                                        parser.reupload(toUploadCampaignName, reuploadingId);
+                                        reuploadModeOn = false;
+                                        reuploadingId = -1;
+                                    } else {
+                                        parser.parseAll(toUploadCampaignName);
+                                    }
+
                                     mainController.stopProgressBar();
                                     mainController.removeDataLoadingTask(this);
 
                                     if (onLoaded != null) onLoaded.takeAction();
 
-                                    parseButton.setText("LOAD AGAIN");
+                                    parseButton.setText("LOAD");
                                     parseButton.setEnabled(true);
                                     parseButton.setForeground(mainController.getGuiColors().getGuiPrimeColor());
 
@@ -113,8 +127,29 @@ public class LoadCSVsMenu extends RPanel {
                     }
 
                 });
-                components.add(getChooseCampaignName());
-                components.add(parseButton);
+
+                if (reuploadModeOn) {
+                    JPanel layoutPanel = new JPanel(new GridLayout(1, 2));
+                    layoutPanel.setBorder(BorderFactory.createEmptyBorder());
+                    layoutPanel.setBackground(getBackground());
+
+                    MenuLabel cancelButton = new MenuLabel("CANCEL", MenuLabel.CENTER, 16, mainController.getGuiColors());
+                    cancelButton.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+                    cancelButton.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            reuploadModeOn = false;
+                            reuploadingId = -1;
+                            refresh();
+                        }
+                    });
+                    layoutPanel.add(parseButton);
+                    layoutPanel.add(cancelButton);
+
+                    components.add(layoutPanel);
+                } else {
+                    components.add(parseButton);
+                }
 
                 centerComponent = new ListView(mainController.getGuiColors(), components).getWrappedInScroll(true);
 
@@ -137,8 +172,11 @@ public class LoadCSVsMenu extends RPanel {
                 wrapper.setBorder(BorderFactory.createEmptyBorder(12, 8, 8, 8));
                 wrapper.setBackground(mainController.getGuiColors().getGuiTextColor());
 
-                wrapper.add(new TitleLabel("Add New Campaign", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.WEST);
-
+                if (reuploadModeOn) {
+                    wrapper.add(new TitleLabel("Re-upload campaign's data", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.WEST);
+                } else {
+                    wrapper.add(new TitleLabel("Add New Campaign", TitleLabel.LEFT, 18, mainController.getGuiColors()), BorderLayout.WEST);
+                }
                 return wrapper;
             }
 
@@ -150,21 +188,21 @@ public class LoadCSVsMenu extends RPanel {
                 wrapper.add(new TitleLabel("Campaign Name", TitleLabel.LEFT, 16, mainController.getGuiColors()), BorderLayout.WEST);
 
                 TextBox campaignChooser = new TextBox(mainController.getGuiColors());
-                campaignChooser.setText(campaignName);
+                campaignChooser.setText(toUploadCampaignName);
                 campaignChooser.getDocument().addDocumentListener(new DocumentListener() {
                     @Override
                     public void insertUpdate(DocumentEvent e) {
-                        campaignName = campaignChooser.getText();
+                        toUploadCampaignName = campaignChooser.getText();
                     }
 
                     @Override
                     public void removeUpdate(DocumentEvent e) {
-                        campaignName = campaignChooser.getText();
+                        toUploadCampaignName = campaignChooser.getText();
                     }
 
                     @Override
                     public void changedUpdate(DocumentEvent e) {
-                        campaignName = campaignChooser.getText();
+                        toUploadCampaignName = campaignChooser.getText();
                     }
                 });
                 wrapper.add(campaignChooser, BorderLayout.CENTER);
@@ -388,11 +426,12 @@ public class LoadCSVsMenu extends RPanel {
 
             private List<Component> getManageCampaignsPanels() {
                 List<Component> panels = new LinkedList<>();
+                if (reuploadModeOn) return panels;
 
                 List<Tuple<Integer, String>> camps = mainController.getDataExchange().selectAllCampaigns();
 
                 if (camps.size() > 0) {
-                    TitleLabel titleLabel = new TitleLabel("Campaigns in the system", TitleLabel.LEFT, 16, mainController.getGuiColors());
+                    TitleLabel titleLabel = new TitleLabel("Campaigns in the system", TitleLabel.LEFT, 18, mainController.getGuiColors());
                     titleLabel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
                     panels.add(titleLabel);
 
@@ -403,9 +442,22 @@ public class LoadCSVsMenu extends RPanel {
 
                         wrapper.add(new TitleLabel(tuple.getY(), TitleLabel.LEFT, 16, mainController.getGuiColors()), BorderLayout.WEST);
 
-                        JPanel rightWrapper = new JPanel(new GridLayout(1, 2, 2, 2));
+                        JPanel rightWrapper = new JPanel(new GridLayout(1, 3, 2, 2));
                         rightWrapper.setBackground(wrapper.getBackground());
                         rightWrapper.setBorder(BorderFactory.createEmptyBorder());
+
+
+                        MenuLabel reuploadDataLabel = new MenuLabel("reupload", MenuLabel.CENTER, 14, mainController.getGuiColors());
+                        reuploadDataLabel.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                reuploadModeOn = true;
+                                reuploadingId = tuple.getX();
+                                toUploadCampaignName = tuple.getY();
+                                refresh();
+                            }
+                        });
+                        rightWrapper.add(reuploadDataLabel);
 
                         MenuLabel changeNameLabel = new MenuLabel("rename", MenuLabel.CENTER, 14, mainController.getGuiColors());
                         changeNameLabel.addMouseListener(new MouseAdapter() {
@@ -475,6 +527,12 @@ public class LoadCSVsMenu extends RPanel {
                         rightWrapper.add(deleteLabel);
 
                         wrapper.add(rightWrapper, BorderLayout.EAST);
+
+                        if (reuploadModeOn && reuploadingId == tuple.getX()) {
+                            reuploadDataLabel.setVisible(false);
+                            changeNameLabel.setVisible(false);
+                            deleteLabel.setVisible(false);
+                        }
 
                         panels.add(wrapper);
                     }

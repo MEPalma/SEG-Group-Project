@@ -22,7 +22,6 @@ public class HomeView extends RPanel {
 
     private final List<BarChart> graphs;
 
-    private int prevWidth;
     private int nCampaigns;
 
     public HomeView(MainController mainController) {
@@ -31,16 +30,12 @@ public class HomeView extends RPanel {
         this.mainController = mainController;
         this.graphs = new LinkedList<BarChart>();
 
-        this.prevWidth = -1;
         this.nCampaigns = 0;
 
         addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-//                if (Math.abs(prevWidth - getWidth()) > DEFAULT_BAR_WIDTH) {
-                    prevWidth = getWidth();
-                    format();
-//                }
+                format();
             }
 
             @Override
@@ -82,14 +77,11 @@ public class HomeView extends RPanel {
 
     private void format() {
         if (this.graphs == null) {
-
+            ;
         }
         else if (this.graphs.size() == 0) {
             refresh();
         } else {
-
-            if (prevWidth == -1) prevWidth = getWidth();
-
             setBorder(BorderFactory.createMatteBorder(0, 4, 4, 4, mainController.getGuiColors().getGuiBackgroundColor()));
 
             JPanel topPanel = new JPanel(new BorderLayout());

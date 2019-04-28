@@ -94,6 +94,11 @@ public class CSVParser {
         JOptionPane.showMessageDialog(null, "Successfully updated the library", "Alert", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public synchronized void reupload(String campaignName, int id) throws Exception {
+        dataExchange.deleteCampaign(id);
+        parseAll(campaignName);
+    }
+
     private void parseImpressionLogFile(Statement sqlStmt, int campaignID) throws SQLException, IOException {
         // 0     1      2       3       4         5            6
         //DATE | ID | Gender | Age | Income | Context | impressionCost

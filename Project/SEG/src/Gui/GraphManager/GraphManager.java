@@ -51,11 +51,11 @@ public class GraphManager {
         ((BarRenderer) cplot.getRenderer()).setBarPainter(new StandardBarPainter());
 
         BarRenderer r = (BarRenderer) barChart.getCategoryPlot().getRenderer();
-        r.setSeriesPaint(0, GuiColors.DEFAULT_BASE_PRIME);
-        r.setSeriesPaint(1, GuiColors.OPTION_BLUE1);
-        r.setSeriesPaint(2, GuiColors.OPTION_RED);
-        r.setSeriesPaint(3, GuiColors.OPTION_ORANGE);
-        r.setSeriesPaint(4, GuiColors.OPTION_GREENBLUE);
+        r.setSeriesPaint(0, GuiColors.OPTION_BLUE1);
+        r.setSeriesPaint(1, GuiColors.OPTION_RED);
+        r.setSeriesPaint(2, GuiColors.OPTION_GREENBLUE);
+        r.setSeriesPaint(4, GuiColors.OPTION_ORANGE);
+        r.setSeriesPaint(5, GuiColors.DEFAULT_BASE_PRIME);
 
         Plot plot = barChart.getPlot();
         plot.setBackgroundPaint(Color.WHITE);

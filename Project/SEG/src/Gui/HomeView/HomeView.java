@@ -63,7 +63,7 @@ public class HomeView extends RPanel {
     }
 
     private int getColumns() {
-        return getWidth() / (nCampaigns * DEFAULT_BAR_WIDTH);
+        return getWidth() / Math.max(nCampaigns * DEFAULT_BAR_WIDTH, 2 * DEFAULT_BAR_WIDTH);
     }
 
     private int getMaxHeightPerRow() {
@@ -73,7 +73,7 @@ public class HomeView extends RPanel {
         int columns = getColumns();
         int rows = nFields / columns;
         int height = getHeight() - 60; //60 is the title banner
-        height -= (120 * rows);//the panning spaces
+        height -= (120 * rows) + 60;//the panning spaces
 
         int maxHeight = height / rows;
 

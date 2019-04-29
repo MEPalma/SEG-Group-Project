@@ -89,11 +89,6 @@ public class DataExchangeTests {
     }
 
     @Test
-    public void testNumberOfImpressions() {
-
-    }
-
-    @Test
     public void testMale() {
         MainController m = new MainController(null, null, null,new Gui.GuiColors());
         FilterSpecs f = m.getInitFilters();
@@ -112,7 +107,8 @@ public class DataExchangeTests {
         double expected = 0;
         double actual = 0;
         for (ImpressionEntry i : allFromImpressions) {
-            if (getUserWithID(allFromUsers, i.getUserId()).getGender() == Male)
+            //if (getUserWithID(allFromUsers, i.getUserId()).getGender() == Male)
+            if (allFromUsers.get((int) (i.getUserId())).getGender() == Male)
                 expected++;
         }
 
@@ -146,6 +142,37 @@ public class DataExchangeTests {
             if (getUserWithID(allFromUsers, i.getUserId()).getGender() == Female)
                 expected++;
         }
+
+        for (Tuple<String,Number> i : actualData) {
+            actual+=i.getY().doubleValue();
+        }
+
+        assertTrue(expected==actual);
+    }
+
+    @Test
+    public void testAllAges() {
+        MainController m = new MainController(null, null, null,new Gui.GuiColors());
+        FilterSpecs f = m.getInitFilters();
+        LinkedList<Enums.Age> ageList = new LinkedList<Enums.Age>();
+        ageList.add(Enums.Age.Age_less_than_25);
+        ageList.add(Enums.Age.Age_25_34);
+        ageList.add(Enums.Age.Age_35_44);
+        ageList.add(Enums.Age.Age_45_54);
+        ageList.add(Enums.Age.Age_more_than_54);
+        f.setAges(ageList);
+
+        DataExchange de2 = new DataExchange(new DatabaseManager());
+
+        GraphSpecs males = new GraphSpecs(1, "testingcampaign", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.DAY_SPAN, GraphSpecs.BOUNCE_DEF.TIME, f);
+        List<Tuple<String,Number>> actualData = de2.getGraphData(males);
+
+        List<ImpressionEntry> allFromImpressions = de.selectAllFrom_IMPRESSION_LOGS();
+
+        double expected = 0;
+        double actual = 0;
+
+        expected = allFromImpressions.size();
 
         for (Tuple<String,Number> i : actualData) {
             actual+=i.getY().doubleValue();
@@ -311,6 +338,39 @@ public class DataExchangeTests {
     }
 
     @Test
+    public void testAllContexts() {
+        MainController m = new MainController(null, null, null,new Gui.GuiColors());
+        FilterSpecs f = m.getInitFilters();
+        LinkedList<Enums.Context> contextList = new LinkedList<Enums.Context>();
+        contextList.add(News);
+        contextList.add(SocialMedia);
+        contextList.add(Shopping);
+        contextList.add(Blog);
+        contextList.add(Hobbies);
+        contextList.add(Travel);
+
+        f.setContexts(contextList);
+
+        DataExchange de2 = new DataExchange(new DatabaseManager());
+
+        GraphSpecs males = new GraphSpecs(1, "testingcampaign", GraphSpecs.METRICS.NumberImpressions, GraphSpecs.TIME_SPAN.DAY_SPAN, GraphSpecs.BOUNCE_DEF.TIME, f);
+        List<Tuple<String,Number>> actualData = de2.getGraphData(males);
+
+        List<ImpressionEntry> allFromImpressions = de.selectAllFrom_IMPRESSION_LOGS();
+
+        double expected = 0;
+        double actual = 0;
+
+        expected = allFromImpressions.size();
+
+        for (Tuple<String,Number> i : actualData) {
+            actual+=i.getY().doubleValue();
+        }
+
+        assertTrue(expected==actual);
+    }
+
+    @Test
     public void testNews() {
         MainController m = new MainController(null, null, null,new Gui.GuiColors());
         FilterSpecs f = m.getInitFilters();
@@ -324,7 +384,6 @@ public class DataExchangeTests {
         List<Tuple<String,Number>> actualData = de2.getGraphData(males);
 
         List<ImpressionEntry> allFromImpressions = de.selectAllFrom_IMPRESSION_LOGS();
-        List<UserEntry> allFromUsers = de.selectAllFrom_USERS();
 
         double expected = 0;
         double actual = 0;
@@ -355,7 +414,6 @@ public class DataExchangeTests {
         List<Tuple<String,Number>> actualData = de2.getGraphData(males);
 
         List<ImpressionEntry> allFromImpressions = de.selectAllFrom_IMPRESSION_LOGS();
-        List<UserEntry> allFromUsers = de.selectAllFrom_USERS();
 
         double expected = 0;
         double actual = 0;
@@ -386,7 +444,6 @@ public class DataExchangeTests {
         List<Tuple<String,Number>> actualData = de2.getGraphData(males);
 
         List<ImpressionEntry> allFromImpressions = de.selectAllFrom_IMPRESSION_LOGS();
-        List<UserEntry> allFromUsers = de.selectAllFrom_USERS();
 
         double expected = 0;
         double actual = 0;
@@ -417,7 +474,6 @@ public class DataExchangeTests {
         List<Tuple<String,Number>> actualData = de2.getGraphData(males);
 
         List<ImpressionEntry> allFromImpressions = de.selectAllFrom_IMPRESSION_LOGS();
-        List<UserEntry> allFromUsers = de.selectAllFrom_USERS();
 
         double expected = 0;
         double actual = 0;
@@ -448,7 +504,6 @@ public class DataExchangeTests {
         List<Tuple<String,Number>> actualData = de2.getGraphData(males);
 
         List<ImpressionEntry> allFromImpressions = de.selectAllFrom_IMPRESSION_LOGS();
-        List<UserEntry> allFromUsers = de.selectAllFrom_USERS();
 
         double expected = 0;
         double actual = 0;
@@ -479,7 +534,6 @@ public class DataExchangeTests {
         List<Tuple<String,Number>> actualData = de2.getGraphData(males);
 
         List<ImpressionEntry> allFromImpressions = de.selectAllFrom_IMPRESSION_LOGS();
-        List<UserEntry> allFromUsers = de.selectAllFrom_USERS();
 
         double expected = 0;
         double actual = 0;

@@ -9,7 +9,7 @@ import Gui.GuiComponents.TitleLabel;
 import Gui.HomeView.HomeView;
 import Gui.MainController;
 import Gui.TakeActionListener;
-import sun.awt.image.ImageWatched;
+//import sun.awt.image.ImageWatched;
 
 import javax.swing.*;
 import java.awt.*;
@@ -178,8 +178,8 @@ public class TabbedView {
         TitleLabel topLabel;
         TitleLabel bottomLabel;
 
-        if (closable) {
-            String[] titleHalves = title.split(":");
+        String[] titleHalves = title.split(":");
+        if (titleHalves.length == 2) {
             topLabel = new TitleLabel("<html>" + titleHalves[0] + "</html>", TitleLabel.LEFT, 14, mainController.getGuiColors());
             bottomLabel = new TitleLabel("<html> <b>" + titleHalves[1] + "</b> </html>", TitleLabel.LEFT, 14, mainController.getGuiColors());
         } else {

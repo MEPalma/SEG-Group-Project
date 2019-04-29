@@ -219,10 +219,6 @@ public class GraphManager {
         return title;
     }
 
-    public static String getGraphLongTitle(String campaignName, GraphSpecs.METRICS m, GraphSpecs.TIME_SPAN t, GraphSpecs.BOUNCE_DEF b) {
-        return campaignName + ":" + getGraphTitle(m,t,b);
-    }
-
     public static String getGraphShortTitle(GraphSpecs.METRICS m) {
         if (m == GraphSpecs.METRICS.NumberImpressions) return "Impression";
         else if (m == GraphSpecs.METRICS.NumberClicks) return "Click";

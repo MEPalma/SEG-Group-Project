@@ -22,7 +22,7 @@ public class DatabaseManager {
 
             // create a connection to the database
             this.dbCon = DriverManager.getConnection("jdbc:sqlite:" + new PathsManager().getDB());
-//            this.dbCon = DriverManager.getConnection("jdbc:sqlite::memory:");
+            //this.dbCon = DriverManager.getConnection("jdbc:sqlite::memory:");
 
             this.dbCon.setAutoCommit(true);
         } catch (ClassNotFoundException e) {

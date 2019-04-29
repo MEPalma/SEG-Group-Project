@@ -35,7 +35,7 @@ public class LoadCSVsMenu extends RPanel {
         this.mainController = mainController;
         setBorder(BorderFactory.createMatteBorder(4, 0, 4, 4, mainController.getGuiColors().getGuiPrimeColor()));
 
-        this.toUploadCampaignName = "";
+        this.toUploadCampaignName = "Today's Campaign";
 
         this.reuploadModeOn = false;
         this.reuploadingId = -1;
@@ -222,7 +222,7 @@ public class LoadCSVsMenu extends RPanel {
                 titleLabel.setPreferredSize(new Dimension(140, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
-                JPanel pathFinderPanel = new JPanel(new BorderLayout());
+                JPanel pathFinderPanel = new JPanel(new FlowLayout());
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
@@ -244,8 +244,8 @@ public class LoadCSVsMenu extends RPanel {
                         int returnValue = jfc.showOpenDialog(thisView);
                         if (returnValue == JFileChooser.APPROVE_OPTION) {
                             pathFinderPanel.removeAll();
-                            pathFinderPanel.add(findFileButton, BorderLayout.EAST);
-                            pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
+                            pathFinderPanel.add(pathTextBox);
+                            pathFinderPanel.add(findFileButton);
                             pathFinderPanel.repaint();
                             pathFinderPanel.revalidate();
 
@@ -281,7 +281,7 @@ public class LoadCSVsMenu extends RPanel {
                 titleLabel.setPreferredSize(new Dimension(140, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
-                JPanel pathFinderPanel = new JPanel(new BorderLayout());
+                JPanel pathFinderPanel = new JPanel(new FlowLayout());
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
@@ -303,8 +303,8 @@ public class LoadCSVsMenu extends RPanel {
                         int returnValue = jfc.showOpenDialog(thisView);
                         if (returnValue == JFileChooser.APPROVE_OPTION) {
                             pathFinderPanel.removeAll();
-                            pathFinderPanel.add(findFileButton, BorderLayout.EAST);
-                            pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
+                            pathFinderPanel.add(pathTextBox);
+                            pathFinderPanel.add(findFileButton);
                             pathFinderPanel.repaint();
                             pathFinderPanel.revalidate();
                             clickLog = jfc.getSelectedFile().getAbsoluteFile();
@@ -340,7 +340,7 @@ public class LoadCSVsMenu extends RPanel {
                 titleLabel.setPreferredSize(new Dimension(140, 20));
                 panel.add(titleLabel, BorderLayout.WEST);
 
-                JPanel pathFinderPanel = new JPanel(new BorderLayout());
+                JPanel pathFinderPanel = new JPanel(new FlowLayout());
                 pathFinderPanel.setBorder(panel.getBorder());
                 pathFinderPanel.setBackground(panel.getBackground());
 
@@ -362,8 +362,8 @@ public class LoadCSVsMenu extends RPanel {
                         int returnValue = jfc.showOpenDialog(thisView);
                         if (returnValue == JFileChooser.APPROVE_OPTION) {
                             pathFinderPanel.removeAll();
-                            pathFinderPanel.add(findFileButton, BorderLayout.EAST);
-                            pathFinderPanel.add(pathTextBox, BorderLayout.CENTER);
+                            pathFinderPanel.add(pathTextBox);
+                            pathFinderPanel.add(findFileButton);
                             pathFinderPanel.repaint();
                             pathFinderPanel.revalidate();
                             serverLog = jfc.getSelectedFile().getAbsoluteFile();

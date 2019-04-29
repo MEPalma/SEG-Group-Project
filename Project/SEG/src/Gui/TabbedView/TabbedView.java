@@ -1,7 +1,5 @@
 package Gui.TabbedView;
 
-
-import Gui.GuiColors;
 import Gui.GuiComponents.HListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
@@ -173,7 +171,7 @@ public class TabbedView {
             }
         });
 
-        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
+        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 13, mainController.getGuiColors());
         titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
 
         tab.add(titleLabel, BorderLayout.CENTER);

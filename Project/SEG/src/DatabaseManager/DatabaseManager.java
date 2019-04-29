@@ -51,7 +51,7 @@ public class DatabaseManager {
      * @param query
      * @return
      */
-    public synchronized ResultSet query(String query) {
+    public ResultSet query(String query) {
         System.out.println(query);
         try {
             Statement stmt = this.dbCon.createStatement();
@@ -68,7 +68,7 @@ public class DatabaseManager {
      *
      * @param query
      */
-    public synchronized void writeQuery(String query) {
+    public void writeQuery(String query) {
         System.out.println(query);
         try {
             Statement stmt = this.dbCon.createStatement();
@@ -85,7 +85,7 @@ public class DatabaseManager {
      *
      * @param queries
      */
-    public synchronized void writeQuery(String[] queries) {
+    public void writeQuery(String[] queries) {
         for (String query : queries) {
             writeQuery(query);
         }

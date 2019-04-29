@@ -149,6 +149,8 @@ public class GraphSpecs {
     }
 
     public boolean containsFilters() {
+        if (this.filterSpecs == null) return false;
+
         return (getGenders().size() > 0 ||
                 getIncomes().size() > 0 ||
                 getAges().size() > 0 ||

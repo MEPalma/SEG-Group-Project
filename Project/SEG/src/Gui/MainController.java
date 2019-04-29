@@ -85,15 +85,6 @@ public class MainController {
         return this.dataExchange;
     }
 
-    public String getCampaignName(int id) {
-        return this.dataExchange.getCampaignName(id);
-    }
-
-    public void setCampaignName(int id, String name) {
-        this.dataExchange.setCampaignName(id, name);
-//        this.gui.updateCampaignName();
-    }
-
     public List<Tuple<String, Number>> getGraphSpecData(GraphSpecs graphSpecs) {
         return this.dataExchange.getGraphData(graphSpecs);
     }
@@ -139,7 +130,9 @@ public class MainController {
                     @Override
                     public void takeAction() {
                         if (isFiltersShowing()) {
-                            openFiltersMenu();
+                            if (!tabbedView.isHomeOpen())
+                                gui.closeFiltersMenu();
+                            else gui.openFilters();
                         }
                     }
                 };
@@ -248,7 +241,6 @@ public class MainController {
                 startProgressBar();
 
                 for (GraphSpecs g : cmpGraphSpec.getGraphSpecs()) {
-//                    g.getFilterSpecs().updateFrom(cmpGraphSpec.getFilterSpecs());
                     g.setData(getGraphSpecData(g));
                 }
 
@@ -330,6 +322,10 @@ public class MainController {
                 tabbedView.push(tmp.getTitle(), GraphManager.getGraphCard(tmp, this.guiColors), tmp, updateOnClick);
             }
         }
+    }
+
+    public void refreshHomeView() {
+        this.tabbedView.getHomeView().refresh();
     }
 
 }

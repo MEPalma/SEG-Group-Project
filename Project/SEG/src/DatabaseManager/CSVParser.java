@@ -87,9 +87,42 @@ public class CSVParser {
         this.dataExchange.setAutoCommit(true);
 
         sourceIdToNewId.clear();
-        System.gc();
 
-        JOptionPane.showMessageDialog(null, "Successfully updated the library", "Alert", JOptionPane.INFORMATION_MESSAGE);
+        this.dataExchange.updateHomeViewCacheForCampaign(newCampaignID);
+
+        JOptionPane.showMessageDialog(null, "Successfully updated the library", "Success", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public synchronized void reupload(String campaignName, int id) throws Exception {
+        dataExchange.deleteCampaign(id);
+        parseAll(campaignName);
+
+//        this.sourceIdToNewId = new HashMap<Integer, Long>();
+//
+//        this.dataExchange.insertNewCampaign(id, campaignName);
+//
+//        int newCampaignID = id;
+//
+//        this.dataExchange.setForeignKeyPragma(false);
+//        this.dataExchange.setAutoCommit(false);
+//
+//        Statement insertionStatement = this.dataExchange.getSqlStatement();
+//
+//        parseImpressionLogFile(insertionStatement, newCampaignID);
+//        parseClickLogFile(insertionStatement, newCampaignID);
+//        parseServerLogFile(insertionStatement, newCampaignID);
+//
+//        this.dataExchange.writeSqlStatement(insertionStatement);
+//        this.dataExchange.commitNow();
+//
+//        this.dataExchange.setForeignKeyPragma(true);
+//        this.dataExchange.setAutoCommit(true);
+//
+//        sourceIdToNewId.clear();
+//
+//        this.dataExchange.updateHomeViewCacheForCampaign(newCampaignID);
+//
+//        JOptionPane.showMessageDialog(null, "Successfully updated the library", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void parseImpressionLogFile(Statement sqlStmt, int campaignID) throws SQLException, IOException {

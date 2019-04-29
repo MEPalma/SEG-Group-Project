@@ -1,6 +1,5 @@
 package Gui;
 
-import Commons.GraphSpecs;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.TitleLabel;
 import Gui.Menus.LoadCSVsMenu;
@@ -19,7 +18,7 @@ public class WelcomeProcedure extends JPanel {
         super(new BorderLayout());
         this.mainController = mainController;
 
-        setBorder(BorderFactory.createMatteBorder(40, 40, 40, 40, mainController.getGuiColors().getGuiBackgroundColor()));
+        setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, mainController.getGuiColors().getGuiBackgroundColor()));
         setBackground(mainController.getGuiColors().getGuiTextColor());
 
         add(getLoadFilesView(), BorderLayout.CENTER);
@@ -47,15 +46,7 @@ public class WelcomeProcedure extends JPanel {
                 this_.removeAll();
                 this_.repaint();
                 this_.revalidate();
-                
-//                mainController.pushToGraphView(new GraphSpecs(
-//
-//                        GraphSpecs.METRICS.NumberImpressions,
-//                        GraphSpecs.TIME_SPAN.HOUR_SPAN,
-//                        GraphSpecs.BOUNCE_DEF.NPAGES,
-//                        mainController.getInitFilters())
-//                );
-                
+
                 onClose.takeAction();
             }
         });
@@ -70,7 +61,7 @@ public class WelcomeProcedure extends JPanel {
         };
 
         LoadCSVsMenu loadCSVsMenu = new LoadCSVsMenu(mainController);
-        loadCSVsMenu.setBorder(BorderFactory.createEmptyBorder(40, 80, 80, 80));
+        loadCSVsMenu.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
         loadCSVsMenu.setOnLoaded(onLoaded);
 
         wrapper.add(loadCSVsMenu, BorderLayout.CENTER);

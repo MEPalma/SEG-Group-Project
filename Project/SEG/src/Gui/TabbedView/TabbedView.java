@@ -1,12 +1,9 @@
 package Gui.TabbedView;
 
-
-import Gui.GuiColors;
 import Gui.GuiComponents.HListView;
 import Gui.GuiComponents.MenuLabel;
 import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
-import Gui.HomeView.HomeView;
 import Gui.MainController;
 import Gui.TakeActionListener;
 
@@ -22,7 +19,7 @@ public class TabbedView {
     private final JPanel tabsHost;
     private final JPanel contentHost;
 
-    private JPanel homeView;
+    private RPanel homeView;
 
     private final LinkedList<Tab> tabs;
 
@@ -59,10 +56,6 @@ public class TabbedView {
         this.tabsHost.removeAll();
         this.contentHost.removeAll();
 
-        if(this.homeView != null) {
-            this.tabsHost.add(createTab("Home", GuiColors.RED_ERROR, 0, null, false), BorderLayout.WEST);
-        }
-
         if (this.selectedIndex > this.tabs.size() - 1)
             this.selectedIndex = this.tabs.size() - 1;
 
@@ -73,6 +66,11 @@ public class TabbedView {
         }
 
         this.tabsHost.add(new HListView(mainController.getGuiColors(), tabCells).getWrappedInScroll(), BorderLayout.CENTER);
+
+        if(this.homeView != null) {
+            this.tabsHost.add(createTab("Home", mainController.getGuiColors().getGuiPrimeColor().darker(), 0, this.tabs.get(0).getUpdateOnSelection(), false), BorderLayout.WEST);
+        }
+
         if (this.selectedIndex >= 0)
             this.contentHost.add(this.tabs.get(this.selectedIndex).getContent(), BorderLayout.CENTER);
 
@@ -90,20 +88,21 @@ public class TabbedView {
         refresh();
     }
 
-    public void pushNewHomeTab(String title, RPanel content) {
-        Tab homeTab = new Tab(title, content, content, null);
+    public void pushNewHomeTab(String title, RPanel content, TakeActionListener updateOnSelection) {
         this.homeView = content;
-        this.tabs.addFirst(homeTab);
+        this.tabs.addFirst(new Tab(title, content, content, updateOnSelection));
 
         refresh();
     }
 
     public void clear() {
         synchronized (this) {
-            this.tabs.clear();
             if (this.homeView != null) {
-                this.tabs.addFirst(new Tab("Home", this.homeView, this.homeView, null));
+                Tab tmp = new Tab("Home", this.homeView, this.homeView, this.tabs.get(0).getUpdateOnSelection());
+                this.tabs.clear();
+                this.tabs.addFirst(tmp);
             }
+            else this.tabs.clear();
         }
         refresh();
     }
@@ -115,7 +114,7 @@ public class TabbedView {
         return false;
     }
 
-    public JPanel getHomeView() {
+    public RPanel getHomeView() {
         return this.homeView;
     }
 
@@ -202,8 +201,8 @@ public class TabbedView {
         bottomLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
         tab.add(bottomLabel, BorderLayout.SOUTH);
 
-        tab.setPreferredSize(new Dimension((closable ? longest -120 : 80), 50));
-
+        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 13, mainController.getGuiColors());
+        titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
 
         if (closable) {
             MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 16, mainController.getGuiColors());
@@ -250,6 +249,10 @@ public class TabbedView {
         }
 
         refresh();
+    }
+
+    public boolean isHomeOpen() {
+        return (this.selectedIndex == 0);
     }
 
 }

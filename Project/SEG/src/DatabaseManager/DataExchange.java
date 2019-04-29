@@ -406,14 +406,8 @@ public class DataExchange {
         this.dbM.writeQuery(QueryComposer.insertSettingStmt(name, value));
     }
 
-    /*
-        UPDATE STATEMENTS
-     */
-    // if you need them call me up (Marco)
-    /*
-        DELETE STATEMENTS
-     */
-    // if you need them call me up (Marco)
+
+
     /*
         DROP ALL STATEMENTS
      */
@@ -553,6 +547,35 @@ public class DataExchange {
         return tmp;
     }
 
+    public Number[] selectByIdFrom_HOMEVIEW_CACHE(int campaignId) {
+        ResultSet rset = this.dbM.query(QueryComposer.selectByIdFrom_HOMEVIEW_CACHE(campaignId));
+
+        Number[] cached = new Number[12];
+        try {
+            //index 1 = campaignId..
+            cached[0] = rset.getDouble(2);
+            cached[1] = rset.getDouble(3);
+            cached[2] = rset.getDouble(4);
+            cached[3] = rset.getDouble(5);
+            cached[4] = rset.getDouble(6);
+            cached[5] = rset.getDouble(7);
+            cached[6] = rset.getDouble(8);
+            cached[7] = rset.getDouble(9);
+            cached[8] = rset.getDouble(10);
+            cached[9] = rset.getDouble(11);
+            cached[10] = rset.getDouble(12);
+            cached[11] = rset.getDouble(13);
+
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
+        return cached;
+    }
+
     /*
         SELECT BY userId
      */
@@ -604,6 +627,10 @@ public class DataExchange {
         }
 
         return names;
+    }
+
+    public void insertNewCampaign(int id, String name) {
+        this.dbM.writeQuery(QueryComposer.insertNewCampaign(id, name));
     }
 
     public int insertNewCampaign(String name) {
@@ -824,14 +851,11 @@ public class DataExchange {
 
         try {
             while (resultSet.next()) {
-
                 root1.add(new Tuple<String, Number>(Stringifiable.secondsToDate(resultSet.getLong("d")).toString(), (resultSet.getFloat("c"))));
-
             }
             //return
             for (int i = 0; i < root1.size(); i++) {
-
-                result.add(new Tuple<>(root1.get(i).getX(), (root1.get(i).getY().floatValue() + list.get(i).getY().floatValue())));
+                result.add(new Tuple<>(root1.get(i).getX(), (list.get(i).getY().floatValue()/root1.get(i).getY().floatValue())));
             }
 
             return result;
@@ -1113,7 +1137,7 @@ public class DataExchange {
             return GuiColors.parseFormattedColor(rset.getString(1));
         } catch(Exception e) {
             updateGuiBackgroundColor(GuiColors.DEFAULT_BACKGROUND);
-            return getTextColor();
+            return getBackgroundColor();
         }
     }
 
@@ -1129,8 +1153,45 @@ public class DataExchange {
         this.dbM.writeQuery(QueryComposer.setGuiTextColor(newTextColor));
     }
 
-    public void updateGuiBackgroundColor(Color newTextColor) {
-        this.dbM.writeQuery(QueryComposer.setGuiBackgroundColor(newTextColor));
+    public void updateGuiBackgroundColor(Color newBackgroundColor) {
+        this.dbM.writeQuery(QueryComposer.setGuiBackgroundColor(newBackgroundColor));
+    }
+
+    public void updateHomeViewCacheForCampaign(int campaignId) {
+        this.dbM.writeQuery(QueryComposer.deleteHomeViewCache(campaignId));
+
+        this.dbM.writeQuery(QueryComposer.insertHomeViewCache(
+                campaignId,
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.NumberImpressions, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.NumberClicks, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.NumberUniques, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.NumberBounces, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.NumberConversions, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.TotalCost, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.CTR, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.CPA, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.CPC, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.CPM, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.NPAGES),
+                getHomeViewCache(campaignId, GraphSpecs.METRICS.BounceRate, GraphSpecs.BOUNCE_DEF.TIME)
+        ));
+    }
+
+    private Number getHomeViewCache(int campaignId, GraphSpecs.METRICS metric, GraphSpecs.BOUNCE_DEF bounceDef) {
+        List<Tuple<String, Number>> tmp = getGraphData(
+                new GraphSpecs(
+                        campaignId,
+                        "",
+                        metric,
+                        null,
+                        bounceDef,
+                        null
+                )
+        );
+
+        if (tmp.size() > 0)
+            return (tmp.get(0).getY());
+        else return 0;
     }
 
 }

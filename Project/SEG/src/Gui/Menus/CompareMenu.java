@@ -59,6 +59,9 @@ public class CompareMenu extends RPanel {
         for (int i = 0; i < allCampaigns.size(); ++i)
             campaignsOptions[i] = allCampaigns.get(i).getY();
 
+        if (allCampaigns.size() > 0)
+            this.selections.add(new Tuple<>(this.allCampaigns.get(0).getX(), this.allCampaigns.get(0).getY()));
+
         refresh();
     }
 
@@ -70,7 +73,7 @@ public class CompareMenu extends RPanel {
         wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         wrapper.setBackground(getBackground());
 
-        wrapper.add(new TitleLabel("Compare", TitleLabel.LEFT, 20, mainController.getGuiColors()), BorderLayout.NORTH);
+        wrapper.add(new TitleLabel("Add graph", TitleLabel.LEFT, 20, mainController.getGuiColors()), BorderLayout.NORTH);
 
         List<Component> cells = new LinkedList<>();
 
@@ -103,17 +106,19 @@ public class CompareMenu extends RPanel {
         });
         wrapper.add(dropDown, BorderLayout.CENTER);
 
-        MenuLabel removeMenuLabel = new MenuLabel("x", MenuLabel.RIGHT, 20, mainController.getGuiColors());
-        removeMenuLabel.dropAllListeners();
-        removeMenuLabel.setForeground(GuiColors.RED_ERROR);
-        removeMenuLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                selections.remove(indexInPool);
-                refresh();
-            }
-        });
-        wrapper.add(removeMenuLabel, BorderLayout.EAST);
+        if (this.selections.size() > 1) {
+            MenuLabel removeMenuLabel = new MenuLabel("x", MenuLabel.RIGHT, 20, mainController.getGuiColors());
+            removeMenuLabel.dropAllListeners();
+            removeMenuLabel.setForeground(GuiColors.RED_ERROR);
+            removeMenuLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent mouseEvent) {
+                    selections.remove(indexInPool);
+                    refresh();
+                }
+            });
+            wrapper.add(removeMenuLabel, BorderLayout.EAST);
+        }
 
         return wrapper;
     }
@@ -202,31 +207,42 @@ public class CompareMenu extends RPanel {
         wrapper.setBackground(getBackground());
         wrapper.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-        MenuLabel addMenuLabel = new MenuLabel("Compare", MenuLabel.CENTER, 16, mainController.getGuiColors());
+        MenuLabel addMenuLabel = new MenuLabel("Add", MenuLabel.CENTER, 16, mainController.getGuiColors());
         addMenuLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                List<GraphSpecs> graphSpecs = new LinkedList<>();
 
-                FilterSpecs commonFilters = mainController.getInitFilters();
+                //check for errors
+                if (selections.size() == 0) {
+                    mainController.showErrorMessage("No campaign is selected", "Please select at least one campaign in order to add a graph!");
+                } else if (selections.size() == 1) {
 
-                for (Tuple<Integer, String> s : selections) {
-                    GraphSpecs tmp = new GraphSpecs(
-                            s.getX(),
-                            s.getY(),
-                            getChosenMetric(),
-                            getChosenTimeSpan(),
-                            getChosenBounceDef(),
-                            commonFilters
-                    );
-                    graphSpecs.add(tmp);
+                    Tuple<Integer, String> selectedCampaign = selections.get(0);
+
+                    GraphSpecs graphSpecs = new GraphSpecs(selectedCampaign.getX(), selectedCampaign.getY(), getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef(), mainController.getInitFilters());
+                    mainController.pushToGraphView(graphSpecs);
+                } else {
+                    List<GraphSpecs> graphSpecs = new LinkedList<>();
+
+                    FilterSpecs commonFilters = mainController.getInitFilters();
+
+                    for (Tuple<Integer, String> s : selections) {
+                        GraphSpecs tmp = new GraphSpecs(
+                                s.getX(),
+                                s.getY(),
+                                getChosenMetric(),
+                                getChosenTimeSpan(),
+                                getChosenBounceDef(),
+                                commonFilters
+                        );
+                        graphSpecs.add(tmp);
+                    }
+
+                    String cardTitle = "Compare " + GraphManager.getGraphShortTitle(getChosenMetric());
+                    String graphTitle = "Compare " + GraphManager.getGraphTitle(getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
+
+                    mainController.pushToGraphView(new CompareGraphSpec(commonFilters, graphSpecs, cardTitle, graphTitle, GraphManager.getGraphShortTitle(getChosenMetric()), GraphManager.getFormattedTimeSpan(getChosenTimeSpan())));
                 }
-
-                String cardTitle = "Compare " + GraphManager.getGraphShortTitle(getChosenMetric());
-                String graphTitle = "Compare " + GraphManager.getGraphTitle(getChosenMetric(), getChosenTimeSpan(), getChosenBounceDef());
-
-                mainController.pushToGraphView(new CompareGraphSpec(commonFilters, graphSpecs, cardTitle, graphTitle, GraphManager.getGraphShortTitle(getChosenMetric()), GraphManager.getFormattedTimeSpan(getChosenTimeSpan())));
-
             }
         });
         wrapper.add(addMenuLabel, BorderLayout.CENTER);

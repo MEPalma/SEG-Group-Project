@@ -171,10 +171,41 @@ public class TabbedView {
             }
         });
 
+        String htmlTitle;
+        int length;
+
+        TitleLabel topLabel;
+        TitleLabel bottomLabel;
+
+        String[] titleHalves = title.split(":");
+        if (titleHalves.length == 2) {
+            topLabel = new TitleLabel("<html>" + titleHalves[0] + "</html>", TitleLabel.LEFT, 14, mainController.getGuiColors());
+            bottomLabel = new TitleLabel("<html> <b>" + titleHalves[1] + "</b> </html>", TitleLabel.LEFT, 14, mainController.getGuiColors());
+        } else {
+            topLabel = new TitleLabel("<html><b>" + title + "</b></html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
+            bottomLabel = new TitleLabel("<html>" + "</html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
+
+        }
+
+        int longest = topLabel.getFontMetrics(topLabel.getFont()).stringWidth(topLabel.getText());
+        int other = bottomLabel.getFontMetrics(bottomLabel.getFont()).stringWidth(bottomLabel.getText());
+        if (other > longest)
+            longest = other;
+
+        //TitleLabel titleLabel = new TitleLabel();
+        //titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+        //tab.add(titleLabel, BorderLayout.CENTER);
+
+        topLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+        tab.add(topLabel, BorderLayout.CENTER);
+
+        bottomLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+        tab.add(bottomLabel, BorderLayout.SOUTH);
+
+        tab.setPreferredSize(new Dimension((closable ? longest -120 : 80), 50));
+
         TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 13, mainController.getGuiColors());
         titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
-
-        tab.add(titleLabel, BorderLayout.CENTER);
 
         if (closable) {
             MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 16, mainController.getGuiColors());

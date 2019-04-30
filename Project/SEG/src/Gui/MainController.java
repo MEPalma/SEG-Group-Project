@@ -136,8 +136,8 @@ public class MainController {
                         }
                     }
                 };
-
-                tabbedView.push(GraphManager.getGraphShortTitle(newGraphSpecs.getMetric()), GraphManager.getGraphCard(newGraphSpecs, guiColors), newGraphSpecs, updateOnClick);
+                String tabTitle = GraphManager.getGraphLongTitle(newGraphSpecs.getCampaignName(), newGraphSpecs.getMetric(), newGraphSpecs.getTimespan(), newGraphSpecs.getBounceDef());
+                tabbedView.push(tabTitle, GraphManager.getGraphCard(newGraphSpecs, guiColors), newGraphSpecs, updateOnClick);
                 stopProgressBar();
                 removeDataLoadingTask(this);
                 super.done();

@@ -11,11 +11,11 @@ import Gui.MainController;
 import Gui.TakeActionListener;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
-import java.awt.*;
 
 import static Gui.Menus.ChooseNewGraphPanel.BOUNCE_DEF;
 

@@ -2,10 +2,9 @@ package Gui.HomeView;
 
 import Commons.Tuple;
 import Gui.GuiComponents.ListView;
+import Gui.GuiComponents.RPanel;
 import Gui.GuiComponents.TitleLabel;
 import Gui.MainController;
-
-import Gui.GuiComponents.RPanel;
 
 import javax.swing.*;
 import java.awt.*;

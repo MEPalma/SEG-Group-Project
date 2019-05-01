@@ -3,20 +3,17 @@ package Tests;
 import Commons.*;
 import DatabaseManager.DataExchange;
 import DatabaseManager.DatabaseManager;
-import Gui.GuiColors;
 import Gui.MainController;
-import Gui.StatusDisplay;
-import Gui.TabbedView.TabbedView;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Filter;
 
 import static Commons.Enums.Context.*;
 import static Commons.Enums.Gender.Female;
 import static Commons.Enums.Gender.Male;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class DataExchangeTests {
 

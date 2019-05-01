@@ -74,7 +74,10 @@ public class GraphManager {
         CategoryAxis axis = barChart.getCategoryPlot().getDomainAxis();
         axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 
-        return new ChartPanel(barChart);
+        JPanel tmp = new ChartPanel(barChart);
+        tmp.setBorder(BorderFactory.createEmptyBorder());
+
+        return tmp;
     }
 
     public static JPanel createBarChar(GraphSpecs graphSpecs) {
@@ -115,7 +118,10 @@ public class GraphManager {
         CategoryAxis axis = barChart.getCategoryPlot().getDomainAxis();
         axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 
-        return new ChartPanel(barChart);
+        JPanel tmp = new ChartPanel(barChart);
+        tmp.setBorder(BorderFactory.createEmptyBorder());
+
+        return tmp;
     }
 
     private static DefaultCategoryDataset getBarChartDataset(String rowKey, Collection<Tuple<String, Number>> data) {

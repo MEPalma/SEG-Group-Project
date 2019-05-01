@@ -51,7 +51,7 @@ public class TabbedView {
 
     public synchronized void refresh() {
         this.tabsHost.setBorder(BorderFactory.createMatteBorder(4, 4, 0, 4, mainController.getGuiColors().getGuiBackgroundColor()));
-        this.contentHost.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, mainController.getGuiColors().getGuiBackgroundColor()));
+        this.contentHost.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 0, mainController.getGuiColors().getGuiBackgroundColor()));
 
         this.tabsHost.removeAll();
         this.contentHost.removeAll();
@@ -171,41 +171,26 @@ public class TabbedView {
             }
         });
 
-        String htmlTitle;
-        int length;
-
         TitleLabel topLabel;
-        TitleLabel bottomLabel;
+        int stringLength = 0;
 
         String[] titleHalves = title.split(":");
         if (titleHalves.length == 2) {
-            topLabel = new TitleLabel("<html>" + titleHalves[0] + "</html>", TitleLabel.LEFT, 14, mainController.getGuiColors());
-            bottomLabel = new TitleLabel("<html> <b>" + titleHalves[1] + "</b> </html>", TitleLabel.LEFT, 14, mainController.getGuiColors());
+            topLabel = new TitleLabel("<html>" + titleHalves[0] + "<br>" + titleHalves[1] + "</html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
+            stringLength = Math.max(
+                    titleHalves[0].length() * (topLabel.getFontMetrics(topLabel.getFont()).charWidth('W') + 4),
+                    titleHalves[1].length() * (topLabel.getFontMetrics(topLabel.getFont()).charWidth('W') + 2)
+            );
         } else {
-            topLabel = new TitleLabel("<html><b>" + title + "</b></html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
-            bottomLabel = new TitleLabel("<html>" + "</html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
-
+            topLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 14, mainController.getGuiColors());
+            stringLength = title.length() * (topLabel.getFontMetrics(topLabel.getFont()).charWidth('Z') + 4);
         }
 
-        int longest = topLabel.getFontMetrics(topLabel.getFont()).stringWidth(topLabel.getText());
-        int other = bottomLabel.getFontMetrics(bottomLabel.getFont()).stringWidth(bottomLabel.getText());
-        if (other > longest)
-            longest = other;
-
-        //TitleLabel titleLabel = new TitleLabel();
-        //titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
-        //tab.add(titleLabel, BorderLayout.CENTER);
+        stringLength += 20;//padding
 
         topLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
+        tab.setPreferredSize(new Dimension(stringLength, 50));
         tab.add(topLabel, BorderLayout.CENTER);
-
-        bottomLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
-        tab.add(bottomLabel, BorderLayout.SOUTH);
-
-        tab.setPreferredSize(new Dimension((closable ? longest -120 : 80), 50));
-
-        TitleLabel titleLabel = new TitleLabel("<html>" + title + "</html>", TitleLabel.CENTER, 13, mainController.getGuiColors());
-        titleLabel.setForeground(mainController.getGuiColors().getGuiTextColor());
 
         if (closable) {
             MenuLabel popLabel = new MenuLabel("x", MenuLabel.CENTER, 16, mainController.getGuiColors());

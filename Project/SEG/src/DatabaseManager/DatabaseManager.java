@@ -52,7 +52,7 @@ public class DatabaseManager {
      * @return
      */
     public ResultSet query(String query) {
-        System.out.println(query);
+//        System.out.println(query);
         try {
             Statement stmt = this.dbCon.createStatement();
             return stmt.executeQuery(query);
@@ -69,7 +69,7 @@ public class DatabaseManager {
      * @param query
      */
     public void writeQuery(String query) {
-        System.out.println(query);
+//        System.out.println(query);
         try {
             Statement stmt = this.dbCon.createStatement();
             stmt.execute(query);

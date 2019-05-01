@@ -1,6 +1,9 @@
 package Gui.Menus;
 
-import Commons.*;
+import Commons.CompareGraphSpec;
+import Commons.Enums;
+import Commons.FilterSpecs;
+import Commons.GraphSpecs;
 import Gui.DateBrowser.DateBrowser;
 import Gui.GuiColors;
 import Gui.GuiComponents.*;

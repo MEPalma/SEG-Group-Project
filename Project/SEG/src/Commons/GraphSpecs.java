@@ -1,8 +1,5 @@
 package Commons;
 
-import Gui.GuiColors;
-
-import java.awt.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
